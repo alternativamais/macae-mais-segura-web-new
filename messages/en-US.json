@@ -1,0 +1,1365 @@
+{
+  "common": {
+    "welcome": "Welcome to Alternativa Base",
+    "dashboard": "Dashboard",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "A system overview"
+  },
+  "navigation": {
+    "main": "Main",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "administration": "Administration",
+    "users": "Users",
+    "permissions": "Permissions",
+    "access_control": "Access Control",
+    "system": "System",
+    "backups": "Backups",
+    "ui_settings": "UI Settings",
+    "logs": "Logs",
+    "my_account": "My Account"
+  },
+  "user": {
+    "account": "Account",
+    "language": "Language",
+    "logout": "Log out"
+  },
+  "search": {
+    "placeholder": "What do you need?",
+    "empty": "No results found.",
+    "trigger": "Search..."
+  },
+  "users": {
+    "title": "Users",
+    "description": "Manage user accounts, assigned roles, and availability status.",
+    "fetch_error": "Error loading users.",
+    "loading": "Loading users...",
+    "stats": {
+      "total": "Total Users",
+      "total_desc": "Accounts loaded for administrative management.",
+      "active": "Active Users",
+      "active_desc": "Profiles marked as available for access.",
+      "inactive": "Inactive Users",
+      "inactive_desc": "Accounts requiring review or reactivation.",
+      "roles": "Roles in Use",
+      "roles_desc": "Distinct profiles assigned among users.",
+      "loading": "Loading"
+    },
+    "table": {
+      "columns": {
+        "user": "User",
+        "username": "Username",
+        "role": "Role",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New User",
+        "view": "View details",
+        "search_placeholder": "Search by name, email, username or role..."
+      },
+      "delete_dialog": {
+        "title": "Delete user",
+        "description": "Are you sure you want to delete this user? This action is irreversible.",
+        "success": "User deleted successfully.",
+        "error": "Error deleting user."
+      },
+      "no_results": "No users found.",
+      "loading": "Loading...",
+      "no_role": "No role",
+      "open_actions": "Open actions"
+    },
+    "form": {
+      "title_create": "New user",
+      "title_edit": "Edit user",
+      "description_create": "Register a new access account for the system.",
+      "description_edit": "Update registration data and user access role.",
+      "labels": {
+        "name": "Name",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "password_edit_hint": "(optional in editing)",
+        "birthday": "Birthday",
+        "role": "Role",
+        "status": "Status"
+      },
+      "placeholders": {
+        "name": "e.g.: Arnaldo Batista",
+        "username": "e.g.: arnaldo.batista",
+        "email": "e.g.: arnaldo@company.com",
+        "password": "Enter password",
+        "birthday": "Select",
+        "role": "Select a role",
+        "status": "Select status"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create user",
+        "saving": "Saving..."
+      },
+      "notifications": {
+        "create_success": "User created successfully.",
+        "update_success": "User updated successfully.",
+        "create_error": "Error creating user.",
+        "update_error": "Error updating user.",
+        "roles_fetch_error": "Error loading available roles."
+      },
+      "validations": {
+        "name_min": "Name must be at least 2 characters.",
+        "username_min": "Username must be at least 3 characters.",
+        "email_invalid": "Invalid email.",
+        "role_required": "Select a role."
+      }
+    },
+  "details": {
+    "title": "User Details",
+    "description": "Registration information for {name}.",
+    "labels": {
+      "name": "Name",
+      "username": "Username",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "birthday": "Birthday",
+      "location_required": "Location required",
+      "id": "ID"
+    },
+    "not_informed": "Not informed",
+    "yes": "Yes",
+    "no": "No",
+    "location_required": "Location required"
+  }
+  },
+  "access_control": {
+    "title": "Access Control",
+    "description": "Manage IP blocks, regional policies, user rules, and location requirements.",
+  "error_load_users": "Error loading users list.",
+  "shared": {
+    "status_active": "Active",
+    "status_inactive": "Inactive",
+    "action_allow": "Allow",
+    "action_block": "Block",
+    "ip_mode_single": "Specific IP",
+    "ip_mode_cidr": "CIDR block",
+    "ip_mode_range": "IP range",
+    "days": {
+      "all": "Every day",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
+    "tabs": {
+      "ip_blocks": "IP Blocks",
+      "region_rules": "Region Rules",
+      "user_ip_rules": "User IP Rules",
+      "user_schedule_rules": "User Schedule Rules",
+      "location": "Location"
+    },
+    "stat_cards": {
+      "active_blocks": "Active blocks",
+      "active_blocks_desc": "IPs, ranges, and blocks currently applied.",
+      "region_rules": "Region rules",
+      "region_rules_desc": "Active regional policies by country.",
+      "user_restrictions": "User restrictions",
+      "user_restrictions_desc": "Sum of individual IP and time rules.",
+      "location_required": "Location required",
+      "location_required_desc": "Users required to send location.",
+      "schedule_windows": "Schedule windows",
+      "schedule_windows_desc": "Active schedule restrictions.",
+      "loading": "Loading"
+    },
+    "ip_blocks_tab": {
+      "error_load": "Error loading IP blocks.",
+      "error_delete": "Error deleting IP block.",
+      "success_delete": "IP block deleted successfully.",
+      "no_permission_title": "No permission to list IP blocks",
+      "no_permission_desc": "Your profile doesn't have the necessary permission to view this tab.",
+      "search": "Search IP block...",
+      "new_block": "New block",
+      "col_id": "Identification",
+      "col_mode": "Mode",
+      "col_value": "Value",
+      "col_status": "Status",
+      "col_updated": "Updated at",
+      "col_actions": "Actions",
+      "no_id": "No identification",
+      "no_desc": "No description",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "loading": "Loading...",
+      "empty": "No IP block found.",
+      "details_title": "IP block details",
+      "details_id": "Identification",
+      "details_mode": "Mode",
+      "details_value": "Value",
+      "details_status": "Status",
+      "details_desc": "Description",
+      "details_created": "Created at",
+      "details_updated": "Updated at",
+    "status_active": "Active",
+    "status_inactive": "Inactive",
+    "open_actions": "Open actions",
+    "delete_title": "Delete IP block",
+      "delete_desc": "Are you sure you want to delete this IP block? This action is irreversible.",
+      "button_delete": "Delete"
+    },
+    "ip_block_form": {
+      "val_start_ip": "Enter the starting IP.",
+      "val_end_ip": "Enter the ending IP.",
+      "val_cidr": "Enter the CIDR block.",
+      "val_ip": "Enter the IP address.",
+      "success_edit": "IP block updated successfully.",
+      "success_new": "IP block created successfully.",
+      "error_save": "Error saving IP block.",
+      "title_edit": "Edit IP block",
+      "title_new": "New IP block",
+      "desc": "Configure specific blocks, ranges, or CIDR blocks to prevent access.",
+      "label_id": "Identification",
+      "placeholder_id": "E.g.: Third-party office",
+      "label_mode": "Mode",
+      "placeholder_mode": "Select mode",
+      "label_start_ip": "Starting IP",
+      "placeholder_start_ip": "E.g.: 200.200.200.1",
+      "label_end_ip": "Ending IP",
+      "placeholder_end_ip": "E.g.: 200.200.200.254",
+      "label_cidr": "CIDR Block",
+      "label_ip": "IP Address",
+      "placeholder_cidr": "E.g.: 200.200.200.0/24",
+      "placeholder_ip": "E.g.: 200.200.200.200",
+      "label_desc": "Description",
+      "placeholder_desc": "Detail the motivation or context of the rule.",
+      "desc_hint": "Optional field for operational audit.",
+      "label_active": "Active block",
+      "active_hint": "When disabled, the record is saved but not applied.",
+      "button_cancel": "Cancel",
+      "button_save": "Save"
+    },
+    "region_rules_tab": {
+      "error_load": "Error loading region rules.",
+      "error_delete": "Error deleting region rule.",
+      "success_delete": "Region rule deleted successfully.",
+      "no_permission_title": "No permission to list region rules",
+      "no_permission_desc": "Your profile doesn't have access to list country or region policies.",
+      "search": "Search region rule...",
+      "new_rule": "New rule",
+      "col_country": "Country",
+      "col_action": "Action",
+      "col_desc": "Description",
+      "col_status": "Status",
+      "col_updated": "Updated at",
+      "col_actions": "Actions",
+      "no_desc": "No description",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "loading": "Loading...",
+      "empty": "No region rule found.",
+      "details_title": "Region rule details",
+      "details_country": "Country",
+      "details_action": "Action",
+      "details_status": "Status",
+      "details_desc": "Description",
+      "details_created": "Created at",
+      "details_updated": "Updated at",
+    "status_active": "Active",
+    "status_inactive": "Inactive",
+    "open_actions": "Open actions",
+    "delete_title": "Delete region rule",
+      "delete_desc": "Are you sure you want to delete this region rule? This action is irreversible.",
+      "button_delete": "Delete"
+    },
+    "region_rule_form": {
+      "val_code_length": "Enter a 2-character ISO Alpha-2 code.",
+      "success_edit": "Region rule updated successfully.",
+      "success_new": "Region rule created successfully.",
+      "error_save": "Error saving region rule.",
+      "title_edit": "Edit region rule",
+      "title_new": "New region rule",
+      "desc": "Define explicitly allowed or blocked countries using ISO code.",
+      "label_action": "Action",
+      "placeholder_action": "Select action",
+      "action_hint": "Select whether the region will be allowed or blocked.",
+      "label_country": "Country (ISO Alpha-2)",
+      "placeholder_country": "E.g.: BR",
+      "country_hint": "Examples: BR, US, PT, AR.",
+      "label_desc": "Description",
+      "placeholder_desc": "Explain the reason or scope of this policy.",
+      "label_active": "Active rule",
+      "active_hint": "Inactive rules remain registered, but are no longer applied.",
+      "button_cancel": "Cancel",
+      "button_save": "Save"
+    },
+    "user_ip_rules_tab": {
+      "error_load": "Error loading user IP rules.",
+      "error_delete": "Error deleting user IP rule.",
+      "success_delete": "User IP rule deleted successfully.",
+      "no_permission_title": "No permission to list user IP rules",
+      "no_permission_desc": "Your profile doesn't have the necessary permission to view this tab.",
+      "search": "Search IP restriction...",
+      "filter_user": "Filter by user",
+      "all_users": "All users",
+      "new_rule": "New rule",
+      "col_user": "User",
+      "col_action": "Action",
+      "col_type": "Type",
+      "col_value": "Value",
+      "col_status": "Status",
+      "col_updated": "Updated at",
+      "col_actions": "Actions",
+      "no_desc": "No description",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "loading": "Loading...",
+      "empty": "No user IP rule found.",
+      "details_title": "User IP rule details",
+      "details_user": "User",
+      "details_action": "Action",
+      "details_type": "Type",
+      "details_value": "Value",
+      "details_status": "Status",
+      "details_desc": "Description",
+      "details_created": "Created at",
+      "details_updated": "Updated at",
+    "status_active": "Active",
+    "status_inactive": "Inactive",
+    "open_actions": "Open actions",
+    "delete_title": "Delete user IP rule",
+      "delete_desc": "Are you sure you want to delete this user IP rule? This action is irreversible.",
+      "button_delete": "Delete"
+    },
+    "user_ip_rule_form": {
+      "val_user": "Select a user.",
+      "val_start_ip": "Enter the starting IP.",
+      "val_end_ip": "Enter the ending IP.",
+      "val_cidr": "Enter the CIDR block.",
+      "val_ip": "Enter the IP address.",
+      "success_edit": "User IP rule updated successfully.",
+      "success_new": "User IP rule created successfully.",
+      "error_save": "Error saving user IP rule.",
+      "title_edit": "Edit user IP rule",
+      "title_new": "New user IP rule",
+      "desc": "Restrict or allow specific IP origins for a system user.",
+      "label_user": "User",
+      "placeholder_user": "Select a user",
+      "label_action": "Action",
+      "placeholder_action": "Select action",
+      "label_type": "Type",
+      "placeholder_type": "Select type",
+      "label_start_ip": "Start IP",
+      "placeholder_start_ip": "E.g.: 10.0.0.1",
+      "label_end_ip": "End IP",
+      "placeholder_end_ip": "E.g.: 10.0.0.254",
+      "label_cidr": "CIDR Block",
+      "label_ip": "IP Address",
+      "placeholder_cidr": "E.g.: 10.0.0.0/24",
+      "placeholder_ip": "E.g.: 10.0.0.15",
+      "label_desc": "Description",
+      "placeholder_desc": "Include observations relevant to the operation.",
+      "desc_hint": "Useful to document the justification of the exception or block.",
+      "label_active": "Active rule",
+      "active_hint": "The rule remains saved for auditing even when disabled.",
+      "button_cancel": "Cancel",
+      "button_save": "Save"
+    },
+    "user_schedule_rules_tab": {
+      "error_load": "Error loading schedule rules.",
+      "error_delete": "Error deleting schedule rule.",
+      "success_delete": "Schedule rule deleted successfully.",
+      "no_permission_title": "No permission to list schedule restrictions",
+      "no_permission_desc": "Your profile doesn't have the necessary permission to view this tab.",
+      "search": "Search schedule restriction...",
+      "filter_user": "Filter by user",
+      "all_users": "All users",
+      "new_rule": "New rule",
+      "col_user": "User",
+      "col_action": "Action",
+      "col_window": "Window",
+      "col_days": "Days",
+      "col_status": "Status",
+      "col_updated": "Updated at",
+      "col_actions": "Actions",
+      "no_desc": "No description",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "loading": "Loading...",
+      "empty": "No schedule rule found.",
+      "details_title": "Schedule rule details",
+      "details_user": "User",
+      "details_action": "Action",
+      "details_window": "Window",
+      "details_days": "Days",
+      "details_timezone": "Timezone",
+      "details_status": "Status",
+      "details_desc": "Description",
+      "details_created": "Created at",
+      "details_updated": "Updated at",
+    "status_active": "Active",
+    "status_inactive": "Inactive",
+    "open_actions": "Open actions",
+    "delete_title": "Delete schedule rule",
+      "delete_desc": "Are you sure you want to delete this schedule rule? This action is irreversible.",
+      "button_delete": "Delete"
+    },
+    "user_schedule_rule_form": {
+      "val_user": "Select a user.",
+      "val_start_time_format": "Enter the start time in HH:mm format.",
+      "val_end_time_format": "Enter the end time in HH:mm format.",
+      "val_timezone": "Enter the timezone.",
+      "success_edit": "Schedule rule updated successfully.",
+      "success_new": "Schedule rule created successfully.",
+      "error_save": "Error saving schedule rule.",
+      "title_edit": "Edit schedule rule",
+      "title_new": "New schedule rule",
+      "desc": "Control access windows per user with time range and days of the week.",
+      "label_user": "User",
+      "placeholder_user": "Select a user",
+      "label_action": "Action",
+      "placeholder_action": "Select action",
+      "action_desc": "Select the action applied in this time window.",
+      "label_start_time": "Start",
+      "start_time_desc": "Standard format: HH:mm.",
+      "label_end_time": "End",
+      "end_time_desc": "Use the same format as start.",
+      "label_days": "Days of the week",
+      "days_desc": "If no day is selected, the rule applies to all days.",
+      "label_timezone": "Timezone",
+      "placeholder_timezone": "E.g.: America/Sao_Paulo",
+      "label_active": "Active rule",
+      "active_desc": "Activate or pause this window.",
+      "label_desc": "Description",
+      "placeholder_desc": "Document the policy or operational context.",
+      "button_cancel": "Cancel",
+      "button_save": "Save"
+    },
+    "location_requirements_tab": {
+      "success_toggle_on": "Location requirement successfully enabled.",
+      "success_toggle_off": "Location requirement successfully disabled.",
+      "error_toggle": "Error updating location requirement.",
+      "no_permission_title": "No access to location module",
+      "no_permission_desc": "Your profile lacks permission to view history or manage location requirements.",
+      "search": "Search user...",
+      "col_user": "User",
+      "col_status": "Status",
+      "col_required": "Requires location",
+      "col_actions": "Actions",
+      "status_required": "Required",
+      "status_optional": "Optional",
+    "actions": {
+      "view_report": "View history",
+      "disable_req": "Disable requirement",
+      "enable_req": "Enable requirement"
+    },
+    "open_actions": "Open actions",
+    "empty": "No user found."
+  },
+  "location_report_dialog": {
+      "loading_map": "Loading map...",
+      "error_load": "Error loading location history.",
+      "title": "Location history",
+      "desc_user": "Location records submitted by {name}.",
+      "desc_no_user": "Select a user to view the history.",
+      "search": "Search in history...",
+      "loading_records": "Loading records...",
+      "map_empty_title": "No point to display on the map",
+      "map_empty_desc": "Adjust search or wait for new location records.",
+      "stat_records": "Records",
+      "stat_last": "Last upload",
+      "stat_highlight": "Highlight",
+      "highlight_selected": "Selected point",
+      "highlight_none": "No selection",
+    "timeline_title": "Timeline",
+    "timeline_desc": "Click on a record to highlight the point on the map.",
+    "map_missing_key_title": "Google Maps not configured",
+    "map_missing_key_desc": "Set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to render the map.",
+    "map_load_error_title": "Unable to load Google Maps",
+    "map_load_error_desc": "Check the API key and the restrictions configured in the project.",
+    "map_card_title": "Travel map",
+    "map_points_count": "{count} plotted records",
+    "map_last_point": "Last point",
+    "col_date": "Date and time",
+      "col_coords": "Latitude / Longitude",
+      "empty": "No record found."
+    }
+  },
+  "backup": {
+  "title": "System Backup",
+  "description": "Manage snapshots, restores, and backup automation for the environment.",
+  "tabs": {
+    "history": "History",
+    "settings": "Automation"
+  },
+  "details_dialog": {
+      "title": "Backup details",
+      "desc": "Technical info of the selected file.",
+      "file": "File",
+      "status": "Status",
+      "origin": "Origin",
+      "created_at": "Created at",
+      "updated_at": "Updated at",
+      "size": "Size",
+      "provider": "Provider",
+      "dropbox": "Dropbox",
+      "format": "Format",
+      "rows": "Rows",
+      "tables": "Tables",
+      "sequences": "Sequences",
+      "generated_at": "Generated at",
+      "checksum": "Checksum",
+      "notes": "Notes",
+      "failure": "Failure",
+      "no_name": "No name"
+    },
+    "history_tab": {
+      "error_load": "Error loading backup history.",
+      "error_download": "Error downloading backup.",
+      "success_download": "Download started.",
+      "no_permission_title": "No access to backups module",
+      "no_permission_desc": "Your profile lacks permissions to view or operate backups.",
+      "search": "Search by file, origin, status or note...",
+      "btn_restore": "Restore file",
+      "btn_new": "New backup",
+      "col_file": "File",
+      "col_status": "Status",
+      "col_summary": "Summary",
+      "col_created": "Created at",
+      "col_actions": "Actions",
+      "format_unknown": "Unknown format",
+      "records_count": "{count} records",
+      "no_notes": "No notes",
+    "actions": {
+      "view": "View details",
+      "download": "Download file",
+      "restore": "Restore"
+    },
+    "open_actions": "Open actions",
+    "loading": "Loading...",
+      "empty": "No backup found.",
+      "no_permission_list_title": "No permission to list backups",
+      "no_permission_list_desc": "Your profile doesn't have access to the backup history yet."
+    },
+    "settings_tab": {
+      "val_schedule": "Set a time to enable automatic backup.",
+      "val_password": "The password must be at least 8 characters.",
+      "val_notes": "Notes can have at most 256 characters.",
+      "error_load": "Error loading backup settings.",
+      "success_update": "Backup settings updated successfully.",
+      "error_update": "Error updating backup settings.",
+      "no_permission_title": "No permission to configure backups",
+      "no_permission_desc": "Your profile lacks access to backup automation rules.",
+      "card_automation": "Automation",
+      "card_automation_on": "Enabled",
+      "card_automation_off": "Disabled",
+      "card_freq": "Frequency",
+      "card_last": "Last run",
+      "loading": "Loading settings...",
+      "form_auto": "Automatic backup",
+      "form_auto_desc": "Enable scheduling to generate recurring system backups.",
+      "form_freq": "Frequency",
+      "placeholder_freq": "Select frequency",
+      "form_time": "Time",
+      "time_desc": "Base time in `America/Sao_Paulo`.",
+      "form_pwd": "Automation password",
+      "placeholder_pwd": "Enter password",
+      "placeholder_pwd_maintain": "Leave empty to keep",
+      "pwd_desc": "Enter the password used by automatic backup.",
+      "form_notes": "Notes",
+      "placeholder_notes": "Describe policy, retention or operational context.",
+      "info_maintain": "A password is already stored for automation. Leave the field blank to keep the current password.",
+      "btn_save": "Save settings"
+    },
+    "create_dialog": {
+      "val_pwd_min": "The backup password must be at least 8 characters.",
+      "val_pwd_max": "The backup password must be at most 128 characters.",
+      "val_notes": "Notes can have at most 256 characters.",
+      "success": "Backup created successfully ({count} records).",
+      "error": "Error creating backup.",
+      "title": "New backup",
+      "desc": "Generate an encrypted database snapshot with a restore password.",
+      "form_pwd": "Backup password",
+      "placeholder_pwd": "Enter the file password",
+      "form_notes": "Notes",
+      "placeholder_notes": "Explain the reason or context for this generation.",
+      "btn_cancel": "Cancel",
+      "btn_submit": "Generate backup"
+    },
+    "restore_dialog": {
+      "val_pwd_min": "The password must be at least 8 characters.",
+      "val_pwd_max": "The password must be at most 128 characters.",
+      "success_restore": "Backup restored successfully ({count} records).",
+      "success_dryrun": "Validation successful ({count} records).",
+      "error": "Error restoring backup.",
+      "title": "Restore backup",
+      "desc": "Use the password for file {file} to validate or apply restoration.",
+      "form_pwd": "Backup password",
+      "placeholder_pwd": "Enter the file password",
+      "form_mode": "Mode",
+      "placeholder_mode": "Select mode",
+      "mode_dryrun": "Only validate",
+      "mode_replace": "Apply restoration",
+      "btn_cancel": "Cancel",
+      "btn_validate": "Validate backup",
+      "btn_restore": "Restore backup"
+    },
+    "restore_upload_dialog": {
+      "val_pwd_min": "The password must be at least 8 characters.",
+      "val_pwd_max": "The password must be at most 128 characters.",
+      "error_no_file": "Select a backup file to continue.",
+      "success_restore": "File restored successfully ({count} records).",
+      "success_dryrun": "Validation successful ({count} records).",
+      "error": "Error restoring backup file.",
+      "title": "Restore file",
+      "desc": "Upload an `.mmsbkp` file to validate or apply manual restoration.",
+      "form_file": "Backup file",
+      "placeholder_file": "Select an .mmsbkp file",
+      "form_pwd": "Backup password",
+      "placeholder_pwd": "Enter the file password",
+      "form_mode": "Mode",
+      "placeholder_mode": "Select mode",
+      "mode_dryrun": "Only validate",
+      "mode_replace": "Apply restoration",
+      "btn_cancel": "Cancel",
+      "btn_validate": "Validate file",
+      "btn_restore": "Restore file"
+    },
+    "stat_cards": {
+      "card_total": "Total backups",
+      "card_total_desc": "Records available for download and restore.",
+      "card_completed": "Completed",
+      "card_completed_desc": "Executions finished without failure.",
+      "card_failed": "Failures",
+      "card_failed_desc": "Backups requiring operational review.",
+      "card_last": "Last automatic run",
+      "card_last_desc_on": "Time of the last automated backup recorded.",
+      "card_last_desc_off": "Automation disabled at the moment.",
+      "loading": "Loading"
+    },
+    "utils": {
+      "freq_daily": "Daily",
+      "freq_days": "Every {days} days",
+      "freq_1hour": "Every 1 hour",
+      "freq_hours": "Every {hours} hours",
+      "freq_minutes": "Every {minutes} minutes",
+      "status_completed": "Completed",
+      "status_failed": "Failed",
+      "status_running": "Running",
+      "origin_scheduled": "Scheduled",
+      "origin_manual": "Manual",
+      "badge_local": "Local",
+      "badge_external": "External",
+      "badge_dropbox_yes": "Sent to Dropbox",
+      "badge_dropbox_no": "Not sent to Dropbox"
+    }
+  },
+  "permissions": {
+    "title": "Access Administration",
+    "description": "Manage roles, API permissions, profile assignments, and frontend screens.",
+    "tabs": {
+      "roles": "Roles",
+      "permissions": "Permissions (API)",
+      "assignment": "Assignment (API)",
+      "screens": "Screens (Frontend)"
+    },
+  "roles_tab": {
+      "search": "Search role...",
+      "new_role": "New role",
+      "col_name": "Role name",
+      "col_updated": "Updated at",
+      "col_actions": "Actions",
+      "no_desc": "No description",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "empty": "No role found.",
+      "loading": "Loading...",
+      "delete_success": "Role deleted successfully.",
+      "delete_error": "Error deleting role.",
+      "load_error": "Error loading roles.",
+      "details_title": "Role details",
+      "details_name": "Name",
+      "details_desc": "Description",
+      "details_created": "Created at",
+      "details_updated": "Updated at",
+    "delete_dialog_title": "Delete role",
+    "delete_dialog_desc": "Are you sure you want to delete this role? This action is irreversible.",
+    "button_delete": "Delete",
+    "open_actions": "Open actions"
+  },
+  "permissions_tab": {
+      "search": "Search permission...",
+      "new": "New permission",
+      "col_name": "Permission",
+      "col_updated": "Updated at",
+      "col_actions": "Actions",
+      "no_group": "No group",
+      "empty": "No permission found.",
+      "loading": "Loading...",
+      "delete_success": "Permission deleted successfully.",
+      "delete_error": "Error deleting permission.",
+      "load_error": "Error loading permissions.",
+      "details_title": "Permission details",
+      "details_key": "Key",
+      "details_group": "Group",
+      "details_created": "Created at",
+      "details_updated": "Updated at",
+    "delete_dialog_title": "Delete permission",
+    "delete_dialog_desc": "Are you sure you want to delete this permission? This action is irreversible.",
+    "button_delete": "Delete",
+    "actions": {
+      "view": "View details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "open_actions": "Open actions"
+  },
+  "assignment_tab": {
+      "search": "Search permission...",
+      "role": "Role",
+      "select_role": "Select a role",
+      "save": "Save assignments",
+      "empty_title": "No permissions found",
+      "empty_desc": "Adjust search to find permissions within available groups.",
+      "start_title": "Select a role to start",
+    "start_desc": "Choose a role in the top bar to view and consolidate its API permissions.",
+    "success": "Permissions updated successfully.",
+    "error_roles": "Error loading roles.",
+    "error_perms": "Error loading available permissions.",
+    "error_role_perms": "Error loading permissions for this role.",
+    "error_save": "Error consolidating permissions.",
+    "fallback_group": "No group",
+    "selection_count": "{selected} of {total}"
+  },
+  "screens_tab": {
+      "search": "Search screen...",
+      "role": "Role",
+      "select_role": "Select a role",
+      "save": "Save screens",
+      "empty_title": "No screens found",
+      "empty_desc": "Adjust search to find screens within available groups.",
+      "start_title": "Select a role to start",
+    "start_desc": "Choose a role in the top bar to view and consolidate allowed frontend screens.",
+    "success": "Screens updated successfully. Re-login to apply to local menu.",
+    "error_roles": "Error loading roles.",
+    "error_screens": "Error loading available screens.",
+    "error_role_screens": "Error loading allowed screens for this role.",
+    "error_save": "Error consolidating screens.",
+    "fallback_group": "No group",
+    "selection_count": "{selected} of {total}"
+  },
+  "stats": {
+    "roles": "Roles",
+    "roles_desc": "Configured administrative profiles.",
+    "permissions": "API permissions",
+    "permissions_desc": "Available keys for backend authorization.",
+    "screens": "Frontend screens",
+    "screens_desc": "Routes and screens mapped for web access.",
+    "groups": "Permission groups",
+    "groups_desc": "Logical groupings used for organization.",
+    "loading": "Loading"
+  },
+  "role_form": {
+      "title_edit": "Edit Role",
+      "title_new": "New Role",
+      "desc_edit": "Update role information.",
+      "desc_new": "Fill in the details to create a new role.",
+      "label_name": "Name",
+      "placeholder_name": "E.g.: Operator",
+      "label_desc": "Description",
+      "placeholder_desc": "Brief description of the responsibilities for this role...",
+      "button_cancel": "Cancel",
+      "button_save": "Save",
+      "success_edit": "Role updated successfully!",
+      "success_new": "Role created successfully!",
+      "error_save": "An error occurred while saving the role.",
+      "val_name_min": "The name must be at least 2 characters."
+    },
+    "permission_form": {
+      "title_edit": "Edit Permission",
+      "title_new": "New Permission",
+      "desc_edit": "Update permission details.",
+      "desc_new": "Define a new custom permission in the system.",
+      "label_name": "Permission Name (Key)",
+      "placeholder_name": "E.g.: create_user",
+      "label_group": "Group",
+      "placeholder_group": "E.g.: users",
+      "button_cancel": "Cancel",
+      "button_save": "Save",
+      "success_edit": "Permission updated successfully!",
+      "success_new": "Permission created successfully!",
+      "error_save": "An error occurred while saving the permission.",
+      "val_name_min": "The name must be at least 2 characters."
+    }
+  },
+  "ui_settings": {
+    "title": "UI Settings",
+    "description": "Customize appearance, visual behavior and system preferences.",
+    "tabs": {
+      "appearance": "Appearance",
+      "layout": "Layout",
+      "theme": "Theme"
+    },
+    "theme": {
+      "title": "Color Themes",
+      "description": "Choose the color palette that best matches your style.",
+      "import_button": "Import variables",
+      "card_title": "Theme Preview",
+      "sources_title": "Theme source",
+      "sources_description": "Choose the origin of the global palette and keep local preview before persisting for all users.",
+      "sources": {
+        "shadcn": {
+          "title": "System base theme",
+          "description": "Uses presets compatible with the project main palette."
+        },
+        "tweakcn": {
+          "title": "External preset",
+          "description": "Loads curated presets from Tweakcn with the same tokens contract."
+        },
+        "imported": {
+          "title": "Imported theme",
+          "description": "Allows importing a CSS with :root and .dark blocks for global override."
+        }
+      },
+      "modes": {
+        "label": "System default mode",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "radius": {
+        "label": "Global radius",
+        "placeholder": "Select radius"
+      },
+      "presets": {
+        "shadcn_label": "Shadcn Preset",
+        "shadcn_placeholder": "Select a base theme",
+        "tweakcn_label": "Tweakcn Preset",
+        "tweakcn_placeholder": "Select an external preset"
+      },
+      "imported_section": {
+        "title": "Imported theme",
+        "description": "Use exported CSS to persist your own set of variables.",
+        "active": "Imported theme active",
+        "inactive": "Imported theme inactive",
+        "vars_count": "{count} {mode} vars",
+        "import_button": "Import theme CSS",
+        "activate_button": "Activate saved imported theme",
+        "hint_1": "Importing only changes the local preview until clicking Save changes.",
+        "hint_2": "Individual light/dark preference remains controlled by each user in the header icon."
+      },
+      "overrides": {
+        "title": "Color Overrides",
+        "description": "Adjust global semantic tokens only. The value is saved as override on top of the active preset.",
+        "colors": {
+          "primary": "Primary",
+          "primary_foreground": "Primary Foreground",
+          "secondary": "Secondary",
+          "secondary_foreground": "Secondary Foreground",
+          "accent": "Accent",
+          "accent_foreground": "Accent Foreground",
+          "muted": "Muted",
+          "muted_foreground": "Muted Foreground"
+        }
+      }
+    },
+    "layout": {
+      "title": "Layout Settings",
+      "description": "Adjust panels behavior, menus and page structure.",
+      "sidebar_structure_title": "Sidebar Structure",
+      "sidebar_structure_desc": "Define the structural style of the administrative shell used by all users.",
+      "sidebar_behavior_title": "Sidebar Behavior",
+      "sidebar_behavior_desc": "Controls collapsible behavior and space allocation.",
+      "sidebar_side_title": "Navigation Side",
+      "sidebar_side_desc": "Positions the sidebar on the left or right side of the interface.",
+      "options": {
+        "sidebar_variant": {
+          "sidebar": {
+            "title": "Default",
+            "description": "Classic sidebar structure integrated with the shell."
+          },
+          "floating": {
+            "title": "Floating",
+            "description": "Elevated sidebar with a floating panel feel."
+          },
+          "inset": {
+            "title": "Inset",
+            "description": "Inset sidebar with margins and emphasized corners."
+          }
+        },
+        "sidebar_collapsible": {
+          "offcanvas": {
+            "title": "Off canvas",
+            "description": "Moves completely out of view when collapsed."
+          },
+          "icon": {
+            "title": "Icons",
+            "description": "Collapses into a compact rail with icons only."
+          },
+          "none": {
+            "title": "Fixed",
+            "description": "Stays permanently expanded."
+          }
+        },
+        "sidebar_side": {
+          "left": "Left",
+          "right": "Right"
+        }
+      }
+    },
+    "import_dialog": {
+      "title": "Import CSS Theme",
+      "description": "Paste the exported CSS containing the :root and .dark blocks. The variables will be persisted as a global theme.",
+      "hint": "Use the same system variables contract. The preview will be applied immediately before saving.",
+      "button_cancel": "Cancel",
+      "button_import": "Import theme",
+      "success_msg": "Theme imported successfully.",
+      "error_msg": "Could not import the provided CSS.",
+      "error_blocks": "Include the :root and .dark blocks with the CSS variables of the imported theme.",
+      "error_vars": "Could not extract enough variables from the provided CSS."
+    },
+    "actions": {
+      "restore": "Restore saved",
+      "apply_base": "Apply base pattern",
+      "save": "Save changes",
+      "saving": "Saving...",
+      "retry": "Try again"
+    },
+    "tags": {
+      "dirty": "Local preview with pending changes",
+      "synced": "Synced with saved pattern",
+      "readonly": "Read only"
+    },
+    "notifications": {
+      "save_success": "Global layout and theme configuration updated.",
+      "save_error": "Could not save global settings.",
+      "load_error_title": "Could not load global configuration",
+      "load_error_desc": "Try reloading the module data to restore the system's visual pattern preview and editing."
+    },
+    "stats": {
+      "loading": "Loading",
+      "cards": {
+        "theme_source": {
+          "title": "Theme Source",
+          "description": "Global preset used as the visual base."
+        },
+        "theme_mode": {
+          "title": "Default Mode",
+          "description": "Initial mode applied across the application."
+        },
+        "radius": {
+          "title": "Global Radius",
+          "description": "Central token used by system border radii."
+        },
+        "shell": {
+          "title": "Sidebar Shell",
+          "description": "Structure and behavior of the global sidebar."
+        }
+      },
+      "values": {
+        "theme_source": {
+          "imported": "Imported"
+        },
+        "theme_mode": {
+          "light": "Light",
+          "dark": "Dark"
+        },
+        "sidebar_variant": {
+          "sidebar": "Default",
+          "floating": "Floating",
+          "inset": "Inset"
+        },
+        "sidebar_collapsible": {
+          "offcanvas": "Off canvas",
+          "icon": "Icons",
+          "none": "Fixed"
+        }
+      }
+    }
+  },
+  "logs": {
+    "title": "System Logs",
+    "description": "Monitor API calls and audit events with advanced filters.",
+    "tabs": {
+      "api": "API",
+      "audit": "Audit"
+    },
+    "notifications": {
+      "load_users_error": "Could not load users for the filter.",
+      "load_logs_error": "Could not load logs."
+    },
+    "shared": {
+      "empty_value": "-",
+      "no_entity": "No entity",
+      "duration_ms": "{value} ms",
+      "duration_seconds": "{value} s",
+      "levels": {
+        "error": "error",
+        "warn": "warn",
+        "info": "info",
+        "debug": "debug"
+      },
+      "origins": {
+        "app": "App",
+        "web": "Web",
+        "unknown": "Unknown"
+      }
+    },
+    "filters": {
+      "fields": {
+        "message": "Message",
+        "user": "User",
+        "level": "Level",
+        "origin": "Origin",
+        "method": "Method",
+        "request_id": "Request ID",
+        "period": "Period",
+        "url": "URL",
+        "error": "Error",
+        "action": "Action",
+        "entity": "Entity"
+      },
+      "placeholders": {
+        "message": "Search message, error or context...",
+        "request_id": "Search request ID...",
+        "period": "Select period",
+        "url": "Ex.: /users or /access-control",
+        "error": "Search by name, message or stack...",
+        "action": "Ex.: create_user",
+        "entity": "Ex.: users, roles"
+      },
+      "options": {
+        "all": "All",
+        "all_feminine": "All",
+        "level": {
+          "error": "error",
+          "warn": "warn",
+          "info": "info",
+          "debug": "debug"
+        },
+        "origin": {
+          "web": "Web",
+          "app": "App",
+          "unknown": "Unknown"
+        }
+      },
+      "actions": {
+        "apply": "Apply filters",
+        "clear": "Clear filters",
+        "clear_period": "Clear period"
+      }
+    },
+    "table": {
+      "columns": {
+        "event": "Event",
+        "result": "Result",
+        "context": "Context",
+        "user": "User",
+        "origin": "Origin",
+        "message": "Message",
+        "date": "Date",
+        "actions": "Actions"
+      },
+      "labels": {
+        "request_id": "Request ID",
+        "duration": "Duration",
+        "source": "Source",
+        "ip": "IP"
+      },
+      "actions": {
+        "open": "Open actions",
+        "view_details": "View details"
+      },
+      "empty": {
+        "no_action": "No action",
+        "no_results": "No logs found."
+      },
+      "loading": "Loading..."
+    },
+    "details": {
+      "title": "Log Details",
+      "empty": "Select a log to view its details.",
+      "sections": {
+        "summary": "Summary",
+        "metadata": "Metadata"
+      },
+      "cards": {
+        "user": "User",
+        "origin": "Origin",
+        "moment": "Moment"
+      },
+      "labels": {
+        "ip": "IP",
+        "request_id": "Request ID",
+        "url": "URL",
+        "duration": "Duration",
+        "controller": "Controller",
+        "handler": "Handler",
+        "action": "Action",
+        "entity": "Entity",
+        "entity_id": "Entity ID",
+        "logical_source": "Logical source"
+      },
+      "tabs": {
+        "payload": "Payload",
+        "error": "Error",
+        "meta": "Meta",
+        "context": "Context"
+      },
+      "payload": {
+        "params": "Params",
+        "query": "Query",
+        "body": "Body",
+        "error_block": "Error",
+        "stack": "Stack",
+        "no_stack": "No stack recorded."
+      }
+    },
+    "stats": {
+      "loading": "Loading",
+      "cards": {
+        "api_total": {
+          "title": "API Logs",
+          "description": "Instrumented requests and responses."
+        },
+        "audit_total": {
+          "title": "Audit Logs",
+          "description": "Business events and sensitive operations."
+        },
+        "api_errors": {
+          "title": "API Errors",
+          "description": "Occurrences classified with error level."
+        },
+        "audit_warnings": {
+          "title": "Audit Warnings",
+          "description": "Audit events with warn level."
+        }
+      }
+    }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "description": "Manage your appointments, events and reminders.",
+    "buttons": {
+      "new_event": "New Event",
+      "today": "Today"
+    },
+    "form": {
+      "title_create": "Create New Event",
+      "title_edit": "Edit Event",
+      "description_create": "Add a new event to your calendar",
+      "description_edit": "Make changes to this event",
+      "labels": {
+        "title": "Event Title",
+        "type": "Event Type",
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration",
+        "options": "Options",
+        "all_day": "All day",
+        "reminder": "Reminder",
+        "location": "Location",
+        "attendees": "Attendees",
+        "description": "Description"
+      },
+      "placeholders": {
+        "title": "Enter event title...",
+        "location": "Add location...",
+        "attendee": "Add attendee...",
+        "description": "Add description..."
+      },
+      "types": {
+        "meeting": "Meeting",
+        "event": "Event",
+        "personal": "Personal",
+        "task": "Task",
+        "reminder": "Reminder"
+      },
+      "durations": {
+        "15_min": "15 min",
+        "30_min": "30 min",
+        "45_min": "45 min",
+        "1_hour": "1 hour",
+        "1_5_hours": "1.5 hours",
+        "2_hours": "2 hours",
+        "3_hours": "3 hours",
+        "all_day": "All day"
+      },
+      "buttons": {
+        "add": "Add",
+        "update": "Update Event",
+        "create": "Create Event",
+        "delete": "Delete",
+        "cancel": "Cancel"
+      }
+    }
+  },
+  "chat": {
+    "title": "Messages",
+    "placeholder": "Search conversations...",
+    "no_conversation": "Select a conversation to start chatting",
+    "search_conversations": "Search conversations...",
+    "header": {
+      "group_status": "{total} members, {online} online",
+      "status_online": "Active now",
+      "status_away": "Away",
+      "status_offline": "Last seen {date}",
+      "group_badge": "Group",
+      "tooltips": {
+        "search": "Search in conversation",
+        "voice_call": "Voice call",
+        "video_call": "Video call",
+        "info": "Conversation info",
+        "more": "More options"
+      },
+      "actions": {
+        "unmute": "Unmute conversation",
+        "mute": "Mute conversation",
+        "search_messages": "Search messages",
+        "manage_members": "Manage members",
+        "delete": "Delete conversation"
+      }
+    },
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "groups": "Groups"
+    },
+    "no_results": "No conversations yet",
+    "no_results_search": "No conversations found matching your search",
+    "input": {
+      "placeholder": "Type a message...",
+      "typing_indicator": "You are typing...",
+      "tooltips": {
+        "attach": "Attach file",
+        "emoji": "Add emoji",
+        "more": "More options",
+        "send": "Send message",
+        "voice": "Voice message"
+      },
+      "actions": {
+        "upload_image": "Photo or video",
+        "upload_file": "Documento"
+      }
+    }
+  },
+  "shared": {
+    "confirm_dialog": {
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
+  },
+  "account_profile": {
+    "val_name": "Enter full name.",
+    "val_username": "Enter at least 3 characters.",
+    "val_email": "Enter a valid email.",
+    "val_cur_pwd": "Enter current password to change password.",
+    "val_new_pwd": "Enter new password.",
+    "val_new_pwd_len": "New password must be at least 8 characters.",
+    "val_confirm_pwd": "Confirm new password.",
+    "val_pwd_match": "Confirmation must match new password.",
+    "success_update": "Profile successfully updated.",
+    "error_update": "Failed to update profile.",
+    "card_data_title": "Account Data",
+    "card_data_desc": "Update basic details used in the system and shown on your profile.",
+    "form_name": "Full name",
+    "form_name_placeholder": "Ex: John Doe",
+    "form_user": "Username",
+    "form_user_placeholder": "Ex: johndoe",
+    "form_user_desc": "This identifier can be used in integrations and internal logs.",
+    "form_email": "Email",
+    "form_email_placeholder": "you@company.com",
+    "form_birth": "Birthday",
+    "card_sec_title": "Security",
+    "card_sec_desc": "Fill the fields below only to change your password.",
+    "form_cur_pwd": "Current password",
+    "form_new_pwd": "New password",
+    "form_confirm_pwd": "Confirm new password",
+    "btn_restore": "Restore values",
+    "btn_save": "Save changes"
+  },
+  "account": {
+    "title": "Account Settings",
+    "description": "Manage your access details, profile information and security preferences.",
+    "notifications": {
+      "load_error": "Failed to load account data."
+    },
+    "errors": {
+      "load": "Could not load your account data."
+    },
+    "error_state": {
+      "title": "Failed to load your account",
+      "description": "The authenticated user data could not be loaded."
+    },
+    "actions": {
+      "retry": "Try again"
+    },
+    "sidebar": {
+      "email": "Email",
+      "role": "Role",
+      "created_at": "Created at"
+    },
+    "shared": {
+      "empty_value": "--"
+    },
+    "overview": {
+      "shared": {
+        "empty_value": "--"
+      },
+      "cards": {
+        "role": {
+          "title": "Current Role",
+          "description": "Profile currently applied to your account in the system."
+        },
+        "status": {
+          "title": "Status",
+          "description": "Current availability of your access."
+        },
+        "updated_at": {
+          "title": "Last update",
+          "description": "Most recent profile change record."
+        },
+        "location_required": {
+          "title": "Location required",
+          "description": "Operational rule currently applied to your login."
+        }
+      },
+      "values": {
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "location_required": {
+          "required": "Required",
+          "optional": "Optional"
+        }
+      }
+    }
+  }
+}

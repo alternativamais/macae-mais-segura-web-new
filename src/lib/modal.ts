@@ -1,0 +1,1 @@
+export const MODAL_EXIT_DURATION_MS = 200

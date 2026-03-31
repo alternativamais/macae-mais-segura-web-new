@@ -1,0 +1,1365 @@
+{
+  "common": {
+    "welcome": "Bem-vindo ao Alternativa Base",
+    "dashboard": "Painel de Controle",
+    "profile": "Perfil",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "language": "Idioma"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Uma visão geral do sistema"
+  },
+  "navigation": {
+    "main": "Principal",
+    "dashboard": "Dashboard",
+    "settings": "Configurações",
+    "administration": "Administração",
+    "users": "Usuários",
+    "permissions": "Permissões",
+    "access_control": "Controle de Acesso",
+    "system": "Sistema",
+    "backups": "Backups",
+    "ui_settings": "Layout e Tema",
+    "logs": "Logs",
+    "my_account": "Minha Conta"
+  },
+  "user": {
+    "account": "Conta",
+    "language": "Idioma",
+    "logout": "Sair"
+  },
+  "search": {
+    "placeholder": "O que você precisa?",
+    "empty": "Nenhum resultado encontrado.",
+    "trigger": "Buscar..."
+  },
+  "users": {
+    "title": "Usuários",
+    "description": "Gerencie contas de acesso, cargos atribuídos e status de disponibilidade.",
+    "fetch_error": "Erro ao carregar usuários.",
+    "loading": "Carregando usuários...",
+    "stats": {
+      "total": "Usuários totais",
+      "total_desc": "Contas carregadas para gestão administrativa.",
+      "active": "Usuários ativos",
+      "active_desc": "Perfis marcados como disponíveis para acesso.",
+      "inactive": "Usuários inativos",
+      "inactive_desc": "Contas que exigem revisão ou reativação.",
+      "roles": "Cargos em uso",
+      "roles_desc": "Perfis distintos atribuídos entre os usuários.",
+      "loading": "Carregando"
+    },
+    "table": {
+      "columns": {
+        "user": "Usuário",
+        "username": "Username",
+        "role": "Cargo",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Excluir",
+        "create": "Novo Usuário",
+        "view": "Ver detalhes",
+        "search_placeholder": "Buscar por nome, email, username ou cargo..."
+      },
+      "delete_dialog": {
+        "title": "Excluir usuário",
+        "description": "Deseja realmente excluir este usuário? Esta ação é irreversível.",
+        "success": "Usuário excluído com sucesso.",
+        "error": "Erro ao excluir usuário."
+      },
+      "no_results": "Nenhum usuário encontrado.",
+      "loading": "Carregando...",
+      "no_role": "Sem cargo",
+      "open_actions": "Abrir ações"
+    },
+    "form": {
+      "title_create": "Novo usuário",
+      "title_edit": "Editar usuário",
+      "description_create": "Cadastre uma nova conta de acesso para o sistema.",
+      "description_edit": "Atualize os dados cadastrais e o cargo de acesso do usuário.",
+      "labels": {
+        "name": "Nome",
+        "username": "Username",
+        "email": "Email",
+        "password": "Senha",
+        "password_edit_hint": "(opcional na edição)",
+        "birthday": "Aniversário",
+        "role": "Cargo",
+        "status": "Status"
+      },
+      "placeholders": {
+        "name": "Ex.: Arnaldo Batista",
+        "username": "Ex.: arnaldo.batista",
+        "email": "Ex.: arnaldo@empresa.com",
+        "password": "Informe a senha",
+        "birthday": "Selecione",
+        "role": "Selecione um cargo",
+        "status": "Selecione o status"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "create": "Criar usuário",
+        "saving": "Salvando..."
+      },
+      "notifications": {
+        "create_success": "Usuário criado com sucesso.",
+        "update_success": "Usuário atualizado com sucesso.",
+        "create_error": "Erro ao criar usuário.",
+        "update_error": "Erro ao atualizar usuário.",
+        "roles_fetch_error": "Erro ao carregar cargos disponíveis."
+      },
+      "validations": {
+        "name_min": "Nome deve ter pelo menos 2 caracteres.",
+        "username_min": "Username deve ter pelo menos 3 caracteres.",
+        "email_invalid": "Email inválido.",
+        "role_required": "Selecione um cargo."
+      }
+    },
+  "details": {
+    "title": "Detalhes do usuário",
+    "description": "Informações cadastrais de {name}.",
+    "labels": {
+      "name": "Nome",
+      "username": "Username",
+      "email": "Email",
+      "role": "Cargo",
+      "status": "Status",
+      "birthday": "Aniversário",
+      "location_required": "Requer localização",
+      "id": "ID"
+    },
+    "not_informed": "Não informado",
+    "yes": "Sim",
+    "no": "Não",
+    "location_required": "Requer localização"
+  }
+  },
+  "access_control": {
+    "title": "Controle de Acesso",
+    "description": "Gerencie bloqueios, políticas regionais, regras por usuário e exigência de localização.",
+  "error_load_users": "Erro ao carregar lista de usuários.",
+  "shared": {
+    "status_active": "Ativo",
+    "status_inactive": "Inativo",
+    "action_allow": "Permitir",
+    "action_block": "Bloquear",
+    "ip_mode_single": "IP específico",
+    "ip_mode_cidr": "Bloco CIDR",
+    "ip_mode_range": "Intervalo de IPs",
+    "days": {
+      "all": "Todos os dias",
+      "monday": "Segunda-feira",
+      "tuesday": "Terça-feira",
+      "wednesday": "Quarta-feira",
+      "thursday": "Quinta-feira",
+      "friday": "Sexta-feira",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    }
+  },
+    "tabs": {
+      "ip_blocks": "Bloqueios de IP",
+      "region_rules": "Regras por região",
+      "user_ip_rules": "Usuários por IP",
+      "user_schedule_rules": "Usuários por horário",
+      "location": "Localização"
+    },
+    "stat_cards": {
+      "active_blocks": "Bloqueios ativos",
+      "active_blocks_desc": "IPs, faixas e blocos atualmente aplicados.",
+      "region_rules": "Regras por região",
+      "region_rules_desc": "Políticas regionais ativas por país.",
+      "user_restrictions": "Restrições por usuário",
+      "user_restrictions_desc": "Soma de regras individuais de IP e horário.",
+      "location_required": "Localização obrigatória",
+      "location_required_desc": "Usuários obrigados a enviar localização.",
+      "schedule_windows": "Janelas de horário",
+      "schedule_windows_desc": "Restrições de horário ativas.",
+      "loading": "Carregando"
+    },
+    "ip_blocks_tab": {
+      "error_load": "Erro ao carregar bloqueios de IP.",
+      "error_delete": "Erro ao remover bloqueio de IP.",
+      "success_delete": "Bloqueio de IP removido com sucesso.",
+      "no_permission_title": "Sem permissão para listar bloqueios de IP",
+      "no_permission_desc": "Seu perfil não possui a permissão necessária para visualizar esta aba.",
+      "search": "Buscar bloqueio de IP...",
+      "new_block": "Novo bloqueio",
+      "col_id": "Identificação",
+      "col_mode": "Modo",
+      "col_value": "Valor",
+      "col_status": "Status",
+      "col_updated": "Atualizado em",
+      "col_actions": "Ações",
+      "no_id": "Sem identificação",
+      "no_desc": "Sem descrição",
+      "actions": {
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
+      "loading": "Carregando...",
+      "empty": "Nenhum bloqueio de IP encontrado.",
+      "details_title": "Detalhes do bloqueio de IP",
+      "details_id": "Identificação",
+      "details_mode": "Modo",
+      "details_value": "Valor",
+      "details_status": "Status",
+      "details_desc": "Descrição",
+      "details_created": "Criado em",
+      "details_updated": "Atualizado em",
+    "status_active": "Ativo",
+    "status_inactive": "Inativo",
+    "open_actions": "Abrir ações",
+    "delete_title": "Excluir bloqueio de IP",
+      "delete_desc": "Deseja realmente excluir este bloqueio de IP? Esta ação é irreversível.",
+      "button_delete": "Excluir"
+    },
+    "ip_block_form": {
+      "val_start_ip": "Informe o IP inicial.",
+      "val_end_ip": "Informe o IP final.",
+      "val_cidr": "Informe o bloco CIDR.",
+      "val_ip": "Informe o endereço IP.",
+      "success_edit": "Bloqueio de IP atualizado com sucesso.",
+      "success_new": "Bloqueio de IP criado com sucesso.",
+      "error_save": "Erro ao salvar bloqueio de IP.",
+      "title_edit": "Editar bloqueio de IP",
+      "title_new": "Novo bloqueio de IP",
+      "desc": "Configure bloqueios pontuais, faixas ou blocos CIDR para impedir acesso.",
+      "label_id": "Identificação",
+      "placeholder_id": "Ex.: Escritório terceiro",
+      "label_mode": "Modo",
+      "placeholder_mode": "Selecione o modo",
+      "label_start_ip": "IP inicial",
+      "placeholder_start_ip": "Ex.: 200.200.200.1",
+      "label_end_ip": "IP final",
+      "placeholder_end_ip": "Ex.: 200.200.200.254",
+      "label_cidr": "Bloco CIDR",
+      "label_ip": "Endereço IP",
+      "placeholder_cidr": "Ex.: 200.200.200.0/24",
+      "placeholder_ip": "Ex.: 200.200.200.200",
+      "label_desc": "Descrição",
+      "placeholder_desc": "Detalhe a motivação ou o contexto da regra.",
+      "desc_hint": "Campo opcional para auditoria operacional.",
+      "label_active": "Bloqueio ativo",
+      "active_hint": "Quando desativado, o registro permanece salvo, mas não é aplicado.",
+      "button_cancel": "Cancelar",
+      "button_save": "Salvar"
+    },
+    "region_rules_tab": {
+      "error_load": "Erro ao carregar regras regionais.",
+      "error_delete": "Erro ao remover regra regional.",
+      "success_delete": "Regra regional removida com sucesso.",
+      "no_permission_title": "Sem permissão para listar regras regionais",
+      "no_permission_desc": "Seu perfil não possui acesso à listagem das políticas por país ou região.",
+      "search": "Buscar regra regional...",
+      "new_rule": "Nova regra",
+      "col_country": "País",
+      "col_action": "Ação",
+      "col_desc": "Descrição",
+      "col_status": "Status",
+      "col_updated": "Atualizado em",
+      "col_actions": "Ações",
+      "no_desc": "Sem descrição",
+      "actions": {
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
+      "loading": "Carregando...",
+      "empty": "Nenhuma regra regional encontrada.",
+      "details_title": "Detalhes da regra regional",
+      "details_country": "País",
+      "details_action": "Ação",
+      "details_status": "Status",
+      "details_desc": "Descrição",
+      "details_created": "Criado em",
+      "details_updated": "Atualizado em",
+    "status_active": "Ativa",
+    "status_inactive": "Inativa",
+    "open_actions": "Abrir ações",
+    "delete_title": "Excluir regra regional",
+      "delete_desc": "Deseja realmente excluir esta regra regional? Esta ação é irreversível.",
+      "button_delete": "Excluir"
+    },
+    "region_rule_form": {
+      "val_code_length": "Informe um código ISO Alpha-2 com 2 caracteres.",
+      "success_edit": "Regra regional atualizada com sucesso.",
+      "success_new": "Regra regional criada com sucesso.",
+      "error_save": "Erro ao salvar regra regional.",
+      "title_edit": "Editar regra regional",
+      "title_new": "Nova regra regional",
+      "desc": "Defina países explicitamente permitidos ou bloqueados usando o código ISO.",
+      "label_action": "Ação",
+      "placeholder_action": "Selecione a ação",
+      "action_hint": "Selecione se a região será permitida ou bloqueada.",
+      "label_country": "País (ISO Alpha-2)",
+      "placeholder_country": "Ex.: BR",
+      "country_hint": "Exemplos: BR, US, PT, AR.",
+      "label_desc": "Descrição",
+      "placeholder_desc": "Explique o motivo ou a abrangência desta política.",
+      "label_active": "Regra ativa",
+      "active_hint": "Regras inativas continuam registradas, mas deixam de ser aplicadas.",
+      "button_cancel": "Cancelar",
+      "button_save": "Salvar"
+    },
+    "user_ip_rules_tab": {
+      "error_load": "Erro ao carregar regras de IP por usuário.",
+      "error_delete": "Erro ao remover regra de IP por usuário.",
+      "success_delete": "Regra de IP removida com sucesso.",
+      "no_permission_title": "Sem permissão para listar restrições de IP por usuário",
+      "no_permission_desc": "Seu perfil não possui a permissão necessária para visualizar esta aba.",
+      "search": "Buscar restrição de IP...",
+      "filter_user": "Filtrar por usuário",
+      "all_users": "Todos os usuários",
+      "new_rule": "Nova regra",
+      "col_user": "Usuário",
+      "col_action": "Ação",
+      "col_type": "Tipo",
+      "col_value": "Valor",
+      "col_status": "Status",
+      "col_updated": "Atualizado em",
+      "col_actions": "Ações",
+      "no_desc": "Sem descrição",
+      "actions": {
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
+      "loading": "Carregando...",
+      "empty": "Nenhuma regra de IP por usuário encontrada.",
+      "details_title": "Detalhes da regra de IP por usuário",
+      "details_user": "Usuário",
+      "details_action": "Ação",
+      "details_type": "Tipo",
+      "details_value": "Valor",
+      "details_status": "Status",
+      "details_desc": "Descrição",
+      "details_created": "Criado em",
+      "details_updated": "Atualizado em",
+    "status_active": "Ativa",
+    "status_inactive": "Inativa",
+    "open_actions": "Abrir ações",
+    "delete_title": "Excluir regra de IP por usuário",
+      "delete_desc": "Deseja realmente excluir esta regra de IP por usuário? Esta ação é irreversível.",
+      "button_delete": "Excluir"
+    },
+    "user_ip_rule_form": {
+      "val_user": "Selecione um usuário.",
+      "val_start_ip": "Informe o IP inicial.",
+      "val_end_ip": "Informe o IP final.",
+      "val_cidr": "Informe o bloco CIDR.",
+      "val_ip": "Informe o endereço IP.",
+      "success_edit": "Regra de IP por usuário atualizada com sucesso.",
+      "success_new": "Regra de IP por usuário criada com sucesso.",
+      "error_save": "Erro ao salvar regra de IP por usuário.",
+      "title_edit": "Editar regra de IP por usuário",
+      "title_new": "Nova regra de IP por usuário",
+      "desc": "Restrinja ou libere origens de IP específicas para um usuário do sistema.",
+      "label_user": "Usuário",
+      "placeholder_user": "Selecione um usuário",
+      "label_action": "Ação",
+      "placeholder_action": "Selecione a ação",
+      "label_type": "Tipo",
+      "placeholder_type": "Selecione o tipo",
+      "label_start_ip": "IP inicial",
+      "placeholder_start_ip": "Ex.: 10.0.0.1",
+      "label_end_ip": "IP final",
+      "placeholder_end_ip": "Ex.: 10.0.0.254",
+      "label_cidr": "Bloco CIDR",
+      "label_ip": "Endereço IP",
+      "placeholder_cidr": "Ex.: 10.0.0.0/24",
+      "placeholder_ip": "Ex.: 10.0.0.15",
+      "label_desc": "Descrição",
+      "placeholder_desc": "Inclua observações relevantes para a operação.",
+      "desc_hint": "Útil para documentar a justificativa da exceção ou bloqueio.",
+      "label_active": "Regra ativa",
+      "active_hint": "A regra fica salva para auditoria mesmo quando desativada.",
+      "button_cancel": "Cancelar",
+      "button_save": "Salvar"
+    },
+    "user_schedule_rules_tab": {
+      "error_load": "Erro ao carregar regras de horário.",
+      "error_delete": "Erro ao remover regra de horário.",
+      "success_delete": "Regra de horário removida com sucesso.",
+      "no_permission_title": "Sem permissão para listar restrições de horário",
+      "no_permission_desc": "Seu perfil não possui a permissão necessária para visualizar esta aba.",
+      "search": "Buscar restrição de horário...",
+      "filter_user": "Filtrar por usuário",
+      "all_users": "Todos os usuários",
+      "new_rule": "Nova regra",
+      "col_user": "Usuário",
+      "col_action": "Ação",
+      "col_window": "Janela",
+      "col_days": "Dias",
+      "col_status": "Status",
+      "col_updated": "Atualizado em",
+      "col_actions": "Ações",
+      "no_desc": "Sem descrição",
+      "actions": {
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
+      "loading": "Carregando...",
+      "empty": "Nenhuma regra de horário encontrada.",
+      "details_title": "Detalhes da regra de horário",
+      "details_user": "Usuário",
+      "details_action": "Ação",
+      "details_window": "Janela",
+      "details_days": "Dias",
+      "details_timezone": "Fuso horário",
+      "details_status": "Status",
+      "details_desc": "Descrição",
+      "details_created": "Criado em",
+      "details_updated": "Atualizado em",
+    "status_active": "Ativa",
+    "status_inactive": "Inativa",
+    "open_actions": "Abrir ações",
+    "delete_title": "Excluir regra de horário",
+      "delete_desc": "Deseja realmente excluir esta regra de horário? Esta ação é irreversível.",
+      "button_delete": "Excluir"
+    },
+    "user_schedule_rule_form": {
+      "val_user": "Selecione um usuário.",
+      "val_start_time_format": "Informe o horário inicial no formato HH:mm.",
+      "val_end_time_format": "Informe o horário final no formato HH:mm.",
+      "val_timezone": "Informe o fuso horário.",
+      "success_edit": "Regra de horário atualizada com sucesso.",
+      "success_new": "Regra de horário criada com sucesso.",
+      "error_save": "Erro ao salvar regra de horário.",
+      "title_edit": "Editar regra de horário",
+      "title_new": "Nova regra de horário",
+      "desc": "Controle janelas de acesso por usuário com faixa de horário e dias da semana.",
+      "label_user": "Usuário",
+      "placeholder_user": "Selecione um usuário",
+      "label_action": "Ação",
+      "placeholder_action": "Selecione a ação",
+      "action_desc": "Selecione a ação aplicada nesta janela de horário.",
+      "label_start_time": "Início",
+      "start_time_desc": "Formato padrão: HH:mm.",
+      "label_end_time": "Fim",
+      "end_time_desc": "Use o mesmo padrão do início.",
+      "label_days": "Dias da semana",
+      "days_desc": "Se nenhum dia for selecionado, a regra se aplica a todos os dias.",
+      "label_timezone": "Fuso horário",
+      "placeholder_timezone": "Ex.: America/Sao_Paulo",
+      "label_active": "Regra ativa",
+      "active_desc": "Ative ou pause a aplicação desta janela.",
+      "label_desc": "Descrição",
+      "placeholder_desc": "Documente a política ou o contexto operacional.",
+      "button_cancel": "Cancelar",
+      "button_save": "Salvar"
+    },
+    "location_requirements_tab": {
+      "success_toggle_on": "Requisito de localização ativado com sucesso.",
+      "success_toggle_off": "Requisito de localização desativado com sucesso.",
+      "error_toggle": "Erro ao atualizar requisito de localização.",
+      "no_permission_title": "Sem acesso ao módulo de localização",
+      "no_permission_desc": "Seu perfil não possui permissão para consultar histórico nem gerenciar exigência de localização.",
+      "search": "Buscar usuário...",
+      "col_user": "Usuário",
+      "col_status": "Status",
+      "col_required": "Requer localização",
+      "col_actions": "Ações",
+      "status_required": "Obrigatório",
+      "status_optional": "Opcional",
+    "actions": {
+      "view_report": "Ver histórico",
+      "disable_req": "Desativar requisito",
+      "enable_req": "Ativar requisito"
+    },
+    "open_actions": "Abrir ações",
+    "empty": "Nenhum usuário encontrado."
+  },
+  "location_report_dialog": {
+      "loading_map": "Carregando mapa...",
+      "error_load": "Erro ao carregar histórico de localização.",
+      "title": "Histórico de localização",
+      "desc_user": "Registros de localização enviados por {name}.",
+      "desc_no_user": "Selecione um usuário para visualizar o histórico.",
+      "search": "Buscar no histórico...",
+      "loading_records": "Carregando registros...",
+      "map_empty_title": "Nenhum ponto para exibir no mapa",
+      "map_empty_desc": "Ajuste a busca ou aguarde novos registros de localização.",
+      "stat_records": "Registros",
+      "stat_last": "Último envio",
+      "stat_highlight": "Destaque",
+      "highlight_selected": "Ponto selecionado",
+      "highlight_none": "Sem seleção",
+    "timeline_title": "Linha do tempo",
+    "timeline_desc": "Clique em um registro para destacar o ponto no mapa.",
+    "map_missing_key_title": "Google Maps não configurado",
+    "map_missing_key_desc": "Defina `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` para renderizar o mapa.",
+    "map_load_error_title": "Não foi possível carregar o Google Maps",
+    "map_load_error_desc": "Verifique a chave da API e as restrições configuradas no projeto.",
+    "map_card_title": "Mapa de deslocamento",
+    "map_points_count": "{count} registros plotados",
+    "map_last_point": "Último ponto",
+    "col_date": "Data e hora",
+      "col_coords": "Latitude / Longitude",
+      "empty": "Nenhum registro encontrado."
+    }
+  },
+  "backup": {
+  "title": "Backup do Sistema",
+  "description": "Gerencie snapshots, restaurações e a automação de backup do ambiente.",
+  "tabs": {
+    "history": "Histórico",
+    "settings": "Automação"
+  },
+  "details_dialog": {
+      "title": "Detalhes do backup",
+      "desc": "Informações técnicas do arquivo selecionado.",
+      "file": "Arquivo",
+      "status": "Status",
+      "origin": "Origem",
+      "created_at": "Criado em",
+      "updated_at": "Atualizado em",
+      "size": "Tamanho",
+      "provider": "Provider",
+      "dropbox": "Dropbox",
+      "format": "Formato",
+      "rows": "Linhas",
+      "tables": "Tabelas",
+      "sequences": "Sequências",
+      "generated_at": "Gerado em",
+      "checksum": "Checksum",
+      "notes": "Observações",
+      "failure": "Falha",
+      "no_name": "Sem nome"
+    },
+    "history_tab": {
+      "error_load": "Erro ao carregar histórico de backups.",
+      "error_download": "Erro ao baixar backup.",
+      "success_download": "Download iniciado.",
+      "no_permission_title": "Sem acesso ao módulo de backups",
+      "no_permission_desc": "Seu perfil não possui permissões para visualizar ou operar backups.",
+      "search": "Buscar por arquivo, origem, status ou observação...",
+      "btn_restore": "Restaurar arquivo",
+      "btn_new": "Novo backup",
+      "col_file": "Arquivo",
+      "col_status": "Status",
+      "col_summary": "Resumo",
+      "col_created": "Criado em",
+      "col_actions": "Ações",
+      "format_unknown": "Formato não identificado",
+      "records_count": "{count} registros",
+      "no_notes": "Sem observações",
+    "actions": {
+      "view": "Ver detalhes",
+      "download": "Baixar arquivo",
+      "restore": "Restaurar"
+    },
+    "open_actions": "Abrir ações",
+    "loading": "Carregando...",
+      "empty": "Nenhum backup encontrado.",
+      "no_permission_list_title": "Sem permissão para listar backups",
+      "no_permission_list_desc": "Seu perfil ainda não possui acesso ao histórico de backups."
+    },
+    "settings_tab": {
+      "val_schedule": "Defina um horário para habilitar o backup automático.",
+      "val_password": "A senha deve ter ao menos 8 caracteres.",
+      "val_notes": "As observações devem ter no máximo 256 caracteres.",
+      "error_load": "Erro ao carregar configurações de backup.",
+      "success_update": "Configurações de backup atualizadas com sucesso.",
+      "error_update": "Erro ao atualizar configurações de backup.",
+      "no_permission_title": "Sem permissão para configurar backups",
+      "no_permission_desc": "Seu perfil não possui acesso às regras de automação de backup.",
+      "card_automation": "Automação",
+      "card_automation_on": "Ativada",
+      "card_automation_off": "Desativada",
+      "card_freq": "Frequência",
+      "card_last": "Última execução",
+      "loading": "Carregando configurações...",
+      "form_auto": "Backup automático",
+      "form_auto_desc": "Ative o agendamento para gerar backups recorrentes do sistema.",
+      "form_freq": "Frequência",
+      "placeholder_freq": "Selecione a frequência",
+      "form_time": "Horário",
+      "time_desc": "Horário base em `America/Sao_Paulo`.",
+      "form_pwd": "Senha de automação",
+      "placeholder_pwd": "Informe a senha",
+      "placeholder_pwd_maintain": "Deixe em branco para manter",
+      "pwd_desc": "Informe a senha usada pelo backup automático.",
+      "form_notes": "Observações",
+      "placeholder_notes": "Descreva política, retenção ou contexto operacional.",
+      "info_maintain": "Uma senha já está armazenada para a automação. Deixe o campo em branco para manter a senha atual.",
+      "btn_save": "Salvar configurações"
+    },
+    "create_dialog": {
+      "val_pwd_min": "A senha do backup deve ter ao menos 8 caracteres.",
+      "val_pwd_max": "A senha do backup deve ter no máximo 128 caracteres.",
+      "val_notes": "As observações devem ter no máximo 256 caracteres.",
+      "success": "Backup criado com sucesso ({count} registros).",
+      "error": "Erro ao criar backup.",
+      "title": "Novo backup",
+      "desc": "Gere um snapshot criptografado do banco com senha de restauração.",
+      "form_pwd": "Senha do backup",
+      "placeholder_pwd": "Informe a senha do arquivo",
+      "form_notes": "Observações",
+      "placeholder_notes": "Explique o motivo ou o contexto desta geração.",
+      "btn_cancel": "Cancelar",
+      "btn_submit": "Gerar backup"
+    },
+    "restore_dialog": {
+      "val_pwd_min": "A senha deve ter ao menos 8 caracteres.",
+      "val_pwd_max": "A senha deve ter no máximo 128 caracteres.",
+      "success_restore": "Backup restaurado com sucesso ({count} registros).",
+      "success_dryrun": "Validação concluída com sucesso ({count} registros).",
+      "error": "Erro ao restaurar backup.",
+      "title": "Restaurar backup",
+      "desc": "Use a senha do arquivo {file} para validar ou aplicar a restauração.",
+      "form_pwd": "Senha do backup",
+      "placeholder_pwd": "Informe a senha do arquivo",
+      "form_mode": "Modo",
+      "placeholder_mode": "Selecione o modo",
+      "mode_dryrun": "Somente validar",
+      "mode_replace": "Aplicar restauração",
+      "btn_cancel": "Cancelar",
+      "btn_validate": "Validar backup",
+      "btn_restore": "Restaurar backup"
+    },
+    "restore_upload_dialog": {
+      "val_pwd_min": "A senha deve ter ao menos 8 caracteres.",
+      "val_pwd_max": "A senha deve ter no máximo 128 caracteres.",
+      "error_no_file": "Selecione um arquivo de backup para continuar.",
+      "success_restore": "Arquivo restaurado com sucesso ({count} registros).",
+      "success_dryrun": "Validação concluída com sucesso ({count} registros).",
+      "error": "Erro ao restaurar arquivo de backup.",
+      "title": "Restaurar arquivo",
+      "desc": "Envie um arquivo `.mmsbkp` para validar ou aplicar uma restauração manual.",
+      "form_file": "Arquivo de backup",
+      "placeholder_file": "Selecione um arquivo .mmsbkp",
+      "form_pwd": "Senha do backup",
+      "placeholder_pwd": "Informe a senha do arquivo",
+      "form_mode": "Modo",
+      "placeholder_mode": "Selecione o modo",
+      "mode_dryrun": "Somente validar",
+      "mode_replace": "Aplicar restauração",
+      "btn_cancel": "Cancelar",
+      "btn_validate": "Validar arquivo",
+      "btn_restore": "Restaurar arquivo"
+    },
+    "stat_cards": {
+      "card_total": "Backups totais",
+      "card_total_desc": "Registros disponíveis para download e restauração.",
+      "card_completed": "Concluídos",
+      "card_completed_desc": "Execuções finalizadas sem falha.",
+      "card_failed": "Falhas",
+      "card_failed_desc": "Backups que exigem revisão operacional.",
+      "card_last": "Última execução automática",
+      "card_last_desc_on": "Horário do último backup automático registrado.",
+      "card_last_desc_off": "Automação desativada no momento.",
+      "loading": "Carregando"
+    },
+    "utils": {
+      "freq_daily": "Diariamente",
+      "freq_days": "A cada {days} dias",
+      "freq_1hour": "A cada 1 hora",
+      "freq_hours": "A cada {hours} horas",
+      "freq_minutes": "A cada {minutes} minutos",
+      "status_completed": "Concluído",
+      "status_failed": "Falhou",
+      "status_running": "Em execução",
+      "origin_scheduled": "Agendado",
+      "origin_manual": "Manual",
+      "badge_local": "Local",
+      "badge_external": "Externo",
+      "badge_dropbox_yes": "Enviado p/ Dropbox",
+      "badge_dropbox_no": "Não enviado p/ Dropbox"
+    }
+  },
+  "permissions": {
+    "title": "Administração de Acesso",
+    "description": "Gerencie cargos, permissões de API, atribuições por perfil e telas do frontend.",
+    "tabs": {
+      "roles": "Cargos",
+      "permissions": "Permissões (API)",
+      "assignment": "Atribuição (API)",
+      "screens": "Telas (Frontend)"
+    },
+  "roles_tab": {
+      "search": "Buscar cargo...",
+      "new_role": "Novo cargo",
+      "col_name": "Nome do cargo",
+      "col_updated": "Atualizado em",
+      "col_actions": "Ações",
+      "no_desc": "Sem descrição",
+      "actions": {
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
+      "empty": "Nenhum cargo encontrado.",
+      "loading": "Carregando...",
+      "delete_success": "Cargo excluído com sucesso.",
+      "delete_error": "Erro ao excluir cargo.",
+      "load_error": "Erro ao carregar cargos.",
+      "details_title": "Detalhes do cargo",
+      "details_name": "Nome",
+      "details_desc": "Descrição",
+      "details_created": "Criado em",
+      "details_updated": "Atualizado em",
+    "delete_dialog_title": "Excluir cargo",
+    "delete_dialog_desc": "Deseja realmente excluir este cargo? Esta ação é irreversível.",
+    "button_delete": "Excluir",
+    "open_actions": "Abrir ações"
+  },
+  "permissions_tab": {
+      "search": "Buscar permissão...",
+      "new": "Nova permissão",
+      "col_name": "Permissão",
+      "col_updated": "Atualizado em",
+      "col_actions": "Ações",
+      "no_group": "Sem grupo",
+      "empty": "Nenhuma permissão encontrada.",
+      "loading": "Carregando...",
+      "delete_success": "Permissão excluída com sucesso.",
+      "delete_error": "Erro ao excluir permissão.",
+      "load_error": "Erro ao carregar permissões.",
+      "details_title": "Detalhes da permissão",
+      "details_key": "Chave",
+      "details_group": "Grupo",
+      "details_created": "Criado em",
+      "details_updated": "Atualizado em",
+    "delete_dialog_title": "Excluir permissão",
+    "delete_dialog_desc": "Deseja realmente excluir esta permissão? Esta ação é irreversível.",
+    "button_delete": "Excluir",
+    "actions": {
+      "view": "Ver detalhes",
+      "edit": "Editar",
+      "delete": "Excluir"
+    },
+    "open_actions": "Abrir ações"
+  },
+  "assignment_tab": {
+      "search": "Buscar permissão...",
+      "role": "Cargo",
+      "select_role": "Selecione um cargo",
+      "save": "Salvar atribuições",
+      "empty_title": "Nenhuma permissão encontrada",
+      "empty_desc": "Ajuste a busca para localizar permissões dentro dos grupos disponíveis.",
+      "start_title": "Selecione um cargo para começar",
+    "start_desc": "Escolha um cargo na barra superior para visualizar e consolidar suas permissões de API.",
+    "success": "Permissões atualizadas com sucesso.",
+    "error_roles": "Erro ao carregar cargos.",
+    "error_perms": "Erro ao carregar permissões disponíveis.",
+    "error_role_perms": "Erro ao carregar permissões deste cargo.",
+    "error_save": "Erro ao consolidar permissões.",
+    "fallback_group": "Sem grupo",
+    "selection_count": "{selected} de {total}"
+  },
+  "screens_tab": {
+      "search": "Buscar tela...",
+      "role": "Cargo",
+      "select_role": "Selecione um cargo",
+      "save": "Salvar telas",
+      "empty_title": "Nenhuma tela encontrada",
+      "empty_desc": "Ajuste a busca para localizar telas dentro dos grupos disponíveis.",
+      "start_title": "Selecione um cargo para começar",
+    "start_desc": "Escolha um cargo na barra superior para visualizar e consolidar as telas permitidas no frontend.",
+    "success": "Telas atualizadas com sucesso. Relogue para aplicar no menu local.",
+    "error_roles": "Erro ao carregar cargos.",
+    "error_screens": "Erro ao carregar telas disponíveis.",
+    "error_role_screens": "Erro ao carregar telas permitidas deste cargo.",
+    "error_save": "Erro ao consolidar telas.",
+    "fallback_group": "Sem grupo",
+    "selection_count": "{selected} de {total}"
+  },
+  "stats": {
+    "roles": "Cargos",
+    "roles_desc": "Perfis administrativos configurados.",
+    "permissions": "Permissões API",
+    "permissions_desc": "Chaves disponíveis para autorização backend.",
+    "screens": "Telas frontend",
+    "screens_desc": "Rotas e telas mapeadas para acesso web.",
+    "groups": "Grupos de permissão",
+    "groups_desc": "Agrupamentos lógicos usados na organização.",
+    "loading": "Carregando"
+  },
+  "role_form": {
+      "title_edit": "Editar Cargo",
+      "title_new": "Novo Cargo",
+      "desc_edit": "Atualize as informações do cargo.",
+      "desc_new": "Preencha as informações para criar um novo cargo.",
+      "label_name": "Nome",
+      "placeholder_name": "Ex: Operador",
+      "label_desc": "Descrição",
+      "placeholder_desc": "Breve descrição sobre as responsabilidades deste cargo...",
+      "button_cancel": "Cancelar",
+      "button_save": "Salvar",
+      "success_edit": "Cargo atualizado com sucesso!",
+      "success_new": "Cargo criado com sucesso!",
+      "error_save": "Ocorreu um erro ao salvar o cargo.",
+      "val_name_min": "O nome deve ter pelo menos 2 caracteres."
+    },
+    "permission_form": {
+      "title_edit": "Editar Permissão",
+      "title_new": "Nova Permissão",
+      "desc_edit": "Atualize as informações da permissão.",
+      "desc_new": "Defina uma nova permissão personalizada no sistema.",
+      "label_name": "Nome da Permissão (Key)",
+      "placeholder_name": "Ex: criar_usuario",
+      "label_group": "Grupo",
+      "placeholder_group": "Ex: usuarios",
+      "button_cancel": "Cancelar",
+      "button_save": "Salvar",
+      "success_edit": "Permissão atualizada com sucesso!",
+      "success_new": "Permissão criada com sucesso!",
+      "error_save": "Ocorreu um erro ao salvar a permissão.",
+      "val_name_min": "O nome deve ter pelo menos 2 caracteres."
+    }
+  },
+  "ui_settings": {
+    "title": "Configurações de UI",
+    "description": "Personalize a aparência, o comportamento visual e as preferências do sistema.",
+    "tabs": {
+      "appearance": "Aparência",
+      "layout": "Layout",
+      "theme": "Tema"
+    },
+    "theme": {
+      "title": "Temas de Cores",
+      "description": "Escolha a paleta de cores que melhor combina com seu estilo.",
+      "import_button": "Importar variáveis",
+      "card_title": "Visualização do Tema",
+      "sources_title": "Origem do tema",
+      "sources_description": "Escolha a origem da paleta global e mantenha um preview local antes de persistir para todos os usuários.",
+      "sources": {
+        "shadcn": {
+          "title": "Tema base do sistema",
+          "description": "Usa presets compatíveis com a paleta principal do projeto."
+        },
+        "tweakcn": {
+          "title": "Preset externo",
+          "description": "Carrega presets curados do Tweakcn com o mesmo contrato de tokens."
+        },
+        "imported": {
+          "title": "Tema importado",
+          "description": "Permite importar um CSS com blocos :root e .dark para sobrescrita global."
+        }
+      },
+      "modes": {
+        "label": "Modo padrão do sistema",
+        "light": "Claro",
+        "dark": "Escuro"
+      },
+      "radius": {
+        "label": "Raio global",
+        "placeholder": "Selecione o raio"
+      },
+      "presets": {
+        "shadcn_label": "Preset Shadcn",
+        "shadcn_placeholder": "Selecione um tema base",
+        "tweakcn_label": "Preset Tweakcn",
+        "tweakcn_placeholder": "Selecione um preset externo"
+      },
+      "imported_section": {
+        "title": "Tema importado",
+        "description": "Use um CSS exportado para persistir o seu próprio conjunto de variáveis.",
+        "active": "Tema importado ativo",
+        "inactive": "Tema importado inativo",
+        "vars_count": "{count} vars de {mode}",
+        "import_button": "Importar CSS do tema",
+        "activate_button": "Ativar tema importado salvo",
+        "hint_1": "A importação altera apenas o preview local até clicar em Salvar alterações.",
+        "hint_2": "A preferência individual de claro/escuro continua sendo controlada por cada usuário no ícone do cabeçalho."
+      },
+      "overrides": {
+        "title": "Sobrescritas de cor",
+        "description": "Ajuste apenas os tokens semânticos globais. O valor é salvo como override sobre o preset ativo.",
+        "colors": {
+          "primary": "Primária",
+          "primary_foreground": "Primária em destaque",
+          "secondary": "Secundária",
+          "secondary_foreground": "Secundária em destaque",
+          "accent": "Destaque",
+          "accent_foreground": "Destaque em primeiro plano",
+          "muted": "Suavizada",
+          "muted_foreground": "Suavizada em destaque"
+        }
+      }
+    },
+    "layout": {
+      "title": "Configurações de Layout",
+      "description": "Ajuste o comportamento dos painéis, menus e estrutura da página.",
+      "sidebar_structure_title": "Estrutura da sidebar",
+      "sidebar_structure_desc": "Defina o estilo estrutural do shell administrativo usado por todos os usuários.",
+      "sidebar_behavior_title": "Comportamento da sidebar",
+      "sidebar_behavior_desc": "Controla a forma de recolhimento e ocupação de espaço.",
+      "sidebar_side_title": "Lado da navegação",
+      "sidebar_side_desc": "Posiciona a sidebar do lado esquerdo ou direito da interface.",
+      "options": {
+        "sidebar_variant": {
+          "sidebar": {
+            "title": "Padrão",
+            "description": "Estrutura clássica de sidebar integrada ao shell."
+          },
+          "floating": {
+            "title": "Flutuante",
+            "description": "Sidebar destacada com sensação de painel flutuante."
+          },
+          "inset": {
+            "title": "Inset",
+            "description": "Sidebar encaixada com margens e cantos destacados."
+          }
+        },
+        "sidebar_collapsible": {
+          "offcanvas": {
+            "title": "Off canvas",
+            "description": "Sai completamente da área visível ao recolher."
+          },
+          "icon": {
+            "title": "Ícones",
+            "description": "Recolhe para uma faixa compacta só com ícones."
+          },
+          "none": {
+            "title": "Fixa",
+            "description": "Permanece sempre expandida."
+          }
+        },
+        "sidebar_side": {
+          "left": "Esquerda",
+          "right": "Direita"
+        }
+      }
+    },
+    "import_dialog": {
+      "title": "Importar tema por CSS",
+      "description": "Cole o CSS exportado contendo os blocos :root e .dark. As variáveis serão persistidas como tema global.",
+      "hint": "Use o mesmo contrato de variáveis do sistema. O preview será aplicado imediatamente antes de salvar.",
+      "button_cancel": "Cancelar",
+      "button_import": "Importar tema",
+      "success_msg": "Tema importado com sucesso.",
+      "error_msg": "Não foi possível importar o CSS informado.",
+      "error_blocks": "Inclua os blocos :root e .dark com as variáveis CSS do tema importado.",
+      "error_vars": "Não foi possível extrair variáveis suficientes do CSS informado."
+    },
+    "actions": {
+      "restore": "Restaurar salvo",
+      "apply_base": "Aplicar padrão base",
+      "save": "Salvar alterações",
+      "saving": "Salvando...",
+      "retry": "Tentar novamente"
+    },
+    "tags": {
+      "dirty": "Preview local com alterações pendentes",
+      "synced": "Sincronizado com o padrão salvo",
+      "readonly": "Somente leitura"
+    },
+    "notifications": {
+      "save_success": "Configuração global de layout e tema atualizada.",
+      "save_error": "Não foi possível salvar as configurações globais.",
+      "load_error_title": "Não foi possível carregar a configuração global",
+      "load_error_desc": "Tente recarregar os dados do módulo para restaurar o preview e a edição do padrão visual do sistema."
+    },
+    "stats": {
+      "loading": "Carregando",
+      "cards": {
+        "theme_source": {
+          "title": "Fonte do tema",
+          "description": "Preset global usado como base visual."
+        },
+        "theme_mode": {
+          "title": "Modo padrão",
+          "description": "Modo inicial aplicado em toda a aplicação."
+        },
+        "radius": {
+          "title": "Raio global",
+          "description": "Token central usado nas bordas do sistema."
+        },
+        "shell": {
+          "title": "Shell lateral",
+          "description": "Estrutura e comportamento da sidebar global."
+        }
+      },
+      "values": {
+        "theme_source": {
+          "imported": "Importado"
+        },
+        "theme_mode": {
+          "light": "Claro",
+          "dark": "Escuro"
+        },
+        "sidebar_variant": {
+          "sidebar": "Padrão",
+          "floating": "Flutuante",
+          "inset": "Inset"
+        },
+        "sidebar_collapsible": {
+          "offcanvas": "Off canvas",
+          "icon": "Ícones",
+          "none": "Fixa"
+        }
+      }
+    }
+  },
+  "logs": {
+    "title": "Logs do Sistema",
+    "description": "Monitore chamadas de API e eventos de auditoria com filtros avançados.",
+    "tabs": {
+      "api": "API",
+      "audit": "Auditoria"
+    },
+    "notifications": {
+      "load_users_error": "Erro ao carregar usuários para o filtro.",
+      "load_logs_error": "Erro ao carregar logs."
+    },
+    "shared": {
+      "empty_value": "-",
+      "no_entity": "Sem entidade",
+      "duration_ms": "{value} ms",
+      "duration_seconds": "{value} s",
+      "levels": {
+        "error": "error",
+        "warn": "warn",
+        "info": "info",
+        "debug": "debug"
+      },
+      "origins": {
+        "app": "App",
+        "web": "Web",
+        "unknown": "Desconhecida"
+      }
+    },
+    "filters": {
+      "fields": {
+        "message": "Mensagem",
+        "user": "Usuário",
+        "level": "Nível",
+        "origin": "Origem",
+        "method": "Método",
+        "request_id": "Request ID",
+        "period": "Período",
+        "url": "URL",
+        "error": "Erro",
+        "action": "Ação",
+        "entity": "Entidade"
+      },
+      "placeholders": {
+        "message": "Buscar mensagem, erro ou contexto...",
+        "request_id": "Buscar request ID...",
+        "period": "Selecionar período",
+        "url": "Ex.: /users ou /access-control",
+        "error": "Buscar por nome, mensagem ou stack...",
+        "action": "Ex.: create_user",
+        "entity": "Ex.: users, roles"
+      },
+      "options": {
+        "all": "Todos",
+        "all_feminine": "Todas",
+        "level": {
+          "error": "error",
+          "warn": "warn",
+          "info": "info",
+          "debug": "debug"
+        },
+        "origin": {
+          "web": "Web",
+          "app": "App",
+          "unknown": "Desconhecida"
+        }
+      },
+      "actions": {
+        "apply": "Aplicar filtros",
+        "clear": "Limpar filtros",
+        "clear_period": "Limpar período"
+      }
+    },
+    "table": {
+      "columns": {
+        "event": "Evento",
+        "result": "Resultado",
+        "context": "Contexto",
+        "user": "Usuário",
+        "origin": "Origem",
+        "message": "Mensagem",
+        "date": "Data",
+        "actions": "Ações"
+      },
+      "labels": {
+        "request_id": "Request ID",
+        "duration": "Duração",
+        "source": "Fonte",
+        "ip": "IP"
+      },
+      "actions": {
+        "open": "Abrir ações",
+        "view_details": "Ver detalhes"
+      },
+      "empty": {
+        "no_action": "Sem ação",
+        "no_results": "Nenhum log encontrado."
+      },
+      "loading": "Carregando..."
+    },
+    "details": {
+      "title": "Detalhes do log",
+      "empty": "Selecione um log para visualizar os detalhes.",
+      "sections": {
+        "summary": "Resumo",
+        "metadata": "Metadados"
+      },
+      "cards": {
+        "user": "Usuário",
+        "origin": "Origem",
+        "moment": "Momento"
+      },
+      "labels": {
+        "ip": "IP",
+        "request_id": "Request ID",
+        "url": "URL",
+        "duration": "Duração",
+        "controller": "Controller",
+        "handler": "Handler",
+        "action": "Ação",
+        "entity": "Entidade",
+        "entity_id": "Entity ID",
+        "logical_source": "Origem lógica"
+      },
+      "tabs": {
+        "payload": "Payload",
+        "error": "Erro",
+        "meta": "Meta",
+        "context": "Contexto"
+      },
+      "payload": {
+        "params": "Params",
+        "query": "Query",
+        "body": "Body",
+        "error_block": "Erro",
+        "stack": "Stack",
+        "no_stack": "Nenhuma stack registrada."
+      }
+    },
+    "stats": {
+      "loading": "Carregando",
+      "cards": {
+        "api_total": {
+          "title": "Logs de API",
+          "description": "Requisições e respostas instrumentadas."
+        },
+        "audit_total": {
+          "title": "Logs de auditoria",
+          "description": "Eventos de negócio e operações sensíveis."
+        },
+        "api_errors": {
+          "title": "Erros de API",
+          "description": "Ocorrências classificadas com nível error."
+        },
+        "audit_warnings": {
+          "title": "Alertas de auditoria",
+          "description": "Eventos de auditoria no nível warn."
+        }
+      }
+    }
+  },
+  "calendar": {
+    "title": "Calendário",
+    "description": "Gerencie seus compromissos, eventos e lembretes.",
+    "buttons": {
+      "new_event": "Novo Evento",
+      "today": "Hoje"
+    },
+    "form": {
+      "title_create": "Criar Evento",
+      "title_edit": "Editar Evento",
+      "description_create": "Adicione um novo evento ao seu calendário",
+      "description_edit": "Faça alterações neste evento",
+      "labels": {
+        "title": "Título do Evento",
+        "type": "Tipo de Evento",
+        "date": "Data",
+        "time": "Hora",
+        "duration": "Duração",
+        "options": "Opções",
+        "all_day": "Dia inteiro",
+        "reminder": "Lembrete",
+        "location": "Localização",
+        "attendees": "Participantes",
+        "description": "Descrição"
+      },
+      "placeholders": {
+        "title": "Digite o título do evento...",
+        "location": "Adicionar local...",
+        "attendee": "Adicionar participante...",
+        "description": "Adicionar descrição..."
+      },
+      "types": {
+        "meeting": "Reunião",
+        "event": "Evento",
+        "personal": "Pessoal",
+        "task": "Tarefa",
+        "reminder": "Lembrete"
+      },
+      "durations": {
+        "15_min": "15 min",
+        "30_min": "30 min",
+        "45_min": "45 min",
+        "1_hour": "1 hora",
+        "1_5_hours": "1.5 horas",
+        "2_hours": "2 horas",
+        "3_hours": "3 horas",
+        "all_day": "O dia todo"
+      },
+      "buttons": {
+        "add": "Add",
+        "update": "Atualizar Evento",
+        "create": "Criar Evento",
+        "delete": "Excluir",
+        "cancel": "Cancelar"
+      }
+    }
+  },
+  "chat": {
+    "title": "Mensagens",
+    "placeholder": "Buscar conversas...",
+    "no_conversation": "Selecione uma conversa para começar a conversar",
+    "search_conversations": "Buscar conversas...",
+    "header": {
+      "group_status": "{total} membros, {online} online",
+      "status_online": "Ativo agora",
+      "status_away": "Ausente",
+      "status_offline": "Visto por último em {date}",
+      "group_badge": "Grupo",
+      "tooltips": {
+        "search": "Buscar na conversa",
+        "voice_call": "Chamada de voz",
+        "video_call": "Chamada de vídeo",
+        "info": "Informações da conversa",
+        "more": "Mais opções"
+      },
+      "actions": {
+        "unmute": "Ativar notificações",
+        "mute": "Silenciar conversa",
+        "search_messages": "Buscar mensagens",
+        "manage_members": "Gerenciar membros",
+        "delete": "Excluir conversa"
+      }
+    },
+    "tabs": {
+      "all": "Todos",
+      "unread": "Não lidas",
+      "groups": "Grupos"
+    },
+    "no_results": "Nenhuma conversa disponível",
+    "no_results_search": "Nenhuma conversa encontrada para sua busca",
+    "input": {
+      "placeholder": "Digite uma mensagem...",
+      "typing_indicator": "Você está digitando...",
+      "tooltips": {
+        "attach": "Anexar arquivo",
+        "emoji": "Adicionar emoji",
+        "more": "Mais opções",
+        "send": "Enviar mensagem",
+        "voice": "Mensagem de voz"
+      },
+      "actions": {
+        "upload_image": "Foto ou vídeo",
+        "upload_file": "Documento"
+      }
+    }
+  },
+  "shared": {
+    "confirm_dialog": {
+      "confirm": "Confirmar",
+      "cancel": "Cancelar"
+    }
+  },
+  "account_profile": {
+    "val_name": "Informe o nome completo.",
+    "val_username": "Informe ao menos 3 caracteres.",
+    "val_email": "Informe um e-mail válido.",
+    "val_cur_pwd": "Informe a senha atual para trocar a senha.",
+    "val_new_pwd": "Informe a nova senha.",
+    "val_new_pwd_len": "A nova senha deve ter ao menos 8 caracteres.",
+    "val_confirm_pwd": "Confirme a nova senha.",
+    "val_pwd_match": "A confirmação deve ser igual à nova senha.",
+    "success_update": "Perfil atualizado com sucesso.",
+    "error_update": "Erro ao atualizar o perfil.",
+    "card_data_title": "Dados da conta",
+    "card_data_desc": "Atualize os dados básicos usados no sistema e exibidos no seu perfil.",
+    "form_name": "Nome completo",
+    "form_name_placeholder": "Ex.: Arnaldo Batista",
+    "form_user": "Usuário",
+    "form_user_placeholder": "Ex.: arnaldobatista",
+    "form_user_desc": "Este identificador pode ser usado em integrações e logs internos.",
+    "form_email": "E-mail",
+    "form_email_placeholder": "voce@empresa.com",
+    "form_birth": "Data de nascimento",
+    "card_sec_title": "Segurança",
+    "card_sec_desc": "Preencha os campos abaixo apenas se quiser trocar a sua senha de acesso.",
+    "form_cur_pwd": "Senha atual",
+    "form_new_pwd": "Nova senha",
+    "form_confirm_pwd": "Confirmar nova senha",
+    "btn_restore": "Restaurar dados",
+    "btn_save": "Salvar alterações"
+  },
+  "account": {
+    "title": "Configurações da Conta",
+    "description": "Gerencie os seus dados de acesso, informações do perfil e preferências de segurança.",
+    "notifications": {
+      "load_error": "Erro ao carregar os dados da conta."
+    },
+    "errors": {
+      "load": "Não foi possível carregar os dados da sua conta."
+    },
+    "error_state": {
+      "title": "Falha ao carregar sua conta",
+      "description": "Os dados do usuário autenticado não puderam ser carregados."
+    },
+    "actions": {
+      "retry": "Tentar novamente"
+    },
+    "sidebar": {
+      "email": "E-mail",
+      "role": "Cargo",
+      "created_at": "Criado em"
+    },
+    "shared": {
+      "empty_value": "--"
+    },
+    "overview": {
+      "shared": {
+        "empty_value": "--"
+      },
+      "cards": {
+        "role": {
+          "title": "Cargo atual",
+          "description": "Perfil aplicado à sua conta no sistema."
+        },
+        "status": {
+          "title": "Status",
+          "description": "Disponibilidade atual do seu acesso."
+        },
+        "updated_at": {
+          "title": "Última atualização",
+          "description": "Registro mais recente de alteração no perfil."
+        },
+        "location_required": {
+          "title": "Localização obrigatória",
+          "description": "Regra operacional aplicada ao seu login."
+        }
+      },
+      "values": {
+        "status": {
+          "active": "Ativo",
+          "inactive": "Inativo"
+        },
+        "location_required": {
+          "required": "Obrigatória",
+          "optional": "Opcional"
+        }
+      }
+    }
+  }
+}
