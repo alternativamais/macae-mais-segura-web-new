@@ -26,7 +26,8 @@
     "logs": "Logs",
     "my_account": "My Account",
     "manual_administration": "Manual administration",
-    "equipment": "Equipment"
+    "equipment": "Equipment",
+    "cameras": "Cameras"
   },
   "user": {
     "account": "Account",
@@ -148,7 +149,160 @@
     "yes": "Yes",
     "no": "No",
     "location_required": "Location required"
-  }
+    }
+  },
+  "cameras": {
+    "title": "Cameras",
+    "description": "Register and manage video capture devices, stream URLs, and locations.",
+    "shared": {
+      "not_informed": "Not informed"
+    },
+    "location": {
+      "point": "Point",
+      "totem": "Totem"
+    },
+    "stats": {
+      "total": "Total Cameras",
+      "total_desc": "Equipment registered in the system.",
+      "active": "Active Cameras",
+      "active_desc": "Devices in normal operation.",
+      "inactive": "Inactive Cameras",
+      "inactive_desc": "Equipment out of operation or in maintenance.",
+      "loading": "Loading"
+    },
+    "table": {
+      "columns": {
+        "name": "Name",
+        "access": "Access",
+        "location": "Location",
+        "status": "Status",
+        "updatedAt": "Updated at",
+        "actions": "Actions"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New Camera",
+        "view": "View details",
+        "search_placeholder": "Search cameras..."
+      },
+      "notifications": {
+        "load_error": "Error loading cameras."
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "open_actions": "Open actions",
+      "no_brand": "Brand not informed",
+      "no_user": "User not informed",
+      "empty": "No cameras found.",
+      "loading": "Loading cameras...",
+      "delete_dialog": {
+        "title": "Delete camera",
+        "description": "Do you really want to remove this camera? This action will stop monitoring this device.",
+        "success": "Camera removed successfully.",
+        "error": "Error removing camera."
+      }
+    },
+    "form": {
+      "title_create": "New Camera",
+      "title_edit": "Edit Camera",
+      "description_create": "Fill in the device technical information.",
+      "description_edit": "Update the device technical and access information.",
+      "labels": {
+        "name": "Camera Name",
+        "ip": "IP / Hostname",
+        "user": "Admin User",
+        "password": "Access Password",
+        "password_edit": "Access Password (leave blank to keep current)",
+        "brand": "Brand / Model",
+        "rtsp_scheme": "RTSP Scheme",
+        "rtsp_port": "RTSP Port",
+        "rtsp_path": "RTSP Path",
+        "ponto": "Installation Point",
+        "totem": "Linked Totem",
+        "destination": "Installation Destination",
+        "status": "Status"
+      },
+      "placeholders": {
+        "name": "Ex.: Square Camera 01",
+        "ip": "192.168.1.100",
+        "user": "admin",
+        "password": "••••••••",
+        "brand": "Ex.: Hikvision, Dahua",
+        "rtsp_path": "/Streaming/Channels/101",
+        "ponto": "Select point",
+        "totem": "Select totem",
+        "status": "Select status",
+        "loading": "Loading..."
+      },
+      "sections": {
+        "identification": "Identification",
+        "identification_desc": "Device name and model.",
+        "network": "Network Access",
+        "network_desc": "Credentials for communicating with the device.",
+        "location": "Location",
+        "location_desc": "Where the camera is installed.",
+        "advanced": "Advanced RTSP Configuration",
+        "advanced_desc": "The RTSP path is resolved by the brand. Use these fields only to override."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Register camera",
+        "saving": "Saving..."
+      },
+      "descriptions": {
+        "test_connection": "Test connectivity before saving to validate basic access to the device.",
+        "destination": "Choose whether the camera will be linked directly to a point or to a totem."
+      },
+      "options": {
+        "brand_generic": "Generic / Others"
+      },
+      "test_button": {
+        "idle": "Test Connection",
+        "testing": "Testing connection...",
+        "success": "Connected successfully",
+        "error": "Failed - Try again"
+      },
+      "notifications": {
+        "load_dependencies_error": "Error loading points and totems.",
+        "create_success": "Camera registered successfully.",
+        "update_success": "Camera updated successfully.",
+        "create_error": "Error registering camera.",
+        "update_error": "Error updating camera.",
+        "test_missing_ip": "Provide the IP or hostname to test the connection.",
+        "test_success": "Connection validated successfully.",
+        "test_success_with_path": "Connection validated successfully. Detected path: {path}",
+        "test_error": "Error testing the camera connection."
+      },
+      "validations": {
+        "name_min": "Name must be at least 2 characters long.",
+        "ip_required": "IP or hostname is required.",
+        "user_required": "User is required.",
+        "location_required": "Select the installation location."
+      }
+    },
+    "details": {
+      "title": "Camera Details",
+      "description": "Technical and network information for {name}.",
+      "not_informed": "Not informed",
+      "no_path": "Not configured",
+      "labels": {
+        "name": "Name",
+        "brand": "Brand / Model",
+        "status": "Status",
+        "ip": "IP / Hostname",
+        "user": "Admin User",
+        "location": "Location",
+        "scheme": "RTSP Scheme",
+        "port": "RTSP Port",
+        "path": "RTSP Path",
+        "stream_url": "Stream URL",
+        "created_at": "Created at",
+        "updated_at": "Updated at",
+        "id": "Identifier"
+      }
+    }
   },
   "access_control": {
     "title": "Access Control",

@@ -83,7 +83,7 @@ export const appNavigation: AppNavigationGroup[] = [
           {
             titleKey: "companies",
             url: "/companies",
-            screenKey: "admin.users",
+            screenKey: "admin.companies",
             icon: Building2,
           },
         ],
@@ -128,7 +128,13 @@ export const appNavigation: AppNavigationGroup[] = [
         titleKey: "equipment",
         url: "#",
         icon: HardDrive,
-        items: [],
+        items: [
+          {
+            titleKey: "cameras",
+            url: "/equipment/cameras",
+            screenKey: "admin.cameras",
+          },
+        ],
       },
     ],
   },

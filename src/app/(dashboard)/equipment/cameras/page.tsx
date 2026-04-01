@@ -3,22 +3,22 @@
 
 import { ScreenGuard } from "@/components/shared/screen-guard"
 import { useTranslator } from "@/lib/i18n"
-import { CompaniesTab } from "./components/companies-tab"
+import { CamerasTab } from "./components/cameras-tab"
 
-export default function CompaniesPage() {
-  const t = useTranslator("companies")
+export default function CamerasPage() {
+  const t = useTranslator("cameras")
 
   return (
-    <ScreenGuard screenKey="admin.companies">
+    <ScreenGuard screenKey="admin.cameras">
       <div className="flex flex-col gap-4">
-        <div className="@container/main px-4 lg:px-6 mt-8 lg:mt-12">
+        <div className="@container/main mt-8 px-4 lg:mt-12 lg:px-6">
           <h2 className="mb-2 text-3xl font-bold tracking-tight">{t("title")}</h2>
           <p className="mb-6 text-muted-foreground">
             {t("description")}
           </p>
 
           <div className="mt-8">
-            <CompaniesTab />
+            <CamerasTab />
           </div>
         </div>
       </div>
