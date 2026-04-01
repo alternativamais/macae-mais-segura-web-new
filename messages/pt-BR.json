@@ -19,6 +19,7 @@
     "users": "Usuários",
     "permissions": "Permissões",
     "access_control": "Controle de Acesso",
+    "companies": "Empresas",
     "system": "Sistema",
     "backups": "Backups",
     "ui_settings": "Layout e Tema",
@@ -1365,6 +1366,97 @@
           "optional": "Opcional"
         }
       }
+    }
+  },
+  "companies": {
+    "title": "Empresas",
+    "description": "Gerencie as empresas parceiras, associações de usuários e status operacional.",
+    "fetch_error": "Erro ao carregar empresas.",
+    "loading": "Carregando empresas...",
+    "tabs": {
+      "list": "Lista de Empresas"
+    },
+    "stats": {
+      "total": "Total de Empresas",
+      "total_desc": "Empresas cadastradas no sistema.",
+      "active": "Empresas ativas",
+      "active_desc": "Empresas com operação liberada.",
+      "inactive": "Empresas inativas",
+      "inactive_desc": "Empresas com restrição de acesso.",
+      "loading": "Carregando..."
+    },
+    "table": {
+      "columns": {
+        "name": "Empresa",
+        "cnpj": "CNPJ",
+        "status": "Status",
+        "createdAt": "Criado em",
+        "actions": "Ações"
+      },
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Excluir",
+        "create": "Nova Empresa",
+        "view": "Ver detalhes",
+        "search_placeholder": "Buscar por nome ou CNPJ..."
+      },
+      "delete_dialog": {
+        "title": "Excluir empresa",
+        "description": "Deseja realmente excluir esta empresa? Esta ação é irreversível.",
+        "success": "Empresa excluída com sucesso.",
+        "error": "Erro ao excluir empresa."
+      },
+      "no_results": "Nenhuma empresa encontrada.",
+      "loading": "Carregando...",
+      "open_actions": "Abrir ações"
+    },
+    "form": {
+      "title_create": "Nova empresa",
+      "title_edit": "Editar empresa",
+      "description_create": "Cadastre uma nova empresa e seus dados fiscais.",
+      "description_edit": "Atualize as informações cadastrais da empresa.",
+      "labels": {
+        "name": "Nome da Empresa",
+        "cnpj": "CNPJ",
+        "status": "Status"
+      },
+      "placeholders": {
+        "name": "Ex.: Alternativa Tecnologia",
+        "cnpj": "00.000.000/0000-00",
+        "status": "Selecione o status"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "create": "Criar empresa",
+        "saving": "Salvando..."
+      },
+      "notifications": {
+        "create_success": "Empresa criada com sucesso.",
+        "update_success": "Empresa atualizada com sucesso.",
+        "create_error": "Erro ao criar empresa.",
+        "update_error": "Erro ao atualizar empresa."
+      },
+      "validations": {
+        "name_min": "Nome deve ter pelo menos 2 caracteres.",
+        "cnpj_invalid": "CNPJ inválido.",
+        "status_required": "Selecione um status."
+      }
+    },
+    "details": {
+      "title": "Detalhes da empresa",
+      "description": "Informações cadastrais de {name}.",
+      "labels": {
+        "name": "Nome",
+        "cnpj": "CNPJ",
+        "status": "Status",
+        "createdAt": "Criado em",
+        "updatedAt": "Última atualização",
+        "id": "ID"
+      },
+      "not_informed": "Não informado"
     }
   }
 }

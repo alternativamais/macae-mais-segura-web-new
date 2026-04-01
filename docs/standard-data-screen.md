@@ -2198,6 +2198,12 @@ Ao mover um editor flutuante, drawer ou pagina antiga para uma tela administrati
 - tabelas sem footer de paginacao
 - acoes destrutivas como CTA principal fora de dropdown ou confirm dialog
 - deixar sobreposicao de filtros ou selects em breakpoints intermediarios
+- usar `text-primary` (ou outras cores textuais globais explícitas) em wrappers de página (`page.tsx`), o que pode herdar indevidamente e sobrescrever o `text-muted-foreground` em botões, ícones e estados.
+- forçar cores como `text-blue-500` nos ícones de `stat-cards.tsx`. Eles devem obrigatoriamente usar sempre `<Icon className="text-muted-foreground" />`.
+- renderizar um estado de loading nos stat cards como apenas texto cru ("Carregando..."). Deve-se usar `<Loader2 className="animate-spin" />` junto a ele acompanhando o padrão.
+- incluir ícones da entidade (ex: `Building2`, `Users`) pendurados avulsos ao lado do Nome na primeira célula visual de uma tabela (`data-table.tsx`), exceto onde haja real necessidade de distinguir sub-entidades. Use puro HTML/Tipografia (ex: `font-medium`).
+- embrulhar uma visualização única (de listagem) dentro de um elemento completão de `<Tabs>` (com `TabsList` e `TabsTrigger`) quando essa interface tem apenas uma única aba/visao. Remova abas fantasmas de telas de visão-única.
+- criar subpastas desnecessárias ou encadeamentos de roteamento administrativo profundos que não sigam a raiz do dashboard. (Por exemplo, `app/(dashboard)/administration/companies` em vez do padrão limpo `app/(dashboard)/companies`).
 
 ---
 

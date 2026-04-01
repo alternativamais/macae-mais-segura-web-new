@@ -2,6 +2,7 @@
 
 import {
   Archive,
+  Building2,
   LayoutDashboard,
   Logs,
   PaintbrushVertical,
@@ -77,6 +78,12 @@ export const appNavigation: AppNavigationGroup[] = [
             titleKey: "access_control",
             url: "/access-control",
             screenKey: "admin.access_control",
+          },
+          {
+            titleKey: "companies",
+            url: "/companies",
+            screenKey: "admin.users",
+            icon: Building2,
           },
         ],
       },

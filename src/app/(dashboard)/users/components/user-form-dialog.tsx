@@ -83,7 +83,7 @@ export function UserFormDialog({
     birthday: z.date(),
     status: z.enum(["active", "inactive"]),
     roleId: z.coerce.number().min(1, t("validations.role_required")),
-    empresaId: z.coerce.number().optional().nullable(),
+    empresaId: z.number().optional().nullable(),
     locationRequired: z.boolean().default(false),
   })
 

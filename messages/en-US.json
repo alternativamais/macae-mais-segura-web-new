@@ -19,6 +19,7 @@
     "users": "Users",
     "permissions": "Permissions",
     "access_control": "Access Control",
+    "companies": "Companies",
     "system": "System",
     "backups": "Backups",
     "ui_settings": "UI Settings",
@@ -1365,6 +1366,97 @@
           "optional": "Optional"
         }
       }
+    }
+  },
+  "companies": {
+    "title": "Companies",
+    "description": "Manage partner companies, user associations, and operational status.",
+    "fetch_error": "Error loading companies.",
+    "loading": "Loading companies...",
+    "tabs": {
+      "list": "Companies List"
+    },
+    "stats": {
+      "total": "Total Companies",
+      "total_desc": "Companies registered in the system.",
+      "active": "Active Companies",
+      "active_desc": "Companies with operational access.",
+      "inactive": "Inactive Companies",
+      "inactive_desc": "Companies with access restrictions.",
+      "loading": "Loading..."
+    },
+    "table": {
+      "columns": {
+        "name": "Company",
+        "cnpj": "CNPJ",
+        "status": "Status",
+        "createdAt": "Created at",
+        "actions": "Actions"
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New Company",
+        "view": "View details",
+        "search_placeholder": "Search by name or CNPJ..."
+      },
+      "delete_dialog": {
+        "title": "Delete company",
+        "description": "Are you sure you want to delete this company? This action is irreversible.",
+        "success": "Company deleted successfully.",
+        "error": "Error deleting company."
+      },
+      "no_results": "No companies found.",
+      "loading": "Loading...",
+      "open_actions": "Open actions"
+    },
+    "form": {
+      "title_create": "New company",
+      "title_edit": "Edit company",
+      "description_create": "Register a new company and its tax data.",
+      "description_edit": "Update company registration information.",
+      "labels": {
+        "name": "Company Name",
+        "cnpj": "CNPJ",
+        "status": "Status"
+      },
+      "placeholders": {
+        "name": "e.g.: Alternativa Technology",
+        "cnpj": "00.000.000/0000-00",
+        "status": "Select status"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create company",
+        "saving": "Saving..."
+      },
+      "notifications": {
+        "create_success": "Company created successfully.",
+        "update_success": "Company updated successfully.",
+        "create_error": "Error creating company.",
+        "update_error": "Error updating company."
+      },
+      "validations": {
+        "name_min": "Name must be at least 2 characters.",
+        "cnpj_invalid": "Invalid CNPJ.",
+        "status_required": "Select a status."
+      }
+    },
+    "details": {
+      "title": "Company Details",
+      "description": "Registration information for {name}.",
+      "labels": {
+        "name": "Name",
+        "cnpj": "CNPJ",
+        "status": "Status",
+        "createdAt": "Created at",
+        "updatedAt": "Last update",
+        "id": "ID"
+      },
+      "not_informed": "Not informed"
     }
   }
 }
