@@ -124,3 +124,24 @@ export interface UserLocationRecord {
   longitude: number | string
   createdAt: string
 }
+
+export interface AccessTrapRoute {
+  id: number
+  path: string
+  method: string
+  description?: string
+  autoBlock: boolean
+  active: boolean
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface CreateAccessTrapRoutePayload {
+  path: string
+  method: string
+  description?: string
+  autoBlock?: boolean
+  active?: boolean
+}
+
+export type UpdateAccessTrapRoutePayload = Partial<CreateAccessTrapRoutePayload>

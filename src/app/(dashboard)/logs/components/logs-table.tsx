@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { EllipsisVertical, Eye } from "lucide-react"
+import { EllipsisVertical, Eye, ShieldBan } from "lucide-react"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TablePaginationFooter } from "@/app/(dashboard)/access-control/components/table-pagination-footer"
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -35,6 +36,8 @@ import {
   getAuditEntityLabel,
   getUserLogLabel,
 } from "./utils"
+import { ConfirmBlockIpDialog } from "./confirm-block-ip-dialog"
+import { useHasPermission } from "@/hooks/use-has-permission"
 
 interface LogsTableProps {
   type: LogType
@@ -60,8 +63,12 @@ export function LogsTable({
   const t = useTranslator("logs.table")
   const tRoot = useTranslator("logs")
   const locale = t.getLocale()
+  const { hasPermission } = useHasPermission()
+  const canBlockIp = hasPermission("criar_bloqueio_ip")
   const [selectedLog, setSelectedLog] = useState<ApiLogRecord | AuditLogRecord | null>(null)
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  const [isBlockIpOpen, setIsBlockIpOpen] = useState(false)
+  const [ipToBlock, setIpToBlock] = useState<string | null>(null)
 
   useEffect(() => {
     if (isDetailsOpen) return
@@ -208,6 +215,21 @@ export function LogsTable({
                             <Eye className="mr-2 h-4 w-4" />
                             {t("actions.view_details")}
                           </DropdownMenuItem>
+                          {canBlockIp && log.ip ? (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                className="cursor-pointer text-destructive focus:text-destructive"
+                                onClick={() => {
+                                  setIpToBlock(log.ip || null)
+                                  setIsBlockIpOpen(true)
+                                }}
+                              >
+                                <ShieldBan className="mr-2 h-4 w-4" />
+                                {t("actions.block_ip")}
+                              </DropdownMenuItem>
+                            </>
+                          ) : null}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -238,6 +260,12 @@ export function LogsTable({
         onOpenChange={setIsDetailsOpen}
         type={type}
         log={selectedLog}
+      />
+
+      <ConfirmBlockIpDialog
+        open={isBlockIpOpen}
+        onOpenChange={setIsBlockIpOpen}
+        ip={ipToBlock}
       />
     </>
   )

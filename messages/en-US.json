@@ -176,7 +176,8 @@
       "region_rules": "Region Rules",
       "user_ip_rules": "User IP Rules",
       "user_schedule_rules": "User Schedule Rules",
-      "location": "Location"
+      "location": "Location",
+      "trap_routes": "Trap Routes"
     },
     "stat_cards": {
       "active_blocks": "Active blocks",
@@ -189,6 +190,8 @@
       "location_required_desc": "Users required to send location.",
       "schedule_windows": "Schedule windows",
       "schedule_windows_desc": "Active schedule restrictions.",
+      "trap_routes": "Trap Routes",
+      "trap_routes_desc": "Paths used as honeypots.",
       "loading": "Loading"
     },
     "ip_blocks_tab": {
@@ -485,6 +488,67 @@
     },
     "open_actions": "Open actions",
     "empty": "No user found."
+  },
+  "trap_routes_tab": {
+    "error_load": "Error loading trap routes.",
+    "error_delete": "Error deleting trap route.",
+    "success_delete": "Trap route deleted successfully.",
+    "no_permission_title": "No permission to list trap routes",
+    "no_permission_desc": "Your profile does not have access to this tab.",
+    "search": "Search route or method...",
+    "new_route": "New trap route",
+    "col_path": "Path",
+    "col_method": "Method",
+    "col_autoblock": "Auto Block",
+    "col_status": "Status",
+    "col_updated": "Updated at",
+    "col_actions": "Actions",
+    "no_desc": "No description",
+    "actions": {
+      "view": "View details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "loading": "Loading...",
+    "empty": "No trap route found.",
+    "details_title": "Trap route details",
+    "details_path": "Path",
+    "details_method": "Method",
+    "details_autoblock": "Auto block",
+    "details_status": "Status",
+    "details_desc": "Description",
+    "details_created": "Created at",
+    "details_updated": "Updated at",
+    "status_active": "Active",
+    "status_inactive": "Inactive",
+    "autoblock_yes": "Yes",
+    "autoblock_no": "No",
+    "open_actions": "Open actions",
+    "delete_title": "Delete trap route",
+    "delete_desc": "Do you really want to delete this trap route? This action is irreversible.",
+    "button_delete": "Delete"
+  },
+  "trap_route_form": {
+    "val_path": "Enter the route path (e.g. /wp-admin).",
+    "success_edit": "Trap route updated successfully.",
+    "success_new": "Trap route created successfully.",
+    "error_save": "Error saving trap route.",
+    "title_edit": "Edit trap route",
+    "title_new": "New trap route",
+    "desc": "Define known bot paths (honeypots) to automatically block the IP when accessed.",
+    "label_path": "Route path",
+    "placeholder_path": "Ex.: /wp-login.php",
+    "label_method": "HTTP Method",
+    "placeholder_method": "Select or type",
+    "method_desc": "Use * to apply to all methods.",
+    "label_autoblock": "Auto Block",
+    "autoblock_desc": "If active, automatically adds the attacker's IP to the system's IP blocks.",
+    "label_desc": "Description",
+    "placeholder_desc": "Optional clarification.",
+    "label_active": "Active route",
+    "active_hint": "Sets whether the honeypot is enabled.",
+    "button_cancel": "Cancel",
+    "button_save": "Save"
   },
   "location_report_dialog": {
       "loading_map": "Loading map...",
@@ -1020,6 +1084,16 @@
       "load_users_error": "Could not load users for the filter.",
       "load_logs_error": "Could not load logs."
     },
+    "block_ip_dialog": {
+      "title": "Block Source IP",
+      "desc": "Do you really want to add a global IP block for address {ip}? Requests from this source will no longer reach the system.",
+      "button_cancel": "Cancel",
+      "button_block": "Block",
+      "default_label": "Blocked via Logs",
+      "default_desc": "IP {ip} blocked manually from system logs.",
+      "success": "IP {ip} blocked successfully.",
+      "error": "Error blocking IP."
+    },
     "shared": {
       "empty_value": "-",
       "no_entity": "No entity",
@@ -1100,7 +1174,8 @@
       },
       "actions": {
         "open": "Open actions",
-        "view_details": "View details"
+        "view_details": "View details",
+        "block_ip": "Block IP"
       },
       "empty": {
         "no_action": "No action",

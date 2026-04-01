@@ -176,7 +176,8 @@
       "region_rules": "Regras por região",
       "user_ip_rules": "Usuários por IP",
       "user_schedule_rules": "Usuários por horário",
-      "location": "Localização"
+      "location": "Localização",
+      "trap_routes": "Rotas Armadilha"
     },
     "stat_cards": {
       "active_blocks": "Bloqueios ativos",
@@ -189,6 +190,8 @@
       "location_required_desc": "Usuários obrigados a enviar localização.",
       "schedule_windows": "Janelas de horário",
       "schedule_windows_desc": "Restrições de horário ativas.",
+      "trap_routes": "Rotas Armadilha",
+      "trap_routes_desc": "Caminhos usados como honeypots.",
       "loading": "Carregando"
     },
     "ip_blocks_tab": {
@@ -485,6 +488,67 @@
     },
     "open_actions": "Abrir ações",
     "empty": "Nenhum usuário encontrado."
+  },
+  "trap_routes_tab": {
+    "error_load": "Erro ao carregar rotas armadilha.",
+    "error_delete": "Erro ao remover rota armadilha.",
+    "success_delete": "Rota armadilha removida com sucesso.",
+    "no_permission_title": "Sem permissão para listar rotas armadilha",
+    "no_permission_desc": "Seu perfil não possui acesso a esta aba.",
+    "search": "Buscar rota ou método...",
+    "new_route": "Nova rota armadilha",
+    "col_path": "Rota",
+    "col_method": "Método",
+    "col_autoblock": "Bloqueio Auto",
+    "col_status": "Status",
+    "col_updated": "Atualizado em",
+    "col_actions": "Ações",
+    "no_desc": "Sem descrição",
+    "actions": {
+      "view": "Ver detalhes",
+      "edit": "Editar",
+      "delete": "Excluir"
+    },
+    "loading": "Carregando...",
+    "empty": "Nenhuma rota armadilha encontrada.",
+    "details_title": "Detalhes da rota armadilha",
+    "details_path": "Rota",
+    "details_method": "Método",
+    "details_autoblock": "Bloqueio auto",
+    "details_status": "Status",
+    "details_desc": "Descrição",
+    "details_created": "Criado em",
+    "details_updated": "Atualizado em",
+    "status_active": "Ativa",
+    "status_inactive": "Inativa",
+    "autoblock_yes": "Sim",
+    "autoblock_no": "Não",
+    "open_actions": "Abrir ações",
+    "delete_title": "Excluir rota armadilha",
+    "delete_desc": "Deseja realmente excluir esta rota armadilha? Esta ação é irreversível.",
+    "button_delete": "Excluir"
+  },
+  "trap_route_form": {
+    "val_path": "Informe o caminho da rota (ex: /wp-admin).",
+    "success_edit": "Rota armadilha atualizada com sucesso.",
+    "success_new": "Rota armadilha criada com sucesso.",
+    "error_save": "Erro ao salvar rota armadilha.",
+    "title_edit": "Editar rota armadilha",
+    "title_new": "Nova rota armadilha",
+    "desc": "Defina caminhos conhecidos por bots (honeypots) para bloquear o IP automaticamente quando acessados.",
+    "label_path": "Caminho da rota",
+    "placeholder_path": "Ex.: /wp-login.php",
+    "label_method": "Método HTTP",
+    "placeholder_method": "Selecione ou digite",
+    "method_desc": "Use * para aplicar a todos os métodos.",
+    "label_autoblock": "Bloqueio Automático",
+    "autoblock_desc": "Se ativo, adiciona o IP do atacante automaticamente aos bloqueios do sistema.",
+    "label_desc": "Descrição",
+    "placeholder_desc": "Campo opcional.",
+    "label_active": "Rota ativa",
+    "active_hint": "Define se o honeypot está ativado.",
+    "button_cancel": "Cancelar",
+    "button_save": "Salvar"
   },
   "location_report_dialog": {
       "loading_map": "Carregando mapa...",
@@ -1020,6 +1084,16 @@
       "load_users_error": "Erro ao carregar usuários para o filtro.",
       "load_logs_error": "Erro ao carregar logs."
     },
+    "block_ip_dialog": {
+      "title": "Bloquear Origem",
+      "desc": "Deseja realmente adicionar um bloqueio global de IP para o endereço {ip}? Requisições vindas desta origem não chegarão mais ao sistema.",
+      "button_cancel": "Cancelar",
+      "button_block": "Bloquear",
+      "default_label": "Bloqueado via Logs",
+      "default_desc": "IP {ip} bloqueado manualmente a partir dos logs do sistema.",
+      "success": "IP {ip} bloqueado com sucesso.",
+      "error": "Erro ao bloquear o IP."
+    },
     "shared": {
       "empty_value": "-",
       "no_entity": "Sem entidade",
@@ -1100,7 +1174,8 @@
       },
       "actions": {
         "open": "Abrir ações",
-        "view_details": "Ver detalhes"
+        "view_details": "Ver detalhes",
+        "block_ip": "Bloquear IP"
       },
       "empty": {
         "no_action": "Sem ação",

@@ -12,6 +12,7 @@ import { RegionRulesTab } from "./components/region-rules-tab"
 import { UserIpRulesTab } from "./components/user-ip-rules-tab"
 import { UserScheduleRulesTab } from "./components/user-schedule-rules-tab"
 import { LocationRequirementsTab } from "./components/location-requirements-tab"
+import { TrapRoutesTab } from "./components/trap-routes-tab"
 import { useTranslator } from "@/lib/i18n"
 
 export default function AccessControlPage() {
@@ -50,6 +51,7 @@ export default function AccessControlPage() {
               <TabsTrigger value="user-ip-rules">{t("tabs.user_ip_rules")}</TabsTrigger>
               <TabsTrigger value="user-schedule-rules">{t("tabs.user_schedule_rules")}</TabsTrigger>
               <TabsTrigger value="location">{t("tabs.location")}</TabsTrigger>
+              <TabsTrigger value="trap-routes">{t("tabs.trap_routes")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="ip-blocks" className="mt-4">
@@ -70,6 +72,10 @@ export default function AccessControlPage() {
 
             <TabsContent value="location" className="mt-4">
               <LocationRequirementsTab users={users} onRefreshUsers={loadUsers} />
+            </TabsContent>
+
+            <TabsContent value="trap-routes" className="mt-4">
+              <TrapRoutesTab />
             </TabsContent>
           </Tabs>
         </div>

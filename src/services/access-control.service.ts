@@ -4,12 +4,15 @@ import {
   AccessRegionRule,
   AccessUserIpRule,
   AccessUserScheduleRule,
+  AccessTrapRoute,
   CreateAccessIpBlockPayload,
   CreateAccessRegionRulePayload,
+  CreateAccessTrapRoutePayload,
   CreateAccessUserIpRulePayload,
   CreateAccessUserScheduleRulePayload,
   UpdateAccessIpBlockPayload,
   UpdateAccessRegionRulePayload,
+  UpdateAccessTrapRoutePayload,
   UpdateAccessUserIpRulePayload,
   UpdateAccessUserScheduleRulePayload,
   UserLocationRecord,
@@ -155,5 +158,32 @@ export const accessControlService = {
     await api.put(`${basePath}/users/${userId}/location-requirement`, {
       required,
     })
+  },
+
+  listTrapRoutes: async (): Promise<AccessTrapRoute[]> => {
+    const { data } = await api.get<AccessTrapRoute[]>(`${basePath}/trap-routes`)
+    return data
+  },
+
+  createTrapRoute: async (
+    payload: CreateAccessTrapRoutePayload
+  ): Promise<AccessTrapRoute> => {
+    const { data } = await api.post<AccessTrapRoute>(`${basePath}/trap-routes`, payload)
+    return data
+  },
+
+  updateTrapRoute: async (
+    id: number,
+    payload: UpdateAccessTrapRoutePayload
+  ): Promise<AccessTrapRoute> => {
+    const { data } = await api.put<AccessTrapRoute>(
+      `${basePath}/trap-routes/${id}`,
+      payload
+    )
+    return data
+  },
+
+  deleteTrapRoute: async (id: number): Promise<void> => {
+    await api.delete(`${basePath}/trap-routes/${id}`)
   },
 }
