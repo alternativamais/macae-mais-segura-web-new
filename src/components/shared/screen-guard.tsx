@@ -20,7 +20,8 @@ export function ScreenGuard({
   fallbackAction = "redirect",
   fallbackRedirectUrl = "/forbidden"
 }: ScreenGuardProps) {
-  const { allowedScreens, isAuthenticated } = useAuthStore()
+  const allowedScreens = useAuthStore((state) => state.allowedScreens)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
 

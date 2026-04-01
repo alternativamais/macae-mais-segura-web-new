@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { ScreenGuard } from "@/components/shared/screen-guard"
 import { userService } from "@/services/user.service"
@@ -16,7 +16,8 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const t = useTranslator("users")
-  const fetchErrorMessage = t("fetch_error")
+  const fetchErrorMessageRef = useRef(t("fetch_error"))
+  fetchErrorMessageRef.current = t("fetch_error")
 
   const loadUsers = useCallback(async () => {
     setIsLoading(true)
@@ -41,12 +42,12 @@ export default function UsersPage() {
         ...remainingPages.flatMap((response) => response.items),
       ])
     } catch (error) {
-      toast.apiError(error, fetchErrorMessage)
+      toast.apiError(error, fetchErrorMessageRef.current)
       setUsers([])
     } finally {
       setIsLoading(false)
     }
-  }, [fetchErrorMessage])
+  }, [])
 
   useEffect(() => {
     loadUsers()
