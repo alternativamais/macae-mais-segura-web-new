@@ -24,7 +24,9 @@
     "backups": "Backups",
     "ui_settings": "UI Settings",
     "logs": "Logs",
-    "my_account": "My Account"
+    "my_account": "My Account",
+    "manual_administration": "Manual administration",
+    "equipment": "Equipment"
   },
   "user": {
     "account": "Account",

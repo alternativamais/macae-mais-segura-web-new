@@ -24,7 +24,9 @@
     "backups": "Backups",
     "ui_settings": "Layout e Tema",
     "logs": "Logs",
-    "my_account": "Minha Conta"
+    "my_account": "Minha Conta",
+    "manual_administration": "Administração manual",
+    "equipment": "Equipamentos"
   },
   "user": {
     "account": "Conta",

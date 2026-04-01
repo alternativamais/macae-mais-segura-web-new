@@ -3,6 +3,7 @@
 import {
   Archive,
   Building2,
+  HardDrive,
   LayoutDashboard,
   Logs,
   PaintbrushVertical,
@@ -117,6 +118,17 @@ export const appNavigation: AppNavigationGroup[] = [
             hiddenInSidebar: true,
           },
         ],
+      },
+    ],
+  },
+  {
+    labelKey: "manual_administration",
+    items: [
+      {
+        titleKey: "equipment",
+        url: "#",
+        icon: HardDrive,
+        items: [],
       },
     ],
   },
