@@ -56,6 +56,7 @@
         "user": "User",
         "username": "Username",
         "role": "Role",
+        "empresa": "Company",
         "status": "Status",
         "actions": "Actions"
       },
@@ -92,6 +93,8 @@
         "password_edit_hint": "(optional in editing)",
         "birthday": "Birthday",
         "role": "Role",
+        "empresa": "Company",
+        "location_required": "Location Required",
         "status": "Status"
       },
       "placeholders": {
@@ -101,6 +104,7 @@
         "password": "Enter password",
         "birthday": "Select",
         "role": "Select a role",
+        "empresa": "Select a company",
         "status": "Select status"
       },
       "buttons": {
@@ -114,7 +118,8 @@
         "update_success": "User updated successfully.",
         "create_error": "Error creating user.",
         "update_error": "Error updating user.",
-        "roles_fetch_error": "Error loading available roles."
+        "roles_fetch_error": "Error loading available roles.",
+        "empresas_fetch_error": "Error loading available companies."
       },
       "validations": {
         "name_min": "Name must be at least 2 characters.",

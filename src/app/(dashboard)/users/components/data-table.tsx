@@ -108,7 +108,7 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
     if (!normalizedSearch) return users
 
     return users.filter((user) =>
-      [user.name, user.email, user.username, user.role?.name]
+      [user.name, user.email, user.username, user.role?.name, user.empresa?.nome]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
@@ -172,6 +172,7 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
               <TableHead>{t("columns.user")}</TableHead>
               <TableHead>{t("columns.username")}</TableHead>
               <TableHead>{t("columns.role")}</TableHead>
+              <TableHead>{t("columns.empresa")}</TableHead>
               <TableHead>{t("columns.status")}</TableHead>
               <TableHead className="w-[80px] text-right">{t("columns.actions")}</TableHead>
             </TableRow>
@@ -192,6 +193,11 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
                       <ShieldCheck className="h-4 w-4 text-muted-foreground" />
                       <span>{user.role?.name || t("no_role")}</span>
                     </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm text-muted-foreground">
+                      {user.empresa?.nome || "-"}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <DataTag tone={getUserStatusTag(user.status).tone}>
@@ -245,7 +251,7 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                   {isLoading ? t("loading") : t("no_results")}
                 </TableCell>
               </TableRow>

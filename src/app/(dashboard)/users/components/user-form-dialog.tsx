@@ -11,8 +11,10 @@ import { formatLocalizedDate, getDateFnsLocale } from "@/lib/i18n/date"
 import { cn } from "@/lib/utils"
 import { roleService } from "@/services/role.service"
 import { userService } from "@/services/user.service"
+import { empresaService } from "@/services/empresa.service"
 import { Role } from "@/types/role"
 import { User } from "@/types/user"
+import { Empresa } from "@/types/empresa"
 import { Button } from "@/components/ui/button"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import {
@@ -44,6 +46,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 
 import { useTranslator } from "@/lib/i18n"
 
@@ -63,6 +66,7 @@ export function UserFormDialog({
   user,
 }: UserFormDialogProps) {
   const [roles, setRoles] = useState<Role[]>([])
+  const [empresas, setEmpresas] = useState<Empresa[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isEdit = !!user
   
@@ -79,6 +83,8 @@ export function UserFormDialog({
     birthday: z.date(),
     status: z.enum(["active", "inactive"]),
     roleId: z.coerce.number().min(1, t("validations.role_required")),
+    empresaId: z.coerce.number().optional().nullable(),
+    locationRequired: z.boolean().default(false),
   })
 
   type UserFormValues = z.infer<typeof userFormSchema>
@@ -93,23 +99,30 @@ export function UserFormDialog({
       birthday: defaultBirthday,
       status: "active",
       roleId: 0,
+      empresaId: null,
+      locationRequired: false,
     },
   })
 
   useEffect(() => {
     if (!open) return
 
-    const loadRoles = async () => {
+    const loadRolesAndEmpresas = async () => {
       try {
-        const data = await roleService.findAllNoPagination()
-        setRoles(data)
+        const [rolesData, empresasData] = await Promise.all([
+          roleService.findAllNoPagination(),
+          empresaService.findAllNoPagination(),
+        ])
+        setRoles(rolesData)
+        setEmpresas(empresasData)
       } catch (error) {
         toast.apiError(error, rolesFetchErrorMessage)
         setRoles([])
+        setEmpresas([])
       }
     }
 
-    loadRoles()
+    loadRolesAndEmpresas()
 
     form.reset({
       name: user?.name || "",
@@ -119,6 +132,8 @@ export function UserFormDialog({
       birthday: user?.birthday ? parseISO(user.birthday) : defaultBirthday,
       status: user?.status === "inactive" ? "inactive" : "active",
       roleId: user?.roleId || 0,
+      empresaId: user?.empresaId || null,
+      locationRequired: user?.locationRequired || false,
     })
   }, [form, open, rolesFetchErrorMessage, user])
 
@@ -319,6 +334,55 @@ export function UserFormDialog({
                       </SelectContent>
                     </Select>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid items-start gap-4 md:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="empresaId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("labels.empresa")}</FormLabel>
+                    <Select
+                      value={field.value ? String(field.value) : "none"}
+                      onValueChange={(value) => field.onChange(value === "none" ? null : Number(value))}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full cursor-pointer">
+                          <SelectValue placeholder={t("placeholders.empresa")} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="none">{t("placeholders.birthday") === "Selecione" ? "Nenhuma" : "None"}</SelectItem>
+                        {empresas.map((empresa) => (
+                          <SelectItem key={empresa.id} value={String(empresa.id)}>
+                            {empresa.nome}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="locationRequired"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center gap-2 space-y-0 h-10 mt-7">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="cursor-pointer font-normal text-sm">
+                      {t("labels.location_required")}
+                    </FormLabel>
                   </FormItem>
                 )}
               />

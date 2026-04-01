@@ -56,6 +56,7 @@
         "user": "Usuário",
         "username": "Username",
         "role": "Cargo",
+        "empresa": "Empresa",
         "status": "Status",
         "actions": "Ações"
       },
@@ -92,6 +93,8 @@
         "password_edit_hint": "(opcional na edição)",
         "birthday": "Aniversário",
         "role": "Cargo",
+        "empresa": "Empresa",
+        "location_required": "Requer localização",
         "status": "Status"
       },
       "placeholders": {
@@ -101,6 +104,7 @@
         "password": "Informe a senha",
         "birthday": "Selecione",
         "role": "Selecione um cargo",
+        "empresa": "Selecione uma empresa",
         "status": "Selecione o status"
       },
       "buttons": {
@@ -114,7 +118,8 @@
         "update_success": "Usuário atualizado com sucesso.",
         "create_error": "Erro ao criar usuário.",
         "update_error": "Erro ao atualizar usuário.",
-        "roles_fetch_error": "Erro ao carregar cargos disponíveis."
+        "roles_fetch_error": "Erro ao carregar cargos disponíveis.",
+        "empresas_fetch_error": "Erro ao carregar empresas disponíveis."
       },
       "validations": {
         "name_min": "Nome deve ter pelo menos 2 caracteres.",

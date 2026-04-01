@@ -1,4 +1,5 @@
 import { PaginatedResponse } from './api';
+import { Empresa } from './empresa';
 
 export interface User {
   id: number;
@@ -11,6 +12,8 @@ export interface User {
   roleId: number;
   birthday?: string;
   locationRequired?: boolean;
+  empresaId?: number | null;
+  empresa?: Empresa;
 }
 
 export interface CreateUserPayload {
@@ -21,11 +24,12 @@ export interface CreateUserPayload {
   birthday: string;
   status: string;
   roleId: number;
+  empresaId?: number | null;
+  locationRequired?: boolean;
 }
 
 export type UpdateUserPayload = Partial<CreateUserPayload> & {
   avatarUrl?: string;
-  locationRequired?: boolean;
 };
 
 export type UserListResponse = PaginatedResponse<User>;

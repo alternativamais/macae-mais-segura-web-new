@@ -32,6 +32,7 @@ export function UserDetailsDialog({ user, open, onOpenChange }: UserDetailsDialo
     { label: t("labels.username"), value: user.username || t("not_informed") },
     { label: t("labels.email"), value: user.email },
     { label: t("labels.role"), value: user.role?.name || tTable("no_role") },
+    { label: tTable("columns.empresa"), value: user.empresa?.nome || t("not_informed") },
     {
       label: t("labels.status"),
       value: String(user.status).toLowerCase() === "active" ? tTable("status_active") : tTable("status_inactive"),
