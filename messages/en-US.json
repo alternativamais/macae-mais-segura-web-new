@@ -28,6 +28,7 @@
     "my_account": "My Account",
     "manual_administration": "Manual administration",
     "equipment": "Equipment",
+    "map": "Map",
     "cameras": "Cameras",
     "totens": "Totens",
     "smart_switches": "Smart Switches",
@@ -975,6 +976,143 @@
       "last_reading": "Last reading: {value}",
       "empty_history": "There is no history available for this sensor yet.",
       "not_informed": "Not informed"
+    }
+  },
+  "operational_map": {
+    "title": "Map",
+    "description": "Track operational points, totems, and officers in real time from a single view.",
+    "loading": "Loading operational map...",
+    "not_informed": "Not informed",
+    "empty_points": "No points found for the current filters.",
+    "map_missing_key_title": "Google Maps not configured",
+    "map_missing_key_desc": "Set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to render the operational map.",
+    "map_load_error_title": "Unable to load Google Maps",
+    "map_load_error_desc": "Check the API key and project restrictions.",
+    "map_card_title": "Operational map",
+    "map_selection_empty": "Select a point or click a marker to open the preview.",
+    "actions": {
+      "refresh": "Refresh",
+      "open_preview": "Open preview"
+    },
+    "errors": {
+      "load_points": "Unable to load map points."
+    },
+    "stats": {
+      "points": "Active points",
+      "points_desc": "Operational points with valid coordinates on the map.",
+      "totens": "Plotted totems",
+      "totens_desc": "Totems linked to the points currently displayed.",
+      "cameras": "Available cameras",
+      "cameras_desc": "Active cameras linked to the loaded points.",
+      "officers": "Officers online",
+      "officers_desc": "Locations received in real time from the app."
+    },
+    "sidebar": {
+      "points_title": "Points on the map",
+      "search_placeholder": "Search by point, reference, or totem...",
+      "open_filters": "Filters",
+      "show_points": "Show points",
+      "show_points_desc": "Displays fixed point and totem markers.",
+      "results": "{count} point(s) found",
+      "scope_results": "Current scope: {visible} of {total} point(s)",
+      "overview_title": "Operational overview",
+      "overview_desc": "Consolidated reading of the points displayed on the map.",
+      "assets_title": "Monitored assets",
+      "assets_desc": "Installed equipment within the filtered scope.",
+      "distribution_title": "Distribution",
+      "distribution_desc": "How the operation is distributed in the current slice.",
+      "insights_title": "Quick insights",
+      "insights_desc": "Fast coverage indicators for the current scope.",
+      "kpis": {
+        "points_scope": "Points in scope",
+        "points_scope_desc": "Markers visible after filters.",
+        "total_assets": "Monitored assets",
+        "total_assets_desc": "Sum of cameras, switches, and climate.",
+        "active_points": "Active points",
+        "active_points_desc": "{value}% of the scope operational.",
+        "totem_coverage": "Totem coverage",
+        "totem_coverage_desc": "Share of points with a linked totem."
+      },
+      "assets": {
+        "cameras": "Cameras",
+        "switches": "Switches",
+        "climate": "Climate"
+      },
+      "distribution": {
+        "active_points": "Active points",
+        "inactive_points": "Inactive points",
+        "with_totem": "With totem",
+        "without_totem": "Without totem"
+      },
+      "insights": {
+        "average_assets": "Average assets per point",
+        "most_equipped": "Most equipped point",
+        "most_equipped_desc": "{count} asset(s) at {value}.",
+        "no_peak": "No standout available right now.",
+        "search_context": "Search context",
+        "search_context_value": "{visible} point(s) in filter out of {total}."
+      }
+    },
+    "preview": {
+      "title_totem": "Totem Preview {value}",
+      "title_point_fallback": "Point preview",
+      "description": "View cameras and linked assets for point {value}.",
+      "loading": "Loading totem details...",
+      "empty": "Select a point to open the operational preview.",
+      "not_informed": "Not informed",
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "errors": {
+        "load_totem": "Failed to load detailed totem information."
+      },
+      "notifications": {
+        "switch_toggle_success": "Command sent to the smart switch.",
+        "switch_toggle_error": "Unable to toggle the smart switch."
+      },
+      "summary": {
+        "reference": "Reference",
+        "cameras": "Cameras",
+        "smart_switch": "Smart switch",
+        "climate": "Climate",
+        "unavailable": "Unavailable"
+      },
+      "details": {
+        "title": "Operational data",
+        "point_name": "Point",
+        "reference": "Reference",
+        "coordinates": "Coordinates",
+        "status": "Status",
+        "totem": "Totem",
+        "smart_switch_title": "Alarm / Smart switch",
+        "smart_switch_unavailable": "No active smart switch linked."
+      },
+      "switch": {
+        "verifying": "Checking",
+        "processing": "Processing...",
+        "on": "On",
+        "off": "Off",
+        "offline": "Offline",
+        "unknown": "Unknown",
+        "turn_on": "Turn alarm on",
+        "turn_off": "Turn alarm off"
+      },
+      "cameras": {
+        "title": "Point cameras",
+        "empty": "There are no active cameras linked to this point."
+      },
+      "camera": {
+        "loading": "Connecting stream...",
+        "retry": "Reconnect",
+        "untitled": "Camera #{id}",
+        "errors": {
+          "no_stream": "WebRTC stream URL is not available.",
+          "connection_lost": "P2P connection to the video stream was lost.",
+          "upstream_failure": "Video communication error (status: {status}).",
+          "generic": "Failed to connect to the video stream."
+        }
+      }
     }
   },
   "access_control": {

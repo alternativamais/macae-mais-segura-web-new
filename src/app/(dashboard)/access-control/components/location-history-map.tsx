@@ -5,6 +5,7 @@ import { GoogleMap, MarkerF, PolylineF, useJsApiLoader } from "@react-google-map
 import { Loader2, MapPinned } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useTranslator } from "@/lib/i18n"
+import { GOOGLE_MAPS_LOADER_ID } from "@/lib/google-maps-loader"
 import { UserLocationRecord } from "@/types/access-control"
 import { formatDateTime } from "./utils"
 
@@ -77,7 +78,7 @@ export function LocationHistoryMap({
   const mapRef = useRef<google.maps.Map | null>(null)
   const [mapsReady, setMapsReady] = useState(false)
   const { isLoaded, loadError } = useJsApiLoader({
-    id: "alternativa-base-google-maps",
+    id: GOOGLE_MAPS_LOADER_ID,
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   })
 

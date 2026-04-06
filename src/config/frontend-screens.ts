@@ -35,6 +35,11 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Configuração global visual do sistema.",
     group: "Configurações",
   },
+  "admin.map": {
+    title: "Mapa",
+    description: "Mapa operacional com pontos, totens e policiais em tempo real.",
+    group: "Principal",
+  },
   "admin.points": {
     title: "Pontos",
     description: "Gerenciamento dos pontos de monitoramento.",

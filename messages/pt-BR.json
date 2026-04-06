@@ -28,6 +28,7 @@
     "my_account": "Minha Conta",
     "manual_administration": "Administração manual",
     "equipment": "Equipamentos",
+    "map": "Mapa",
     "cameras": "Câmeras",
     "totens": "Totens",
     "smart_switches": "Smart Switches",
@@ -975,6 +976,143 @@
       "last_reading": "Última leitura: {value}",
       "empty_history": "Ainda não há histórico disponível para este sensor.",
       "not_informed": "Não informado"
+    }
+  },
+  "operational_map": {
+    "title": "Mapa",
+    "description": "Acompanhe pontos operacionais, totens e policiais em tempo real em uma única visão.",
+    "loading": "Carregando mapa operacional...",
+    "not_informed": "Não informado",
+    "empty_points": "Nenhum ponto encontrado para os filtros atuais.",
+    "map_missing_key_title": "Google Maps não configurado",
+    "map_missing_key_desc": "Defina `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` para renderizar o mapa operacional.",
+    "map_load_error_title": "Não foi possível carregar o Google Maps",
+    "map_load_error_desc": "Verifique a chave da API e as restrições configuradas no projeto.",
+    "map_card_title": "Mapa operacional",
+    "map_selection_empty": "Selecione um ponto ou clique em um marcador para abrir o preview.",
+    "actions": {
+      "refresh": "Atualizar",
+      "open_preview": "Abrir preview"
+    },
+    "errors": {
+      "load_points": "Não foi possível carregar os pontos do mapa."
+    },
+    "stats": {
+      "points": "Pontos ativos",
+      "points_desc": "Pontos operacionais com coordenadas válidas no mapa.",
+      "totens": "Totens plotados",
+      "totens_desc": "Totens vinculados aos pontos atualmente exibidos.",
+      "cameras": "Câmeras disponíveis",
+      "cameras_desc": "Câmeras ativas vinculadas aos pontos carregados.",
+      "officers": "Policiais online",
+      "officers_desc": "Localizações recebidas em tempo real pela central."
+    },
+    "sidebar": {
+      "points_title": "Pontos no mapa",
+      "search_placeholder": "Buscar por ponto, referência ou totem...",
+      "open_filters": "Filtros",
+      "show_points": "Exibir pontos",
+      "show_points_desc": "Mostra os marcadores fixos de pontos e totens.",
+      "results": "{count} ponto(s) encontrado(s)",
+      "scope_results": "Escopo atual: {visible} de {total} ponto(s)",
+      "overview_title": "Visão operacional",
+      "overview_desc": "Leitura consolidada dos pontos exibidos no mapa.",
+      "assets_title": "Ativos monitorados",
+      "assets_desc": "Equipamentos instalados no escopo filtrado.",
+      "distribution_title": "Distribuição",
+      "distribution_desc": "Como a operação está distribuída no recorte atual.",
+      "insights_title": "Insights rápidos",
+      "insights_desc": "Indicadores para leitura rápida da cobertura.",
+      "kpis": {
+        "points_scope": "Pontos no escopo",
+        "points_scope_desc": "Marcadores exibidos após os filtros.",
+        "total_assets": "Ativos monitorados",
+        "total_assets_desc": "Soma de câmeras, switches e clima.",
+        "active_points": "Pontos ativos",
+        "active_points_desc": "{value}% do escopo em operação.",
+        "totem_coverage": "Cobertura com totem",
+        "totem_coverage_desc": "Participação de pontos com totem."
+      },
+      "assets": {
+        "cameras": "Câmeras",
+        "switches": "Switches",
+        "climate": "Clima"
+      },
+      "distribution": {
+        "active_points": "Pontos ativos",
+        "inactive_points": "Pontos inativos",
+        "with_totem": "Com totem",
+        "without_totem": "Sem totem"
+      },
+      "insights": {
+        "average_assets": "Média de ativos por ponto",
+        "most_equipped": "Ponto mais equipado",
+        "most_equipped_desc": "{count} ativo(s) em {value}.",
+        "no_peak": "Nenhum destaque disponível no momento.",
+        "search_context": "Contexto da busca",
+        "search_context_value": "{visible} ponto(s) no filtro de um total de {total}."
+      }
+    },
+    "preview": {
+      "title_totem": "Preview do Totem {value}",
+      "title_point_fallback": "Preview do ponto",
+      "description": "Visualize as câmeras e ativos vinculados ao ponto {value}.",
+      "loading": "Carregando detalhes do totem...",
+      "empty": "Selecione um ponto para abrir o preview operacional.",
+      "not_informed": "Não informado",
+      "status": {
+        "active": "Ativo",
+        "inactive": "Inativo"
+      },
+      "errors": {
+        "load_totem": "Falha ao carregar informações detalhadas do totem."
+      },
+      "notifications": {
+        "switch_toggle_success": "Comando enviado ao smart switch.",
+        "switch_toggle_error": "Não foi possível alternar o smart switch."
+      },
+      "summary": {
+        "reference": "Referência",
+        "cameras": "Câmeras",
+        "smart_switch": "Smart switch",
+        "climate": "Clima",
+        "unavailable": "Não disponível"
+      },
+      "details": {
+        "title": "Dados operacionais",
+        "point_name": "Ponto",
+        "reference": "Referência",
+        "coordinates": "Coordenadas",
+        "status": "Status",
+        "totem": "Totem",
+        "smart_switch_title": "Alarme / Smart switch",
+        "smart_switch_unavailable": "Nenhum smart switch ativo vinculado."
+      },
+      "switch": {
+        "verifying": "Verificando",
+        "processing": "Processando...",
+        "on": "Ligado",
+        "off": "Desligado",
+        "offline": "Offline",
+        "unknown": "Desconhecido",
+        "turn_on": "Ligar alarme",
+        "turn_off": "Desligar alarme"
+      },
+      "cameras": {
+        "title": "Câmeras do ponto",
+        "empty": "Nenhuma câmera ativa vinculada a este ponto."
+      },
+      "camera": {
+        "loading": "Conectando stream...",
+        "retry": "Reconectar",
+        "untitled": "Câmera #{id}",
+        "errors": {
+          "no_stream": "URL de stream WebRTC não disponível.",
+          "connection_lost": "Conexão P2P perdida com o stream de vídeo.",
+          "upstream_failure": "Erro de comunicação de vídeo (status: {status}).",
+          "generic": "Falha ao conectar o fluxo de vídeo."
+        }
+      }
     }
   },
   "access_control": {

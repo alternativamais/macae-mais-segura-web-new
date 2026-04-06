@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { GOOGLE_MAPS_LOADER_ID } from "@/lib/google-maps-loader"
 import { PointCoordinates, formatPointCoordinates } from "./utils"
 import { useTranslator } from "@/lib/i18n"
 
@@ -61,7 +62,7 @@ export function PointMapPickerDialog({
   )
 
   const { isLoaded, loadError } = useJsApiLoader({
-    id: "alternativa-base-google-maps-point-picker",
+    id: GOOGLE_MAPS_LOADER_ID,
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   })
 

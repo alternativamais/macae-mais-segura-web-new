@@ -16,6 +16,7 @@ import {
   buildSignInPath,
   isTokenExpired,
 } from "@/lib/auth-session";
+import { cn } from "@/lib/utils";
 
 export default function DashboardLayout({
   children,
@@ -35,6 +36,7 @@ export default function DashboardLayout({
     const query = searchParams.toString();
     return buildSafeNextPath(pathname, query ? `?${query}` : "");
   }, [pathname, searchParams]);
+  const isOperationalMapRoute = pathname === "/map";
   const [isBootstrappingSession, setIsBootstrappingSession] = React.useState(true);
 
   React.useEffect(() => {
@@ -109,6 +111,34 @@ export default function DashboardLayout({
     );
   }
 
+  const content = (
+    <SidebarInset className={isOperationalMapRoute ? "overflow-hidden" : undefined}>
+      <SiteHeader floating={isOperationalMapRoute} />
+      <div
+        className={cn(
+          "flex flex-1 flex-col",
+          isOperationalMapRoute && "min-h-0 overflow-hidden",
+        )}
+      >
+        <div
+          className={cn(
+            "@container/main flex flex-1 flex-col gap-2",
+            isOperationalMapRoute && "min-h-0 gap-0 overflow-hidden",
+          )}
+        >
+          <div
+            className={cn(
+              "flex flex-col gap-4 py-4 md:gap-6 md:py-6",
+              isOperationalMapRoute && "relative min-h-0 flex-1 gap-0 py-0",
+            )}
+          >
+            {children}
+          </div>
+        </div>
+      </div>
+    </SidebarInset>
+  );
+
   return (
     <SidebarProvider
       style={{
@@ -125,29 +155,11 @@ export default function DashboardLayout({
             collapsible={config.collapsible}
             side={config.side}
           />
-          <SidebarInset>
-            <SiteHeader />
-            <div className="flex flex-1 flex-col">
-              <div className="@container/main flex flex-1 flex-col gap-2">
-                <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                  {children}
-                </div>
-              </div>
-            </div>
-          </SidebarInset>
+          {content}
         </>
       ) : (
         <>
-          <SidebarInset>
-            <SiteHeader />
-            <div className="flex flex-1 flex-col">
-              <div className="@container/main flex flex-1 flex-col gap-2">
-                <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                  {children}
-                </div>
-              </div>
-            </div>
-          </SidebarInset>
+          {content}
           <AppSidebar
             variant={config.variant}
             collapsible={config.collapsible}
