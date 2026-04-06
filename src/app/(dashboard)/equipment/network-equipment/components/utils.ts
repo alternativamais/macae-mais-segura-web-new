@@ -29,8 +29,8 @@ export interface NetworkEquipmentFormValuesLike {
   status: "active" | "inactive"
   online: boolean
   destino: NetworkEquipmentDestination
-  pontoId: string
-  totemId: string
+  pontoId?: string
+  totemId?: string
   tipoEquipamento: NetworkEquipmentType
   macAddress?: string
   usuarioGerencia?: string
