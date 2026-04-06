@@ -43,8 +43,12 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useTranslator } from "@/lib/i18n"
-import { cameraService, pontoService, totemService } from "@/services/camera.service"
-import { Camera, Ponto, Totem } from "@/types/camera"
+import { cameraService } from "@/services/camera.service"
+import { pontoService } from "@/services/ponto.service"
+import { totemService } from "@/services/totem.service"
+import { Camera } from "@/types/camera"
+import { Ponto } from "@/types/ponto"
+import { Totem } from "@/types/totem"
 
 function createCameraFormSchema(messages: {
   nameMin: string
@@ -170,8 +174,8 @@ export function CameraFormDialog({
 
       try {
         const [pointsData, totemsData] = await Promise.all([
-          pontoService.findAll(),
-          totemService.findAll(),
+          pontoService.findAllNoPagination(),
+          totemService.findAllNoPagination(),
         ])
 
         setPontos(Array.isArray(pointsData) ? pointsData : [])

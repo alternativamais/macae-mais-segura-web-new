@@ -167,7 +167,7 @@ export function PointPreviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-6xl">
+      <DialogContent className="max-h-[85vh] overflow-hidden sm:max-w-6xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
@@ -184,9 +184,8 @@ export function PointPreviewDialog({
             {t("empty")}
           </div>
         ) : (
-          <ScrollArea className="max-h-[75vh] pr-4">
-            <div className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="flex min-h-0 flex-col gap-6 overflow-hidden">
+            <div className="grid shrink-0 gap-4 md:grid-cols-2 xl:grid-cols-4">
                 {summaryCards.map((card) => (
                   <Card key={card.title}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -198,9 +197,9 @@ export function PointPreviewDialog({
                     </CardContent>
                   </Card>
                 ))}
-              </div>
+            </div>
 
-              <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+            <div className="grid min-h-0 gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
                 <Card>
                   <CardHeader>
                     <CardTitle>{t("details.title")}</CardTitle>
@@ -294,17 +293,19 @@ export function PointPreviewDialog({
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="min-h-0 overflow-hidden">
                   <CardHeader>
                     <CardTitle>{t("cameras.title")}</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="min-h-0">
                     {cameras.length > 0 ? (
-                      <div className="grid gap-4 md:grid-cols-2">
-                        {cameras.map((camera) => (
-                          <CameraStreamTile key={camera.id} camera={camera} />
-                        ))}
-                      </div>
+                      <ScrollArea className="max-h-[52vh] pr-4">
+                        <div className="grid gap-4 md:grid-cols-2">
+                          {cameras.map((camera) => (
+                            <CameraStreamTile key={camera.id} camera={camera} />
+                          ))}
+                        </div>
+                      </ScrollArea>
                     ) : (
                       <div className="flex min-h-[240px] items-center justify-center rounded-lg border-2 border-dashed bg-muted/30 px-6 text-center text-sm text-muted-foreground">
                         {t("cameras.empty")}
@@ -312,9 +313,8 @@ export function PointPreviewDialog({
                     )}
                   </CardContent>
                 </Card>
-              </div>
             </div>
-          </ScrollArea>
+          </div>
         )}
       </DialogContent>
     </Dialog>

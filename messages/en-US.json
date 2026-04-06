@@ -293,6 +293,10 @@
       "description": "Technical and network information for {name}.",
       "not_informed": "Not informed",
       "no_path": "Not configured",
+      "location": {
+        "point": "Point",
+        "totem": "Totem"
+      },
       "labels": {
         "name": "Name",
         "brand": "Brand / Model",
@@ -1104,12 +1108,17 @@
       },
       "camera": {
         "loading": "Connecting stream...",
+        "loading_hls": "Loading HLS stream...",
         "retry": "Reconnect",
         "untitled": "Camera #{id}",
+        "mode_webrtc": "WebRTC",
+        "mode_hls": "HLS",
         "errors": {
           "no_stream": "WebRTC stream URL is not available.",
           "connection_lost": "P2P connection to the video stream was lost.",
           "upstream_failure": "Video communication error (status: {status}).",
+          "hls_failed": "Failed to play the HLS stream.",
+          "hls_unsupported": "This browser does not support the configured HLS playback.",
           "generic": "Failed to connect to the video stream."
         }
       }

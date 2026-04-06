@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Expand, Loader2, RefreshCcw, Shrink } from "lucide-react"
+import type Hls from "hls.js"
 import { Button } from "@/components/ui/button"
 import { AUTH_TOKEN_KEY } from "@/lib/auth-session"
 import { useTranslator } from "@/lib/i18n"
@@ -17,10 +18,12 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null)
+  const hlsRef = useRef<Hls | null>(null)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [retryCount, setRetryCount] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [streamMode, setStreamMode] = useState<"webrtc" | "hls">("webrtc")
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -41,9 +44,117 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
     let mounted = true
     let silentRetries = 0
     const maxSilentRetries = 3
+    let fallbackStarted = false
 
-    setIsLoading(true)
-    setError("")
+    const cleanupPeerConnection = () => {
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close()
+        peerConnectionRef.current = null
+      }
+    }
+
+    const cleanupHls = () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy()
+        hlsRef.current = null
+      }
+    }
+
+    const clearVideoElement = () => {
+      if (!videoRef.current) {
+        return
+      }
+
+      videoRef.current.pause()
+      videoRef.current.removeAttribute("src")
+      videoRef.current.srcObject = null
+      videoRef.current.load()
+    }
+
+    const startHls = async (hlsUrl?: string | null) => {
+      if (!mounted) {
+        return
+      }
+
+      if (!hlsUrl) {
+        setError(t("errors.no_stream"))
+        setIsLoading(false)
+        return
+      }
+
+      fallbackStarted = true
+      cleanupPeerConnection()
+      cleanupHls()
+      clearVideoElement()
+      setStreamMode("hls")
+      setError("")
+      setIsLoading(true)
+
+      const video = videoRef.current
+      if (!video) {
+        return
+      }
+
+      try {
+        if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = hlsUrl
+          await video.play().catch(() => undefined)
+          if (mounted) {
+            setIsLoading(false)
+          }
+          return
+        }
+
+        const { default: Hls } = await import("hls.js")
+
+        if (!mounted) {
+          return
+        }
+
+        if (!Hls.isSupported()) {
+          setError(t("errors.hls_unsupported"))
+          setIsLoading(false)
+          return
+        }
+
+        const hls = new Hls({
+          lowLatencyMode: true,
+          backBufferLength: 30,
+        })
+
+        hlsRef.current = hls
+        hls.loadSource(hlsUrl)
+        hls.attachMedia(video)
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          void video.play().catch(() => undefined)
+          if (mounted) {
+            setIsLoading(false)
+          }
+        })
+
+        hls.on(Hls.Events.ERROR, (_event, data) => {
+          if (!mounted || !data.fatal) {
+            return
+          }
+
+          setError(t("errors.hls_failed"))
+          setIsLoading(false)
+        })
+      } catch (streamError) {
+        if (!mounted) {
+          return
+        }
+
+        const message =
+          streamError instanceof Error && streamError.message
+            ? streamError.message
+            : t("errors.hls_failed")
+
+        setError(message)
+        setIsLoading(false)
+      }
+    }
 
     const startWebRtc = async () => {
       try {
@@ -54,12 +165,16 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
         }
 
         if (!info?.webRtcUrl) {
-          throw new Error(t("errors.no_stream"))
+          await startHls(info?.hlsUrl)
+          return
         }
 
-        if (peerConnectionRef.current) {
-          peerConnectionRef.current.close()
-        }
+        cleanupPeerConnection()
+        cleanupHls()
+        clearVideoElement()
+        setStreamMode("webrtc")
+        setError("")
+        setIsLoading(true)
 
         const peerConnection = new RTCPeerConnection({
           iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
@@ -75,6 +190,8 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
           }
 
           videoRef.current.srcObject = event.streams[0]
+          setStreamMode("webrtc")
+          setError("")
           setIsLoading(false)
         }
 
@@ -83,8 +200,11 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
             peerConnection.iceConnectionState === "failed" ||
             peerConnection.iceConnectionState === "disconnected"
           ) {
-            setError(t("errors.connection_lost"))
-            setIsLoading(false)
+            if (fallbackStarted) {
+              return
+            }
+
+            void startHls(info.hlsUrl)
           }
         }
 
@@ -127,12 +247,9 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
         })
 
         if (!response.ok) {
-          if (response.status === 400 && silentRetries < maxSilentRetries) {
+          if ((response.status === 400 || response.status === 404) && silentRetries < maxSilentRetries) {
             silentRetries += 1
-
-            if (peerConnectionRef.current) {
-              peerConnectionRef.current.close()
-            }
+            cleanupPeerConnection()
 
             window.setTimeout(() => {
               if (mounted) {
@@ -143,7 +260,8 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
             return
           }
 
-          throw new Error(t("errors.upstream_failure", { status: response.status }))
+          await startHls(info.hlsUrl)
+          return
         }
 
         const answerSdp = await response.text()
@@ -159,6 +277,12 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
           return
         }
 
+        const info = await mapService.getCameraStreamInfo(camera.id).catch(() => null)
+        if (info?.hlsUrl && !fallbackStarted) {
+          await startHls(info.hlsUrl)
+          return
+        }
+
         const message =
           streamError instanceof Error && streamError.message
             ? streamError.message
@@ -169,19 +293,16 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
       }
     }
 
+    setIsLoading(true)
+    setError("")
+    setStreamMode("webrtc")
     void startWebRtc()
 
     return () => {
       mounted = false
-
-      if (peerConnectionRef.current) {
-        peerConnectionRef.current.close()
-        peerConnectionRef.current = null
-      }
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = null
-      }
+      cleanupPeerConnection()
+      cleanupHls()
+      clearVideoElement()
     }
   }, [camera?.id, retryCount, t])
 
@@ -205,7 +326,7 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
   return (
     <div
       ref={containerRef}
-      className="group relative overflow-hidden rounded-lg border bg-black aspect-video"
+      className="group relative aspect-video overflow-hidden rounded-lg border bg-black"
     >
       <video
         ref={videoRef}
@@ -221,6 +342,9 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
         <div className="min-w-0">
           <p className="truncate text-sm font-medium text-white">
             {camera.nome || t("untitled", { id: camera.id })}
+          </p>
+          <p className="text-xs text-white/70">
+            {streamMode === "hls" ? t("mode_hls") : t("mode_webrtc")}
           </p>
         </div>
 
@@ -239,7 +363,7 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white">
           <span className="inline-flex items-center gap-2 text-sm">
             <Loader2 className="h-4 w-4 animate-spin" />
-            {t("loading")}
+            {streamMode === "hls" ? t("loading_hls") : t("loading")}
           </span>
         </div>
       ) : null}
