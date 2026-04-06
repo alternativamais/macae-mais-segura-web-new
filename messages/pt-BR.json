@@ -30,7 +30,8 @@
     "equipment": "Equipamentos",
     "cameras": "Câmeras",
     "totens": "Totens",
-    "smart_switches": "Smart Switches"
+    "smart_switches": "Smart Switches",
+    "network_equipment": "Equipamentos de Rede"
   },
   "user": {
     "account": "Conta",
@@ -574,6 +575,212 @@
       "values": {
         "install_in_totem": "Dentro de um Totem",
         "install_in_point": "Direto no Ponto"
+      }
+    }
+  },
+  "network_equipment": {
+    "title": "Equipamentos de Rede",
+    "description": "Gerencie roteadores, ONUs, rádios e switches instalados em pontos ou totens.",
+    "fetch_error": "Erro ao carregar equipamentos de rede.",
+    "shared": {
+      "not_informed": "Não informado"
+    },
+    "location": {
+      "point": "Ponto",
+      "totem": "Totem",
+      "no_reference": "Sem referência"
+    },
+    "types": {
+      "router": "Roteador c/ Wi-Fi",
+      "onu": "ONU",
+      "radio": "Rádio",
+      "switch": "Switch"
+    },
+    "stats": {
+      "total": "Total de equipamentos",
+      "total_desc": "Dispositivos de rede cadastrados no sistema.",
+      "active": "Equipamentos ativos",
+      "active_desc": "Dispositivos aptos para operação.",
+      "online": "Conectados",
+      "online_desc": "Equipamentos marcados como online.",
+      "points": "Instalados em pontos",
+      "points_desc": "Equipamentos vinculados diretamente a pontos.",
+      "totens": "Instalados em totens",
+      "totens_desc": "Equipamentos vinculados a totens operacionais.",
+      "loading": "Carregando..."
+    },
+    "table": {
+      "columns": {
+        "name": "Nome",
+        "type": "Tipo",
+        "location": "Localização",
+        "network": "Rede",
+        "online": "Online",
+        "status": "Status",
+        "updated_at": "Atualizado em",
+        "actions": "Ações"
+      },
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "online": {
+        "true": "Online",
+        "false": "Offline"
+      },
+      "actions": {
+        "edit": "Editar",
+        "delete": "Excluir",
+        "create": "Novo equipamento",
+        "view": "Ver detalhes",
+        "search_placeholder": "Buscar por nome, tipo, IP, MAC, ponto ou totem..."
+      },
+      "open_actions": "Abrir ações",
+      "loading": "Carregando equipamentos...",
+      "empty": "Nenhum equipamento encontrado.",
+      "delete_dialog": {
+        "title": "Excluir equipamento",
+        "description": "Deseja realmente excluir este equipamento de rede?",
+        "success": "Equipamento excluído com sucesso.",
+        "error": "Erro ao excluir equipamento."
+      }
+    },
+    "form": {
+      "title_create": "Novo equipamento de rede",
+      "title_edit": "Editar equipamento de rede",
+      "description_create": "Cadastre um novo roteador, ONU, rádio ou switch para operação em campo.",
+      "description_edit": "Atualize os dados técnicos, localização e status operacional do equipamento.",
+      "sections": {
+        "general": "Dados Gerais",
+        "general_desc": "Identificação e acesso principal ao equipamento.",
+        "network": "Acesso à Rede",
+        "network_desc": "Credenciais e endereçamento para comunicação com o dispositivo.",
+        "location": "Localização",
+        "location_desc": "Defina onde o equipamento está instalado.",
+        "specific": "Dados Específicos",
+        "specific_desc": "Campos variáveis conforme o tipo de equipamento.",
+        "system": "Status do Sistema",
+        "system_desc": "Situação operacional e disponibilidade."
+      },
+      "labels": {
+        "name": "Nome do Equipamento",
+        "type": "Tipo de Equipamento",
+        "ip": "IP",
+        "mac": "MAC Address",
+        "management_user": "Usuário de Gerência",
+        "management_password": "Senha de Gerência",
+        "destination": "Onde instalar?",
+        "point": "Ponto de Monitoramento",
+        "totem": "Totem",
+        "ports": "Qtd. de Portas",
+        "ssid": "Nome da Rede (SSID)",
+        "wifi_password": "Senha do Wi-Fi",
+        "onu_mode": "Modo da ONU",
+        "pppoe_user": "Usuário PPPoE",
+        "pppoe_password": "Senha PPPoE",
+        "radio_mode": "Modo de Operação",
+        "frequency": "Frequência",
+        "managed": "É Gerenciável?",
+        "vlans": "Descrição de VLANs",
+        "status": "Status (Sistema)",
+        "online": "Conexão Online"
+      },
+      "placeholders": {
+        "name": "Ex.: Roteador Praça Central",
+        "type": "Selecione o tipo",
+        "ip": "Ex.: 10.10.10.20",
+        "mac": "Ex.: 00:1A:2B:3C:4D:5E",
+        "management_user": "Ex.: admin",
+        "management_password": "Informe a senha",
+        "point": "Selecione o ponto",
+        "totem": "Selecione o totem",
+        "ports": "Ex.: 8",
+        "ssid": "Ex.: WIFI_MACAE",
+        "wifi_password": "Informe a senha do Wi-Fi",
+        "onu_mode": "Selecione o modo",
+        "pppoe_user": "Informe o usuário PPPoE",
+        "pppoe_password": "Informe a senha PPPoE",
+        "radio_mode": "Selecione o modo",
+        "frequency": "Selecione a frequência",
+        "vlans": "Ex.: VLAN 10 dados, VLAN 20 voz",
+        "status": "Selecione o status",
+        "loading": "Carregando..."
+      },
+      "options": {
+        "none": "Nenhum",
+        "install_in_point": "Direto no Ponto",
+        "install_in_totem": "Dentro de um Totem",
+        "onu_bridge": "Bridge",
+        "onu_routed": "Roteada (PPPoE)",
+        "radio_ap": "Access Point (AP)",
+        "radio_station": "Station (Cliente)",
+        "frequency_24": "2.4 GHz",
+        "frequency_5": "5 GHz"
+      },
+      "descriptions": {
+        "ip": "O endereço IP é obrigatório e deve ser único na base.",
+        "destination": "Escolha se o equipamento está instalado diretamente no ponto ou dentro de um totem.",
+        "destination_point": "Vincula o equipamento ao ponto selecionado.",
+        "destination_totem": "Vincula o equipamento a um totem operacional.",
+        "point": "O vínculo com ponto é opcional.",
+        "totem": "O vínculo com totem é opcional.",
+        "managed": "Use esta opção para switches com gerenciamento e VLANs.",
+        "vlans": "Descreva as VLANs configuradas neste switch.",
+        "online": "Indica a situação atual de conectividade do equipamento."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "create": "Criar equipamento",
+        "saving": "Salvando..."
+      },
+      "notifications": {
+        "load_dependencies_error": "Erro ao carregar pontos e totens disponíveis.",
+        "create_success": "Equipamento criado com sucesso.",
+        "update_success": "Equipamento atualizado com sucesso.",
+        "create_error": "Erro ao criar equipamento.",
+        "update_error": "Erro ao atualizar equipamento."
+      },
+      "validations": {
+        "name_required": "Informe o nome do equipamento.",
+        "ip_required": "Informe o IP do equipamento."
+      }
+    },
+    "details": {
+      "title": "Detalhes do equipamento",
+      "description": "Informações técnicas e operacionais de {name}.",
+      "not_informed": "Não informado",
+      "location": {
+        "point": "Ponto",
+        "totem": "Totem",
+        "no_reference": "Sem referência"
+      },
+      "values": {
+        "yes": "Sim",
+        "no": "Não"
+      },
+      "labels": {
+        "name": "Nome",
+        "type": "Tipo",
+        "location": "Localização",
+        "location_reference": "Referência",
+        "ip": "IP",
+        "mac": "MAC Address",
+        "management_user": "Usuário de Gerência",
+        "management_password": "Senha de Gerência",
+        "status": "Status",
+        "online": "Online",
+        "ports": "Qtd. de Portas",
+        "ssid": "SSID",
+        "wifi_password": "Senha do Wi-Fi",
+        "onu_mode": "Modo da ONU",
+        "pppoe_user": "Usuário PPPoE",
+        "pppoe_password": "Senha PPPoE",
+        "radio_mode": "Modo de Operação",
+        "frequency": "Frequência",
+        "managed": "Gerenciável",
+        "vlans": "VLANs",
+        "created_at": "Criado em",
+        "updated_at": "Atualizado em",
+        "id": "ID"
       }
     }
   },

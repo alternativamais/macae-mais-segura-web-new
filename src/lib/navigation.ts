@@ -162,6 +162,12 @@ export const appNavigation: AppNavigationGroup[] = [
             screenKey: "admin.smart_switches",
             icon: Power,
           },
+          {
+            titleKey: "network_equipment",
+            url: "/equipment/network-equipment",
+            screenKey: "admin.network_equipment",
+            icon: Settings,
+          },
         ],
       },
     ],

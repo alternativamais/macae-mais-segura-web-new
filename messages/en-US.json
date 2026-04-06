@@ -30,7 +30,8 @@
     "equipment": "Equipment",
     "cameras": "Cameras",
     "totens": "Totens",
-    "smart_switches": "Smart Switches"
+    "smart_switches": "Smart Switches",
+    "network_equipment": "Network Equipment"
   },
   "user": {
     "account": "Account",
@@ -574,6 +575,212 @@
       "values": {
         "install_in_totem": "Inside a Totem",
         "install_in_point": "Direct at the Point"
+      }
+    }
+  },
+  "network_equipment": {
+    "title": "Network Equipment",
+    "description": "Manage routers, ONUs, radios, and switches installed at points or totems.",
+    "fetch_error": "Error loading network equipment.",
+    "shared": {
+      "not_informed": "Not informed"
+    },
+    "location": {
+      "point": "Point",
+      "totem": "Totem",
+      "no_reference": "No reference"
+    },
+    "types": {
+      "router": "Router with Wi-Fi",
+      "onu": "ONU",
+      "radio": "Radio",
+      "switch": "Switch"
+    },
+    "stats": {
+      "total": "Total equipment",
+      "total_desc": "Network devices registered in the system.",
+      "active": "Active equipment",
+      "active_desc": "Devices available for operation.",
+      "online": "Connected",
+      "online_desc": "Equipment currently marked as online.",
+      "points": "Installed at points",
+      "points_desc": "Equipment linked directly to monitoring points.",
+      "totens": "Installed in totems",
+      "totens_desc": "Equipment linked to operational totems.",
+      "loading": "Loading..."
+    },
+    "table": {
+      "columns": {
+        "name": "Name",
+        "type": "Type",
+        "location": "Location",
+        "network": "Network",
+        "online": "Online",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "actions": "Actions"
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "online": {
+        "true": "Online",
+        "false": "Offline"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New equipment",
+        "view": "View details",
+        "search_placeholder": "Search by name, type, IP, MAC, point or totem..."
+      },
+      "open_actions": "Open actions",
+      "loading": "Loading equipment...",
+      "empty": "No equipment found.",
+      "delete_dialog": {
+        "title": "Delete equipment",
+        "description": "Do you really want to delete this network equipment?",
+        "success": "Equipment deleted successfully.",
+        "error": "Error deleting equipment."
+      }
+    },
+    "form": {
+      "title_create": "New network equipment",
+      "title_edit": "Edit network equipment",
+      "description_create": "Register a new router, ONU, radio, or switch for field operation.",
+      "description_edit": "Update the equipment technical data, location, and operational status.",
+      "sections": {
+        "general": "General Data",
+        "general_desc": "Identification and primary management access.",
+        "network": "Network Access",
+        "network_desc": "Credentials and addressing for communicating with the device.",
+        "location": "Location",
+        "location_desc": "Define where the equipment is installed.",
+        "specific": "Specific Data",
+        "specific_desc": "Fields that vary according to the equipment type.",
+        "system": "System Status",
+        "system_desc": "Operational state and availability."
+      },
+      "labels": {
+        "name": "Equipment Name",
+        "type": "Equipment Type",
+        "ip": "IP",
+        "mac": "MAC Address",
+        "management_user": "Management User",
+        "management_password": "Management Password",
+        "destination": "Where to install?",
+        "point": "Monitoring Point",
+        "totem": "Totem",
+        "ports": "Port Count",
+        "ssid": "Network Name (SSID)",
+        "wifi_password": "Wi-Fi Password",
+        "onu_mode": "ONU Mode",
+        "pppoe_user": "PPPoE User",
+        "pppoe_password": "PPPoE Password",
+        "radio_mode": "Operation Mode",
+        "frequency": "Frequency",
+        "managed": "Managed?",
+        "vlans": "VLAN Description",
+        "status": "System Status",
+        "online": "Online Connection"
+      },
+      "placeholders": {
+        "name": "e.g. Central Square Router",
+        "type": "Select the type",
+        "ip": "e.g. 10.10.10.20",
+        "mac": "e.g. 00:1A:2B:3C:4D:5E",
+        "management_user": "e.g. admin",
+        "management_password": "Enter the password",
+        "point": "Select the point",
+        "totem": "Select the totem",
+        "ports": "e.g. 8",
+        "ssid": "e.g. WIFI_MACAE",
+        "wifi_password": "Enter the Wi-Fi password",
+        "onu_mode": "Select the mode",
+        "pppoe_user": "Enter the PPPoE user",
+        "pppoe_password": "Enter the PPPoE password",
+        "radio_mode": "Select the mode",
+        "frequency": "Select the frequency",
+        "vlans": "e.g. VLAN 10 data, VLAN 20 voice",
+        "status": "Select the status",
+        "loading": "Loading..."
+      },
+      "options": {
+        "none": "None",
+        "install_in_point": "Direct at the Point",
+        "install_in_totem": "Inside a Totem",
+        "onu_bridge": "Bridge",
+        "onu_routed": "Routed (PPPoE)",
+        "radio_ap": "Access Point (AP)",
+        "radio_station": "Station (Client)",
+        "frequency_24": "2.4 GHz",
+        "frequency_5": "5 GHz"
+      },
+      "descriptions": {
+        "ip": "The IP address is required and must be unique in the database.",
+        "destination": "Choose whether the equipment is installed directly at a point or inside a totem.",
+        "destination_point": "Links the equipment to the selected point.",
+        "destination_totem": "Links the equipment to an operational totem.",
+        "point": "Point link is optional.",
+        "totem": "Totem link is optional.",
+        "managed": "Use this for managed switches with VLAN support.",
+        "vlans": "Describe the VLANs configured on this switch.",
+        "online": "Indicates the current connectivity status of the equipment."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create equipment",
+        "saving": "Saving..."
+      },
+      "notifications": {
+        "load_dependencies_error": "Error loading available points and totems.",
+        "create_success": "Equipment created successfully.",
+        "update_success": "Equipment updated successfully.",
+        "create_error": "Error creating equipment.",
+        "update_error": "Error updating equipment."
+      },
+      "validations": {
+        "name_required": "Enter the equipment name.",
+        "ip_required": "Enter the equipment IP."
+      }
+    },
+    "details": {
+      "title": "Equipment details",
+      "description": "Technical and operational information for {name}.",
+      "not_informed": "Not informed",
+      "location": {
+        "point": "Point",
+        "totem": "Totem",
+        "no_reference": "No reference"
+      },
+      "values": {
+        "yes": "Yes",
+        "no": "No"
+      },
+      "labels": {
+        "name": "Name",
+        "type": "Type",
+        "location": "Location",
+        "location_reference": "Reference",
+        "ip": "IP",
+        "mac": "MAC Address",
+        "management_user": "Management User",
+        "management_password": "Management Password",
+        "status": "Status",
+        "online": "Online",
+        "ports": "Port Count",
+        "ssid": "SSID",
+        "wifi_password": "Wi-Fi Password",
+        "onu_mode": "ONU Mode",
+        "pppoe_user": "PPPoE User",
+        "pppoe_password": "PPPoE Password",
+        "radio_mode": "Operation Mode",
+        "frequency": "Frequency",
+        "managed": "Managed",
+        "vlans": "VLANs",
+        "created_at": "Created at",
+        "updated_at": "Updated at",
+        "id": "ID"
       }
     }
   },

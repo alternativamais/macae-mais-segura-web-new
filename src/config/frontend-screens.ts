@@ -60,4 +60,9 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Gerenciamento dos smart switches integrados ao Home Assistant.",
     group: "Equipamentos",
   },
+  "admin.network_equipment": {
+    title: "Equipamentos de Rede",
+    description: "Gerenciamento de roteadores, ONUs, rádios e switches.",
+    group: "Equipamentos",
+  },
 }
