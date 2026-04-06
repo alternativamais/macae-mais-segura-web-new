@@ -80,12 +80,6 @@ export const appNavigation: AppNavigationGroup[] = [
             url: "/access-control",
             screenKey: "admin.access_control",
           },
-          {
-            titleKey: "companies",
-            url: "/companies",
-            screenKey: "admin.companies",
-            icon: Building2,
-          },
         ],
       },
       {
@@ -124,6 +118,19 @@ export const appNavigation: AppNavigationGroup[] = [
   {
     labelKey: "manual_administration",
     items: [
+      {
+        titleKey: "administration",
+        url: "#",
+        icon: Building2,
+        items: [
+          {
+            titleKey: "companies",
+            url: "/companies",
+            screenKey: "admin.companies",
+            icon: Building2,
+          },
+        ],
+      },
       {
         titleKey: "equipment",
         url: "#",
