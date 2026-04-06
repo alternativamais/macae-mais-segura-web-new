@@ -28,7 +28,8 @@
     "my_account": "My Account",
     "manual_administration": "Manual administration",
     "equipment": "Equipment",
-    "cameras": "Cameras"
+    "cameras": "Cameras",
+    "totens": "Totens"
   },
   "user": {
     "account": "Account",
@@ -302,6 +303,124 @@
         "created_at": "Created at",
         "updated_at": "Updated at",
         "id": "Identifier"
+      }
+    }
+  },
+  "totens": {
+    "title": "Totens",
+    "description": "Manage operational totems, monitoring point links, and call center integration.",
+    "fetch_error": "Error loading totems.",
+    "shared": {
+      "not_informed": "Not informed",
+      "unassigned_extension": "No linked extension",
+      "no_reference": "No reference"
+    },
+    "stats": {
+      "total": "Total totens",
+      "total_desc": "Totens registered in the system.",
+      "active": "Active totems",
+      "active_desc": "Totens in normal operation.",
+      "inactive": "Inactive totems",
+      "inactive_desc": "Totens out of operation or under maintenance.",
+      "integrations": "Active integrations",
+      "integrations_desc": "Total associated cameras, smart switches and climate equipment.",
+      "loading": "Loading..."
+    },
+    "table": {
+      "columns": {
+        "number": "Number",
+        "point": "Point",
+        "extension": "Extension",
+        "integrations": "Integrations",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "actions": "Actions"
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New totem",
+        "view": "View details",
+        "search_placeholder": "Search by number, point, extension, or queue..."
+      },
+      "integrations_count": "{count} link(s)",
+      "open_actions": "Open actions",
+      "loading": "Loading totems...",
+      "empty": "No totems found.",
+      "delete_dialog": {
+        "title": "Delete totem",
+        "description": "Do you really want to delete this totem? This action will remove related operational links.",
+        "success": "Totem deleted successfully.",
+        "error": "Error deleting totem."
+      }
+    },
+    "form": {
+      "title_create": "New totem",
+      "title_edit": "Edit totem",
+      "description_create": "Register a new totem and link it to the correct operational point.",
+      "description_edit": "Update the totem number, status and telephony integration.",
+      "labels": {
+        "number": "Totem number",
+        "point": "Monitoring point",
+        "extension": "Totem extension",
+        "status": "Status"
+      },
+      "placeholders": {
+        "number": "e.g.: T-001",
+        "point": "Select the point",
+        "extension": "Select the extension",
+        "status": "Select the status",
+        "loading": "Loading..."
+      },
+      "options": {
+        "select_point": "Select the point",
+        "unassigned_extension": "No linked extension",
+        "extension_inactive": "(Inactive)",
+        "extension_assigned_to": "(Assigned to totem {numero})"
+      },
+      "descriptions": {
+        "extension": "Select a totem-type extension registered in the call center or leave it blank.",
+        "point_edit_locked": "The linked point cannot be changed in this version because the current API does not expose point updates for totems."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create totem",
+        "saving": "Saving..."
+      },
+      "notifications": {
+        "load_dependencies_error": "Error loading points and available extensions.",
+        "create_success": "Totem created successfully.",
+        "update_success": "Totem updated successfully.",
+        "create_error": "Error creating totem.",
+        "update_error": "Error updating totem."
+      },
+      "validations": {
+        "number_min": "Enter the totem number.",
+        "point_required": "Select the point where the totem will be installed."
+      }
+    },
+    "details": {
+      "title": "Totem details",
+      "description": "Operational information for totem {number}.",
+      "not_informed": "Not informed",
+      "unassigned_extension": "No linked extension",
+      "labels": {
+        "number": "Number",
+        "point": "Point",
+        "reference": "Reference",
+        "extension": "Extension",
+        "queue": "Queue",
+        "cameras": "Cameras",
+        "smart_switches": "Smart switches",
+        "climate_equipments": "Climate equipment",
+        "total_integrations": "Total integrations",
+        "status": "Status",
+        "created_at": "Created at",
+        "updated_at": "Updated at",
+        "id": "ID"
       }
     }
   },

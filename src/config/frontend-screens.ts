@@ -50,4 +50,9 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Gerenciamento de câmeras de vigilância.",
     group: "Equipamentos",
   },
+  "admin.totens": {
+    title: "Totens",
+    description: "Gerenciamento dos totens operacionais.",
+    group: "Equipamentos",
+  },
 }

@@ -28,7 +28,8 @@
     "my_account": "Minha Conta",
     "manual_administration": "Administração manual",
     "equipment": "Equipamentos",
-    "cameras": "Câmeras"
+    "cameras": "Câmeras",
+    "totens": "Totens"
   },
   "user": {
     "account": "Conta",
@@ -302,6 +303,124 @@
         "created_at": "Criado em",
         "updated_at": "Atualizado em",
         "id": "Identificador"
+      }
+    }
+  },
+  "totens": {
+    "title": "Totens",
+    "description": "Gerencie os totens operacionais, vínculo com pontos de monitoramento e integração com a central de atendimento.",
+    "fetch_error": "Erro ao carregar totens.",
+    "shared": {
+      "not_informed": "Não informado",
+      "unassigned_extension": "Sem ramal vinculado",
+      "no_reference": "Sem referência"
+    },
+    "stats": {
+      "total": "Total de totens",
+      "total_desc": "Totens cadastrados no sistema.",
+      "active": "Totens ativos",
+      "active_desc": "Totens em operação normal.",
+      "inactive": "Totens inativos",
+      "inactive_desc": "Totens fora de operação ou em manutenção.",
+      "integrations": "Integrações ativas",
+      "integrations_desc": "Total de câmeras, smart switches e climatização associados.",
+      "loading": "Carregando..."
+    },
+    "table": {
+      "columns": {
+        "number": "Número",
+        "point": "Ponto",
+        "extension": "Ramal",
+        "integrations": "Integrações",
+        "status": "Status",
+        "updated_at": "Atualizado em",
+        "actions": "Ações"
+      },
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Excluir",
+        "create": "Novo totem",
+        "view": "Ver detalhes",
+        "search_placeholder": "Buscar por número, ponto, ramal ou fila..."
+      },
+      "integrations_count": "{count} vínculo(s)",
+      "open_actions": "Abrir ações",
+      "loading": "Carregando totens...",
+      "empty": "Nenhum totem encontrado.",
+      "delete_dialog": {
+        "title": "Excluir totem",
+        "description": "Deseja realmente excluir este totem? Esta ação removerá os vínculos operacionais associados.",
+        "success": "Totem excluído com sucesso.",
+        "error": "Erro ao excluir totem."
+      }
+    },
+    "form": {
+      "title_create": "Novo totem",
+      "title_edit": "Editar totem",
+      "description_create": "Cadastre um novo totem e vincule-o ao ponto operacional correto.",
+      "description_edit": "Atualize o número, status e integração telefônica do totem.",
+      "labels": {
+        "number": "Número do totem",
+        "point": "Ponto de monitoramento",
+        "extension": "Ramal do totem",
+        "status": "Status"
+      },
+      "placeholders": {
+        "number": "Ex.: T-001",
+        "point": "Selecione o ponto",
+        "extension": "Selecione o ramal",
+        "status": "Selecione o status",
+        "loading": "Carregando..."
+      },
+      "options": {
+        "select_point": "Selecione o ponto",
+        "unassigned_extension": "Nenhum ramal vinculado",
+        "extension_inactive": "(Inativo)",
+        "extension_assigned_to": "(Vinculado ao totem {numero})"
+      },
+      "descriptions": {
+        "extension": "Selecione um ramal do tipo totem cadastrado na central de atendimento ou deixe em branco.",
+        "point_edit_locked": "O ponto vinculado não pode ser alterado nesta versão porque a API atual não expõe atualização de ponto para totens."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "create": "Criar totem",
+        "saving": "Salvando..."
+      },
+      "notifications": {
+        "load_dependencies_error": "Erro ao carregar pontos e ramais disponíveis.",
+        "create_success": "Totem criado com sucesso.",
+        "update_success": "Totem atualizado com sucesso.",
+        "create_error": "Erro ao criar totem.",
+        "update_error": "Erro ao atualizar totem."
+      },
+      "validations": {
+        "number_min": "Informe o número do totem.",
+        "point_required": "Selecione o ponto onde o totem será instalado."
+      }
+    },
+    "details": {
+      "title": "Detalhes do totem",
+      "description": "Informações operacionais do totem {number}.",
+      "not_informed": "Não informado",
+      "unassigned_extension": "Sem ramal vinculado",
+      "labels": {
+        "number": "Número",
+        "point": "Ponto",
+        "reference": "Referência",
+        "extension": "Ramal",
+        "queue": "Fila",
+        "cameras": "Câmeras",
+        "smart_switches": "Smart switches",
+        "climate_equipments": "Climatização",
+        "total_integrations": "Total de integrações",
+        "status": "Status",
+        "created_at": "Criado em",
+        "updated_at": "Atualizado em",
+        "id": "ID"
       }
     }
   },
