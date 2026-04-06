@@ -31,7 +31,8 @@
     "cameras": "Câmeras",
     "totens": "Totens",
     "smart_switches": "Smart Switches",
-    "network_equipment": "Equipamentos de Rede"
+    "network_equipment": "Equipamentos de Rede",
+    "climate_equipment": "Equipamentos Climáticos"
   },
   "user": {
     "account": "Conta",
@@ -782,6 +783,198 @@
         "updated_at": "Atualizado em",
         "id": "ID"
       }
+    }
+  },
+  "climate_equipment": {
+    "title": "Equipamentos Climáticos",
+    "description": "Gerencie estações e sensores climáticos integrados ao Home Assistant, instalados em pontos ou totens.",
+    "fetch_error": "Erro ao carregar equipamentos climáticos.",
+    "tabs": {
+      "equipments": "Equipamentos",
+      "dashboard": "Dashboard"
+    },
+    "shared": {
+      "not_informed": "Não informado"
+    },
+    "location": {
+      "point": "Ponto",
+      "totem": "Totem",
+      "no_reference": "Sem referência",
+      "unassigned": "Sem vínculo"
+    },
+    "stats": {
+      "total": "Total de equipamentos",
+      "total_desc": "Estações climáticas cadastradas no sistema.",
+      "active": "Equipamentos ativos",
+      "active_desc": "Dispositivos liberados para operação.",
+      "points": "Direto no ponto",
+      "points_desc": "Equipamentos climáticos instalados sem totem.",
+      "totens": "Instalados em totens",
+      "totens_desc": "Equipamentos climáticos vinculados a totens.",
+      "loading": "Carregando..."
+    },
+    "table": {
+      "columns": {
+        "name": "Nome",
+        "installation": "Instalação",
+        "sensors": "Sensores",
+        "status": "Status",
+        "last_synced_at": "Última sincronização",
+        "actions": "Ações"
+      },
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "sensors_count": "{count} sensores",
+      "more_sensors": "+{count} sensores",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Excluir",
+        "create": "Novo equipamento",
+        "view": "Ver detalhes",
+        "view_dashboard": "Ver dashboard",
+        "sync": "Sincronizar agora",
+        "search_placeholder": "Buscar por nome, prefixo, label, ponto ou totem..."
+      },
+      "open_actions": "Abrir ações",
+      "loading": "Carregando equipamentos...",
+      "empty": "Nenhum equipamento encontrado.",
+      "sync_success": "Equipamento sincronizado com sucesso.",
+      "sync_error": "Erro ao sincronizar equipamento.",
+      "delete_dialog": {
+        "title": "Excluir equipamento",
+        "description": "Deseja realmente excluir este equipamento climático?",
+        "success": "Equipamento excluído com sucesso.",
+        "error": "Erro ao excluir equipamento."
+      }
+    },
+    "form": {
+      "title_create": "Novo equipamento climático",
+      "title_edit": "Editar equipamento climático",
+      "description_create": "Cadastre uma nova estação climática integrada ao Home Assistant.",
+      "description_edit": "Atualize a identificação, a integração e a instalação do equipamento climático.",
+      "sections": {
+        "identification": "Identificação",
+        "identification_desc": "Nome interno, label amigável e observações do equipamento.",
+        "integration": "Integração",
+        "integration_desc": "Selecione o dispositivo disponível no Home Assistant e visualize os sensores detectados.",
+        "location": "Localização",
+        "location_desc": "Defina se a instalação é em totem, direto no ponto ou sem vínculo.",
+        "system": "Status do Sistema",
+        "system_desc": "Situação operacional do equipamento climático."
+      },
+      "labels": {
+        "name": "Nome",
+        "home_assistant_label": "Nome amigável (Home Assistant)",
+        "description": "Descrição",
+        "home_assistant_device_key": "Dispositivo do Home Assistant",
+        "detected_sensors": "Sensores detectados",
+        "destination": "Onde instalar?",
+        "point": "Ponto",
+        "totem": "Totem",
+        "status": "Status"
+      },
+      "placeholders": {
+        "name": "Ex.: Estação Climática Praça Central",
+        "home_assistant_label": "Ex.: Weather2-2",
+        "description": "Informações adicionais sobre o equipamento",
+        "home_assistant_device_key": "Selecione um dispositivo",
+        "point": "Selecione o ponto",
+        "totem": "Selecione o totem",
+        "status": "Selecione o status"
+      },
+      "options": {
+        "in_use": "em uso",
+        "unassigned": "Sem vínculo",
+        "install_in_totem": "Dentro de um Totem",
+        "install_in_point": "Direto no Ponto",
+        "status_active": "Ativo",
+        "status_inactive": "Inativo"
+      },
+      "descriptions": {
+        "home_assistant_device_key": "Cada equipamento usa o prefixo único das entidades de sensor no Home Assistant.",
+        "destination": "O vínculo é opcional. Use totem ou ponto conforme a instalação real em campo.",
+        "point": "Ao instalar direto no ponto, o equipamento fica sem vínculo com totem.",
+        "totem": "Ao instalar em totem, o ponto é derivado do próprio totem."
+      },
+      "buttons": {
+        "refresh_devices": "Atualizar dispositivos",
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "create": "Criar equipamento",
+        "saving": "Salvando..."
+      },
+      "notifications": {
+        "load_dependencies_error": "Erro ao carregar pontos, totens e dispositivos disponíveis.",
+        "load_devices_error": "Erro ao atualizar dispositivos do Home Assistant.",
+        "create_success": "Equipamento criado com sucesso.",
+        "update_success": "Equipamento atualizado com sucesso.",
+        "create_error": "Erro ao criar equipamento.",
+        "update_error": "Erro ao atualizar equipamento."
+      },
+      "validations": {
+        "name_required": "Informe o nome do equipamento.",
+        "device_required": "Selecione um dispositivo do Home Assistant."
+      }
+    },
+    "details": {
+      "title": "Detalhes do equipamento",
+      "description": "Informações operacionais de {name}.",
+      "not_informed": "Não informado",
+      "location": {
+        "point": "Ponto",
+        "totem": "Totem",
+        "no_reference": "Sem referência",
+        "unassigned": "Sem vínculo"
+      },
+      "labels": {
+        "name": "Nome",
+        "home_assistant_device_key": "Prefixo Home Assistant",
+        "home_assistant_label": "Nome amigável",
+        "installation": "Instalação",
+        "reference": "Referência",
+        "status": "Status",
+        "last_synced_at": "Última sincronização",
+        "sensors": "Sensores",
+        "description": "Descrição",
+        "id": "ID"
+      }
+    },
+    "dashboard": {
+      "filters": {
+        "equipment": "Equipamento",
+        "select_equipment": "Selecione um equipamento",
+        "totem": "Totem",
+        "all_totems": "Todos os totens",
+        "range": "Período"
+      },
+      "actions": {
+        "refresh": "Atualizar"
+      },
+      "ranges": {
+        "30m": "Últimos 30 minutos",
+        "1h": "Última hora",
+        "12h": "Últimas 12 horas",
+        "1d": "Último dia",
+        "1s": "Última semana",
+        "1m": "Último mês"
+      },
+      "summary": {
+        "scope": "Escopo",
+        "totem_value": "Totem {value}",
+        "select_equipment": "Selecione um equipamento",
+        "equipments": "Equipamentos",
+        "sensors": "Sensores",
+        "available_sensors": "{count} de {total} disponíveis",
+        "last_sync": "Última sincronização"
+      },
+      "load_error": "Não foi possível carregar o dashboard climático.",
+      "loading": "Carregando dashboard...",
+      "empty": "Selecione um equipamento ou um totem com equipamentos climáticos para visualizar o dashboard.",
+      "sensor_available": "Disponível",
+      "sensor_unavailable": "Indisponível",
+      "last_reading": "Última leitura: {value}",
+      "empty_history": "Ainda não há histórico disponível para este sensor.",
+      "not_informed": "Não informado"
     }
   },
   "access_control": {

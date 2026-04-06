@@ -12,6 +12,7 @@ import {
   RadioTower,
   Settings,
   ShieldCheck,
+  Thermometer,
   Users,
   type LucideIcon,
 } from "lucide-react"
@@ -167,6 +168,12 @@ export const appNavigation: AppNavigationGroup[] = [
             url: "/equipment/network-equipment",
             screenKey: "admin.network_equipment",
             icon: Settings,
+          },
+          {
+            titleKey: "climate_equipment",
+            url: "/equipment/climate-equipment",
+            screenKey: "admin.climate_equipment",
+            icon: Thermometer,
           },
         ],
       },

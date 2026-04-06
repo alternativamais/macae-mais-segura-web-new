@@ -31,7 +31,8 @@
     "cameras": "Cameras",
     "totens": "Totens",
     "smart_switches": "Smart Switches",
-    "network_equipment": "Network Equipment"
+    "network_equipment": "Network Equipment",
+    "climate_equipment": "Climate Equipment"
   },
   "user": {
     "account": "Account",
@@ -782,6 +783,198 @@
         "updated_at": "Updated at",
         "id": "ID"
       }
+    }
+  },
+  "climate_equipment": {
+    "title": "Climate Equipment",
+    "description": "Manage climate stations and sensors integrated with Home Assistant, installed at points or totems.",
+    "fetch_error": "Error loading climate equipment.",
+    "tabs": {
+      "equipments": "Equipment",
+      "dashboard": "Dashboard"
+    },
+    "shared": {
+      "not_informed": "Not informed"
+    },
+    "location": {
+      "point": "Point",
+      "totem": "Totem",
+      "no_reference": "No reference",
+      "unassigned": "Unassigned"
+    },
+    "stats": {
+      "total": "Total equipment",
+      "total_desc": "Climate stations registered in the system.",
+      "active": "Active equipment",
+      "active_desc": "Devices released for operation.",
+      "points": "Direct at point",
+      "points_desc": "Climate equipment installed without a totem.",
+      "totens": "Installed in totems",
+      "totens_desc": "Climate equipment linked to totems.",
+      "loading": "Loading..."
+    },
+    "table": {
+      "columns": {
+        "name": "Name",
+        "installation": "Installation",
+        "sensors": "Sensors",
+        "status": "Status",
+        "last_synced_at": "Last sync",
+        "actions": "Actions"
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "sensors_count": "{count} sensors",
+      "more_sensors": "+{count} sensors",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New equipment",
+        "view": "View details",
+        "view_dashboard": "Open dashboard",
+        "sync": "Sync now",
+        "search_placeholder": "Search by name, prefix, label, point or totem..."
+      },
+      "open_actions": "Open actions",
+      "loading": "Loading equipment...",
+      "empty": "No equipment found.",
+      "sync_success": "Equipment synchronized successfully.",
+      "sync_error": "Error synchronizing equipment.",
+      "delete_dialog": {
+        "title": "Delete equipment",
+        "description": "Do you really want to delete this climate equipment?",
+        "success": "Equipment deleted successfully.",
+        "error": "Error deleting equipment."
+      }
+    },
+    "form": {
+      "title_create": "New climate equipment",
+      "title_edit": "Edit climate equipment",
+      "description_create": "Register a new climate station integrated with Home Assistant.",
+      "description_edit": "Update the identification, integration, and installation of the climate equipment.",
+      "sections": {
+        "identification": "Identification",
+        "identification_desc": "Internal name, friendly label, and equipment notes.",
+        "integration": "Integration",
+        "integration_desc": "Select the available Home Assistant device and review the detected sensors.",
+        "location": "Location",
+        "location_desc": "Define whether the installation is in a totem, directly at a point, or unassigned.",
+        "system": "System Status",
+        "system_desc": "Operational state of the climate equipment."
+      },
+      "labels": {
+        "name": "Name",
+        "home_assistant_label": "Friendly name (Home Assistant)",
+        "description": "Description",
+        "home_assistant_device_key": "Home Assistant device",
+        "detected_sensors": "Detected sensors",
+        "destination": "Where to install?",
+        "point": "Point",
+        "totem": "Totem",
+        "status": "Status"
+      },
+      "placeholders": {
+        "name": "e.g. Central Square Climate Station",
+        "home_assistant_label": "e.g. Weather2-2",
+        "description": "Additional notes about the equipment",
+        "home_assistant_device_key": "Select a device",
+        "point": "Select the point",
+        "totem": "Select the totem",
+        "status": "Select the status"
+      },
+      "options": {
+        "in_use": "in use",
+        "unassigned": "Unassigned",
+        "install_in_totem": "Inside a Totem",
+        "install_in_point": "Direct at the Point",
+        "status_active": "Active",
+        "status_inactive": "Inactive"
+      },
+      "descriptions": {
+        "home_assistant_device_key": "Each equipment uses the unique Home Assistant sensor entity prefix.",
+        "destination": "The link is optional. Use totem or point according to the real field installation.",
+        "point": "When installed directly at a point, the equipment stays without a totem.",
+        "totem": "When installed in a totem, the point is derived from the totem itself."
+      },
+      "buttons": {
+        "refresh_devices": "Refresh devices",
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create equipment",
+        "saving": "Saving..."
+      },
+      "notifications": {
+        "load_dependencies_error": "Error loading available points, totems, and devices.",
+        "load_devices_error": "Error refreshing Home Assistant devices.",
+        "create_success": "Equipment created successfully.",
+        "update_success": "Equipment updated successfully.",
+        "create_error": "Error creating equipment.",
+        "update_error": "Error updating equipment."
+      },
+      "validations": {
+        "name_required": "Enter the equipment name.",
+        "device_required": "Select a Home Assistant device."
+      }
+    },
+    "details": {
+      "title": "Equipment details",
+      "description": "Operational information for {name}.",
+      "not_informed": "Not informed",
+      "location": {
+        "point": "Point",
+        "totem": "Totem",
+        "no_reference": "No reference",
+        "unassigned": "Unassigned"
+      },
+      "labels": {
+        "name": "Name",
+        "home_assistant_device_key": "Home Assistant prefix",
+        "home_assistant_label": "Friendly name",
+        "installation": "Installation",
+        "reference": "Reference",
+        "status": "Status",
+        "last_synced_at": "Last sync",
+        "sensors": "Sensors",
+        "description": "Description",
+        "id": "ID"
+      }
+    },
+    "dashboard": {
+      "filters": {
+        "equipment": "Equipment",
+        "select_equipment": "Select equipment",
+        "totem": "Totem",
+        "all_totems": "All totems",
+        "range": "Time range"
+      },
+      "actions": {
+        "refresh": "Refresh"
+      },
+      "ranges": {
+        "30m": "Last 30 minutes",
+        "1h": "Last hour",
+        "12h": "Last 12 hours",
+        "1d": "Last day",
+        "1s": "Last week",
+        "1m": "Last month"
+      },
+      "summary": {
+        "scope": "Scope",
+        "totem_value": "Totem {value}",
+        "select_equipment": "Select equipment",
+        "equipments": "Equipment",
+        "sensors": "Sensors",
+        "available_sensors": "{count} of {total} available",
+        "last_sync": "Last sync"
+      },
+      "load_error": "Unable to load the climate dashboard.",
+      "loading": "Loading dashboard...",
+      "empty": "Select equipment or a totem with climate equipment to view the dashboard.",
+      "sensor_available": "Available",
+      "sensor_unavailable": "Unavailable",
+      "last_reading": "Last reading: {value}",
+      "empty_history": "There is no history available for this sensor yet.",
+      "not_informed": "Not informed"
     }
   },
   "access_control": {

@@ -65,4 +65,9 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Gerenciamento de roteadores, ONUs, rádios e switches.",
     group: "Equipamentos",
   },
+  "admin.climate_equipment": {
+    title: "Equipamentos Climáticos",
+    description: "Gerenciamento de estações e sensores climáticos integrados ao Home Assistant.",
+    group: "Equipamentos",
+  },
 }
