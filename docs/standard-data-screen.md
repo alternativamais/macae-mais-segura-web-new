@@ -698,6 +698,38 @@ Regra:
 - `screenKey` deve refletir a policy do backend
 - nenhuma tela administrativa deve renderizar sem esse guard
 
+### 4.1.1 Permissao de tela e cadastro obrigatorio no catalogo
+
+Implementar uma nova tela administrativa nao termina no `ScreenGuard`.
+Toda tela nova deve obrigatoriamente fechar o fluxo de permissao de tela de ponta a ponta.
+
+Isso significa entregar, no minimo:
+
+- rota protegida por `ScreenGuard` com `screenKey` correto
+- entrada correspondente em `src/lib/navigation.ts`, quando a tela fizer parte da navegacao oficial
+- definicao consistente de `screenKey`, `title`, `description`, `path` e `group`
+- sincronizacao da tela com o catalogo de frontend screens usado pelo backend
+- disponibilidade da tela na area de atribuicao de telas em `Permissoes`
+
+Regra operacional:
+
+- se a tela existe no frontend mas nao existe no catalogo `frontend_screens`, a implementacao esta incompleta
+- se a tela foi movida de grupo, o `group` do catalogo tambem deve ser atualizado
+- se a tela entrou no menu oficial, ela precisa aparecer de forma consistente na sidebar, na busca rapida e no fluxo de permissao
+
+Fonte de verdade envolvida:
+
+- frontend: `src/lib/navigation.ts`
+- frontend: `src/config/frontend-screens.ts`
+- frontend: `src/lib/frontend-screens.ts`
+- frontend: fluxo de login que sincroniza `/frontend/screens/sync-client`
+- backend: `macae-mais-segura-api/src/modules/frontend-screens/frontend-screens.registry.ts`
+
+Conclusao pratica:
+
+- nunca considerar uma tela migrada como pronta sem implementar tambem a parte de permissao de tela
+- toda migracao deve validar nao so renderizacao e CRUD, mas tambem atribuicao de tela por perfil
+
 ### 4.2 Estrutura visual base
 
 Estrutura obrigatoria:
@@ -2222,6 +2254,10 @@ Antes de considerar uma tela administrativa pronta, validar:
 - [ ] labels de menu/search do modulo saem de `src/lib/navigation.ts` quando a tela participa da navegacao global
 - [ ] sidebar e `CommandSearch` nao mantem fonte de verdade duplicada para a rota
 - [ ] `page.tsx` usa `ScreenGuard`
+- [ ] `screenKey` da tela esta alinhado com a policy real do backend
+- [ ] a tela foi registrada no catalogo de frontend screens
+- [ ] a tela aparece corretamente no fluxo de atribuicao de telas/perfis
+- [ ] mudancas de grupo, titulo ou path da tela tambem foram refletidas no catalogo de permissoes
 - [ ] titulo, subtitulo, stat cards e tabs seguem a estrutura padrao
 - [ ] permissoes de leitura e mutacao foram separadas
 - [ ] estados vazios usam `TabStateCard` ou linha vazia apropriada
