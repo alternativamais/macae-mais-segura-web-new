@@ -29,7 +29,8 @@
     "manual_administration": "Manual administration",
     "equipment": "Equipment",
     "cameras": "Cameras",
-    "totens": "Totens"
+    "totens": "Totens",
+    "smart_switches": "Smart Switches"
   },
   "user": {
     "account": "Account",
@@ -421,6 +422,158 @@
         "created_at": "Created at",
         "updated_at": "Updated at",
         "id": "ID"
+      }
+    }
+  },
+  "smart_switches": {
+    "title": "Smart Switches",
+    "description": "Manage Home Assistant smart switches, with installation in totems or directly at points and power commands.",
+    "fetch_error": "Error loading smart switches.",
+    "shared": {
+      "not_informed": "Not informed"
+    },
+    "stats": {
+      "total": "Total smart switches",
+      "total_desc": "Devices registered in the system.",
+      "active": "Active smart switches",
+      "active_desc": "Devices available for remote operation.",
+      "inactive": "Inactive smart switches",
+      "inactive_desc": "Devices out of operation or disabled.",
+      "totems": "Installed in totems",
+      "totems_desc": "Totems with associated electrical automation.",
+      "points": "Direct at point",
+      "points_desc": "Points with a smart switch installed without a totem.",
+      "loading": "Loading..."
+    },
+    "table": {
+      "columns": {
+        "name": "Name",
+        "entity_id": "Entity ID",
+        "installation": "Installation",
+        "power_state": "State",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "actions": "Actions"
+      },
+      "location": {
+        "direct_point": "Direct at point",
+        "inside_totem": "Inside totem • {point}"
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "power_state": {
+        "on": "On",
+        "off": "Off",
+        "offline": "Offline",
+        "unknown": "Unknown"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New smart switch",
+        "view": "View details",
+        "refresh_state": "Refresh state",
+        "toggle": "Toggle power",
+        "search_placeholder": "Search by name, entity ID, totem, or point..."
+      },
+      "notifications": {
+        "refresh_success": "Smart switch state updated.",
+        "refresh_error": "Error refreshing smart switch state.",
+        "toggle_success": "Command sent to the smart switch.",
+        "toggle_error": "Error toggling the smart switch."
+      },
+      "open_actions": "Open actions",
+      "loading": "Loading smart switches...",
+      "empty": "No smart switches found.",
+      "delete_dialog": {
+        "title": "Delete smart switch",
+        "description": "Do you really want to delete this smart switch? This action will remove the link with the automated device.",
+        "success": "Smart switch deleted successfully.",
+        "error": "Error deleting smart switch."
+      }
+    },
+    "form": {
+      "title_create": "New smart switch",
+      "title_edit": "Edit smart switch",
+      "description_create": "Register a Home Assistant device and choose whether it will be installed in a totem or directly at a point.",
+      "description_edit": "Update the device data, linked entity, and installation location.",
+      "labels": {
+        "name": "Name",
+        "entity_id": "Home Assistant entity",
+        "destination": "Where to install?",
+        "totem": "Linked totem",
+        "point": "Linked point",
+        "status": "Status"
+      },
+      "actions": {
+        "refresh_entities": "Refresh"
+      },
+      "placeholders": {
+        "name": "Optional — it will be filled from the friendly name",
+        "entity_id": "Select the entity",
+        "totem": "Select the totem",
+        "point": "Select the point",
+        "status": "Select the status",
+        "loading": "Loading..."
+      },
+      "options": {
+        "select_totem": "Select the totem",
+        "select_point": "Select the point",
+        "install_in_totem": "Inside a Totem",
+        "install_in_point": "Direct at the Point",
+        "entity_without_name": "Entity without friendly name"
+      },
+      "descriptions": {
+        "entity_id": "Choose an available switch-type entity from Home Assistant.",
+        "name": "If left blank, the system will try to use the entity friendly name.",
+        "destination": "Define whether the smart switch will be inside a totem or installed directly at the point.",
+        "destination_totem": "Uses the totem as the primary equipment.",
+        "destination_point": "Installs the smart switch without a totem link.",
+        "totem": "Select the totem where the smart switch will be installed.",
+        "point": "Select the point where the smart switch will be installed."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create smart switch",
+        "saving": "Saving..."
+      },
+      "notifications": {
+        "load_dependencies_error": "Error loading points, totems, and available entities.",
+        "refresh_entities_error": "Error refreshing the Home Assistant entity list.",
+        "create_success": "Smart switch created successfully.",
+        "update_success": "Smart switch updated successfully.",
+        "create_error": "Error creating smart switch.",
+        "update_error": "Error updating smart switch."
+      },
+      "validations": {
+        "entity_required": "Select the Home Assistant entity.",
+        "totem_required": "Select the linked totem.",
+        "point_required": "Select the linked point."
+      },
+      "selected_point": "Point derived from totem: {point}",
+      "selected_direct_point": "Direct installation at point: {point}"
+    },
+    "details": {
+      "title": "Smart switch details",
+      "description": "Operational information for {name}.",
+      "not_informed": "Not informed",
+      "labels": {
+        "name": "Name",
+        "entity_id": "Entity ID",
+        "installation_type": "Installation type",
+        "installation": "Installation",
+        "totem": "Totem",
+        "point": "Point",
+        "status": "Status",
+        "power_state": "Power state",
+        "created_at": "Created at",
+        "updated_at": "Updated at",
+        "id": "ID"
+      },
+      "values": {
+        "install_in_totem": "Inside a Totem",
+        "install_in_point": "Direct at the Point"
       }
     }
   },

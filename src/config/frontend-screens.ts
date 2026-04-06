@@ -55,4 +55,9 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Gerenciamento dos totens operacionais.",
     group: "Equipamentos",
   },
+  "admin.smart_switches": {
+    title: "Smart Switches",
+    description: "Gerenciamento dos smart switches integrados ao Home Assistant.",
+    group: "Equipamentos",
+  },
 }
