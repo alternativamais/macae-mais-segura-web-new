@@ -20,6 +20,7 @@
     "permissions": "Permissões",
     "access_control": "Controle de Acesso",
     "companies": "Empresas",
+    "points": "Pontos",
     "system": "Sistema",
     "backups": "Backups",
     "ui_settings": "Layout e Tema",
@@ -1687,6 +1688,131 @@
         "updatedAt": "Última atualização",
         "id": "ID"
       },
+      "not_informed": "Não informado"
+    }
+  },
+  "points": {
+    "title": "Pontos",
+    "description": "Gerencie os pontos de monitoramento, coordenadas, referência operacional e vínculo com empresas.",
+    "fetch_error": "Erro ao carregar pontos.",
+    "system_default": "Nenhuma (Sistema)",
+    "stats": {
+      "total": "Total de pontos",
+      "total_desc": "Pontos de monitoramento cadastrados no sistema.",
+      "active": "Pontos ativos",
+      "active_desc": "Locais disponíveis para operação e monitoramento.",
+      "inactive": "Pontos inativos",
+      "inactive_desc": "Locais temporariamente fora de operação.",
+      "equipment": "Equipamentos vinculados",
+      "equipment_desc": "Total de câmeras e totens associados aos pontos.",
+      "loading": "Carregando..."
+    },
+    "table": {
+      "columns": {
+        "name": "Ponto",
+        "reference": "Referência",
+        "coordinates": "Coordenadas",
+        "equipment": "Equipamentos",
+        "status": "Status",
+        "updatedAt": "Atualizado em",
+        "actions": "Ações"
+      },
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "actions": {
+        "edit": "Editar",
+        "delete": "Excluir",
+        "create": "Novo ponto",
+        "view": "Ver detalhes",
+        "search_placeholder": "Buscar por nome, referência, coordenadas ou empresa..."
+      },
+      "delete_dialog": {
+        "title": "Excluir ponto",
+        "description": "Deseja realmente excluir este ponto? Esta ação pode impactar os vínculos operacionais existentes.",
+        "success": "Ponto excluído com sucesso.",
+        "error": "Erro ao excluir ponto."
+      },
+      "equipment_count": "{count} ativo(s)",
+      "open_actions": "Abrir ações",
+      "loading": "Carregando pontos...",
+      "empty": "Nenhum ponto encontrado."
+    },
+    "form": {
+      "title_create": "Novo ponto",
+      "title_edit": "Editar ponto",
+      "description_create": "Cadastre um novo ponto de monitoramento com referência operacional.",
+      "description_edit": "Atualize os dados cadastrais e operacionais do ponto.",
+      "labels": {
+        "name": "Nome do ponto",
+        "reference": "Ponto de referência",
+        "coordinates": "Coordenadas (lat,lng)",
+        "status": "Status",
+        "company": "Empresa responsável"
+      },
+      "actions": {
+        "select_on_map": "Selecionar no mapa",
+        "adjust_on_map": "Ajustar no mapa"
+      },
+      "placeholders": {
+        "name": "Ex.: Praça Washington Luiz",
+        "reference": "Ex.: Em frente à prefeitura",
+        "coordinates": "Ex.: -22.376534,-41.794399",
+        "status": "Selecione o status",
+        "company": "Selecione a empresa"
+      },
+      "options": {
+        "system_default": "Nenhuma (Sistema)"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "create": "Criar ponto",
+        "saving": "Salvando..."
+      },
+      "notifications": {
+        "create_success": "Ponto criado com sucesso.",
+        "update_success": "Ponto atualizado com sucesso.",
+        "create_error": "Erro ao criar ponto.",
+        "update_error": "Erro ao atualizar ponto."
+      },
+      "selected_coordinates": "Coordenadas selecionadas: {coordinates}",
+      "validations": {
+        "name_min": "Nome deve ter pelo menos 2 caracteres.",
+        "coordinates_invalid": "Informe coordenadas no formato latitude,longitude."
+      },
+      "map_picker": {
+        "title": "Selecionar coordenadas no mapa",
+        "description": "Clique no mapa para marcar a posição exata do ponto. Você também pode arrastar o marcador para fazer um ajuste fino.",
+        "instructions": "Clique no mapa ou arraste o marcador para ajustar a posição.",
+        "no_selection": "Nenhuma coordenada selecionada.",
+        "loading": "Carregando mapa...",
+        "missing_key_title": "Google Maps não configurado",
+        "missing_key_desc": "Defina NEXT_PUBLIC_GOOGLE_MAPS_API_KEY para habilitar a seleção visual de coordenadas.",
+        "load_error_title": "Falha ao carregar o mapa",
+        "load_error_desc": "Não foi possível carregar o Google Maps neste momento.",
+        "buttons": {
+          "cancel": "Cancelar",
+          "confirm": "Usar coordenadas"
+        }
+      }
+    },
+    "details": {
+      "title": "Detalhes do ponto",
+      "description": "Informações operacionais de {name}.",
+      "labels": {
+        "name": "Nome",
+        "reference": "Referência",
+        "coordinates": "Coordenadas",
+        "company": "Empresa",
+        "cameras": "Câmeras",
+        "totems": "Totens",
+        "total_equipment": "Total de equipamentos",
+        "status": "Status",
+        "created_at": "Criado em",
+        "updated_at": "Última atualização",
+        "id": "ID"
+      },
+      "system_default": "Nenhuma (Sistema)",
       "not_informed": "Não informado"
     }
   }

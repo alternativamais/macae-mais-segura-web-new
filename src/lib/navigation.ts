@@ -6,6 +6,7 @@ import {
   HardDrive,
   LayoutDashboard,
   Logs,
+  MapPin,
   PaintbrushVertical,
   Settings,
   ShieldCheck,
@@ -123,6 +124,12 @@ export const appNavigation: AppNavigationGroup[] = [
         url: "#",
         icon: Building2,
         items: [
+          {
+            titleKey: "points",
+            url: "/administration/points",
+            screenKey: "admin.points",
+            icon: MapPin,
+          },
           {
             titleKey: "companies",
             url: "/companies",

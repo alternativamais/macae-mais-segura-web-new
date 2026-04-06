@@ -17,6 +17,7 @@ import { useAuthStore } from "@/store/auth-store"
 import Link from "next/link"
 import Image from "next/image"
 import { setCookie } from "cookies-next"
+import { collectFrontendScreens } from "@/lib/frontend-screens"
 import {
   AUTH_COOKIE_KEY,
   AUTH_REDIRECT_REASON,
@@ -61,7 +62,41 @@ export function LoginForm({
           maxAge: 60 * 60 * 24 * 7, // 7 dias
           path: '/',
         })
-        login(accessToken, user, allowedScreens, permissions)
+
+        let finalAllowedScreens = Array.isArray(allowedScreens)
+          ? Array.from(
+              new Set(
+                allowedScreens
+                  .filter((screenKey) => typeof screenKey === "string")
+                  .map((screenKey) => screenKey.trim())
+                  .filter(Boolean),
+              ),
+            )
+          : []
+
+        const roleName =
+          typeof user?.role?.name === "string" ? user.role.name.toLowerCase() : ""
+
+        if (roleName === "admin") {
+          const frontendScreens = collectFrontendScreens()
+          const screenKeys = frontendScreens.map((screen) => screen.screenKey)
+
+          if (frontendScreens.length) {
+            try {
+              await authService.syncClientScreens(frontendScreens)
+            } catch (error) {
+              console.warn("Falha ao sincronizar telas do frontend", error)
+            }
+          }
+
+          if (screenKeys.length) {
+            finalAllowedScreens = Array.from(
+              new Set([...finalAllowedScreens, ...screenKeys]),
+            )
+          }
+        }
+
+        login(accessToken, user, finalAllowedScreens, permissions)
         toast.success("Login realizado com sucesso!")
         const next = searchParams.get("next")
         if (next && next.startsWith("/") && !next.startsWith("//")) {

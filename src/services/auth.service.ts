@@ -1,5 +1,6 @@
 import api from '@/lib/api-client';
 import { LoginResponse, SessionSnapshot } from '@/types/auth';
+import { FrontendScreen } from '@/types/frontend-screen';
 
 export const authService = {
   login: async (credentials: any): Promise<LoginResponse> => {
@@ -14,6 +15,14 @@ export const authService = {
 
   checkToken: async (): Promise<SessionSnapshot> => {
     const { data } = await api.get<SessionSnapshot>('/check-token');
+    return data;
+  },
+
+  syncClientScreens: async (screens: Array<Pick<FrontendScreen, "screenKey" | "title" | "description" | "path" | "group">>) => {
+    const { data } = await api.post('/frontend/screens/sync-client', {
+      platform: 'web',
+      screens,
+    });
     return data;
   },
 };

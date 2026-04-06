@@ -20,6 +20,7 @@
     "permissions": "Permissions",
     "access_control": "Access Control",
     "companies": "Companies",
+    "points": "Points",
     "system": "System",
     "backups": "Backups",
     "ui_settings": "UI Settings",
@@ -1687,6 +1688,131 @@
         "updatedAt": "Last update",
         "id": "ID"
       },
+      "not_informed": "Not informed"
+    }
+  },
+  "points": {
+    "title": "Points",
+    "description": "Manage monitoring points, coordinates, operational references and company links.",
+    "fetch_error": "Error loading points.",
+    "system_default": "None (System)",
+    "stats": {
+      "total": "Total points",
+      "total_desc": "Monitoring points registered in the system.",
+      "active": "Active points",
+      "active_desc": "Locations currently available for operation and monitoring.",
+      "inactive": "Inactive points",
+      "inactive_desc": "Locations temporarily out of operation.",
+      "equipment": "Linked equipment",
+      "equipment_desc": "Total cameras and totems assigned to the points.",
+      "loading": "Loading..."
+    },
+    "table": {
+      "columns": {
+        "name": "Point",
+        "reference": "Reference",
+        "coordinates": "Coordinates",
+        "equipment": "Equipment",
+        "status": "Status",
+        "updatedAt": "Updated at",
+        "actions": "Actions"
+      },
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "New point",
+        "view": "View details",
+        "search_placeholder": "Search by name, reference, coordinates or company..."
+      },
+      "delete_dialog": {
+        "title": "Delete point",
+        "description": "Do you really want to delete this point? This action may affect existing operational links.",
+        "success": "Point deleted successfully.",
+        "error": "Error deleting point."
+      },
+      "equipment_count": "{count} active",
+      "open_actions": "Open actions",
+      "loading": "Loading points...",
+      "empty": "No points found."
+    },
+    "form": {
+      "title_create": "New point",
+      "title_edit": "Edit point",
+      "description_create": "Register a new monitoring point with its operational reference.",
+      "description_edit": "Update the point registration and operational data.",
+      "labels": {
+        "name": "Point name",
+        "reference": "Reference point",
+        "coordinates": "Coordinates (lat,lng)",
+        "status": "Status",
+        "company": "Responsible company"
+      },
+      "actions": {
+        "select_on_map": "Select on map",
+        "adjust_on_map": "Adjust on map"
+      },
+      "placeholders": {
+        "name": "e.g.: Washington Luiz Square",
+        "reference": "e.g.: In front of city hall",
+        "coordinates": "e.g.: -22.376534,-41.794399",
+        "status": "Select a status",
+        "company": "Select a company"
+      },
+      "options": {
+        "system_default": "None (System)"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create point",
+        "saving": "Saving..."
+      },
+      "notifications": {
+        "create_success": "Point created successfully.",
+        "update_success": "Point updated successfully.",
+        "create_error": "Error creating point.",
+        "update_error": "Error updating point."
+      },
+      "selected_coordinates": "Selected coordinates: {coordinates}",
+      "validations": {
+        "name_min": "Name must be at least 2 characters.",
+        "coordinates_invalid": "Enter coordinates in latitude,longitude format."
+      },
+      "map_picker": {
+        "title": "Select coordinates on the map",
+        "description": "Click on the map to mark the exact point location. You can also drag the marker for fine adjustment.",
+        "instructions": "Click on the map or drag the marker to adjust the position.",
+        "no_selection": "No coordinates selected.",
+        "loading": "Loading map...",
+        "missing_key_title": "Google Maps is not configured",
+        "missing_key_desc": "Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to enable visual coordinate selection.",
+        "load_error_title": "Failed to load the map",
+        "load_error_desc": "Google Maps could not be loaded at this time.",
+        "buttons": {
+          "cancel": "Cancel",
+          "confirm": "Use coordinates"
+        }
+      }
+    },
+    "details": {
+      "title": "Point details",
+      "description": "Operational information for {name}.",
+      "labels": {
+        "name": "Name",
+        "reference": "Reference",
+        "coordinates": "Coordinates",
+        "company": "Company",
+        "cameras": "Cameras",
+        "totems": "Totems",
+        "total_equipment": "Total equipment",
+        "status": "Status",
+        "created_at": "Created at",
+        "updated_at": "Last update",
+        "id": "ID"
+      },
+      "system_default": "None (System)",
       "not_informed": "Not informed"
     }
   }
