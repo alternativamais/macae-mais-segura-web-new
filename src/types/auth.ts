@@ -22,3 +22,10 @@ export interface SessionSnapshot {
   allowedScreens: string[];
   permissions: string[];
 }
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+  latitude?: number;
+  longitude?: number;
+}

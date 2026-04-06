@@ -18,6 +18,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { setCookie } from "cookies-next"
 import { collectFrontendScreens } from "@/lib/frontend-screens"
+import { captureBrowserLocation } from "@/lib/browser-location"
 import {
   AUTH_COOKIE_KEY,
   AUTH_REDIRECT_REASON,
@@ -52,7 +53,13 @@ export function LoginForm({
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true)
     try {
-      const response = await authService.login(data)
+      const coordinates = await captureBrowserLocation()
+      const response = await authService.login({
+        email: data.email,
+        password: data.password,
+        latitude: coordinates?.latitude,
+        longitude: coordinates?.longitude,
+      })
       const { accessToken, user, allowedScreens, permissions } = response
 
       if (accessToken) {

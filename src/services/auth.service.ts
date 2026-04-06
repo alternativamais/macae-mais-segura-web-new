@@ -1,9 +1,9 @@
 import api from '@/lib/api-client';
-import { LoginResponse, SessionSnapshot } from '@/types/auth';
+import { LoginCredentials, LoginResponse, SessionSnapshot } from '@/types/auth';
 import { FrontendScreen } from '@/types/frontend-screen';
 
 export const authService = {
-  login: async (credentials: any): Promise<LoginResponse> => {
+  login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
     const { data } = await api.post<LoginResponse>('/auth', credentials);
     return data;
   },
