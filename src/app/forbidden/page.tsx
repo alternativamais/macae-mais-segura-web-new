@@ -9,8 +9,6 @@ export default function ForbiddenPage() {
       icon="shieldX"
       primaryHref="/dashboard"
       primaryLabel="Voltar ao dashboard"
-      secondaryHref="/sign-in"
-      secondaryLabel="Trocar de conta"
     />
   )
 }

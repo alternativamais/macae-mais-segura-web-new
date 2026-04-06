@@ -17,6 +17,11 @@ import { useAuthStore } from "@/store/auth-store"
 import Link from "next/link"
 import Image from "next/image"
 import { setCookie } from "cookies-next"
+import {
+  AUTH_COOKIE_KEY,
+  AUTH_REDIRECT_REASON,
+  AUTH_TOKEN_KEY,
+} from "@/lib/auth-session"
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -33,6 +38,7 @@ export function LoginForm({
   const router = useRouter()
   const searchParams = useSearchParams()
   const login = useAuthStore((state) => state.login)
+  const reason = searchParams.get("reason")
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -49,9 +55,9 @@ export function LoginForm({
       const { accessToken, user, allowedScreens, permissions } = response
 
       if (accessToken) {
-        localStorage.setItem("@alternativa-base:token", accessToken)
+        localStorage.setItem(AUTH_TOKEN_KEY, accessToken)
         // O cookie é essencial para o Middleware do Nextjs
-        setCookie("@alternativa-base:token", accessToken, { 
+        setCookie(AUTH_COOKIE_KEY, accessToken, { 
           maxAge: 60 * 60 * 24 * 7, // 7 dias
           path: '/',
         })
@@ -65,7 +71,6 @@ export function LoginForm({
         }
       }
     } catch (error: any) {
-      const message = error.response?.data?.message || "Erro ao realizar login"
       toast.apiError(error, "Erro ao realizar login")
     } finally {
       setIsLoading(false)
@@ -89,6 +94,11 @@ export function LoginForm({
                   Acesse sua conta para continuar
                 </p>
               </div>
+              {reason === AUTH_REDIRECT_REASON.sessionExpired ? (
+                <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                  Sua sessão expirou. Entre novamente para continuar.
+                </div>
+              ) : null}
               <div className="grid gap-3">
                 <Label htmlFor="email">E-mail</Label>
                 <Input

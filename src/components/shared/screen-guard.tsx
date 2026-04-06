@@ -1,11 +1,17 @@
 "use client"
 
 import { useAuthStore } from "@/store/auth-store"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
 import { ShieldAlert } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import {
+  AUTH_REDIRECT_REASON,
+  buildSafeNextPath,
+  buildSignInPath,
+  isTokenExpired,
+} from "@/lib/auth-session"
 
 interface ScreenGuardProps {
   screenKey: string
@@ -22,30 +28,65 @@ export function ScreenGuard({
 }: ScreenGuardProps) {
   const allowedScreens = useAuthStore((state) => state.allowedScreens)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const token = useAuthStore((state) => state.token)
+  const hasHydrated = useAuthStore((state) => state.hasHydrated)
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [mounted, setMounted] = useState(false)
+  const currentPath = useMemo(() => {
+    const query = searchParams.toString()
+    return buildSafeNextPath(pathname, query ? `?${query}` : "")
+  }, [pathname, searchParams])
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Se o usuário não está logado ou não tem a tela na lista, ele não pode acessar.
-  const hasAccess = isAuthenticated && allowedScreens.includes(screenKey)
-  const shouldRedirect = mounted && !hasAccess && fallbackAction === "redirect"
+  const tokenExpired = token ? isTokenExpired(token) : false
+  const needsAuthentication = mounted && hasHydrated && (!isAuthenticated || !token || tokenExpired)
+  const hasAccess = hasHydrated && isAuthenticated && !tokenExpired && allowedScreens.includes(screenKey)
+  const shouldRedirectToForbidden =
+    mounted && hasHydrated && !needsAuthentication && !hasAccess && fallbackAction === "redirect"
 
   useEffect(() => {
-    if (!shouldRedirect) {
+    if (!mounted || !hasHydrated) {
+      return
+    }
+
+    if (needsAuthentication) {
+      router.replace(
+        buildSignInPath(
+          currentPath,
+          tokenExpired
+            ? AUTH_REDIRECT_REASON.sessionExpired
+            : AUTH_REDIRECT_REASON.authRequired,
+        ),
+      )
+      return
+    }
+
+    if (!shouldRedirectToForbidden) {
       return
     }
 
     router.replace(fallbackRedirectUrl)
-  }, [fallbackRedirectUrl, router, shouldRedirect])
+  }, [
+    currentPath,
+    fallbackRedirectUrl,
+    hasHydrated,
+    mounted,
+    needsAuthentication,
+    router,
+    shouldRedirectToForbidden,
+    tokenExpired,
+  ])
 
   // Só checamos após a hidratação
-  if (!mounted) return null
+  if (!mounted || !hasHydrated) return null
 
   if (!hasAccess) {
-    if (shouldRedirect) {
+    if (needsAuthentication || shouldRedirectToForbidden) {
       return null
     }
 

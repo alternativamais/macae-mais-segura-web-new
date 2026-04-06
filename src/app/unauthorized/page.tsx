@@ -3,6 +3,10 @@
 import { useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { RouteErrorState } from "@/components/shared/route-error-state"
+import {
+  AUTH_REDIRECT_REASON,
+  buildSignInPath,
+} from "@/lib/auth-session"
 
 const REDIRECT_DELAY_SECONDS = 5
 
@@ -10,16 +14,21 @@ export default function UnauthorizedPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [secondsRemaining, setSecondsRemaining] = useState(REDIRECT_DELAY_SECONDS)
+  const reason = searchParams.get("reason")
+  const next = searchParams.get("next")
+  const isSessionExpired = reason === AUTH_REDIRECT_REASON.sessionExpired
+  const isAuthRequired = reason === AUTH_REDIRECT_REASON.authRequired
+  const shouldHideActions = isSessionExpired || isAuthRequired
 
   const redirectHref = useMemo(() => {
-    const next = searchParams.get("next")
+    const safeNext =
+      next && next.startsWith("/") && !next.startsWith("//") ? next : null
 
-    if (next && next.startsWith("/") && !next.startsWith("//")) {
-      return `/sign-in?next=${encodeURIComponent(next)}`
-    }
-
-    return "/sign-in"
-  }, [searchParams])
+    return buildSignInPath(
+      safeNext,
+      isSessionExpired ? AUTH_REDIRECT_REASON.sessionExpired : undefined,
+    )
+  }, [isSessionExpired, next])
 
   useEffect(() => {
     const intervalId = window.setInterval(() => {
@@ -39,13 +48,20 @@ export default function UnauthorizedPage() {
   return (
     <RouteErrorState
       code="401"
-      title="Não autenticado"
-      description={`Esta rota exige uma sessão válida. Você será redirecionado para o login em ${secondsRemaining} segundo${secondsRemaining === 1 ? "" : "s"}.`}
+      title={isSessionExpired ? "Sessão expirada" : "Não autenticado"}
+      description={
+        isSessionExpired
+          ? `Sua sessão expirou e o acesso foi encerrado automaticamente. Você será redirecionado para o login em ${secondsRemaining} segundo${secondsRemaining === 1 ? "" : "s"}.`
+          : isAuthRequired
+            ? `Esta rota exige autenticação. Você será redirecionado para o login em ${secondsRemaining} segundo${secondsRemaining === 1 ? "" : "s"}.`
+            : `Esta rota exige uma sessão válida. Você será redirecionado para o login em ${secondsRemaining} segundo${secondsRemaining === 1 ? "" : "s"}.`
+      }
       icon="shieldAlert"
       primaryHref={redirectHref}
       primaryLabel="Ir para o login agora"
-      secondaryHref="/"
-      secondaryLabel="Voltar ao início"
+      secondaryHref={shouldHideActions ? undefined : "/"}
+      secondaryLabel={shouldHideActions ? undefined : "Voltar ao início"}
+      hideActions={shouldHideActions}
     />
   )
 }

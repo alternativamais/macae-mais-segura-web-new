@@ -3,12 +3,19 @@
 import React from "react";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { useSidebarConfig } from "@/hooks/use-sidebar-config";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth-store";
+import {
+  AUTH_REDIRECT_REASON,
+  buildSafeNextPath,
+  buildSignInPath,
+  isTokenExpired,
+} from "@/lib/auth-session";
 
 export default function DashboardLayout({
   children,
@@ -16,20 +23,38 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { config } = useSidebarConfig();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const hasHydrated = useAuthStore((state) => state.hasHydrated);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const token = useAuthStore((state) => state.token);
   const syncSession = useAuthStore((state) => state.syncSession);
   const logout = useAuthStore((state) => state.logout);
-  const [isBootstrappingSession, setIsBootstrappingSession] = React.useState(
-    () => Boolean(isAuthenticated && token),
-  );
+  const currentPath = React.useMemo(() => {
+    const query = searchParams.toString();
+    return buildSafeNextPath(pathname, query ? `?${query}` : "");
+  }, [pathname, searchParams]);
+  const [isBootstrappingSession, setIsBootstrappingSession] = React.useState(true);
 
   React.useEffect(() => {
     let cancelled = false;
 
     const bootstrapSession = async () => {
+      if (!hasHydrated) {
+        return;
+      }
+
       if (!isAuthenticated || !token) {
         setIsBootstrappingSession(false);
+        return;
+      }
+
+      if (isTokenExpired(token)) {
+        logout();
+        router.replace(
+          buildSignInPath(currentPath, AUTH_REDIRECT_REASON.sessionExpired),
+        );
         return;
       }
 
@@ -47,6 +72,9 @@ export default function DashboardLayout({
           error.response?.status === 401
         ) {
           logout();
+          router.replace(
+            buildSignInPath(currentPath, AUTH_REDIRECT_REASON.sessionExpired),
+          );
         }
       } finally {
         if (!cancelled) {
@@ -60,9 +88,17 @@ export default function DashboardLayout({
     return () => {
       cancelled = true;
     };
-  }, [isAuthenticated, logout, syncSession, token]);
+  }, [
+    currentPath,
+    hasHydrated,
+    isAuthenticated,
+    logout,
+    router,
+    syncSession,
+    token,
+  ]);
 
-  if (isBootstrappingSession) {
+  if (!hasHydrated || isBootstrappingSession) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="inline-flex items-center gap-3 rounded-lg border bg-card px-4 py-3 text-sm text-muted-foreground">

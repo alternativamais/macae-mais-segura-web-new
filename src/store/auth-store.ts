@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { deleteCookie } from 'cookies-next';
 import { User } from '@/types/auth';
+import { AUTH_COOKIE_KEY, AUTH_TOKEN_KEY } from '@/lib/auth-session';
 
 interface AuthState {
   token: string | null;
@@ -9,6 +10,7 @@ interface AuthState {
   allowedScreens: string[];
   permissions: string[];
   isAuthenticated: boolean;
+  hasHydrated: boolean;
   login: (token: string, user: User, allowedScreens?: string[], permissions?: string[]) => void;
   syncSession: (payload: {
     user: User;
@@ -16,6 +18,7 @@ interface AuthState {
     permissions: string[];
   }) => void;
   updateUser: (patch: Partial<User>) => void;
+  setHasHydrated: (value: boolean) => void;
   logout: () => void;
 }
 
@@ -27,6 +30,7 @@ export const useAuthStore = create<AuthState>()(
       allowedScreens: [],
       permissions: [],
       isAuthenticated: false,
+      hasHydrated: false,
 
       login: (token, user, allowedScreens = [], permissions = []) => {
         set({ token, user, allowedScreens, permissions, isAuthenticated: true });
@@ -48,15 +52,22 @@ export const useAuthStore = create<AuthState>()(
         }));
       },
 
+      setHasHydrated: (value) => {
+        set({ hasHydrated: value });
+      },
+
       logout: () => {
-        deleteCookie('@alternativa-base:token');
-        localStorage.removeItem('@alternativa-base:token');
+        deleteCookie(AUTH_COOKIE_KEY);
+        localStorage.removeItem(AUTH_TOKEN_KEY);
         set({ token: null, user: null, allowedScreens: [], permissions: [], isAuthenticated: false });
       },
     }),
     {
       name: '@alternativa-base:auth',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

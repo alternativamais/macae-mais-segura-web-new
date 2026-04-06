@@ -32,6 +32,7 @@ interface RouteErrorStateProps {
   secondaryLabel?: string
   onRetry?: () => void
   retryLabel?: string
+  hideActions?: boolean
 }
 
 export function RouteErrorState({
@@ -45,6 +46,7 @@ export function RouteErrorState({
   secondaryLabel = "Fazer login",
   onRetry,
   retryLabel = "Tentar novamente",
+  hideActions = false,
 }: RouteErrorStateProps) {
   const Icon = iconMap[icon]
 
@@ -83,28 +85,32 @@ export function RouteErrorState({
               </p>
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              {onRetry ? (
-                <Button onClick={onRetry} className="cursor-pointer">
-                  <RotateCcw className="mr-2 h-4 w-4" />
-                  {retryLabel}
-                </Button>
-              ) : (
-                <Button asChild className="cursor-pointer">
-                  <Link href={primaryHref}>
-                    <Home className="mr-2 h-4 w-4" />
-                    {primaryLabel}
-                  </Link>
-                </Button>
-              )}
+            {!hideActions ? (
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                {onRetry ? (
+                  <Button onClick={onRetry} className="cursor-pointer">
+                    <RotateCcw className="mr-2 h-4 w-4" />
+                    {retryLabel}
+                  </Button>
+                ) : primaryHref && primaryLabel ? (
+                  <Button asChild className="cursor-pointer">
+                    <Link href={primaryHref}>
+                      <Home className="mr-2 h-4 w-4" />
+                      {primaryLabel}
+                    </Link>
+                  </Button>
+                ) : null}
 
-              <Button asChild variant="outline" className="cursor-pointer">
-                <Link href={secondaryHref}>
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  {secondaryLabel}
-                </Link>
-              </Button>
-            </div>
+                {secondaryHref && secondaryLabel ? (
+                  <Button asChild variant="outline" className="cursor-pointer">
+                    <Link href={secondaryHref}>
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      {secondaryLabel}
+                    </Link>
+                  </Button>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </CardContent>
       </Card>

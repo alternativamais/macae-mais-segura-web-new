@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { notificationService } from './notifications/notification-service';
 import { useAuthStore } from '@/store/auth-store';
+import {
+  AUTH_REDIRECT_REASON,
+  AUTH_TOKEN_KEY,
+  buildSignInPath,
+  getClientCurrentPath,
+} from '@/lib/auth-session';
 
 let isHandlingUnauthorizedRedirect = false;
 
@@ -11,7 +17,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('@alternativa-base:token');
+      const token = localStorage.getItem(AUTH_TOKEN_KEY);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -32,13 +38,11 @@ api.interceptors.response.use(
         });
         useAuthStore.getState().logout();
 
-        const unauthorizedUrl = new URL('/unauthorized', window.location.origin);
-        const currentPath = `${window.location.pathname}${window.location.search}`;
-        if (currentPath && currentPath !== '/unauthorized') {
-          unauthorizedUrl.searchParams.set('next', currentPath);
-        }
-
-        window.location.replace(unauthorizedUrl.toString());
+        const signInPath = buildSignInPath(
+          getClientCurrentPath(),
+          AUTH_REDIRECT_REASON.sessionExpired,
+        );
+        window.location.replace(new URL(signInPath, window.location.origin).toString());
       }
     }
     return Promise.reject(error);
