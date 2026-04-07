@@ -70,64 +70,6 @@ export const appNavigation: AppNavigationGroup[] = [
     ],
   },
   {
-    labelKey: "settings",
-    items: [
-      {
-        titleKey: "administration",
-        url: "#",
-        icon: Users,
-        items: [
-          {
-            titleKey: "users",
-            url: "/users",
-            screenKey: "admin.users",
-          },
-          {
-            titleKey: "permissions",
-            url: "/permissions",
-            screenKey: "admin.roles",
-          },
-          {
-            titleKey: "access_control",
-            url: "/access-control",
-            screenKey: "admin.access_control",
-          },
-        ],
-      },
-      {
-        titleKey: "system",
-        url: "#",
-        icon: Settings,
-        items: [
-          {
-            titleKey: "backups",
-            url: "/backup",
-            screenKey: "admin.backup",
-            icon: Archive,
-          },
-          {
-            titleKey: "ui_settings",
-            url: "/ui-settings",
-            screenKey: "admin.ui_settings",
-            icon: PaintbrushVertical,
-          },
-          {
-            titleKey: "logs",
-            url: "/logs",
-            screenKey: "admin.logs",
-            icon: Logs,
-          },
-          {
-            titleKey: "my_account",
-            url: "/settings/account",
-            icon: ShieldCheck,
-            hiddenInSidebar: true,
-          },
-        ],
-      },
-    ],
-  },
-  {
     labelKey: "manual_administration",
     items: [
       {
@@ -195,6 +137,64 @@ export const appNavigation: AppNavigationGroup[] = [
             url: "/administration/integrations/plate-sending",
             screenKey: "admin.integracoes",
             icon: Send,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    labelKey: "settings",
+    items: [
+      {
+        titleKey: "administration",
+        url: "#",
+        icon: Users,
+        items: [
+          {
+            titleKey: "users",
+            url: "/users",
+            screenKey: "admin.users",
+          },
+          {
+            titleKey: "permissions",
+            url: "/permissions",
+            screenKey: "admin.roles",
+          },
+          {
+            titleKey: "access_control",
+            url: "/access-control",
+            screenKey: "admin.access_control",
+          },
+        ],
+      },
+      {
+        titleKey: "system",
+        url: "#",
+        icon: Settings,
+        items: [
+          {
+            titleKey: "backups",
+            url: "/backup",
+            screenKey: "admin.backup",
+            icon: Archive,
+          },
+          {
+            titleKey: "ui_settings",
+            url: "/ui-settings",
+            screenKey: "admin.ui_settings",
+            icon: PaintbrushVertical,
+          },
+          {
+            titleKey: "logs",
+            url: "/logs",
+            screenKey: "admin.logs",
+            icon: Logs,
+          },
+          {
+            titleKey: "my_account",
+            url: "/settings/account",
+            icon: ShieldCheck,
+            hiddenInSidebar: true,
           },
         ],
       },
