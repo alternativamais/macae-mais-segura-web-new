@@ -13,6 +13,7 @@ import {
   RadioTower,
   Settings,
   ShieldCheck,
+  Send,
   Thermometer,
   Users,
   type LucideIcon,
@@ -181,6 +182,19 @@ export const appNavigation: AppNavigationGroup[] = [
             url: "/equipment/climate-equipment",
             screenKey: "admin.climate_equipment",
             icon: Thermometer,
+          },
+        ],
+      },
+      {
+        titleKey: "integrations",
+        url: "#",
+        icon: Send,
+        items: [
+          {
+            titleKey: "plate_sending",
+            url: "/administration/integrations/plate-sending",
+            screenKey: "admin.integracoes",
+            icon: Send,
           },
         ],
       },

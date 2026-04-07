@@ -28,12 +28,14 @@
     "my_account": "Minha Conta",
     "manual_administration": "Administração manual",
     "equipment": "Equipamentos",
+    "integrations": "Integrações",
     "map": "Mapa",
     "cameras": "Câmeras",
     "totens": "Totens",
     "smart_switches": "Smart Switches",
     "network_equipment": "Equipamentos de Rede",
-    "climate_equipment": "Equipamentos Climáticos"
+    "climate_equipment": "Equipamentos Climáticos",
+    "plate_sending": "Envio de placas"
   },
   "user": {
     "account": "Conta",
@@ -2633,6 +2635,326 @@
       },
       "system_default": "Nenhuma (Sistema)",
       "not_informed": "Não informado"
+    }
+  },
+  "plate_sending": {
+    "title": "Envio de Placas",
+    "description": "Gerencie as integrações que recebem leituras LPR e consulte o estado operacional das câmeras vinculadas.",
+    "fetch_error": "Erro ao carregar integrações de envio de placas.",
+    "loading": "Carregando integrações...",
+    "search_placeholder": "Buscar por nome, código ou descrição...",
+    "empty": "Nenhuma integração de envio de placas encontrada.",
+    "description_fallback": "Sem descrição operacional cadastrada para esta integração.",
+    "tabs": {
+      "overview": "Visão geral"
+    },
+    "statuses": {
+      "active": "Ativa",
+      "inactive": "Inativa"
+    },
+    "shared": {
+      "not_informed": "Não informado"
+    },
+    "actions": {
+      "reload": "Atualizar",
+      "view_details": "Ver detalhes",
+      "enter_integration": "Entrar na integração",
+      "back_to_list": "Voltar para a lista"
+    },
+    "selected_integration_label": "Integração selecionada",
+    "overview_table": {
+      "columns": {
+        "integration": "Integração",
+        "code": "Código",
+        "flow": "Fluxo",
+        "auth": "Autorização",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "open_actions": "Abrir ações"
+    },
+    "integration_specs": {
+      "pmrj": {
+        "identifier_label": "Código CET",
+        "identifier_help": "Defina o código CET por direção para as câmeras enviadas à PMRJ."
+      },
+      "prf": {
+        "identifier_label": "camera.numero",
+        "identifier_help": "Defina o campo camera.numero por direção para as câmeras enviadas à PRF."
+      }
+    },
+    "card": {
+      "flow_label": "Fluxo",
+      "flow_value": "Recebimento LPR",
+      "auth_label": "Autorização",
+      "auth_value": "Por token"
+    },
+    "stats": {
+      "total": "Integrações totais",
+      "total_desc": "Integrações cadastradas para recebimento de placas.",
+      "active": "Integrações ativas",
+      "active_desc": "Integrações disponíveis para operação.",
+      "inactive": "Integrações inativas",
+      "inactive_desc": "Integrações desabilitadas ou em revisão.",
+      "codes": "Códigos únicos",
+      "codes_desc": "Total de conectores distintos disponíveis no hub.",
+      "loading": "Carregando"
+    },
+    "management": {
+      "tabs": {
+        "configured": "Câmeras configuradas ({count})",
+        "available": "Câmeras disponíveis ({count})"
+      },
+      "search_configured_placeholder": "Buscar por câmera, IP, totem ou identificador...",
+      "search_available_placeholder": "Buscar câmeras disponíveis...",
+      "camera_name_fallback": "Câmera #{id}",
+      "meta": {
+        "identifier_prefix": "Identificador",
+        "direction_prefix": "Direções",
+        "direction_value": "Aproximando / Partindo",
+        "tokens_prefix": "Webhook",
+        "tokens_value": "Autorizado por token"
+      },
+      "stats": {
+        "configured": "Câmeras configuradas",
+        "configured_desc": "Câmeras já vinculadas a esta integração.",
+        "available": "Câmeras disponíveis",
+        "available_desc": "Câmeras ainda livres para configuração.",
+        "active": "Envios ativos",
+        "active_desc": "Câmeras atualmente habilitadas para envio.",
+        "tokens": "Tokens ativos",
+        "tokens_desc": "Tokens ainda válidos entre as câmeras configuradas.",
+        "loading": "Carregando"
+      },
+      "table": {
+        "columns": {
+          "camera": "Câmera",
+          "ip": "IP",
+          "location": "Localização",
+          "active": "Ativo",
+          "tokens": "Tokens",
+          "updated_at": "Atualizado em",
+          "actions": "Ações"
+        },
+        "direction_label": "Direção",
+        "toggle_active": "Alternar envio da câmera",
+        "active_tokens": "{count} ativo(s)",
+        "open_actions": "Abrir ações"
+      },
+      "direction_values": {
+        "all": "Ambas",
+        "obverse": "Aproximando",
+        "reverse": "Partindo"
+      },
+      "direction_labels": {
+        "all": "Ambas (Aproximando e Partindo)",
+        "obverse": "Aproximando",
+        "reverse": "Partindo"
+      },
+      "actions": {
+        "add": "Adicionar",
+        "monitor": "Monitor em tempo real",
+        "edit_identifier": "Editar identificador",
+        "manage_tokens": "Gerenciar tokens",
+        "view_logs": "Ver logs",
+        "remove": "Remover"
+      },
+      "empty_configured": "Nenhuma câmera configurada nesta integração.",
+      "empty_available": "Todas as câmeras já estão configuradas nesta integração.",
+      "notifications": {
+        "load_error": "Erro ao carregar as câmeras desta integração.",
+        "activated": "Câmera ativada para envio.",
+        "deactivated": "Câmera desativada para envio.",
+        "toggle_error": "Erro ao atualizar o status da câmera.",
+        "remove_success": "Câmera removida da integração.",
+        "remove_error": "Erro ao remover a câmera da integração.",
+        "add_success": "Câmera adicionada à integração.",
+        "add_error": "Erro ao adicionar a câmera à integração.",
+        "edit_success": "Identificador atualizado com sucesso.",
+        "edit_error": "Erro ao atualizar o identificador.",
+        "camera_missing": "Nenhuma câmera foi selecionada para esta operação."
+      },
+      "form": {
+        "add_title": "Adicionar câmera",
+        "edit_title": "Editar configuração da câmera",
+        "add_description": "Configure os dados operacionais da câmera para a integração {integration}.",
+        "edit_description": "Atualize os identificadores e o filtro de direção usados pela integração {integration}.",
+        "camera_fallback": "Câmera sem nome",
+        "direction_filter": "Direção permitida",
+        "direction_help": "Defina se a câmera envia ambos os sentidos ou somente um deles.",
+        "identifier_single": "{label} (opcional)",
+        "identifier_obverse": "{label} - Aproximando (opcional)",
+        "identifier_reverse": "{label} - Partindo (opcional)",
+        "identifier_placeholder": "Se vazio, o sistema usará o nome da câmera.",
+        "identifier_help": "Se nenhum valor for informado, o backend utiliza o nome da câmera como fallback.",
+        "cancel": "Cancelar",
+        "save": "Salvar",
+        "saving": "Salvando...",
+        "add": "Adicionar"
+      },
+      "delete_dialog": {
+        "title": "Remover câmera da integração",
+        "description": "Deseja remover a câmera {camera} desta integração?",
+        "confirm": "Remover",
+        "cancel": "Cancelar"
+      }
+    },
+    "tokens": {
+      "title": "Tokens da câmera",
+      "description": "Gerencie os tokens usados pela câmera {camera} para receber leituras LPR.",
+      "generated_title": "Novo token gerado",
+      "generated_description": "Copie o token abaixo e configure-o na câmera ou no integrador remoto.",
+      "active_count": "{count} token(s) ativo(s)",
+      "generate": "Gerar novo token",
+      "copy": "Copiar token",
+      "revoke": "Revogar",
+      "close": "Fechar",
+      "empty": "Nenhum token foi gerado para esta câmera.",
+      "columns": {
+        "token": "Token",
+        "status": "Status",
+        "created_at": "Criado em",
+        "actions": "Ações"
+      },
+      "status": {
+        "active": "Ativo",
+        "revoked": "Revogado"
+      },
+      "notifications": {
+        "load_error": "Erro ao carregar os tokens da câmera.",
+        "generate_success": "Token gerado com sucesso.",
+        "generate_error": "Erro ao gerar o token.",
+        "revoke_success": "Token revogado com sucesso.",
+        "revoke_error": "Erro ao revogar o token.",
+        "copy_success": "Token copiado para a área de transferência.",
+        "copy_error": "Não foi possível copiar o token."
+      }
+    },
+    "logs": {
+      "title": "Logs de envio - {camera}",
+      "description": "Consulte os envios realizados, erros de integração e payloads trafegados.",
+      "details_title": "Detalhes do envio",
+      "details_description": "Veja o payload enviado e a resposta devolvida pela integração.",
+      "request_payload": "Payload enviado",
+      "response_payload": "Resposta recebida",
+      "no_error": "-",
+      "empty": "Nenhum log encontrado para esta câmera.",
+      "close": "Fechar",
+      "columns": {
+        "plate": "Placa",
+        "identifier": "Identificador",
+        "direction": "Sentido",
+        "status": "Status",
+        "error": "Erro",
+        "sent_at": "Enviado em",
+        "actions": "Ações"
+      },
+      "actions": {
+        "view_payload": "Ver payload"
+      },
+      "status": {
+        "success": "Sucesso",
+        "error": "Erro"
+      },
+      "notifications": {
+        "load_error": "Erro ao carregar os logs da integração."
+      }
+    },
+    "test": {
+      "title": "Monitor em tempo real",
+      "description": "Acompanhe os eventos da câmera {camera} enquanto ela envia leituras para {integration}.",
+      "filter_placeholder": "Filtrar por ID da câmera (opcional)",
+      "tabs": {
+        "events": "Console de eventos",
+        "raw": "Dados da câmera (raw)"
+      },
+      "status": {
+        "connected": "Conectado",
+        "listening": "Monitorando",
+        "disconnected": "Desconectado"
+      },
+      "actions": {
+        "connect": "Conectar",
+        "connecting": "Conectando...",
+        "start": "Iniciar monitoramento",
+        "stop": "Parar monitoramento",
+        "disconnect": "Desconectar",
+        "clear": "Limpar console",
+        "close": "Fechar"
+      },
+      "empty_console": "Clique em conectar e depois em iniciar monitoramento para começar.",
+      "empty_raw": "Nenhum dado bruto recebido ainda.",
+      "events": {
+        "received_title": "DADOS RECEBIDOS DA CÂMERA",
+        "saved_title": "SALVO NO BANCO",
+        "ignored_title": "DUPLICATA IGNORADA",
+        "sending_title": "ENVIANDO PARA {integration}...",
+        "sent_title": "ENVIADO PARA {integration} COM SUCESSO",
+        "error_title": "ERRO AO ENVIAR PARA {integration}",
+        "plate": "Placa",
+        "confidence": "Confiança",
+        "vehicle_color": "Cor do veículo",
+        "vehicle_type": "Tipo do veículo",
+        "device_id": "Device ID",
+        "detection_id": "ID da detecção",
+        "message": "Mensagem"
+      },
+      "notifications": {
+        "token_missing": "Nenhum token de autenticação foi encontrado no navegador.",
+        "connecting": "Conectando ao servidor WebSocket...",
+        "connected": "Conectado ao servidor com sucesso.",
+        "authenticated": "Autenticado como usuário {userId}.",
+        "monitoring": "Monitorando câmera {cameraId}.",
+        "waiting_title": "AGUARDANDO DADOS DA CÂMERA...",
+        "waiting_description": "Envie dados para o webhook para visualizar os eventos aqui em tempo real.",
+        "disconnected": "Desconectado do servidor.",
+        "connection_error": "Erro de conexão: {message}",
+        "start_error": "Não foi possível iniciar o monitoramento desta câmera.",
+        "subscribing": "Inscrevendo monitoramento da câmera {cameraId}...",
+        "stopped": "Monitoramento interrompido.",
+        "manual_disconnect": "Desconectado manualmente."
+      }
+    },
+    "details": {
+      "title": "Detalhes da integração",
+      "description": "Acompanhe câmeras vinculadas, filtros de direção e tokens operacionais desta integração.",
+      "enabled": "Ativa",
+      "disabled": "Inativa",
+      "load_error": "Não foi possível carregar os detalhes desta integração.",
+      "overview_title": "Visão geral",
+      "configured_title": "Câmeras vinculadas",
+      "available_cameras_title": "Câmeras disponíveis",
+      "available_cameras_desc": "Quantidade de câmeras ainda não vinculadas a esta integração.",
+      "empty_configured": "Nenhuma câmera vinculada a esta integração no momento.",
+      "not_informed": "Não informado",
+      "token_unavailable": "Nenhum token ativo",
+      "camera_name_fallback": "Câmera #{id}",
+      "statuses": {
+        "active": "Envio ativo",
+        "inactive": "Envio inativo"
+      },
+      "directions": {
+        "all": "Ambos os sentidos",
+        "obverse": "Aproximando",
+        "reverse": "Afastando"
+      },
+      "metrics": {
+        "configured": "Câmeras vinculadas",
+        "active": "Envios ativos",
+        "tokens": "Tokens ativos",
+        "available": "Câmeras livres"
+      },
+      "fields": {
+        "code": "Código",
+        "name": "Nome",
+        "description_label": "Descrição",
+        "status": "Status",
+        "direction": "Filtro de direção",
+        "cod_cet": "Código principal",
+        "cod_cet_obverse": "Código aproximando",
+        "cod_cet_reverse": "Código afastando",
+        "token": "Token"
+      }
     }
   }
 }

@@ -50,6 +50,11 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Gestão de empresas vinculadas ao sistema.",
     group: "Administração Manual",
   },
+  "admin.integracoes": {
+    title: "Envio de Placas",
+    description: "Hub das integrações responsáveis pelo envio de leituras de placas.",
+    group: "Integrações",
+  },
   "admin.cameras": {
     title: "Câmeras",
     description: "Gerenciamento de câmeras de vigilância.",
