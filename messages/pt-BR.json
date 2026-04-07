@@ -37,6 +37,7 @@
     "smart_switches": "Smart Switches",
     "network_equipment": "Equipamentos de Rede",
     "climate_equipment": "Equipamentos Climáticos",
+    "notification_center": "Central de Notificações",
     "plate_sending": "Envio de placas",
     "extensions": "Ramais"
   },
@@ -2850,6 +2851,196 @@
       },
       "system_default": "Nenhuma (Sistema)",
       "not_informed": "Não informado"
+    }
+  },
+  "notification_center": {
+    "title": "Central de Notificações",
+    "description": "Envie notificações push para o app, acompanhe campanhas enviadas e gerencie localidades reutilizáveis.",
+    "no_access": "Seu perfil não possui permissões suficientes para este módulo.",
+    "shared": {
+      "not_informed": "Não informado",
+      "target_all": "Todos os usuários",
+      "target_user": "Usuários específicos",
+      "target_locality": "Localidade cadastrada",
+      "target_area": "Área personalizada",
+      "audience_all": "Todos os públicos",
+      "audience_policial": "Somente policiais",
+      "audience_cidadao": "Demais cidadãos"
+    },
+    "tabs": {
+      "send": "Enviar",
+      "history": "Histórico",
+      "localities": "Localidades"
+    },
+    "send": {
+      "form_title": "Nova campanha",
+      "labels": {
+        "title": "Título",
+        "body": "Mensagem",
+        "audience": "Público-alvo",
+        "target": "Alcance da notificação",
+        "users": "Selecionar usuários",
+        "locality": "Localidade",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "radius": "Raio (km)",
+        "max_age": "Idade máxima da localização (min)",
+        "data": "Dados extras (JSON)"
+      },
+      "placeholders": {
+        "title": "Ex.: Alerta de ocorrência",
+        "body": "Ex.: Há uma ocorrência próxima à sua região.",
+        "locality": "Selecione uma localidade",
+        "data": "Ex.: \"tipo\":\"alerta\",\"url\":\"https://...\""
+      },
+      "audience_options": {
+        "all": "Todos os usuários",
+        "policial": "Somente policiais",
+        "cidadao": "Demais cidadãos"
+      },
+      "target_options": {
+        "all": "Todos os usuários",
+        "user": "Usuários específicos",
+        "locality": "Localidade cadastrada",
+        "area": "Área personalizada"
+      },
+      "users_permission_hint": "Seu perfil não possui acesso para listar usuários do app. O envio por usuário específico fica indisponível.",
+      "loading_users": "Carregando usuários do app...",
+      "users_fetch_error": "Erro ao carregar usuários do app.",
+      "locality_summary": "Centro: {lat}, {lng} | Raio: {radius} km | Localização válida por até {age} minutos",
+      "map_missing_key": "A chave do Google Maps não está configurada.",
+      "map_load_error": "Não foi possível carregar o mapa.",
+      "map_loading": "Carregando mapa...",
+      "buttons": {
+        "send": "Enviar notificação",
+        "reset": "Limpar"
+      },
+      "validation_error": "Preencha os campos obrigatórios e corrija o JSON antes de enviar.",
+      "preview_title": "Resumo do alcance",
+      "preview_loading": "Calculando alcance...",
+      "preview_error": "Não foi possível calcular o alcance.",
+      "preview_empty": "Preencha os critérios de envio para visualizar o alcance previsto.",
+      "preview_total": "Total estimado",
+      "preview_active_locations": "Localizações ativas",
+      "tipo_labels": {
+        "policial": "Policiais",
+        "cidadao": "Cidadãos",
+        "outros": "Outros"
+      },
+      "platform_labels": {
+        "android": "Android",
+        "ios": "iOS",
+        "other": "Outros",
+        "unknown": "Sem registro"
+      },
+      "send_success": "Notificação enviada com sucesso.",
+      "send_error": "Erro ao enviar notificação.",
+      "result_title": "Resultado do envio",
+      "result_total": "Total: {count}",
+      "result_sent": "Entregues: {count}",
+      "result_failed": "Falhas: {count}",
+      "result_without_token": "Sem token: {count}"
+    },
+    "history": {
+      "fetch_error": "Erro ao carregar histórico de notificações.",
+      "details_error": "Erro ao carregar os detalhes da notificação.",
+      "actions": {
+        "refresh": "Atualizar"
+      },
+      "columns": {
+        "title": "Título",
+        "target": "Destinatários",
+        "created_at": "Enviada em",
+        "total": "Total",
+        "sent": "Entregues",
+        "failed": "Falhas",
+        "without_token": "Sem token",
+        "actions": "Ações"
+      },
+      "empty": "Nenhuma notificação enviada até o momento.",
+      "details": {
+        "title": "Detalhes da notificação",
+        "description": "Acompanhe os destinatários e o status final da campanha.",
+        "loading": "Carregando detalhes...",
+        "empty": "Nenhum destinatário encontrado.",
+        "extra_data": "Dados extras",
+        "status_sent": "Enviada",
+        "status_failed": "Falhou",
+        "status_pending": "Pendente",
+        "status_no_token": "Sem token",
+        "columns": {
+          "user": "Usuário",
+          "status": "Status",
+          "read_at": "Lida em",
+          "error": "Último erro"
+        }
+      }
+    },
+    "localities": {
+      "fetch_error": "Erro ao carregar localidades.",
+      "delete_success": "Localidade removida com sucesso.",
+      "delete_error": "Erro ao remover localidade.",
+      "actions": {
+        "refresh": "Atualizar",
+        "create": "Nova localidade",
+        "delete": "Excluir",
+        "open_manager": "Gerenciar localidades"
+      },
+      "columns": {
+        "name": "Nome",
+        "description": "Descrição",
+        "center": "Centro",
+        "radius": "Raio (km)",
+        "max_age": "Idade máx. localização",
+        "updated_at": "Atualizada em",
+        "actions": "Ações"
+      },
+      "empty": "Nenhuma localidade cadastrada.",
+      "no_description": "Sem descrição informada.",
+      "delete_dialog": {
+        "title": "Excluir localidade",
+        "description": "Deseja realmente remover esta localidade? Esta ação não poderá ser desfeita."
+      },
+      "modal": {
+        "title": "Localidades",
+        "description": "Gerencie as localidades reutilizáveis usadas no envio de notificações."
+      },
+      "form": {
+        "title_create": "Nova localidade",
+        "title_edit": "Editar localidade",
+        "description_create": "Cadastre uma região reutilizável para campanhas futuras.",
+        "description_edit": "Atualize os dados da localidade selecionada.",
+        "labels": {
+          "name": "Nome",
+          "description": "Descrição",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "radius": "Raio (km)",
+          "max_age": "Idade máxima da localização (min)"
+        },
+        "placeholders": {
+          "name": "Ex.: Praça Veríssimo de Melo",
+          "description": "Ex.: Área central para eventos e ocorrências"
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "save": "Salvar alterações",
+          "create": "Criar localidade"
+        },
+        "notifications": {
+          "create_success": "Localidade criada com sucesso.",
+          "update_success": "Localidade atualizada com sucesso.",
+          "create_error": "Erro ao criar localidade.",
+          "update_error": "Erro ao atualizar localidade."
+        },
+        "validations": {
+          "name": "Informe o nome da localidade.",
+          "latitude": "Informe uma latitude válida.",
+          "longitude": "Informe uma longitude válida.",
+          "radius": "Informe um raio válido.",
+          "max_age": "Informe uma idade máxima válida."
+        }
+      }
     }
   },
   "plate_sending": {

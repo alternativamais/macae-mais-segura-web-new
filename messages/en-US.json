@@ -37,6 +37,7 @@
     "smart_switches": "Smart Switches",
     "network_equipment": "Network Equipment",
     "climate_equipment": "Climate Equipment",
+    "notification_center": "Notification Center",
     "plate_sending": "Plate Sending",
     "extensions": "Extensions"
   },
@@ -2850,6 +2851,196 @@
       },
       "system_default": "None (System)",
       "not_informed": "Not informed"
+    }
+  },
+  "notification_center": {
+    "title": "Notification Center",
+    "description": "Send push notifications to the app, track sent campaigns, and manage reusable localities.",
+    "no_access": "Your profile does not have enough permissions for this module.",
+    "shared": {
+      "not_informed": "Not informed",
+      "target_all": "All users",
+      "target_user": "Specific users",
+      "target_locality": "Saved locality",
+      "target_area": "Custom area",
+      "audience_all": "All audiences",
+      "audience_policial": "Police officers only",
+      "audience_cidadao": "Other citizens"
+    },
+    "tabs": {
+      "send": "Send",
+      "history": "History",
+      "localities": "Localities"
+    },
+    "send": {
+      "form_title": "New campaign",
+      "labels": {
+        "title": "Title",
+        "body": "Message",
+        "audience": "Audience",
+        "target": "Notification scope",
+        "users": "Select users",
+        "locality": "Locality",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "radius": "Radius (km)",
+        "max_age": "Max location age (min)",
+        "data": "Extra data (JSON)"
+      },
+      "placeholders": {
+        "title": "Ex.: Incident alert",
+        "body": "Ex.: There is an incident near your region.",
+        "locality": "Select a locality",
+        "data": "Ex.: \"type\":\"alert\",\"url\":\"https://...\""
+      },
+      "audience_options": {
+        "all": "All users",
+        "policial": "Police officers only",
+        "cidadao": "Other citizens"
+      },
+      "target_options": {
+        "all": "All users",
+        "user": "Specific users",
+        "locality": "Saved locality",
+        "area": "Custom area"
+      },
+      "users_permission_hint": "Your profile cannot list app users. Sending to specific users is unavailable.",
+      "loading_users": "Loading app users...",
+      "users_fetch_error": "Error loading app users.",
+      "locality_summary": "Center: {lat}, {lng} | Radius: {radius} km | Location valid for up to {age} minutes",
+      "map_missing_key": "Google Maps API key is not configured.",
+      "map_load_error": "Unable to load the map.",
+      "map_loading": "Loading map...",
+      "buttons": {
+        "send": "Send notification",
+        "reset": "Clear"
+      },
+      "validation_error": "Fill in the required fields and fix the JSON before sending.",
+      "preview_title": "Reach summary",
+      "preview_loading": "Calculating reach...",
+      "preview_error": "Unable to calculate reach.",
+      "preview_empty": "Fill in the sending criteria to preview expected reach.",
+      "preview_total": "Estimated total",
+      "preview_active_locations": "Active locations",
+      "tipo_labels": {
+        "policial": "Police",
+        "cidadao": "Citizens",
+        "outros": "Others"
+      },
+      "platform_labels": {
+        "android": "Android",
+        "ios": "iOS",
+        "other": "Other",
+        "unknown": "Unknown"
+      },
+      "send_success": "Notification sent successfully.",
+      "send_error": "Error sending notification.",
+      "result_title": "Dispatch result",
+      "result_total": "Total: {count}",
+      "result_sent": "Delivered: {count}",
+      "result_failed": "Failed: {count}",
+      "result_without_token": "Without token: {count}"
+    },
+    "history": {
+      "fetch_error": "Error loading notification history.",
+      "details_error": "Error loading notification details.",
+      "actions": {
+        "refresh": "Refresh"
+      },
+      "columns": {
+        "title": "Title",
+        "target": "Recipients",
+        "created_at": "Sent at",
+        "total": "Total",
+        "sent": "Delivered",
+        "failed": "Failed",
+        "without_token": "Without token",
+        "actions": "Actions"
+      },
+      "empty": "No notifications have been sent yet.",
+      "details": {
+        "title": "Notification details",
+        "description": "Track recipients and final campaign status.",
+        "loading": "Loading details...",
+        "empty": "No recipients found.",
+        "extra_data": "Extra data",
+        "status_sent": "Sent",
+        "status_failed": "Failed",
+        "status_pending": "Pending",
+        "status_no_token": "No token",
+        "columns": {
+          "user": "User",
+          "status": "Status",
+          "read_at": "Read at",
+          "error": "Last error"
+        }
+      }
+    },
+    "localities": {
+      "fetch_error": "Error loading localities.",
+      "delete_success": "Locality removed successfully.",
+      "delete_error": "Error removing locality.",
+      "actions": {
+        "refresh": "Refresh",
+        "create": "New locality",
+        "delete": "Delete",
+        "open_manager": "Manage localities"
+      },
+      "columns": {
+        "name": "Name",
+        "description": "Description",
+        "center": "Center",
+        "radius": "Radius (km)",
+        "max_age": "Max location age",
+        "updated_at": "Updated at",
+        "actions": "Actions"
+      },
+      "empty": "No localities found.",
+      "no_description": "No description provided.",
+      "delete_dialog": {
+        "title": "Delete locality",
+        "description": "Do you really want to remove this locality? This action cannot be undone."
+      },
+      "modal": {
+        "title": "Localities",
+        "description": "Manage the reusable localities used when sending notifications."
+      },
+      "form": {
+        "title_create": "New locality",
+        "title_edit": "Edit locality",
+        "description_create": "Register a reusable region for future campaigns.",
+        "description_edit": "Update the selected locality data.",
+        "labels": {
+          "name": "Name",
+          "description": "Description",
+          "latitude": "Latitude",
+          "longitude": "Longitude",
+          "radius": "Radius (km)",
+          "max_age": "Max location age (min)"
+        },
+        "placeholders": {
+          "name": "Ex.: Central square",
+          "description": "Ex.: Central area for events and incidents"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Save changes",
+          "create": "Create locality"
+        },
+        "notifications": {
+          "create_success": "Locality created successfully.",
+          "update_success": "Locality updated successfully.",
+          "create_error": "Error creating locality.",
+          "update_error": "Error updating locality."
+        },
+        "validations": {
+          "name": "Enter the locality name.",
+          "latitude": "Enter a valid latitude.",
+          "longitude": "Enter a valid longitude.",
+          "radius": "Enter a valid radius.",
+          "max_age": "Enter a valid max age."
+        }
+      }
     }
   },
   "plate_sending": {

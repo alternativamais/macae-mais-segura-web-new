@@ -2,6 +2,7 @@
 
 import {
   Archive,
+  Bell,
   Building2,
   HardDrive,
   LayoutDashboard,
@@ -150,6 +151,12 @@ export const appNavigation: AppNavigationGroup[] = [
         url: "#",
         icon: Send,
         items: [
+          {
+            titleKey: "notification_center",
+            url: "/administration/integrations/notification-center",
+            screenKey: "admin.notification_center",
+            icon: Bell,
+          },
           {
             titleKey: "plate_sending",
             url: "/administration/integrations/plate-sending",
