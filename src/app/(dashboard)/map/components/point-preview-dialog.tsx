@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react"
 import { Camera, Loader2, Power, RadioTower, Thermometer, Video } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Dialog,
   DialogContent,
@@ -166,8 +165,8 @@ export function PointPreviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-hidden sm:max-w-6xl">
-        <DialogHeader>
+      <DialogContent className="flex h-[min(92vh,860px)] w-[min(96vw,1180px)] max-w-[96vw] flex-col overflow-hidden p-0 sm:max-w-[1180px]">
+        <DialogHeader className="shrink-0 px-4 pt-4 pb-3 sm:px-6 sm:pt-5 sm:pb-4">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             {point
@@ -179,139 +178,146 @@ export function PointPreviewDialog({
         </DialogHeader>
 
         {!marker || !point ? (
-          <div className="rounded-lg border-2 border-dashed bg-muted/30 px-6 py-10 text-center text-sm text-muted-foreground">
-            {t("empty")}
+          <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+            <div className="rounded-lg border-2 border-dashed bg-muted/30 px-6 py-10 text-center text-sm text-muted-foreground">
+              {t("empty")}
+            </div>
           </div>
         ) : (
-          <div className="flex min-h-0 flex-col gap-6 overflow-hidden">
-            <div className="grid shrink-0 gap-4 md:grid-cols-2 xl:grid-cols-4">
-                {summaryCards.map((card) => (
-                  <Card key={card.title}>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-                      <card.icon className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-sm font-semibold">{card.value}</div>
-                    </CardContent>
-                  </Card>
-                ))}
-            </div>
-
-            <div className="grid min-h-0 gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{t("details.title")}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4 text-sm">
-                    <div className="space-y-1">
-                      <p className="text-muted-foreground">{t("details.point_name")}</p>
-                      <p className="font-medium">{point.nome || t("not_informed")}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-muted-foreground">{t("details.reference")}</p>
-                      <p className="font-medium">
-                        {getPointReference(point, t("not_informed"))}
+          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden px-4 pb-4 sm:px-6 sm:pb-6">
+            <div className="grid shrink-0 grid-cols-2 gap-3 xl:grid-cols-4">
+              {summaryCards.map((card) => (
+                <div
+                  key={card.title}
+                  className="rounded-lg border bg-card px-3 py-3 sm:px-4 sm:py-3.5"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium text-muted-foreground sm:text-sm">
+                        {card.title}
+                      </p>
+                      <p className="mt-2 line-clamp-2 text-sm font-semibold leading-snug sm:text-base">
+                        {card.value}
                       </p>
                     </div>
+                    <card.icon className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex min-h-0 flex-1 flex-col gap-4 lg:grid lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
+              <div className="order-2 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border bg-card lg:order-1">
+                <div className="border-b px-4 py-3">
+                  <h3 className="text-base font-semibold">{t("details.title")}</h3>
+                </div>
+                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 text-sm">
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground">{t("details.point_name")}</p>
+                    <p className="font-medium">{point.nome || t("not_informed")}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground">{t("details.reference")}</p>
+                    <p className="font-medium">{getPointReference(point, t("not_informed"))}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground">{t("details.coordinates")}</p>
+                    <p className="font-medium">{point.coordenadas || t("not_informed")}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground">{t("details.status")}</p>
+                    <Badge variant="secondary">
+                      {formatRelativePointStatus(
+                        point.status,
+                        t("status.active"),
+                        t("status.inactive"),
+                      )}
+                    </Badge>
+                  </div>
+
+                  {point.totem?.numero ? (
                     <div className="space-y-1">
-                      <p className="text-muted-foreground">{t("details.coordinates")}</p>
-                      <p className="font-medium">{point.coordenadas || t("not_informed")}</p>
+                      <p className="text-muted-foreground">{t("details.totem")}</p>
+                      <p className="font-medium">{point.totem.numero}</p>
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-muted-foreground">{t("details.status")}</p>
+                  ) : null}
+
+                  <div className="space-y-2 rounded-lg border bg-muted/20 p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="font-medium">{t("details.smart_switch_title")}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {smartSwitch?.nome || t("details.smart_switch_unavailable")}
+                        </p>
+                      </div>
                       <Badge variant="secondary">
-                        {formatRelativePointStatus(
-                          point.status,
-                          t("status.active"),
-                          t("status.inactive"),
-                        )}
+                        {switchLoading
+                          ? t("switch.verifying")
+                          : switchState === "on"
+                            ? t("switch.on")
+                            : switchState === "off"
+                              ? t("switch.off")
+                              : switchState === "offline"
+                                ? t("switch.offline")
+                                : t("switch.unknown")}
                       </Badge>
                     </div>
 
-                    {point.totem?.numero ? (
-                      <div className="space-y-1">
-                        <p className="text-muted-foreground">{t("details.totem")}</p>
-                        <p className="font-medium">{point.totem.numero}</p>
-                      </div>
-                    ) : null}
+                    <Button
+                      type="button"
+                      onClick={() => void handleToggleSmartSwitch()}
+                      disabled={!smartSwitch?.id || switchLoading}
+                      className="w-full cursor-pointer"
+                      variant={switchState === "on" ? "destructive" : "default"}
+                    >
+                      {switchLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          {t("switch.processing")}
+                        </>
+                      ) : switchState === "on" ? (
+                        t("switch.turn_off")
+                      ) : (
+                        t("switch.turn_on")
+                      )}
+                    </Button>
+                  </div>
 
-                    <div className="space-y-2 rounded-lg border bg-muted/20 p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="font-medium">{t("details.smart_switch_title")}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {smartSwitch?.nome || t("details.smart_switch_unavailable")}
-                          </p>
-                        </div>
-                        <Badge variant="secondary">
-                          {switchLoading
-                            ? t("switch.verifying")
-                            : switchState === "on"
-                              ? t("switch.on")
-                              : switchState === "off"
-                                ? t("switch.off")
-                                : switchState === "offline"
-                                  ? t("switch.offline")
-                                  : t("switch.unknown")}
-                        </Badge>
-                      </div>
-
-                      <Button
-                        type="button"
-                        onClick={() => void handleToggleSmartSwitch()}
-                        disabled={!smartSwitch?.id || switchLoading}
-                        className="w-full cursor-pointer"
-                        variant={switchState === "on" ? "destructive" : "default"}
-                      >
-                        {switchLoading ? (
-                          <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            {t("switch.processing")}
-                          </>
-                        ) : switchState === "on" ? (
-                          t("switch.turn_off")
-                        ) : (
-                          t("switch.turn_on")
-                        )}
-                      </Button>
+                  {isLoading ? (
+                    <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {t("loading")}
                     </div>
+                  ) : null}
 
-                    {isLoading ? (
-                      <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        {t("loading")}
-                      </div>
-                    ) : null}
+                  {loadError ? (
+                    <div className="rounded-lg border border-dashed bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+                      {loadError}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
 
-                    {loadError ? (
-                      <div className="rounded-lg border border-dashed bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-                        {loadError}
+              <div className="order-1 flex min-h-0 flex-[1.35] flex-col overflow-hidden rounded-xl border bg-card lg:order-2">
+                <div className="shrink-0 border-b px-4 py-3">
+                  <h3 className="text-base font-semibold">{t("cameras.title")}</h3>
+                </div>
+                <div className="min-h-0 flex-1 px-4 py-4">
+                  {cameras.length > 0 ? (
+                    <div className="h-full overflow-y-auto pr-1 sm:pr-2">
+                      <div className="grid gap-3 md:grid-cols-2">
+                        {cameras.map((camera) => (
+                          <CameraStreamTile key={camera.id} camera={camera} />
+                        ))}
                       </div>
-                    ) : null}
-                  </CardContent>
-                </Card>
-
-                <Card className="min-h-0 overflow-hidden">
-                  <CardHeader>
-                    <CardTitle>{t("cameras.title")}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="min-h-0">
-                    {cameras.length > 0 ? (
-                      <div className="max-h-[52vh] overflow-y-auto pr-4">
-                        <div className="grid gap-4 md:grid-cols-2">
-                          {cameras.map((camera) => (
-                            <CameraStreamTile key={camera.id} camera={camera} />
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex min-h-[240px] items-center justify-center rounded-lg border-2 border-dashed bg-muted/30 px-6 text-center text-sm text-muted-foreground">
-                        {t("cameras.empty")}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                    </div>
+                  ) : (
+                    <div className="flex h-full min-h-[220px] items-center justify-center rounded-lg border-2 border-dashed bg-muted/30 px-6 text-center text-sm text-muted-foreground">
+                      {t("cameras.empty")}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
