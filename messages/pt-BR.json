@@ -29,13 +29,15 @@
     "manual_administration": "Administração manual",
     "equipment": "Equipamentos",
     "integrations": "Integrações",
+    "telephony": "Telefonia",
     "map": "Mapa",
     "cameras": "Câmeras",
     "totens": "Totens",
     "smart_switches": "Smart Switches",
     "network_equipment": "Equipamentos de Rede",
     "climate_equipment": "Equipamentos Climáticos",
-    "plate_sending": "Envio de placas"
+    "plate_sending": "Envio de placas",
+    "extensions": "Ramais"
   },
   "user": {
     "account": "Conta",
@@ -314,6 +316,118 @@
         "updated_at": "Atualizado em",
         "id": "Identificador"
       }
+    }
+  },
+  "call_center_extensions": {
+    "title": "Ramais",
+    "description": "Gerencie os ramais da central, filas e vínculos operacionais com os totens.",
+    "fetch_error": "Erro ao carregar ramais.",
+    "loading": "Carregando ramais...",
+    "shared": {
+      "not_informed": "Não informado",
+      "unlinked_totem": "Sem totem vinculado"
+    },
+    "stats": {
+      "total": "Ramais totais",
+      "total_desc": "Ramais cadastrados para operação.",
+      "active": "Ramais ativos",
+      "active_desc": "Ramais disponíveis para atendimento.",
+      "totem": "Ramais de totem",
+      "totem_desc": "Ramais reservados para totens físicos.",
+      "operator": "Ramais de operador",
+      "operator_desc": "Ramais destinados ao atendimento interno.",
+      "loading": "Carregando"
+    },
+    "table": {
+      "columns": {
+        "number": "Ramal",
+        "description": "Descrição",
+        "queue": "Fila",
+        "type": "Tipo",
+        "totem": "Totem vinculado",
+        "status": "Status",
+        "updated_at": "Atualizado em",
+        "actions": "Ações"
+      },
+      "actions": {
+        "create": "Novo ramal",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "view": "Ver detalhes",
+        "search_placeholder": "Buscar por ramal, descrição, fila ou totem...",
+        "filter_type": "Filtrar por tipo",
+        "filter_all": "Todos os tipos"
+      },
+      "type_operator": "Operador",
+      "type_totem": "Totem",
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "open_actions": "Abrir ações",
+      "no_results": "Nenhum ramal encontrado.",
+      "delete_dialog": {
+        "title": "Excluir ramal",
+        "description": "Deseja realmente excluir este ramal? Esta ação não poderá ser desfeita.",
+        "success": "Ramal excluído com sucesso.",
+        "error": "Erro ao excluir ramal."
+      }
+    },
+    "form": {
+      "title_create": "Novo ramal",
+      "title_edit": "Editar ramal",
+      "description_create": "Cadastre um novo ramal para atendimento ou integração com totem.",
+      "description_edit": "Atualize os dados operacionais do ramal selecionado.",
+      "labels": {
+        "number": "Número do ramal",
+        "description": "Descrição",
+        "queue": "Fila",
+        "type": "Tipo",
+        "status": "Status"
+      },
+      "placeholders": {
+        "number": "Ex.: 1001",
+        "description": "Ex.: Atendimento praça central",
+        "queue": "Ex.: fila_principal",
+        "type": "Selecione o tipo",
+        "status": "Selecione o status"
+      },
+      "options": {
+        "type_operator": "Operador",
+        "type_totem": "Totem",
+        "status_active": "Ativo",
+        "status_inactive": "Inativo"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Salvar alterações",
+        "create": "Criar ramal"
+      },
+      "notifications": {
+        "create_success": "Ramal criado com sucesso.",
+        "update_success": "Ramal atualizado com sucesso.",
+        "create_error": "Erro ao criar ramal.",
+        "update_error": "Erro ao atualizar ramal."
+      },
+      "validations": {
+        "number_min": "Informe o número do ramal.",
+        "description_min": "Informe a descrição do ramal.",
+        "queue_min": "Informe a fila do ramal."
+      }
+    },
+    "details": {
+      "title": "Detalhes do ramal",
+      "description": "Informações operacionais do ramal {number}.",
+      "labels": {
+        "number": "Número do ramal",
+        "description": "Descrição",
+        "queue": "Fila",
+        "type": "Tipo",
+        "status": "Status",
+        "totem": "Totem vinculado",
+        "updated_at": "Atualizado em",
+        "created_at": "Criado em",
+        "id": "ID"
+      },
+      "not_informed": "Não informado"
     }
   },
   "totens": {

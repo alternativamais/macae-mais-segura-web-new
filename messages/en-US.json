@@ -29,13 +29,15 @@
     "manual_administration": "Manual administration",
     "equipment": "Equipment",
     "integrations": "Integrations",
+    "telephony": "Telephony",
     "map": "Map",
     "cameras": "Cameras",
     "totens": "Totens",
     "smart_switches": "Smart Switches",
     "network_equipment": "Network Equipment",
     "climate_equipment": "Climate Equipment",
-    "plate_sending": "Plate Sending"
+    "plate_sending": "Plate Sending",
+    "extensions": "Extensions"
   },
   "user": {
     "account": "Account",
@@ -314,6 +316,118 @@
         "updated_at": "Updated at",
         "id": "Identifier"
       }
+    }
+  },
+  "call_center_extensions": {
+    "title": "Extensions",
+    "description": "Manage call center extensions, queues, and operational totem links.",
+    "fetch_error": "Error loading extensions.",
+    "loading": "Loading extensions...",
+    "shared": {
+      "not_informed": "Not informed",
+      "unlinked_totem": "No linked totem"
+    },
+    "stats": {
+      "total": "Total Extensions",
+      "total_desc": "Extensions registered for operation.",
+      "active": "Active Extensions",
+      "active_desc": "Extensions currently available for service.",
+      "totem": "Totem Extensions",
+      "totem_desc": "Extensions reserved for physical totens.",
+      "operator": "Operator Extensions",
+      "operator_desc": "Extensions intended for internal operators.",
+      "loading": "Loading"
+    },
+    "table": {
+      "columns": {
+        "number": "Extension",
+        "description": "Description",
+        "queue": "Queue",
+        "type": "Type",
+        "totem": "Linked Totem",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "actions": "Actions"
+      },
+      "actions": {
+        "create": "New extension",
+        "edit": "Edit",
+        "delete": "Delete",
+        "view": "View details",
+        "search_placeholder": "Search by extension, description, queue, or totem...",
+        "filter_type": "Filter by type",
+        "filter_all": "All types"
+      },
+      "type_operator": "Operator",
+      "type_totem": "Totem",
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "open_actions": "Open actions",
+      "no_results": "No extensions found.",
+      "delete_dialog": {
+        "title": "Delete extension",
+        "description": "Do you really want to delete this extension? This action cannot be undone.",
+        "success": "Extension deleted successfully.",
+        "error": "Error deleting extension."
+      }
+    },
+    "form": {
+      "title_create": "New extension",
+      "title_edit": "Edit extension",
+      "description_create": "Register a new extension for service or totem integration.",
+      "description_edit": "Update the operational data of the selected extension.",
+      "labels": {
+        "number": "Extension number",
+        "description": "Description",
+        "queue": "Queue",
+        "type": "Type",
+        "status": "Status"
+      },
+      "placeholders": {
+        "number": "Ex.: 1001",
+        "description": "Ex.: Main square service",
+        "queue": "Ex.: main_queue",
+        "type": "Select type",
+        "status": "Select status"
+      },
+      "options": {
+        "type_operator": "Operator",
+        "type_totem": "Totem",
+        "status_active": "Active",
+        "status_inactive": "Inactive"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save changes",
+        "create": "Create extension"
+      },
+      "notifications": {
+        "create_success": "Extension created successfully.",
+        "update_success": "Extension updated successfully.",
+        "create_error": "Error creating extension.",
+        "update_error": "Error updating extension."
+      },
+      "validations": {
+        "number_min": "Enter the extension number.",
+        "description_min": "Enter the extension description.",
+        "queue_min": "Enter the extension queue."
+      }
+    },
+    "details": {
+      "title": "Extension details",
+      "description": "Operational information for extension {number}.",
+      "labels": {
+        "number": "Extension number",
+        "description": "Description",
+        "queue": "Queue",
+        "type": "Type",
+        "status": "Status",
+        "totem": "Linked totem",
+        "updated_at": "Updated at",
+        "created_at": "Created at",
+        "id": "ID"
+      },
+      "not_informed": "Not informed"
     }
   },
   "totens": {

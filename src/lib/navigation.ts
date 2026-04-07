@@ -11,6 +11,7 @@ import {
   PaintbrushVertical,
   Power,
   RadioTower,
+  Phone,
   Settings,
   ShieldCheck,
   Send,
@@ -66,6 +67,17 @@ export const appNavigation: AppNavigationGroup[] = [
         url: "/map",
         icon: Map,
         screenKey: "admin.map",
+      },
+    ],
+  },
+  {
+    labelKey: "telephony",
+    items: [
+      {
+        titleKey: "extensions",
+        url: "/telephony/extensions",
+        icon: Phone,
+        screenKey: "admin.call_center_extensions",
       },
     ],
   },
