@@ -25,7 +25,6 @@ import { Integration } from "@/types/integration"
 import { useTranslator } from "@/lib/i18n"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
 import { IntegrationDetailsDialog } from "./integration-details-dialog"
-import { StatCards } from "./stat-cards"
 import { getIntegrationBadgeVariant, getIntegrationSearchIndex } from "./utils"
 
 interface PlateSendingOverviewTabProps {
@@ -77,10 +76,7 @@ export function PlateSendingOverviewTab({
   }, [filteredIntegrations, page, pageSize])
 
   return (
-    <div className="space-y-6">
-      <StatCards integrations={integrations} isLoading={isLoading} />
-
-      <div className="space-y-4">
+    <div className="space-y-4">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="relative w-full max-w-sm">
             <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -181,14 +177,13 @@ export function PlateSendingOverviewTab({
           </Table>
         </div>
 
-        <TablePaginationFooter
-          total={filteredIntegrations.length}
-          page={page}
-          pageSize={pageSize}
-          onPageChange={setPage}
-          onPageSizeChange={setPageSize}
-        />
-      </div>
+      <TablePaginationFooter
+        total={filteredIntegrations.length}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+      />
 
       <IntegrationDetailsDialog
         integration={detailsIntegration}

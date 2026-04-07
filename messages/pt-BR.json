@@ -3052,7 +3052,8 @@
     "empty": "Nenhuma integração de envio de placas encontrada.",
     "description_fallback": "Sem descrição operacional cadastrada para esta integração.",
     "tabs": {
-      "overview": "Visão geral"
+      "overview": "Envio de placas",
+      "lpr_management": "Gerenciar placas (LPR)"
     },
     "statuses": {
       "active": "Ativa",
@@ -3360,6 +3361,96 @@
         "cod_cet_obverse": "Código aproximando",
         "cod_cet_reverse": "Código afastando",
         "token": "Token"
+      }
+    },
+    "lpr": {
+      "no_access": "Seu perfil não possui permissão para visualizar as detecções LPR.",
+      "list_description": "Consulte, corrija e limpe registros de placas recebidos pelas integrações.",
+      "loading_cameras": "Carregando câmeras disponíveis...",
+      "camera_fallback": "Câmera #{id}",
+      "empty": "Nenhuma detecção LPR encontrada.",
+      "directions": {
+        "obverse": "Aproximando",
+        "reverse": "Partindo"
+      },
+      "filters": {
+        "plate": "Placa",
+        "camera": "Câmera",
+        "start_date": "Início",
+        "end_date": "Fim",
+        "all_cameras": "Todas as câmeras",
+        "placeholders": {
+          "plate": "Ex.: ABC1D23",
+          "camera": "Selecione uma câmera"
+        }
+      },
+      "actions": {
+        "search": "Buscar",
+        "reset": "Limpar",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "cleanup": "Limpeza em massa"
+      },
+      "table": {
+        "columns": {
+          "id": "ID",
+          "plate": "Placa",
+          "detected_at": "Data/Hora",
+          "camera": "Câmera",
+          "direction": "Direção",
+          "confidence": "Confiança",
+          "actions": "Ações"
+        },
+        "open_actions": "Abrir ações"
+      },
+      "form": {
+        "title": "Editar detecção",
+        "description": "Corrija a placa reconhecida e o nível de confiança deste registro.",
+        "fields": {
+          "plate": "Placa",
+          "confidence": "Confiança"
+        },
+        "placeholders": {
+          "plate": "Ex.: ABC1D23",
+          "confidence": "Ex.: 98.5"
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "save": "Salvar alterações"
+        }
+      },
+      "cleanup": {
+        "title": "Limpeza em massa",
+        "description": "Remova registros antigos ou exclua os itens mais antigos por quantidade.",
+        "fields": {
+          "older_than": "Excluir mais antigos que",
+          "quantity": "Quantidade de registros mais antigos"
+        },
+        "placeholders": {
+          "quantity": "Ex.: 500"
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "confirm": "Executar limpeza"
+        }
+      },
+      "delete_dialog": {
+        "title": "Excluir detecção",
+        "description": "Deseja realmente excluir a detecção da placa {plate}?",
+        "confirm": "Excluir",
+        "cancel": "Cancelar"
+      },
+      "notifications": {
+        "load_error": "Erro ao carregar as detecções LPR.",
+        "load_cameras_error": "Erro ao carregar as câmeras para filtro.",
+        "validation_error": "Informe uma placa válida para salvar a detecção.",
+        "update_success": "Detecção atualizada com sucesso.",
+        "update_error": "Erro ao atualizar a detecção.",
+        "delete_success": "Detecção excluída com sucesso.",
+        "delete_error": "Erro ao excluir a detecção.",
+        "cleanup_validation_error": "Preencha pelo menos um critério para a limpeza em massa.",
+        "cleanup_success": "{count} registro(s) removido(s) com sucesso.",
+        "cleanup_error": "Erro ao executar a limpeza em massa."
       }
     }
   }

@@ -3052,7 +3052,8 @@
     "empty": "No plate sending integrations found.",
     "description_fallback": "No operational description has been configured for this integration.",
     "tabs": {
-      "overview": "Overview"
+      "overview": "Plate sending",
+      "lpr_management": "Manage plates (LPR)"
     },
     "statuses": {
       "active": "Active",
@@ -3360,6 +3361,96 @@
         "cod_cet_obverse": "Approaching code",
         "cod_cet_reverse": "Leaving code",
         "token": "Token"
+      }
+    },
+    "lpr": {
+      "no_access": "Your profile does not have permission to view LPR detections.",
+      "list_description": "Review, correct, and clean plate records received by the integrations.",
+      "loading_cameras": "Loading available cameras...",
+      "camera_fallback": "Camera #{id}",
+      "empty": "No LPR detections found.",
+      "directions": {
+        "obverse": "Approaching",
+        "reverse": "Leaving"
+      },
+      "filters": {
+        "plate": "Plate",
+        "camera": "Camera",
+        "start_date": "Start",
+        "end_date": "End",
+        "all_cameras": "All cameras",
+        "placeholders": {
+          "plate": "Ex.: ABC1D23",
+          "camera": "Select a camera"
+        }
+      },
+      "actions": {
+        "search": "Search",
+        "reset": "Clear",
+        "edit": "Edit",
+        "delete": "Delete",
+        "cleanup": "Bulk cleanup"
+      },
+      "table": {
+        "columns": {
+          "id": "ID",
+          "plate": "Plate",
+          "detected_at": "Date/Time",
+          "camera": "Camera",
+          "direction": "Direction",
+          "confidence": "Confidence",
+          "actions": "Actions"
+        },
+        "open_actions": "Open actions"
+      },
+      "form": {
+        "title": "Edit detection",
+        "description": "Correct the recognized plate and confidence level for this record.",
+        "fields": {
+          "plate": "Plate",
+          "confidence": "Confidence"
+        },
+        "placeholders": {
+          "plate": "Ex.: ABC1D23",
+          "confidence": "Ex.: 98.5"
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "save": "Save changes"
+        }
+      },
+      "cleanup": {
+        "title": "Bulk cleanup",
+        "description": "Remove old records or delete the oldest items by quantity.",
+        "fields": {
+          "older_than": "Delete records older than",
+          "quantity": "Number of oldest records"
+        },
+        "placeholders": {
+          "quantity": "Ex.: 500"
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "confirm": "Run cleanup"
+        }
+      },
+      "delete_dialog": {
+        "title": "Delete detection",
+        "description": "Do you really want to delete the detection for plate {plate}?",
+        "confirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notifications": {
+        "load_error": "Error loading LPR detections.",
+        "load_cameras_error": "Error loading cameras for the filter.",
+        "validation_error": "Enter a valid plate before saving the detection.",
+        "update_success": "Detection updated successfully.",
+        "update_error": "Error updating the detection.",
+        "delete_success": "Detection deleted successfully.",
+        "delete_error": "Error deleting the detection.",
+        "cleanup_validation_error": "Fill in at least one criterion for the bulk cleanup.",
+        "cleanup_success": "{count} record(s) removed successfully.",
+        "cleanup_error": "Error running the bulk cleanup."
       }
     }
   }
