@@ -74,6 +74,12 @@ export const appNavigation: AppNavigationGroup[] = [
     labelKey: "telephony",
     items: [
       {
+        titleKey: "call_center",
+        url: "/telephony/call-center",
+        icon: Phone,
+        screenKey: "admin.call_center",
+      },
+      {
         titleKey: "extensions",
         url: "/telephony/extensions",
         icon: Phone,

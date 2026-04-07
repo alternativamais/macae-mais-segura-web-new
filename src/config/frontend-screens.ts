@@ -55,6 +55,11 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Hub das integrações responsáveis pelo envio de leituras de placas.",
     group: "Integrações",
   },
+  "admin.call_center": {
+    title: "Central de Atendimento",
+    description: "Monitoramento em tempo real das ligações do call center e gestão do ramal do agente.",
+    group: "Telefonia",
+  },
   "admin.call_center_extensions": {
     title: "Ramais",
     description: "Gestão dos ramais da central e vínculos com totens.",

@@ -30,6 +30,7 @@
     "equipment": "Equipment",
     "integrations": "Integrations",
     "telephony": "Telephony",
+    "call_center": "Call Center",
     "map": "Map",
     "cameras": "Cameras",
     "totens": "Totens",
@@ -428,6 +429,106 @@
         "id": "ID"
       },
       "not_informed": "Not informed"
+    }
+  },
+  "call_center": {
+    "title": "Call Center",
+    "description": "Monitor Asterisk calls in real time, claim your extension, and follow operational events.",
+    "loading": "Loading call center...",
+    "permission_denied": "You do not have permission to view the Call Center.",
+    "shared": {
+      "not_informed": "Not informed"
+    },
+    "notifications": {
+      "load_error": "Error loading call center calls.",
+      "logs_error": "Error loading call center logs.",
+      "session_error": "Error loading agent session."
+    },
+    "status": {
+      "ringing": "Ringing",
+      "answered": "Answered",
+      "completed": "Completed",
+      "abandoned": "Abandoned"
+    },
+    "history": {
+      "queue_join": "Joined queue",
+      "queue_rejoin": "Returned to queue",
+      "queue_abandon": "Left queue",
+      "agent_called": "Routed to agent",
+      "agent_connect": "Call connected",
+      "agent_ring_noanswer": "Agent did not answer",
+      "agent_missed": "Attempt missed",
+      "agent_complete": "Call completed",
+      "caller_abandon": "Caller abandoned",
+      "channel_hangup": "Channel closed"
+    },
+    "stats": {
+      "total": "Monitored Calls",
+      "total_desc": "Recent calls loaded from the call center.",
+      "ringing": "Ringing now",
+      "ringing_desc": "Calls currently waiting for answer.",
+      "answered": "In service",
+      "answered_desc": "Calls with an agent connected.",
+      "abandoned": "Abandoned",
+      "abandoned_desc": "Calls abandoned or not answered.",
+      "loading": "Loading"
+    },
+    "session": {
+      "title": "My Extension",
+      "description": "Claim or release your operational extension for service.",
+      "active": "Active extension in this session",
+      "select_placeholder": "Select an operator extension",
+      "permission_hint": "Your profile does not have permission to claim an extension in the call center.",
+      "not_informed": "Not informed",
+      "buttons": {
+        "login": "Claim extension",
+        "logout": "Release extension"
+      },
+      "notifications": {
+        "login_success": "Extension claimed successfully.",
+        "login_error": "Error claiming extension.",
+        "logout_success": "Extension session closed successfully.",
+        "logout_error": "Error closing extension session."
+      }
+    },
+    "monitor": {
+      "title": "Real-time monitor",
+      "description": "Track call center activity and inspect call history.",
+      "refresh": "Refresh",
+      "filters": {
+        "all": "All ({count})"
+      }
+    },
+    "tabs": {
+      "calls": "Calls",
+      "logs": "Logs"
+    },
+    "table": {
+      "columns": {
+        "queue": "Queue",
+        "origin": "Totem / Origin",
+        "agent": "Agent",
+        "status": "Status",
+        "start": "Start",
+        "answered": "Answered",
+        "end": "End",
+        "duration": "Duration",
+        "incidents": "Incidents",
+        "history": "History"
+      },
+      "extension": "Ext. {extension}",
+      "empty": "No calls registered."
+    },
+    "logs": {
+      "refresh": "Refresh logs",
+      "loading": "Loading call center logs...",
+      "empty": "No operational logs available."
+    },
+    "history_dialog": {
+      "title": "Call history #{id}",
+      "description": "Captured events for this call in the call center.",
+      "empty": "No events recorded for this call.",
+      "extension": "Extension {extension}"
     }
   },
   "totens": {

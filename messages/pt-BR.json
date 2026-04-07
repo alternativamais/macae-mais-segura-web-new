@@ -30,6 +30,7 @@
     "equipment": "Equipamentos",
     "integrations": "Integrações",
     "telephony": "Telefonia",
+    "call_center": "Central de Atendimento",
     "map": "Mapa",
     "cameras": "Câmeras",
     "totens": "Totens",
@@ -428,6 +429,106 @@
         "id": "ID"
       },
       "not_informed": "Não informado"
+    }
+  },
+  "call_center": {
+    "title": "Central de Atendimento",
+    "description": "Monitore as ligações do Asterisk em tempo real, assuma seu ramal e acompanhe eventos operacionais.",
+    "loading": "Carregando central de atendimento...",
+    "permission_denied": "Você não possui permissão para visualizar a Central de Atendimento.",
+    "shared": {
+      "not_informed": "Não informado"
+    },
+    "notifications": {
+      "load_error": "Erro ao carregar ligações da central.",
+      "logs_error": "Erro ao carregar logs da central.",
+      "session_error": "Erro ao carregar sessão do agente."
+    },
+    "status": {
+      "ringing": "Chamando",
+      "answered": "Atendida",
+      "completed": "Encerrada",
+      "abandoned": "Perdida"
+    },
+    "history": {
+      "queue_join": "Entrou na fila",
+      "queue_rejoin": "Retornou para a fila",
+      "queue_abandon": "Abandonou a fila",
+      "agent_called": "Direcionada ao agente",
+      "agent_connect": "Atendimento iniciado",
+      "agent_ring_noanswer": "Agente não atendeu",
+      "agent_missed": "Tentativa sem resposta",
+      "agent_complete": "Atendimento concluído",
+      "caller_abandon": "Abandono durante atendimento",
+      "channel_hangup": "Canal encerrado"
+    },
+    "stats": {
+      "total": "Ligações monitoradas",
+      "total_desc": "Chamadas recentes carregadas da central.",
+      "ringing": "Chamando agora",
+      "ringing_desc": "Chamadas aguardando atendimento.",
+      "answered": "Em atendimento",
+      "answered_desc": "Ligações com agente conectado.",
+      "abandoned": "Perdidas",
+      "abandoned_desc": "Ligações abandonadas ou não atendidas.",
+      "loading": "Carregando"
+    },
+    "session": {
+      "title": "Meu Ramal",
+      "description": "Assuma ou libere seu ramal operacional para atendimento.",
+      "active": "Ramal ativo nesta sessão",
+      "select_placeholder": "Selecione um ramal de operador",
+      "permission_hint": "Seu perfil não possui permissão para assumir um ramal na central.",
+      "not_informed": "Não informado",
+      "buttons": {
+        "login": "Assumir ramal",
+        "logout": "Sair do ramal"
+      },
+      "notifications": {
+        "login_success": "Ramal assumido com sucesso.",
+        "login_error": "Erro ao assumir ramal.",
+        "logout_success": "Sessão do ramal encerrada com sucesso.",
+        "logout_error": "Erro ao encerrar sessão do ramal."
+      }
+    },
+    "monitor": {
+      "title": "Monitor em tempo real",
+      "description": "Acompanhe o andamento das ligações da central e consulte o histórico operacional.",
+      "refresh": "Atualizar",
+      "filters": {
+        "all": "Todas ({count})"
+      }
+    },
+    "tabs": {
+      "calls": "Ligações",
+      "logs": "Logs"
+    },
+    "table": {
+      "columns": {
+        "queue": "Fila",
+        "origin": "Totem / Origem",
+        "agent": "Atendente",
+        "status": "Status",
+        "start": "Início",
+        "answered": "Atendida",
+        "end": "Fim",
+        "duration": "Duração",
+        "incidents": "Chamados",
+        "history": "Histórico"
+      },
+      "extension": "Ramal {extension}",
+      "empty": "Nenhuma ligação registrada."
+    },
+    "logs": {
+      "refresh": "Atualizar logs",
+      "loading": "Carregando logs da central...",
+      "empty": "Nenhum log operacional disponível."
+    },
+    "history_dialog": {
+      "title": "Histórico da ligação #{id}",
+      "description": "Eventos capturados para esta ligação na central.",
+      "empty": "Nenhum evento registrado para esta ligação.",
+      "extension": "Ramal {extension}"
     }
   },
   "totens": {
