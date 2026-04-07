@@ -12,7 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { smartSwitchService } from "@/services/smart-switch.service"
 import { totemService } from "@/services/totem.service"
@@ -299,13 +298,13 @@ export function PointPreviewDialog({
                   </CardHeader>
                   <CardContent className="min-h-0">
                     {cameras.length > 0 ? (
-                      <ScrollArea className="max-h-[52vh] pr-4">
+                      <div className="max-h-[52vh] overflow-y-auto pr-4">
                         <div className="grid gap-4 md:grid-cols-2">
                           {cameras.map((camera) => (
                             <CameraStreamTile key={camera.id} camera={camera} />
                           ))}
                         </div>
-                      </ScrollArea>
+                      </div>
                     ) : (
                       <div className="flex min-h-[240px] items-center justify-center rounded-lg border-2 border-dashed bg-muted/30 px-6 text-center text-sm text-muted-foreground">
                         {t("cameras.empty")}

@@ -47,7 +47,6 @@
     "cookies-next": "^6.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.35.2",
-    "hls.js": "^1.6.15",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.562.0",
     "next": "^16.1.6",
