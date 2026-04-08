@@ -14,6 +14,30 @@ interface CameraStreamTileProps {
 
 const MAX_SILENT_RETRIES = 3
 const SILENT_RETRY_DELAY_MS = 2500
+const MAX_PARALLEL_CAMERA_BOOTSTRAPS = 2
+
+let activeCameraBootstraps = 0
+const waitingCameraBootstraps: Array<() => void> = []
+
+async function acquireCameraBootstrapSlot() {
+  if (activeCameraBootstraps < MAX_PARALLEL_CAMERA_BOOTSTRAPS) {
+    activeCameraBootstraps += 1
+    return
+  }
+
+  await new Promise<void>((resolve) => {
+    waitingCameraBootstraps.push(() => {
+      activeCameraBootstraps += 1
+      resolve()
+    })
+  })
+}
+
+function releaseCameraBootstrapSlot() {
+  activeCameraBootstraps = Math.max(0, activeCameraBootstraps - 1)
+  const next = waitingCameraBootstraps.shift()
+  next?.()
+}
 
 export function CameraStreamTile({ camera }: CameraStreamTileProps) {
   const t = useTranslator("operational_map.preview.camera")
@@ -21,11 +45,36 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
+  const disconnectTimerRef = useRef<number | null>(null)
 
   const [status, setStatus] = useState<"idle" | "connecting" | "connected" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
   const [retryCount, setRetryCount] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const target = containerRef.current
+    if (!target || typeof IntersectionObserver === "undefined") {
+      setIsVisible(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting)
+      },
+      {
+        threshold: 0.2,
+      },
+    )
+
+    observer.observe(target)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   // ---------- Fullscreen ----------
   useEffect(() => {
@@ -43,9 +92,21 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
     }
   }, [])
 
-  // ---------- WebRTC WHEP (idêntico ao legado) ----------
+  const clearDisconnectTimer = useCallback(() => {
+    if (disconnectTimerRef.current) {
+      window.clearTimeout(disconnectTimerRef.current)
+      disconnectTimerRef.current = null
+    }
+  }, [])
+
+  // ---------- WebRTC WHEP ----------
   useEffect(() => {
     if (!camera?.id) return
+    if (!isVisible) {
+      setStatus("idle")
+      setErrorMessage("")
+      return
+    }
 
     let mounted = true
     let silentRetries = 0
@@ -54,7 +115,12 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
     setErrorMessage("")
 
     const startWebRTC = async () => {
+      let bootstrapSlotAcquired = false
+
       try {
+        await acquireCameraBootstrapSlot()
+        bootstrapSlotAcquired = true
+
         const info = await streamService.getStreamInfo(camera.id)
 
         if (!mounted) return
@@ -82,19 +148,35 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
         pc.ontrack = (event) => {
           if (mounted && video) {
             video.srcObject = event.streams[0]
+            clearDisconnectTimer()
+            setErrorMessage("")
             setStatus("connected")
           }
         }
 
         pc.oniceconnectionstatechange = () => {
-          if (
-            pc.iceConnectionState === "failed" ||
-            pc.iceConnectionState === "disconnected"
-          ) {
-            if (mounted) {
+          if (!mounted) return
+
+          if (pc.iceConnectionState === "connected" || pc.iceConnectionState === "completed") {
+            clearDisconnectTimer()
+            setStatus("connected")
+            return
+          }
+
+          if (pc.iceConnectionState === "disconnected") {
+            clearDisconnectTimer()
+            disconnectTimerRef.current = window.setTimeout(() => {
+              if (!mounted) return
               setErrorMessage(t("errors.connection_lost"))
               setStatus("error")
-            }
+            }, 4000)
+            return
+          }
+
+          if (pc.iceConnectionState === "failed") {
+            clearDisconnectTimer()
+            setErrorMessage(t("errors.connection_lost"))
+            setStatus("error")
           }
         }
 
@@ -168,6 +250,10 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
           )
           setStatus("error")
         }
+      } finally {
+        if (bootstrapSlotAcquired) {
+          releaseCameraBootstrapSlot()
+        }
       }
     }
 
@@ -175,6 +261,7 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
 
     return () => {
       mounted = false
+      clearDisconnectTimer()
       if (pcRef.current) {
         pcRef.current.close()
         pcRef.current = null
@@ -185,7 +272,7 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [camera?.id, retryCount])
+  }, [camera?.id, clearDisconnectTimer, isVisible, retryCount])
 
   const handleRetry = () => {
     if (pcRef.current) {
