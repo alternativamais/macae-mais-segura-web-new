@@ -15,6 +15,7 @@ import {
   Thermometer,
 } from "lucide-react"
 import { ScreenGuard } from "@/components/shared/screen-guard"
+import { SummaryStatTile } from "@/components/shared/summary-stat-cards"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
@@ -233,46 +234,28 @@ export default function OperationalMapPage() {
                         </div>
 
                         <div className="mt-3 grid grid-cols-2 gap-2">
-                          <div className="rounded-md border bg-background px-2.5 py-2">
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.points_scope")}
-                            </p>
-                            <p className="text-xl font-semibold">{filteredSummary.totalPoints}</p>
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.points_scope_desc")}
-                            </p>
-                          </div>
-                          <div className="rounded-md border bg-background px-2.5 py-2">
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.total_assets")}
-                            </p>
-                            <p className="text-xl font-semibold">{filteredSummary.totalAssets}</p>
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.total_assets_desc")}
-                            </p>
-                          </div>
-                          <div className="rounded-md border bg-background px-2.5 py-2">
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.active_points")}
-                            </p>
-                            <p className="text-xl font-semibold">{filteredSummary.activePoints}</p>
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.active_points_desc", {
-                                value: Math.round(filteredSummary.activeCoverage),
-                              })}
-                            </p>
-                          </div>
-                          <div className="rounded-md border bg-background px-2.5 py-2">
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.totem_coverage")}
-                            </p>
-                            <p className="text-xl font-semibold">
-                              {Math.round(filteredSummary.totemCoverage)}%
-                            </p>
-                            <p className="text-[11px] text-muted-foreground">
-                              {t("sidebar.kpis.totem_coverage_desc")}
-                            </p>
-                          </div>
+                          <SummaryStatTile
+                            title={t("sidebar.kpis.points_scope")}
+                            value={filteredSummary.totalPoints}
+                            description={t("sidebar.kpis.points_scope_desc")}
+                          />
+                          <SummaryStatTile
+                            title={t("sidebar.kpis.total_assets")}
+                            value={filteredSummary.totalAssets}
+                            description={t("sidebar.kpis.total_assets_desc")}
+                          />
+                          <SummaryStatTile
+                            title={t("sidebar.kpis.active_points")}
+                            value={filteredSummary.activePoints}
+                            description={t("sidebar.kpis.active_points_desc", {
+                              value: Math.round(filteredSummary.activeCoverage),
+                            })}
+                          />
+                          <SummaryStatTile
+                            title={t("sidebar.kpis.totem_coverage")}
+                            value={`${Math.round(filteredSummary.totemCoverage)}%`}
+                            description={t("sidebar.kpis.totem_coverage_desc")}
+                          />
                         </div>
                       </div>
 
@@ -288,31 +271,21 @@ export default function OperationalMapPage() {
                         </div>
 
                         <div className="mt-3 grid grid-cols-3 gap-2">
-                          <div className="rounded-md border bg-background px-2.5 py-2">
-                            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                              <Camera className="h-3.5 w-3.5" />
-                              {t("sidebar.assets.cameras")}
-                            </div>
-                            <p className="mt-1 text-lg font-semibold">{filteredSummary.totalCameras}</p>
-                          </div>
-                          <div className="rounded-md border bg-background px-2.5 py-2">
-                            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                              <Activity className="h-3.5 w-3.5" />
-                              {t("sidebar.assets.switches")}
-                            </div>
-                            <p className="mt-1 text-lg font-semibold">
-                              {filteredSummary.totalSmartSwitches}
-                            </p>
-                          </div>
-                          <div className="rounded-md border bg-background px-2.5 py-2">
-                            <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                              <Thermometer className="h-3.5 w-3.5" />
-                              {t("sidebar.assets.climate")}
-                            </div>
-                            <p className="mt-1 text-lg font-semibold">
-                              {filteredSummary.totalClimateEquipments}
-                            </p>
-                          </div>
+                          <SummaryStatTile
+                            title={t("sidebar.assets.cameras")}
+                            value={filteredSummary.totalCameras}
+                            icon={Camera}
+                          />
+                          <SummaryStatTile
+                            title={t("sidebar.assets.switches")}
+                            value={filteredSummary.totalSmartSwitches}
+                            icon={Activity}
+                          />
+                          <SummaryStatTile
+                            title={t("sidebar.assets.climate")}
+                            value={filteredSummary.totalClimateEquipments}
+                            icon={Thermometer}
+                          />
                         </div>
                       </div>
 

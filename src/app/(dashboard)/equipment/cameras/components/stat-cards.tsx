@@ -1,5 +1,5 @@
-import { CheckCircle2, Loader2, Monitor, XCircle } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { CheckCircle2, Monitor, XCircle } from "lucide-react"
+import { SummaryStatCards } from "@/components/shared/summary-stat-cards"
 import { useTranslator } from "@/lib/i18n"
 
 interface StatCardsProps {
@@ -36,28 +36,10 @@ export function StatCards({ stats, isLoading = false }: StatCardsProps) {
   ]
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      {cards.map((stat) => (
-        <Card key={stat.title}>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-            <stat.icon className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {isLoading || !stats ? (
-                <span className="inline-flex items-center gap-2 text-base text-muted-foreground">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {t("loading")}
-                </span>
-              ) : (
-                stat.value
-              )}
-            </div>
-            <p className="mt-1 text-xs text-muted-foreground">{stat.description}</p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+    <SummaryStatCards
+      items={cards.map((stat) => ({ ...stat, loading: isLoading || !stats }))}
+      className="grid-cols-2 md:grid-cols-3"
+      loadingLabel={t("loading")}
+    />
   )
 }
