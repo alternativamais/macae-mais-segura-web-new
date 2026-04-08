@@ -302,7 +302,7 @@ export function ClimateEquipmentFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-3xl">
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{isEdit ? t("title_edit") : t("title_create")}</DialogTitle>
           <DialogDescription>
@@ -320,19 +320,20 @@ export function ClimateEquipmentFormDialog({
               collapsible
               value={openSection}
               onValueChange={(value) => setOpenSection(value || "identification")}
-              className="w-full rounded-lg border"
+              className="rounded-md border bg-card"
             >
-              <AccordionItem value="identification">
-                <AccordionTrigger className="px-4 no-underline hover:no-underline">
-                  <div className="text-left">
-                    <div className="font-medium">{t("sections.identification")}</div>
-                    <div className="text-sm font-normal text-muted-foreground">
+              <AccordionItem value="identification" className="px-4">
+                <AccordionTrigger className="cursor-pointer py-4 hover:no-underline">
+                  <div className="space-y-1 text-left">
+                    <div>{t("sections.identification")}</div>
+                    <div className="text-xs font-normal text-muted-foreground">
                       {t("sections.identification_desc")}
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="space-y-4 px-4 pb-4">
-                  <div className="grid gap-4 md:grid-cols-2">
+                <AccordionContent className="pb-0">
+                  <div className="space-y-4 pb-4">
+                    <div className="grid items-start gap-4 md:grid-cols-2">
                     <FormField
                       control={form.control}
                       name="nome"
@@ -344,17 +345,37 @@ export function ClimateEquipmentFormDialog({
                           </FormControl>
                           <FormMessage />
                         </FormItem>
-                      )}
-                    />
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="homeAssistantLabel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("labels.home_assistant_label")}</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder={t("placeholders.home_assistant_label")}
+                                {...field}
+                                value={field.value || ""}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                     <FormField
                       control={form.control}
-                      name="homeAssistantLabel"
+                      name="descricao"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("labels.home_assistant_label")}</FormLabel>
+                          <FormLabel>{t("labels.description")}</FormLabel>
                           <FormControl>
-                            <Input
-                              placeholder={t("placeholders.home_assistant_label")}
+                            <Textarea
+                              placeholder={t("placeholders.description")}
+                              rows={3}
                               {...field}
                               value={field.value || ""}
                             />
@@ -364,278 +385,266 @@ export function ClimateEquipmentFormDialog({
                       )}
                     />
                   </div>
-
-                  <FormField
-                    control={form.control}
-                    name="descricao"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t("labels.description")}</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder={t("placeholders.description")}
-                            rows={3}
-                            {...field}
-                            value={field.value || ""}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="integration">
-                <AccordionTrigger className="px-4 no-underline hover:no-underline">
-                  <div className="text-left">
-                    <div className="font-medium">{t("sections.integration")}</div>
-                    <div className="text-sm font-normal text-muted-foreground">
+              <AccordionItem value="integration" className="px-4">
+                <AccordionTrigger className="cursor-pointer py-4 hover:no-underline">
+                  <div className="space-y-1 text-left">
+                    <div>{t("sections.integration")}</div>
+                    <div className="text-xs font-normal text-muted-foreground">
                       {t("sections.integration_desc")}
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="space-y-4 px-4 pb-4">
-                  <div className="flex justify-end">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={loadDevices}
-                      disabled={isRefreshingDevices}
-                    >
-                      {isRefreshingDevices ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <RefreshCcw className="mr-2 h-4 w-4" />
-                      )}
-                      {t("buttons.refresh_devices")}
-                    </Button>
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="homeAssistantDeviceKey"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t("labels.home_assistant_device_key")}</FormLabel>
-                        <Select
-                          value={field.value}
-                          onValueChange={handleDeviceChange}
-                          disabled={isLoadingDependencies || isRefreshingDevices}
-                        >
-                          <FormControl>
-                            <SelectTrigger className="w-full cursor-pointer">
-                              <SelectValue placeholder={t("placeholders.home_assistant_device_key")} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {ensureDeviceOptions.map((device) => {
-                              const isDisabled =
-                                !device.available && device.linkedEquipmentId !== item?.id
-
-                              return (
-                                <SelectItem
-                                  key={device.deviceKey}
-                                  value={device.deviceKey}
-                                  disabled={isDisabled}
-                                >
-                                  {device.friendlyName || device.deviceKey}
-                                  {device.friendlyName ? ` (${device.deviceKey})` : ""}
-                                  {isDisabled ? ` - ${t("options.in_use")}` : ""}
-                                </SelectItem>
-                              )
-                            })}
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          {t("descriptions.home_assistant_device_key")}
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {selectedDevice?.sensors?.length ? (
-                    <div className="rounded-lg border bg-muted/20 p-4">
-                      <p className="mb-3 text-sm font-medium">{t("labels.detected_sensors")}</p>
-                      <div className="grid gap-2">
-                        {selectedDevice.sensors.map((sensor) => (
-                          <div
-                            key={`${sensor.entityId}-${sensor.type}`}
-                            className="flex flex-col gap-1 rounded-md border bg-background px-3 py-2 sm:flex-row sm:items-center sm:justify-between"
-                          >
-                            <span className="text-sm font-medium">{sensor.label}</span>
-                            <span className="font-mono text-xs text-muted-foreground">
-                              {sensor.entityId}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                <AccordionContent className="pb-0">
+                  <div className="space-y-4 pb-4">
+                    <div className="flex justify-end">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={loadDevices}
+                        disabled={isRefreshingDevices}
+                        className="cursor-pointer"
+                      >
+                        {isRefreshingDevices ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <RefreshCcw className="mr-2 h-4 w-4" />
+                        )}
+                        {t("buttons.refresh_devices")}
+                      </Button>
                     </div>
-                  ) : null}
+
+                    <FormField
+                      control={form.control}
+                      name="homeAssistantDeviceKey"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("labels.home_assistant_device_key")}</FormLabel>
+                          <Select
+                            value={field.value}
+                            onValueChange={handleDeviceChange}
+                            disabled={isLoadingDependencies || isRefreshingDevices}
+                          >
+                            <FormControl>
+                              <SelectTrigger className="w-full cursor-pointer">
+                                <SelectValue placeholder={t("placeholders.home_assistant_device_key")} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {ensureDeviceOptions.map((device) => {
+                                const isDisabled =
+                                  !device.available && device.linkedEquipmentId !== item?.id
+
+                                return (
+                                  <SelectItem
+                                    key={device.deviceKey}
+                                    value={device.deviceKey}
+                                    disabled={isDisabled}
+                                  >
+                                    {device.friendlyName || device.deviceKey}
+                                    {device.friendlyName ? ` (${device.deviceKey})` : ""}
+                                    {isDisabled ? ` - ${t("options.in_use")}` : ""}
+                                  </SelectItem>
+                                )
+                              })}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            {t("descriptions.home_assistant_device_key")}
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {selectedDevice?.sensors?.length ? (
+                      <div className="rounded-lg border bg-muted/20 p-4">
+                        <p className="mb-3 text-sm font-medium">{t("labels.detected_sensors")}</p>
+                        <div className="grid gap-2">
+                          {selectedDevice.sensors.map((sensor) => (
+                            <div
+                              key={`${sensor.entityId}-${sensor.type}`}
+                              className="flex flex-col gap-1 rounded-md border bg-background px-3 py-2 sm:flex-row sm:items-center sm:justify-between"
+                            >
+                              <span className="text-sm font-medium">{sensor.label}</span>
+                              <span className="font-mono text-xs text-muted-foreground">
+                                {sensor.entityId}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="location">
-                <AccordionTrigger className="px-4 no-underline hover:no-underline">
-                  <div className="text-left">
-                    <div className="font-medium">{t("sections.location")}</div>
-                    <div className="text-sm font-normal text-muted-foreground">
+              <AccordionItem value="location" className="px-4">
+                <AccordionTrigger className="cursor-pointer py-4 hover:no-underline">
+                  <div className="space-y-1 text-left">
+                    <div>{t("sections.location")}</div>
+                    <div className="text-xs font-normal text-muted-foreground">
                       {t("sections.location_desc")}
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="space-y-4 px-4 pb-4">
-                  <FormField
-                    control={form.control}
-                    name="destino"
-                    render={({ field }) => (
-                      <FormItem className="space-y-3">
-                        <FormLabel>{t("labels.destination")}</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            value={field.value}
-                            onValueChange={(value) =>
-                              handleDestinationChange(value as ClimateEquipmentDestination)
-                            }
-                            className="flex flex-col gap-3 sm:flex-row"
-                          >
-                            <div className="flex items-center gap-3 rounded-lg border px-4 py-3">
-                              <RadioGroupItem value="totem" id="climate-destination-totem" />
-                              <label
-                                htmlFor="climate-destination-totem"
-                                className="cursor-pointer text-sm font-medium"
-                              >
-                                {t("options.install_in_totem")}
-                              </label>
-                            </div>
-                            <div className="flex items-center gap-3 rounded-lg border px-4 py-3">
-                              <RadioGroupItem value="ponto" id="climate-destination-point" />
-                              <label
-                                htmlFor="climate-destination-point"
-                                className="cursor-pointer text-sm font-medium"
-                              >
-                                {t("options.install_in_point")}
-                              </label>
-                            </div>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormDescription>{t("descriptions.destination")}</FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <AccordionContent className="pb-0">
+                  <div className="space-y-4 pb-4">
+                    <FormField
+                      control={form.control}
+                      name="destino"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel>{t("labels.destination")}</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              value={field.value}
+                              onValueChange={(value) =>
+                                handleDestinationChange(value as ClimateEquipmentDestination)
+                              }
+                              className="flex flex-col gap-3 sm:flex-row"
+                            >
+                              <div className="flex items-center gap-3 rounded-lg border px-4 py-3">
+                                <RadioGroupItem value="totem" id="climate-destination-totem" />
+                                <label
+                                  htmlFor="climate-destination-totem"
+                                  className="cursor-pointer text-sm font-medium"
+                                >
+                                  {t("options.install_in_totem")}
+                                </label>
+                              </div>
+                              <div className="flex items-center gap-3 rounded-lg border px-4 py-3">
+                                <RadioGroupItem value="ponto" id="climate-destination-point" />
+                                <label
+                                  htmlFor="climate-destination-point"
+                                  className="cursor-pointer text-sm font-medium"
+                                >
+                                  {t("options.install_in_point")}
+                                </label>
+                              </div>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormDescription>{t("descriptions.destination")}</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  {destination === "totem" ? (
-                    <FormField
-                      control={form.control}
-                      name="totemId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("labels.totem")}</FormLabel>
-                          <Select
-                            value={field.value || NO_TOTEM_VALUE}
-                            onValueChange={field.onChange}
-                            disabled={isLoadingDependencies}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="w-full cursor-pointer">
-                                <SelectValue placeholder={t("placeholders.totem")} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value={NO_TOTEM_VALUE}>
-                                {t("options.unassigned")}
-                              </SelectItem>
-                              {totens.map((totem) => (
-                                <SelectItem key={totem.id} value={String(totem.id)}>
-                                  {buildClimateTotemOptionLabel(
-                                    totem,
-                                    tShared("not_informed"),
-                                  )}
+                    {destination === "totem" ? (
+                      <FormField
+                        control={form.control}
+                        name="totemId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("labels.totem")}</FormLabel>
+                            <Select
+                              value={field.value || NO_TOTEM_VALUE}
+                              onValueChange={field.onChange}
+                              disabled={isLoadingDependencies}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="w-full cursor-pointer">
+                                  <SelectValue placeholder={t("placeholders.totem")} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value={NO_TOTEM_VALUE}>
+                                  {t("options.unassigned")}
                                 </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormDescription>{t("descriptions.totem")}</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  ) : (
-                    <FormField
-                      control={form.control}
-                      name="pontoId"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("labels.point")}</FormLabel>
-                          <Select
-                            value={field.value || NO_POINT_VALUE}
-                            onValueChange={field.onChange}
-                            disabled={isLoadingDependencies}
-                          >
-                            <FormControl>
-                              <SelectTrigger className="w-full cursor-pointer">
-                                <SelectValue placeholder={t("placeholders.point")} />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value={NO_POINT_VALUE}>
-                                {t("options.unassigned")}
-                              </SelectItem>
-                              {points.map((point) => (
-                                <SelectItem key={point.id} value={String(point.id)}>
-                                  {buildClimatePointOptionLabel(
-                                    point,
-                                    tShared("not_informed"),
-                                  )}
+                                {totens.map((totem) => (
+                                  <SelectItem key={totem.id} value={String(totem.id)}>
+                                    {buildClimateTotemOptionLabel(
+                                      totem,
+                                      tShared("not_informed"),
+                                    )}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>{t("descriptions.totem")}</FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ) : (
+                      <FormField
+                        control={form.control}
+                        name="pontoId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("labels.point")}</FormLabel>
+                            <Select
+                              value={field.value || NO_POINT_VALUE}
+                              onValueChange={field.onChange}
+                              disabled={isLoadingDependencies}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="w-full cursor-pointer">
+                                  <SelectValue placeholder={t("placeholders.point")} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value={NO_POINT_VALUE}>
+                                  {t("options.unassigned")}
                                 </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormDescription>{t("descriptions.point")}</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
+                                {points.map((point) => (
+                                  <SelectItem key={point.id} value={String(point.id)}>
+                                    {buildClimatePointOptionLabel(
+                                      point,
+                                      tShared("not_informed"),
+                                    )}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>{t("descriptions.point")}</FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                  </div>
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="system">
-                <AccordionTrigger className="px-4 no-underline hover:no-underline">
-                  <div className="text-left">
-                    <div className="font-medium">{t("sections.system")}</div>
-                    <div className="text-sm font-normal text-muted-foreground">
+              <AccordionItem value="system" className="px-4">
+                <AccordionTrigger className="cursor-pointer py-4 hover:no-underline">
+                  <div className="space-y-1 text-left">
+                    <div>{t("sections.system")}</div>
+                    <div className="text-xs font-normal text-muted-foreground">
                       {t("sections.system_desc")}
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="space-y-4 px-4 pb-4">
-                  <FormField
-                    control={form.control}
-                    name="status"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>{t("labels.status")}</FormLabel>
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <FormControl>
-                            <SelectTrigger className="w-full cursor-pointer">
-                              <SelectValue placeholder={t("placeholders.status")} />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="active">{t("options.status_active")}</SelectItem>
-                            <SelectItem value="inactive">
-                              {t("options.status_inactive")}
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <AccordionContent className="pb-0">
+                  <div className="space-y-4 pb-4">
+                    <FormField
+                      control={form.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("labels.status")}</FormLabel>
+                          <Select value={field.value} onValueChange={field.onChange}>
+                            <FormControl>
+                              <SelectTrigger className="w-full cursor-pointer">
+                                <SelectValue placeholder={t("placeholders.status")} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="active">{t("options.status_active")}</SelectItem>
+                              <SelectItem value="inactive">
+                                {t("options.status_inactive")}
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
