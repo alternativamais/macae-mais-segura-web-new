@@ -9,7 +9,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
@@ -41,7 +40,7 @@ const DEFAULT_CENTER = { lat: -22.376534, lng: -41.794399 }
 
 const mapContainerStyle = {
   width: "100%",
-  height: "360px",
+  height: "100%",
 }
 
 const mapOptions: google.maps.MapOptions = {
@@ -125,7 +124,7 @@ export function LocalityMapPickerDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[88vh] overflow-hidden sm:max-w-5xl">
+      <DialogContent className="max-h-[92vh] overflow-hidden sm:max-w-5xl">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
@@ -144,14 +143,14 @@ export function LocalityMapPickerDialog({
             <p className="mt-1 text-sm text-muted-foreground">{t("load_error_desc")}</p>
           </div>
         ) : !isLoaded ? (
-          <div className="flex h-[360px] items-center justify-center rounded-xl border bg-muted/20 text-muted-foreground">
+          <div className="flex h-[50vh] min-h-[320px] items-center justify-center rounded-xl border bg-muted/20 text-muted-foreground sm:h-[360px]">
             <span className="inline-flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin" />
               {t("loading")}
             </span>
           </div>
         ) : (
-          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(320px,0.95fr)]">
+          <div className="grid min-h-0 gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(320px,0.95fr)]">
             <Card className="gap-0 overflow-hidden py-0">
               <div className="flex flex-wrap items-start justify-between gap-3 border-b bg-muted/20 px-4 py-3">
                 <div className="space-y-1">
@@ -172,39 +171,41 @@ export function LocalityMapPickerDialog({
               </div>
 
               <CardContent className="px-0">
-                <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
-                  center={center}
-                  zoom={selectedPosition ? 15 : 13}
-                  options={mapOptions}
-                  onClick={handleMapClick}
-                  onLoad={(map) => {
-                    mapRef.current = map
-                  }}
-                  onUnmount={() => {
-                    mapRef.current = null
-                  }}
-                >
-                  {selectedPosition ? (
-                    <>
-                      <MarkerF position={selectedPosition} />
-                      {radiusMeters > 0 ? (
-                        <CircleF
-                          center={selectedPosition}
-                          radius={radiusMeters}
-                          options={{
-                            fillColor: "#f97316",
-                            fillOpacity: 0.14,
-                            strokeColor: "#ea580c",
-                            strokeOpacity: 0.9,
-                            strokeWeight: 2,
-                            clickable: false,
-                          }}
-                        />
-                      ) : null}
-                    </>
-                  ) : null}
-                </GoogleMap>
+                <div className="h-[52vh] min-h-[340px] sm:h-[360px]">
+                  <GoogleMap
+                    mapContainerStyle={mapContainerStyle}
+                    center={center}
+                    zoom={selectedPosition ? 15 : 13}
+                    options={mapOptions}
+                    onClick={handleMapClick}
+                    onLoad={(map) => {
+                      mapRef.current = map
+                    }}
+                    onUnmount={() => {
+                      mapRef.current = null
+                    }}
+                  >
+                    {selectedPosition ? (
+                      <>
+                        <MarkerF position={selectedPosition} />
+                        {radiusMeters > 0 ? (
+                          <CircleF
+                            center={selectedPosition}
+                            radius={radiusMeters}
+                            options={{
+                              fillColor: "#f97316",
+                              fillOpacity: 0.14,
+                              strokeColor: "#ea580c",
+                              strokeOpacity: 0.9,
+                              strokeWeight: 2,
+                              clickable: false,
+                            }}
+                          />
+                        ) : null}
+                      </>
+                    ) : null}
+                  </GoogleMap>
+                </div>
               </CardContent>
             </Card>
 
@@ -240,6 +241,7 @@ export function LocalityMapPickerDialog({
                       step={0.5}
                       value={[radiusKm]}
                       onValueChange={(values) => setRadiusKm(values[0] ?? radiusKm)}
+                      className="py-2"
                     />
                   </div>
 
@@ -259,6 +261,7 @@ export function LocalityMapPickerDialog({
                       onValueChange={(values) =>
                         setMaxLocationAgeMinutes(values[0] ?? maxLocationAgeMinutes)
                       }
+                      className="py-2"
                     />
                   </div>
                 </div>
@@ -267,7 +270,7 @@ export function LocalityMapPickerDialog({
           </div>
         )}
 
-        <DialogFooter>
+        <div className="flex flex-col-reverse gap-2 pt-4 sm:flex-row sm:justify-end">
           <Button
             type="button"
             variant="outline"
@@ -284,7 +287,7 @@ export function LocalityMapPickerDialog({
           >
             {t("buttons.confirm")}
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   )
