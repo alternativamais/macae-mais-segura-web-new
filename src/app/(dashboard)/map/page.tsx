@@ -17,7 +17,6 @@ import {
 import { ScreenGuard } from "@/components/shared/screen-guard"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Switch } from "@/components/ui/switch"
 import { useTranslator } from "@/lib/i18n"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
@@ -38,6 +37,13 @@ import {
 
 export default function OperationalMapPage() {
   const t = useTranslator("operational_map")
+  const [filtersOpen, setFiltersOpen] = useState(() => {
+    if (typeof window === "undefined") {
+      return true
+    }
+
+    return window.innerWidth >= 768
+  })
 
   const [points, setPoints] = useState<OperationalMapPoint[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -46,7 +52,6 @@ export default function OperationalMapPage() {
   const [showPoints, setShowPoints] = useState(true)
   const [selectedMarkerId, setSelectedMarkerId] = useState<number | null>(null)
   const [previewOpen, setPreviewOpen] = useState(false)
-  const [filtersOpen, setFiltersOpen] = useState(true)
 
   const markers = useMemo(() => normalizePointMarkers(points), [points])
   const filteredMarkers = useMemo(
@@ -90,6 +95,23 @@ export default function OperationalMapPage() {
 
     setSelectedMarkerId(markers[0]?.id ?? null)
   }, [markers, selectedMarkerId])
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 768px)")
+    const syncFiltersState = (event?: MediaQueryListEvent) => {
+      const matches = event?.matches ?? mediaQuery.matches
+      setFiltersOpen(matches)
+    }
+
+    syncFiltersState()
+
+    mediaQuery.addEventListener("change", syncFiltersState)
+    return () => mediaQuery.removeEventListener("change", syncFiltersState)
+  }, [])
 
   const handleMarkerSelect = (markerId: number) => {
     setSelectedMarkerId(markerId)
@@ -188,7 +210,7 @@ export default function OperationalMapPage() {
                 ) : null}
               </div>
 
-              <ScrollArea className="min-h-0 flex-1">
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
                 <div className="space-y-4 p-4">
                   {isLoading ? (
                     <div className="flex items-center justify-center rounded-lg border-2 border-dashed bg-muted/30 px-4 py-10 text-sm text-muted-foreground">
@@ -412,7 +434,7 @@ export default function OperationalMapPage() {
                     </div>
                   )}
                 </div>
-              </ScrollArea>
+              </div>
             </div>
           </div>
 
