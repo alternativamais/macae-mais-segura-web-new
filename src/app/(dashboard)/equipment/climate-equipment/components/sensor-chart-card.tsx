@@ -23,19 +23,35 @@ export function SensorChartCard({ sensor }: SensorChartCardProps) {
   const t = useTranslator("climate_equipment.dashboard")
   const locale = t.getLocale()
 
+  const normalizeNumericValue = (value: unknown) => {
+    if (typeof value === "number") {
+      return Number.isFinite(value) ? value : null
+    }
+
+    if (typeof value === "string") {
+      const normalized = value.replace(",", ".").trim()
+      if (!normalized) return null
+
+      const parsed = Number(normalized)
+      return Number.isFinite(parsed) ? parsed : null
+    }
+
+    return null
+  }
+
   const data = sensor.history.map((entry) => ({
     label: new Date(entry.recordedAt).toLocaleTimeString(locale, {
       hour: "2-digit",
       minute: "2-digit",
     }),
     fullLabel: formatClimateDateTime(entry.recordedAt, locale),
-    value: typeof entry.value === "number" ? entry.value : null,
+    value: normalizeNumericValue(entry.value ?? entry.rawValue),
   }))
 
   const hasChartData = data.some((entry) => typeof entry.value === "number")
   const latestValue =
-    sensor.lastValue !== null && sensor.lastValue !== undefined
-      ? sensor.lastValue
+    normalizeNumericValue(sensor.lastValue) !== null
+      ? normalizeNumericValue(sensor.lastValue)
       : (sensor.lastRawValue ?? t("not_informed"))
   const chartColor = getClimateSensorColor(sensor.type)
 

@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
 import { useTranslator } from "@/lib/i18n"
+import { cn } from "@/lib/utils"
 import { ClimateEquipment } from "@/types/climate-equipment"
 import {
   ClimateEquipmentStatusBadge,
@@ -48,16 +49,26 @@ export function ClimateEquipmentDetailsDialog({
 
   const sensorSummary =
     item.sensors.length > 0 ? (
-      <div className="flex flex-col gap-2 sm:items-end">
+      <div className="space-y-3">
+        <div className="text-xs text-muted-foreground">
+          {t("labels.sensors_count", { count: item.sensors.length })}
+        </div>
+        <div className="grid gap-2 md:grid-cols-3">
         {item.sensors.map((sensor) => (
           <div
             key={`${sensor.id}-${sensor.type}`}
-            className="flex flex-wrap items-center gap-2 sm:justify-end"
+            className="flex items-center justify-between gap-3 rounded-md border bg-muted/20 px-3 py-2"
           >
-            <span className="text-sm">{sensor.label}</span>
+            <div className="min-w-0">
+              <div className="truncate text-sm font-medium">{sensor.label}</div>
+              <div className="truncate text-xs text-muted-foreground">
+                {sensor.friendlyName || sensor.entityId}
+              </div>
+            </div>
             <ClimateSensorAvailabilityBadge available={sensor.isAvailable} />
           </div>
         ))}
+        </div>
       </div>
     ) : (
       notInformed
@@ -95,6 +106,7 @@ export function ClimateEquipmentDetailsDialog({
     {
       label: t("labels.sensors"),
       value: sensorSummary,
+      fullWidth: true,
     },
     {
       label: t("labels.description"),
@@ -121,11 +133,23 @@ export function ClimateEquipmentDetailsDialog({
         <div className="space-y-3">
           {items.map((entry, index) => (
             <div key={`${entry.label}-${index}`} className="space-y-3">
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+              <div
+                className={cn(
+                  "flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between",
+                  entry.fullWidth ? "sm:flex-col sm:items-stretch" : "",
+                )}
+              >
                 <span className="text-sm font-medium text-muted-foreground">
                   {entry.label}
                 </span>
-                <div className="text-sm sm:max-w-[60%] sm:text-right">{entry.value}</div>
+                <div
+                  className={cn(
+                    "text-sm",
+                    entry.fullWidth ? "sm:max-w-none sm:text-left" : "sm:max-w-[60%] sm:text-right",
+                  )}
+                >
+                  {entry.value}
+                </div>
               </div>
               {index < items.length - 1 ? <Separator /> : null}
             </div>

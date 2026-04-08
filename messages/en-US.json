@@ -1158,6 +1158,7 @@
         "status": "Status",
         "last_synced_at": "Last sync",
         "sensors": "Sensors",
+        "sensors_count": "{count} sensors",
         "description": "Description",
         "id": "ID"
       }
@@ -1193,7 +1194,7 @@
       "load_error": "Unable to load the climate dashboard.",
       "loading": "Loading dashboard...",
       "empty": "Select equipment or a totem with climate equipment to view the dashboard.",
-      "sensor_available": "Available",
+      "sensor_available": "Online",
       "sensor_unavailable": "Unavailable",
       "last_reading": "Last reading: {value}",
       "empty_history": "There is no history available for this sensor yet.",

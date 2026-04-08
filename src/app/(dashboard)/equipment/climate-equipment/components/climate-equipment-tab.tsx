@@ -39,7 +39,7 @@ import { climateEquipmentService } from "@/services/climate-equipment.service"
 import { ClimateEquipment } from "@/types/climate-equipment"
 import { ClimateEquipmentDetailsDialog } from "./climate-equipment-details-dialog"
 import { ClimateEquipmentFormDialog } from "./climate-equipment-form-dialog"
-import { ClimateEquipmentStatusBadge, ClimateSensorAvailabilityBadge } from "./status-badges"
+import { ClimateEquipmentStatusBadge } from "./status-badges"
 import {
   formatClimateDateTime,
   getClimateEquipmentDisplayName,
@@ -236,25 +236,8 @@ export function ClimateEquipmentTab({
                     </div>
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
-                    <div className="space-y-2">
-                      <div className="text-sm font-medium">
-                        {t("table.sensors_count", { count: item.sensors.length })}
-                      </div>
-                      {item.sensors.length ? (
-                        <div className="flex flex-wrap gap-2">
-                          {item.sensors.slice(0, 2).map((sensor) => (
-                            <ClimateSensorAvailabilityBadge
-                              key={`${item.id}-${sensor.id}`}
-                              available={sensor.isAvailable}
-                            />
-                          ))}
-                          {item.sensors.length > 2 ? (
-                            <span className="text-xs text-muted-foreground">
-                              {t("table.more_sensors", { count: item.sensors.length - 2 })}
-                            </span>
-                          ) : null}
-                        </div>
-                      ) : null}
+                    <div className="text-sm font-medium">
+                      {t("table.sensors_count", { count: item.sensors.length })}
                     </div>
                   </TableCell>
                   <TableCell>

@@ -256,28 +256,5 @@ export function getClimateSensorTypeLabel(
 }
 
 export function getClimateSensorColor(type?: string | null) {
-  switch (type) {
-    case "temperature":
-      return "hsl(var(--chart-1))"
-    case "probe_temperature":
-      return "hsl(var(--chart-5))"
-    case "humidity":
-      return "hsl(var(--chart-2))"
-    case "outdoor_humidity":
-      return "hsl(var(--chart-3))"
-    case "air_pressure":
-      return "hsl(var(--chart-4))"
-    case "wind_speed":
-      return "hsl(var(--chart-5))"
-    case "precipitation_intensity":
-      return "hsl(var(--chart-2))"
-    case "total_precipitation_today":
-      return "hsl(var(--chart-3))"
-    case "uv_index":
-      return "hsl(var(--chart-4))"
-    case "sound_pressure":
-      return "hsl(var(--chart-1))"
-    default:
-      return "hsl(var(--muted-foreground))"
-  }
+  return "var(--primary)"
 }
