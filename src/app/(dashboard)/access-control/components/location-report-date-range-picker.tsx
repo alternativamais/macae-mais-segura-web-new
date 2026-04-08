@@ -61,19 +61,21 @@ export function LocationReportDateRangePicker({
   return (
     <div className="space-y-2">
       <label className="block text-sm font-medium">{t("period_label")}</label>
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <Popover>
           <PopoverTrigger asChild>
             <Button
               type="button"
               variant="outline"
               className={cn(
-                "w-full justify-start text-left font-normal cursor-pointer",
+                "min-w-0 flex-1 justify-start text-left font-normal cursor-pointer",
                 !selectedRange?.from && "text-muted-foreground",
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {formatRangeLabel(selectedRange, t("period_placeholder"), locale)}
+              <span className="truncate">
+                {formatRangeLabel(selectedRange, t("period_placeholder"), locale)}
+              </span>
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -99,7 +101,7 @@ export function LocationReportDateRangePicker({
             type="button"
             variant="outline"
             size="icon"
-            className="cursor-pointer"
+            className="shrink-0 cursor-pointer"
             onClick={() => onChange({ dateFrom: "", dateTo: "" })}
           >
             <X className="h-4 w-4" />

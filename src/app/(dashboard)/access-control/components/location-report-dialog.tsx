@@ -1,8 +1,15 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import { useEffect, useMemo, useState } from "react"
-import { Loader2, MapPin, Route, Sparkles } from "lucide-react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import {
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  MapPin,
+  Route,
+  Sparkles,
+} from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import {
   Dialog,
@@ -14,6 +21,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -27,7 +41,6 @@ import { UserLocationRecord } from "@/types/access-control"
 import { User } from "@/types/user"
 import { formatDateTime, getLocationCoordinatesLabel } from "./utils"
 import { useTranslator } from "@/lib/i18n"
-import { TablePaginationFooter } from "./table-pagination-footer"
 import { LocationReportDateRangePicker } from "./location-report-date-range-picker"
 
 const LocationHistoryMap = dynamic(
@@ -76,8 +89,12 @@ export function LocationReportDialog({
   const [pageSize, setPageSize] = useState(20)
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
+  const [timelineHeight, setTimelineHeight] = useState<number | null>(null)
+  const [syncTimelineHeight, setSyncTimelineHeight] = useState(false)
+  const leftColumnRef = useRef<HTMLDivElement | null>(null)
   const t = useTranslator("access_control.location_report_dialog")
   const currentLocale = t.getLocale()
+  const totalPages = Math.max(1, Math.ceil(totalRecords / pageSize))
 
   useEffect(() => {
     if (!open || !user?.id) {
@@ -151,9 +168,60 @@ export function LocationReportDialog({
     }
   }, [filteredRecords, selectedRecordId])
 
+  useEffect(() => {
+    if (!open) {
+      setSyncTimelineHeight(false)
+      setTimelineHeight(null)
+      return
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 1280px)")
+    const updateSyncMode = () => {
+      const shouldSync = mediaQuery.matches
+      setSyncTimelineHeight(shouldSync)
+
+      if (!shouldSync) {
+        setTimelineHeight(null)
+      }
+    }
+
+    updateSyncMode()
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", updateSyncMode)
+      return () => mediaQuery.removeEventListener("change", updateSyncMode)
+    }
+
+    mediaQuery.addListener(updateSyncMode)
+    return () => mediaQuery.removeListener(updateSyncMode)
+  }, [open])
+
+  useEffect(() => {
+    if (!open || !syncTimelineHeight || !leftColumnRef.current) {
+      return
+    }
+
+    const element = leftColumnRef.current
+
+    const updateHeight = () => {
+      setTimelineHeight(Math.ceil(element.getBoundingClientRect().height))
+    }
+
+    updateHeight()
+
+    const observer = new ResizeObserver(() => updateHeight())
+    observer.observe(element)
+    window.addEventListener("resize", updateHeight)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", updateHeight)
+    }
+  }, [open, syncTimelineHeight, filteredRecords.length, totalRecords])
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[88vh] overflow-hidden sm:max-w-5xl">
+      <DialogContent className="max-h-[88vh] overflow-hidden sm:max-w-6xl">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
@@ -163,19 +231,19 @@ export function LocationReportDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 overflow-hidden">
-          <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_220px]">
+        <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
+          <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_220px]">
             <Input
               placeholder={t("search")}
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
-              className="max-w-xl"
+              className="min-w-0 max-w-xl"
             />
 
             {user ? (
               <Button
                 variant="outline"
-                className="cursor-default justify-start gap-2 justify-self-start lg:justify-self-end"
+                className="w-full cursor-default justify-start gap-2 lg:w-auto lg:justify-self-end"
                 type="button"
               >
                 <MapPin className="h-4 w-4" />
@@ -184,8 +252,8 @@ export function LocationReportDialog({
             ) : null}
           </div>
 
-          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(320px,0.95fr)]">
-            <div className="space-y-4">
+          <div className="grid min-h-0 gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(360px,0.95fr)] xl:items-start">
+            <div ref={leftColumnRef} className="flex min-h-0 flex-col gap-4">
               {isLoading ? (
                 <div className="flex h-[360px] items-center justify-center rounded-xl border bg-muted/20 text-muted-foreground">
                   <span className="inline-flex items-center gap-2">
@@ -211,29 +279,29 @@ export function LocationReportDialog({
 
               <div className="grid gap-3 md:grid-cols-3">
                 <Card className="gap-0 bg-muted/20 py-0">
-                  <CardContent className="p-4">
-                    <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  <CardContent className="space-y-2 p-4">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                       {t("stat_records")}
                     </div>
-                    <div className="mt-2 text-2xl font-semibold">{totalRecords}</div>
+                    <div className="text-2xl font-semibold">{totalRecords}</div>
                   </CardContent>
                 </Card>
                 <Card className="gap-0 bg-muted/20 py-0">
-                  <CardContent className="p-4">
-                    <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  <CardContent className="space-y-2 p-4">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                       {t("stat_last")}
                     </div>
-                    <div className="mt-2 text-sm font-medium">
+                    <div className="text-sm font-medium leading-5">
                       {records[0] ? formatDateTime(records[0].createdAt, currentLocale) : "--"}
                     </div>
                   </CardContent>
                 </Card>
                 <Card className="gap-0 bg-muted/20 py-0">
-                  <CardContent className="p-4">
-                    <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  <CardContent className="space-y-2 p-4">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                       {t("stat_highlight")}
                     </div>
-                    <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium">
+                    <div className="inline-flex items-center gap-2 text-sm font-medium leading-5">
                       <Sparkles className="h-4 w-4 text-primary" />
                       {selectedRecordId ? t("highlight_selected") : t("highlight_none")}
                     </div>
@@ -242,7 +310,14 @@ export function LocationReportDialog({
               </div>
             </div>
 
-            <Card className="gap-0 overflow-hidden py-0">
+            <Card
+              className="flex min-h-0 flex-col gap-0 overflow-hidden py-0"
+              style={
+                syncTimelineHeight && timelineHeight
+                  ? { height: `${timelineHeight}px` }
+                  : undefined
+              }
+            >
               <div className="border-b bg-muted/20 px-4 py-3">
                 <div className="text-sm font-medium">{t("timeline_title")}</div>
                 <div className="text-xs text-muted-foreground">
@@ -250,8 +325,8 @@ export function LocationReportDialog({
                 </div>
               </div>
 
-              <CardContent className="space-y-4 px-0 pb-0">
-                <div className="px-4 pt-4">
+              <CardContent className="flex min-h-0 flex-1 flex-col gap-4 px-0 pb-0">
+                <div className="border-b px-4 py-4">
                   <LocationReportDateRangePicker
                     dateFrom={dateFrom}
                     dateTo={dateTo}
@@ -263,66 +338,115 @@ export function LocationReportDialog({
                   />
                 </div>
 
-                <div className="max-h-[420px] overflow-auto">
+                <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>{t("col_date")}</TableHead>
-                        <TableHead>{t("col_coords")}</TableHead>
+                        <TableHead className="whitespace-nowrap pr-3">{t("col_date")}</TableHead>
+                        <TableHead className="whitespace-nowrap">{t("col_coords")}</TableHead>
                       </TableRow>
                     </TableHeader>
-                    <TableBody>
-                      {isLoading ? (
-                        <TableRow>
-                          <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
-                            <span className="inline-flex items-center gap-2">
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                              {t("loading_records")}
-                            </span>
-                          </TableCell>
-                        </TableRow>
-                      ) : filteredRecords.length > 0 ? (
-                        filteredRecords.map((record) => {
-                          const isSelected = selectedRecordId === record.id
-
-                          return (
-                            <TableRow
-                              key={record.id}
-                              className="cursor-pointer"
-                              data-state={isSelected ? "selected" : undefined}
-                              onClick={() => setSelectedRecordId(record.id)}
-                            >
-                              <TableCell className="font-medium">
-                                {formatDateTime(record.createdAt, currentLocale)}
-                              </TableCell>
-                              <TableCell className="font-mono text-xs">
-                                {getLocationCoordinatesLabel(record)}
-                              </TableCell>
-                            </TableRow>
-                          )
-                        })
-                      ) : (
-                        <TableRow>
-                          <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
-                            {t("empty")}
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </TableBody>
                   </Table>
+
+                  <div className="min-h-0 flex-1 overflow-auto">
+                    <Table>
+                      <TableBody>
+                        {isLoading ? (
+                          <TableRow>
+                            <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
+                              <span className="inline-flex items-center gap-2">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                {t("loading_records")}
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                        ) : filteredRecords.length > 0 ? (
+                          filteredRecords.map((record) => {
+                            const isSelected = selectedRecordId === record.id
+
+                            return (
+                              <TableRow
+                                key={record.id}
+                                className="cursor-pointer"
+                                data-state={isSelected ? "selected" : undefined}
+                                onClick={() => setSelectedRecordId(record.id)}
+                              >
+                                <TableCell className="whitespace-nowrap pr-3 font-medium">
+                                  {formatDateTime(record.createdAt, currentLocale)}
+                                </TableCell>
+                                <TableCell className="font-mono text-[11px] leading-5 sm:text-xs">
+                                  {getLocationCoordinatesLabel(record)}
+                                </TableCell>
+                              </TableRow>
+                            )
+                          })
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
+                              {t("empty")}
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
 
-                <div className="px-4">
-                  <TablePaginationFooter
-                    total={totalRecords}
-                    page={page}
-                    pageSize={pageSize}
-                    onPageChange={setPage}
-                    onPageSizeChange={(value) => {
-                      setPageSize(value)
-                      setPage(1)
-                    }}
-                  />
+                <div className="border-t px-4 py-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">Exibir</span>
+                      <Select
+                        value={`${pageSize}`}
+                        onValueChange={(value) => {
+                          setPageSize(Number(value))
+                          setPage(1)
+                        }}
+                      >
+                        <SelectTrigger className="h-9 w-[78px] cursor-pointer">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent side="top">
+                          {[10, 20, 30, 50].map((size) => (
+                            <SelectItem key={size} value={`${size}`}>
+                              {size}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                      <div className="text-right text-sm leading-5 text-muted-foreground">
+                        <div className="whitespace-nowrap">
+                          Página {page}/{totalPages}
+                        </div>
+                        <div>{totalRecords} registros</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-9 w-9 cursor-pointer"
+                          onClick={() => setPage(Math.max(1, page - 1))}
+                          disabled={page <= 1}
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                          <span className="sr-only">Página anterior</span>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-9 w-9 cursor-pointer"
+                          onClick={() => setPage(Math.min(totalPages, page + 1))}
+                          disabled={page >= totalPages}
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                          <span className="sr-only">Próxima página</span>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
