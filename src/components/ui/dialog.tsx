@@ -6,6 +6,25 @@ import { XIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+function flattenChildren(children: React.ReactNode): React.ReactNode[] {
+  const items: React.ReactNode[] = []
+
+  React.Children.forEach(children, (child) => {
+    if (React.isValidElement(child) && child.type === React.Fragment) {
+      items.push(
+        ...flattenChildren(
+          (child.props as { children?: React.ReactNode }).children
+        )
+      )
+      return
+    }
+
+    items.push(child)
+  })
+
+  return items
+}
+
 function Dialog({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {
@@ -54,18 +73,56 @@ function DialogContent({
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
 }) {
+  const flatChildren = flattenChildren(children)
+
+  const footerChildren = flatChildren.filter(
+    (child) => React.isValidElement(child) && child.type === DialogFooter
+  )
+
+  const contentChildren = flatChildren.filter(
+    (child) => !(React.isValidElement(child) && child.type === DialogFooter)
+  )
+
+  const hasFooter = footerChildren.length > 0
+
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 flex w-full max-w-[calc(100%-2rem)] max-h-[calc(100dvh-2rem)] translate-x-[-50%] translate-y-[-50%] flex-col overflow-hidden rounded-lg border shadow-lg duration-200 sm:max-w-lg",
           className
         )}
         {...props}
       >
-        {children}
+        <div
+          className={cn(
+            "min-h-0 overflow-y-auto px-6 pt-6",
+            hasFooter ? "flex-1 pb-4" : "pb-6"
+          )}
+        >
+          <div className="flex flex-col gap-4">{contentChildren}</div>
+        </div>
+
+        {hasFooter && (
+          <div className="bg-background shrink-0 px-6 pt-4 pb-6">
+            {footerChildren.map((child, index) => {
+              if (!React.isValidElement(child)) return child
+
+              return React.cloneElement(
+                child as React.ReactElement<{ className?: string }>,
+                {
+                  key: child.key ?? index,
+                  className: cn(
+                    (child.props as { className?: string }).className
+                  ),
+                }
+              )
+            })}
+          </div>
+        )}
+
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
@@ -94,10 +151,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-footer"
-      className={cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
-        className
-      )}
+      className={cn("flex flex-row justify-end gap-2", className)}
       {...props}
     />
   )
