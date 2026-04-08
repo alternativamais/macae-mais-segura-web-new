@@ -1346,26 +1346,26 @@
   "access_control": {
     "title": "Controle de Acesso",
     "description": "Gerencie bloqueios, políticas regionais, regras por usuário e exigência de localização.",
-  "error_load_users": "Erro ao carregar lista de usuários.",
-  "shared": {
-    "status_active": "Ativo",
-    "status_inactive": "Inativo",
-    "action_allow": "Permitir",
-    "action_block": "Bloquear",
-    "ip_mode_single": "IP específico",
-    "ip_mode_cidr": "Bloco CIDR",
-    "ip_mode_range": "Intervalo de IPs",
-    "days": {
-      "all": "Todos os dias",
-      "monday": "Segunda-feira",
-      "tuesday": "Terça-feira",
-      "wednesday": "Quarta-feira",
-      "thursday": "Quinta-feira",
-      "friday": "Sexta-feira",
-      "saturday": "Sábado",
-      "sunday": "Domingo"
-    }
-  },
+    "error_load_users": "Erro ao carregar lista de usuários.",
+    "shared": {
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "action_allow": "Permitir",
+      "action_block": "Bloquear",
+      "ip_mode_single": "IP específico",
+      "ip_mode_cidr": "Bloco CIDR",
+      "ip_mode_range": "Intervalo de IPs",
+      "days": {
+        "all": "Todos os dias",
+        "monday": "Segunda-feira",
+        "tuesday": "Terça-feira",
+        "wednesday": "Quarta-feira",
+        "thursday": "Quinta-feira",
+        "friday": "Sexta-feira",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+      }
+    },
     "tabs": {
       "ip_blocks": "Bloqueios de IP",
       "region_rules": "Regras por região",
@@ -1420,10 +1420,10 @@
       "details_desc": "Descrição",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
-    "status_active": "Ativo",
-    "status_inactive": "Inativo",
-    "open_actions": "Abrir ações",
-    "delete_title": "Excluir bloqueio de IP",
+      "status_active": "Ativo",
+      "status_inactive": "Inativo",
+      "open_actions": "Abrir ações",
+      "delete_title": "Excluir bloqueio de IP",
       "delete_desc": "Deseja realmente excluir este bloqueio de IP? Esta ação é irreversível.",
       "button_delete": "Excluir"
     },
@@ -1487,10 +1487,10 @@
       "details_desc": "Descrição",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
-    "status_active": "Ativa",
-    "status_inactive": "Inativa",
-    "open_actions": "Abrir ações",
-    "delete_title": "Excluir regra regional",
+      "status_active": "Ativa",
+      "status_inactive": "Inativa",
+      "open_actions": "Abrir ações",
+      "delete_title": "Excluir regra regional",
       "delete_desc": "Deseja realmente excluir esta regra regional? Esta ação é irreversível.",
       "button_delete": "Excluir"
     },
@@ -1549,10 +1549,10 @@
       "details_desc": "Descrição",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
-    "status_active": "Ativa",
-    "status_inactive": "Inativa",
-    "open_actions": "Abrir ações",
-    "delete_title": "Excluir regra de IP por usuário",
+      "status_active": "Ativa",
+      "status_inactive": "Inativa",
+      "open_actions": "Abrir ações",
+      "delete_title": "Excluir regra de IP por usuário",
       "delete_desc": "Deseja realmente excluir esta regra de IP por usuário? Esta ação é irreversível.",
       "button_delete": "Excluir"
     },
@@ -1625,10 +1625,10 @@
       "details_desc": "Descrição",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
-    "status_active": "Ativa",
-    "status_inactive": "Inativa",
-    "open_actions": "Abrir ações",
-    "delete_title": "Excluir regra de horário",
+      "status_active": "Ativa",
+      "status_inactive": "Inativa",
+      "open_actions": "Abrir ações",
+      "delete_title": "Excluir regra de horário",
       "delete_desc": "Deseja realmente excluir esta regra de horário? Esta ação é irreversível.",
       "button_delete": "Excluir"
     },
@@ -1676,76 +1676,76 @@
       "col_actions": "Ações",
       "status_required": "Obrigatório",
       "status_optional": "Opcional",
-    "actions": {
-      "view_report": "Ver histórico",
-      "disable_req": "Desativar requisito",
-      "enable_req": "Ativar requisito"
+      "actions": {
+        "view_report": "Ver histórico",
+        "disable_req": "Desativar requisito",
+        "enable_req": "Ativar requisito"
+      },
+      "open_actions": "Abrir ações",
+      "empty": "Nenhum usuário encontrado."
     },
-    "open_actions": "Abrir ações",
-    "empty": "Nenhum usuário encontrado."
-  },
-  "trap_routes_tab": {
-    "error_load": "Erro ao carregar rotas armadilha.",
-    "error_delete": "Erro ao remover rota armadilha.",
-    "success_delete": "Rota armadilha removida com sucesso.",
-    "no_permission_title": "Sem permissão para listar rotas armadilha",
-    "no_permission_desc": "Seu perfil não possui acesso a esta aba.",
-    "search": "Buscar rota ou método...",
-    "new_route": "Nova rota armadilha",
-    "col_path": "Rota",
-    "col_method": "Método",
-    "col_autoblock": "Bloqueio Auto",
-    "col_status": "Status",
-    "col_updated": "Atualizado em",
-    "col_actions": "Ações",
-    "no_desc": "Sem descrição",
-    "actions": {
-      "view": "Ver detalhes",
-      "edit": "Editar",
-      "delete": "Excluir"
+    "trap_routes_tab": {
+      "error_load": "Erro ao carregar rotas armadilha.",
+      "error_delete": "Erro ao remover rota armadilha.",
+      "success_delete": "Rota armadilha removida com sucesso.",
+      "no_permission_title": "Sem permissão para listar rotas armadilha",
+      "no_permission_desc": "Seu perfil não possui acesso a esta aba.",
+      "search": "Buscar rota ou método...",
+      "new_route": "Nova rota armadilha",
+      "col_path": "Rota",
+      "col_method": "Método",
+      "col_autoblock": "Bloqueio Auto",
+      "col_status": "Status",
+      "col_updated": "Atualizado em",
+      "col_actions": "Ações",
+      "no_desc": "Sem descrição",
+      "actions": {
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
+      "loading": "Carregando...",
+      "empty": "Nenhuma rota armadilha encontrada.",
+      "details_title": "Detalhes da rota armadilha",
+      "details_path": "Rota",
+      "details_method": "Método",
+      "details_autoblock": "Bloqueio auto",
+      "details_status": "Status",
+      "details_desc": "Descrição",
+      "details_created": "Criado em",
+      "details_updated": "Atualizado em",
+      "status_active": "Ativa",
+      "status_inactive": "Inativa",
+      "autoblock_yes": "Sim",
+      "autoblock_no": "Não",
+      "open_actions": "Abrir ações",
+      "delete_title": "Excluir rota armadilha",
+      "delete_desc": "Deseja realmente excluir esta rota armadilha? Esta ação é irreversível.",
+      "button_delete": "Excluir"
     },
-    "loading": "Carregando...",
-    "empty": "Nenhuma rota armadilha encontrada.",
-    "details_title": "Detalhes da rota armadilha",
-    "details_path": "Rota",
-    "details_method": "Método",
-    "details_autoblock": "Bloqueio auto",
-    "details_status": "Status",
-    "details_desc": "Descrição",
-    "details_created": "Criado em",
-    "details_updated": "Atualizado em",
-    "status_active": "Ativa",
-    "status_inactive": "Inativa",
-    "autoblock_yes": "Sim",
-    "autoblock_no": "Não",
-    "open_actions": "Abrir ações",
-    "delete_title": "Excluir rota armadilha",
-    "delete_desc": "Deseja realmente excluir esta rota armadilha? Esta ação é irreversível.",
-    "button_delete": "Excluir"
-  },
-  "trap_route_form": {
-    "val_path": "Informe o caminho da rota (ex: /wp-admin).",
-    "success_edit": "Rota armadilha atualizada com sucesso.",
-    "success_new": "Rota armadilha criada com sucesso.",
-    "error_save": "Erro ao salvar rota armadilha.",
-    "title_edit": "Editar rota armadilha",
-    "title_new": "Nova rota armadilha",
-    "desc": "Defina caminhos conhecidos por bots (honeypots) para bloquear o IP automaticamente quando acessados.",
-    "label_path": "Caminho da rota",
-    "placeholder_path": "Ex.: /wp-login.php",
-    "label_method": "Método HTTP",
-    "placeholder_method": "Selecione ou digite",
-    "method_desc": "Use * para aplicar a todos os métodos.",
-    "label_autoblock": "Bloqueio Automático",
-    "autoblock_desc": "Se ativo, adiciona o IP do atacante automaticamente aos bloqueios do sistema.",
-    "label_desc": "Descrição",
-    "placeholder_desc": "Campo opcional.",
-    "label_active": "Rota ativa",
-    "active_hint": "Define se o honeypot está ativado.",
-    "button_cancel": "Cancelar",
-    "button_save": "Salvar"
-  },
-  "location_report_dialog": {
+    "trap_route_form": {
+      "val_path": "Informe o caminho da rota (ex: /wp-admin).",
+      "success_edit": "Rota armadilha atualizada com sucesso.",
+      "success_new": "Rota armadilha criada com sucesso.",
+      "error_save": "Erro ao salvar rota armadilha.",
+      "title_edit": "Editar rota armadilha",
+      "title_new": "Nova rota armadilha",
+      "desc": "Defina caminhos conhecidos por bots (honeypots) para bloquear o IP automaticamente quando acessados.",
+      "label_path": "Caminho da rota",
+      "placeholder_path": "Ex.: /wp-login.php",
+      "label_method": "Método HTTP",
+      "placeholder_method": "Selecione ou digite",
+      "method_desc": "Use * para aplicar a todos os métodos.",
+      "label_autoblock": "Bloqueio Automático",
+      "autoblock_desc": "Se ativo, adiciona o IP do atacante automaticamente aos bloqueios do sistema.",
+      "label_desc": "Descrição",
+      "placeholder_desc": "Campo opcional.",
+      "label_active": "Rota ativa",
+      "active_hint": "Define se o honeypot está ativado.",
+      "button_cancel": "Cancelar",
+      "button_save": "Salvar"
+    },
+    "location_report_dialog": {
       "loading_map": "Carregando mapa...",
       "error_load": "Erro ao carregar histórico de localização.",
       "title": "Histórico de localização",
@@ -1760,28 +1760,28 @@
       "stat_highlight": "Destaque",
       "highlight_selected": "Ponto selecionado",
       "highlight_none": "Sem seleção",
-    "timeline_title": "Linha do tempo",
-    "timeline_desc": "Clique em um registro para destacar o ponto no mapa.",
-    "map_missing_key_title": "Google Maps não configurado",
-    "map_missing_key_desc": "Defina `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` para renderizar o mapa.",
-    "map_load_error_title": "Não foi possível carregar o Google Maps",
-    "map_load_error_desc": "Verifique a chave da API e as restrições configuradas no projeto.",
-    "map_card_title": "Mapa de deslocamento",
-    "map_points_count": "{count} registros plotados",
-    "map_last_point": "Último ponto",
-    "col_date": "Data e hora",
+      "timeline_title": "Linha do tempo",
+      "timeline_desc": "Clique em um registro para destacar o ponto no mapa.",
+      "map_missing_key_title": "Google Maps não configurado",
+      "map_missing_key_desc": "Defina `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` para renderizar o mapa.",
+      "map_load_error_title": "Não foi possível carregar o Google Maps",
+      "map_load_error_desc": "Verifique a chave da API e as restrições configuradas no projeto.",
+      "map_card_title": "Mapa de deslocamento",
+      "map_points_count": "{count} registros plotados",
+      "map_last_point": "Último ponto",
+      "col_date": "Data e hora",
       "col_coords": "Latitude / Longitude",
       "empty": "Nenhum registro encontrado."
     }
   },
   "backup": {
-  "title": "Backup do Sistema",
-  "description": "Gerencie snapshots, restaurações e a automação de backup do ambiente.",
-  "tabs": {
-    "history": "Histórico",
-    "settings": "Automação"
-  },
-  "details_dialog": {
+    "title": "Backup do Sistema",
+    "description": "Gerencie snapshots, restaurações e a automação de backup do ambiente.",
+    "tabs": {
+      "history": "Histórico",
+      "settings": "Automação"
+    },
+    "details_dialog": {
       "title": "Detalhes do backup",
       "desc": "Informações técnicas do arquivo selecionado.",
       "file": "Arquivo",
@@ -1819,13 +1819,13 @@
       "format_unknown": "Formato não identificado",
       "records_count": "{count} registros",
       "no_notes": "Sem observações",
-    "actions": {
-      "view": "Ver detalhes",
-      "download": "Baixar arquivo",
-      "restore": "Restaurar"
-    },
-    "open_actions": "Abrir ações",
-    "loading": "Carregando...",
+      "actions": {
+        "view": "Ver detalhes",
+        "download": "Baixar arquivo",
+        "restore": "Restaurar"
+      },
+      "open_actions": "Abrir ações",
+      "loading": "Carregando...",
       "empty": "Nenhum backup encontrado.",
       "no_permission_list_title": "Sem permissão para listar backups",
       "no_permission_list_desc": "Seu perfil ainda não possui acesso ao histórico de backups."
@@ -1952,7 +1952,7 @@
       "assignment": "Atribuição (API)",
       "screens": "Telas (Frontend)"
     },
-  "roles_tab": {
+    "roles_tab": {
       "search": "Buscar cargo...",
       "new_role": "Novo cargo",
       "col_name": "Nome do cargo",
@@ -1974,12 +1974,12 @@
       "details_desc": "Descrição",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
-    "delete_dialog_title": "Excluir cargo",
-    "delete_dialog_desc": "Deseja realmente excluir este cargo? Esta ação é irreversível.",
-    "button_delete": "Excluir",
-    "open_actions": "Abrir ações"
-  },
-  "permissions_tab": {
+      "delete_dialog_title": "Excluir cargo",
+      "delete_dialog_desc": "Deseja realmente excluir este cargo? Esta ação é irreversível.",
+      "button_delete": "Excluir",
+      "open_actions": "Abrir ações"
+    },
+    "permissions_tab": {
       "search": "Buscar permissão...",
       "new": "Nova permissão",
       "col_name": "Permissão",
@@ -1996,17 +1996,17 @@
       "details_group": "Grupo",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
-    "delete_dialog_title": "Excluir permissão",
-    "delete_dialog_desc": "Deseja realmente excluir esta permissão? Esta ação é irreversível.",
-    "button_delete": "Excluir",
-    "actions": {
-      "view": "Ver detalhes",
-      "edit": "Editar",
-      "delete": "Excluir"
+      "delete_dialog_title": "Excluir permissão",
+      "delete_dialog_desc": "Deseja realmente excluir esta permissão? Esta ação é irreversível.",
+      "button_delete": "Excluir",
+      "actions": {
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir"
+      },
+      "open_actions": "Abrir ações"
     },
-    "open_actions": "Abrir ações"
-  },
-  "assignment_tab": {
+    "assignment_tab": {
       "search": "Buscar permissão...",
       "role": "Cargo",
       "select_role": "Selecione um cargo",
@@ -2014,16 +2014,16 @@
       "empty_title": "Nenhuma permissão encontrada",
       "empty_desc": "Ajuste a busca para localizar permissões dentro dos grupos disponíveis.",
       "start_title": "Selecione um cargo para começar",
-    "start_desc": "Escolha um cargo na barra superior para visualizar e consolidar suas permissões de API.",
-    "success": "Permissões atualizadas com sucesso.",
-    "error_roles": "Erro ao carregar cargos.",
-    "error_perms": "Erro ao carregar permissões disponíveis.",
-    "error_role_perms": "Erro ao carregar permissões deste cargo.",
-    "error_save": "Erro ao consolidar permissões.",
-    "fallback_group": "Sem grupo",
-    "selection_count": "{selected} de {total}"
-  },
-  "screens_tab": {
+      "start_desc": "Escolha um cargo na barra superior para visualizar e consolidar suas permissões de API.",
+      "success": "Permissões atualizadas com sucesso.",
+      "error_roles": "Erro ao carregar cargos.",
+      "error_perms": "Erro ao carregar permissões disponíveis.",
+      "error_role_perms": "Erro ao carregar permissões deste cargo.",
+      "error_save": "Erro ao consolidar permissões.",
+      "fallback_group": "Sem grupo",
+      "selection_count": "{selected} de {total}"
+    },
+    "screens_tab": {
       "search": "Buscar tela...",
       "role": "Cargo",
       "select_role": "Selecione um cargo",
@@ -2031,27 +2031,27 @@
       "empty_title": "Nenhuma tela encontrada",
       "empty_desc": "Ajuste a busca para localizar telas dentro dos grupos disponíveis.",
       "start_title": "Selecione um cargo para começar",
-    "start_desc": "Escolha um cargo na barra superior para visualizar e consolidar as telas permitidas no frontend.",
-    "success": "Telas atualizadas com sucesso. Relogue para aplicar no menu local.",
-    "error_roles": "Erro ao carregar cargos.",
-    "error_screens": "Erro ao carregar telas disponíveis.",
-    "error_role_screens": "Erro ao carregar telas permitidas deste cargo.",
-    "error_save": "Erro ao consolidar telas.",
-    "fallback_group": "Sem grupo",
-    "selection_count": "{selected} de {total}"
-  },
-  "stats": {
-    "roles": "Cargos",
-    "roles_desc": "Perfis administrativos configurados.",
-    "permissions": "Permissões API",
-    "permissions_desc": "Chaves disponíveis para autorização backend.",
-    "screens": "Telas frontend",
-    "screens_desc": "Rotas e telas mapeadas para acesso web.",
-    "groups": "Grupos de permissão",
-    "groups_desc": "Agrupamentos lógicos usados na organização.",
-    "loading": "Carregando"
-  },
-  "role_form": {
+      "start_desc": "Escolha um cargo na barra superior para visualizar e consolidar as telas permitidas no frontend.",
+      "success": "Telas atualizadas com sucesso. Relogue para aplicar no menu local.",
+      "error_roles": "Erro ao carregar cargos.",
+      "error_screens": "Erro ao carregar telas disponíveis.",
+      "error_role_screens": "Erro ao carregar telas permitidas deste cargo.",
+      "error_save": "Erro ao consolidar telas.",
+      "fallback_group": "Sem grupo",
+      "selection_count": "{selected} de {total}"
+    },
+    "stats": {
+      "roles": "Cargos",
+      "roles_desc": "Perfis administrativos configurados.",
+      "permissions": "Permissões API",
+      "permissions_desc": "Chaves disponíveis para autorização backend.",
+      "screens": "Telas frontend",
+      "screens_desc": "Rotas e telas mapeadas para acesso web.",
+      "groups": "Grupos de permissão",
+      "groups_desc": "Agrupamentos lógicos usados na organização.",
+      "loading": "Carregando"
+    },
+    "role_form": {
       "title_edit": "Editar Cargo",
       "title_new": "Novo Cargo",
       "desc_edit": "Atualize as informações do cargo.",
@@ -2885,7 +2885,7 @@
         "latitude": "Latitude",
         "longitude": "Longitude",
         "radius": "Raio (km)",
-        "max_age": "Idade máxima da localização (min)",
+        "max_age": "Idade máxima da localização",
         "data": "Dados extras (JSON)"
       },
       "placeholders": {
@@ -3014,14 +3014,41 @@
         "labels": {
           "name": "Nome",
           "description": "Descrição",
-          "latitude": "Latitude",
-          "longitude": "Longitude",
+          "coordinates": "Coordenadas",
           "radius": "Raio (km)",
-          "max_age": "Idade máxima da localização (min)"
+          "max_age": "Idade máxima da localização"
         },
         "placeholders": {
           "name": "Ex.: Praça Veríssimo de Melo",
-          "description": "Ex.: Área central para eventos e ocorrências"
+          "description": "Ex.: Área central para eventos e ocorrências",
+          "coordinates": "Ex.: -22.376534,-41.794399"
+        },
+        "actions": {
+          "select_on_map": "Selecionar no mapa",
+          "adjust_on_map": "Ajustar no mapa"
+        },
+        "map_picker": {
+          "title": "Selecionar área no mapa",
+          "description": "Defina o centro da localidade e ajuste o raio e a idade máxima da localização.",
+          "map_title": "Área da localidade",
+          "instructions": "Clique no mapa para posicionar o centro da localidade.",
+          "settings_title": "Configurações da área",
+          "settings_desc": "Os parâmetros abaixo serão salvos junto com a localidade.",
+          "labels": {
+            "coordinates": "Coordenadas",
+            "radius": "Raio (km)",
+            "max_age": "Idade máxima da localização"
+          },
+          "buttons": {
+            "cancel": "Cancelar",
+            "confirm": "Aplicar seleção"
+          },
+          "loading": "Carregando mapa...",
+          "no_selection": "Nenhum ponto selecionado.",
+          "missing_key_title": "Google Maps não configurado",
+          "missing_key_desc": "Defina NEXT_PUBLIC_GOOGLE_MAPS_API_KEY para selecionar coordenadas no mapa.",
+          "load_error_title": "Não foi possível carregar o mapa",
+          "load_error_desc": "Verifique a chave do Google Maps e tente novamente."
         },
         "buttons": {
           "cancel": "Cancelar",
@@ -3036,10 +3063,15 @@
         },
         "validations": {
           "name": "Informe o nome da localidade.",
-          "latitude": "Informe uma latitude válida.",
-          "longitude": "Informe uma longitude válida.",
+          "coordinates": "Informe coordenadas válidas no formato latitude,longitude.",
           "radius": "Informe um raio válido.",
           "max_age": "Informe uma idade máxima válida."
+        },
+        "selected_coordinates": "Coordenadas selecionadas: {coordinates}",
+        "no_coordinates": "Nenhuma coordenada selecionada.",
+        "summary": {
+          "radius": "Valor definido na seleção do mapa",
+          "max_age": "Valor definido na seleção do mapa"
         }
       }
     }

@@ -144,23 +144,23 @@
         "role_required": "Select a role."
       }
     },
-  "details": {
-    "title": "User Details",
-    "description": "Registration information for {name}.",
-    "labels": {
-      "name": "Name",
-      "username": "Username",
-      "email": "Email",
-      "role": "Role",
-      "status": "Status",
-      "birthday": "Birthday",
-      "location_required": "Location required",
-      "id": "ID"
-    },
-    "not_informed": "Not informed",
-    "yes": "Yes",
-    "no": "No",
-    "location_required": "Location required"
+    "details": {
+      "title": "User Details",
+      "description": "Registration information for {name}.",
+      "labels": {
+        "name": "Name",
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "status": "Status",
+        "birthday": "Birthday",
+        "location_required": "Location required",
+        "id": "ID"
+      },
+      "not_informed": "Not informed",
+      "yes": "Yes",
+      "no": "No",
+      "location_required": "Location required"
     }
   },
   "cameras": {
@@ -1346,26 +1346,26 @@
   "access_control": {
     "title": "Access Control",
     "description": "Manage IP blocks, regional policies, user rules, and location requirements.",
-  "error_load_users": "Error loading users list.",
-  "shared": {
-    "status_active": "Active",
-    "status_inactive": "Inactive",
-    "action_allow": "Allow",
-    "action_block": "Block",
-    "ip_mode_single": "Specific IP",
-    "ip_mode_cidr": "CIDR block",
-    "ip_mode_range": "IP range",
-    "days": {
-      "all": "Every day",
-      "monday": "Monday",
-      "tuesday": "Tuesday",
-      "wednesday": "Wednesday",
-      "thursday": "Thursday",
-      "friday": "Friday",
-      "saturday": "Saturday",
-      "sunday": "Sunday"
-    }
-  },
+    "error_load_users": "Error loading users list.",
+    "shared": {
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "action_allow": "Allow",
+      "action_block": "Block",
+      "ip_mode_single": "Specific IP",
+      "ip_mode_cidr": "CIDR block",
+      "ip_mode_range": "IP range",
+      "days": {
+        "all": "Every day",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      }
+    },
     "tabs": {
       "ip_blocks": "IP Blocks",
       "region_rules": "Region Rules",
@@ -1420,10 +1420,10 @@
       "details_desc": "Description",
       "details_created": "Created at",
       "details_updated": "Updated at",
-    "status_active": "Active",
-    "status_inactive": "Inactive",
-    "open_actions": "Open actions",
-    "delete_title": "Delete IP block",
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "open_actions": "Open actions",
+      "delete_title": "Delete IP block",
       "delete_desc": "Are you sure you want to delete this IP block? This action is irreversible.",
       "button_delete": "Delete"
     },
@@ -1487,10 +1487,10 @@
       "details_desc": "Description",
       "details_created": "Created at",
       "details_updated": "Updated at",
-    "status_active": "Active",
-    "status_inactive": "Inactive",
-    "open_actions": "Open actions",
-    "delete_title": "Delete region rule",
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "open_actions": "Open actions",
+      "delete_title": "Delete region rule",
       "delete_desc": "Are you sure you want to delete this region rule? This action is irreversible.",
       "button_delete": "Delete"
     },
@@ -1549,10 +1549,10 @@
       "details_desc": "Description",
       "details_created": "Created at",
       "details_updated": "Updated at",
-    "status_active": "Active",
-    "status_inactive": "Inactive",
-    "open_actions": "Open actions",
-    "delete_title": "Delete user IP rule",
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "open_actions": "Open actions",
+      "delete_title": "Delete user IP rule",
       "delete_desc": "Are you sure you want to delete this user IP rule? This action is irreversible.",
       "button_delete": "Delete"
     },
@@ -1625,10 +1625,10 @@
       "details_desc": "Description",
       "details_created": "Created at",
       "details_updated": "Updated at",
-    "status_active": "Active",
-    "status_inactive": "Inactive",
-    "open_actions": "Open actions",
-    "delete_title": "Delete schedule rule",
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "open_actions": "Open actions",
+      "delete_title": "Delete schedule rule",
       "delete_desc": "Are you sure you want to delete this schedule rule? This action is irreversible.",
       "button_delete": "Delete"
     },
@@ -1676,76 +1676,76 @@
       "col_actions": "Actions",
       "status_required": "Required",
       "status_optional": "Optional",
-    "actions": {
-      "view_report": "View history",
-      "disable_req": "Disable requirement",
-      "enable_req": "Enable requirement"
+      "actions": {
+        "view_report": "View history",
+        "disable_req": "Disable requirement",
+        "enable_req": "Enable requirement"
+      },
+      "open_actions": "Open actions",
+      "empty": "No user found."
     },
-    "open_actions": "Open actions",
-    "empty": "No user found."
-  },
-  "trap_routes_tab": {
-    "error_load": "Error loading trap routes.",
-    "error_delete": "Error deleting trap route.",
-    "success_delete": "Trap route deleted successfully.",
-    "no_permission_title": "No permission to list trap routes",
-    "no_permission_desc": "Your profile does not have access to this tab.",
-    "search": "Search route or method...",
-    "new_route": "New trap route",
-    "col_path": "Path",
-    "col_method": "Method",
-    "col_autoblock": "Auto Block",
-    "col_status": "Status",
-    "col_updated": "Updated at",
-    "col_actions": "Actions",
-    "no_desc": "No description",
-    "actions": {
-      "view": "View details",
-      "edit": "Edit",
-      "delete": "Delete"
+    "trap_routes_tab": {
+      "error_load": "Error loading trap routes.",
+      "error_delete": "Error deleting trap route.",
+      "success_delete": "Trap route deleted successfully.",
+      "no_permission_title": "No permission to list trap routes",
+      "no_permission_desc": "Your profile does not have access to this tab.",
+      "search": "Search route or method...",
+      "new_route": "New trap route",
+      "col_path": "Path",
+      "col_method": "Method",
+      "col_autoblock": "Auto Block",
+      "col_status": "Status",
+      "col_updated": "Updated at",
+      "col_actions": "Actions",
+      "no_desc": "No description",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "loading": "Loading...",
+      "empty": "No trap route found.",
+      "details_title": "Trap route details",
+      "details_path": "Path",
+      "details_method": "Method",
+      "details_autoblock": "Auto block",
+      "details_status": "Status",
+      "details_desc": "Description",
+      "details_created": "Created at",
+      "details_updated": "Updated at",
+      "status_active": "Active",
+      "status_inactive": "Inactive",
+      "autoblock_yes": "Yes",
+      "autoblock_no": "No",
+      "open_actions": "Open actions",
+      "delete_title": "Delete trap route",
+      "delete_desc": "Do you really want to delete this trap route? This action is irreversible.",
+      "button_delete": "Delete"
     },
-    "loading": "Loading...",
-    "empty": "No trap route found.",
-    "details_title": "Trap route details",
-    "details_path": "Path",
-    "details_method": "Method",
-    "details_autoblock": "Auto block",
-    "details_status": "Status",
-    "details_desc": "Description",
-    "details_created": "Created at",
-    "details_updated": "Updated at",
-    "status_active": "Active",
-    "status_inactive": "Inactive",
-    "autoblock_yes": "Yes",
-    "autoblock_no": "No",
-    "open_actions": "Open actions",
-    "delete_title": "Delete trap route",
-    "delete_desc": "Do you really want to delete this trap route? This action is irreversible.",
-    "button_delete": "Delete"
-  },
-  "trap_route_form": {
-    "val_path": "Enter the route path (e.g. /wp-admin).",
-    "success_edit": "Trap route updated successfully.",
-    "success_new": "Trap route created successfully.",
-    "error_save": "Error saving trap route.",
-    "title_edit": "Edit trap route",
-    "title_new": "New trap route",
-    "desc": "Define known bot paths (honeypots) to automatically block the IP when accessed.",
-    "label_path": "Route path",
-    "placeholder_path": "Ex.: /wp-login.php",
-    "label_method": "HTTP Method",
-    "placeholder_method": "Select or type",
-    "method_desc": "Use * to apply to all methods.",
-    "label_autoblock": "Auto Block",
-    "autoblock_desc": "If active, automatically adds the attacker's IP to the system's IP blocks.",
-    "label_desc": "Description",
-    "placeholder_desc": "Optional clarification.",
-    "label_active": "Active route",
-    "active_hint": "Sets whether the honeypot is enabled.",
-    "button_cancel": "Cancel",
-    "button_save": "Save"
-  },
-  "location_report_dialog": {
+    "trap_route_form": {
+      "val_path": "Enter the route path (e.g. /wp-admin).",
+      "success_edit": "Trap route updated successfully.",
+      "success_new": "Trap route created successfully.",
+      "error_save": "Error saving trap route.",
+      "title_edit": "Edit trap route",
+      "title_new": "New trap route",
+      "desc": "Define known bot paths (honeypots) to automatically block the IP when accessed.",
+      "label_path": "Route path",
+      "placeholder_path": "Ex.: /wp-login.php",
+      "label_method": "HTTP Method",
+      "placeholder_method": "Select or type",
+      "method_desc": "Use * to apply to all methods.",
+      "label_autoblock": "Auto Block",
+      "autoblock_desc": "If active, automatically adds the attacker's IP to the system's IP blocks.",
+      "label_desc": "Description",
+      "placeholder_desc": "Optional clarification.",
+      "label_active": "Active route",
+      "active_hint": "Sets whether the honeypot is enabled.",
+      "button_cancel": "Cancel",
+      "button_save": "Save"
+    },
+    "location_report_dialog": {
       "loading_map": "Loading map...",
       "error_load": "Error loading location history.",
       "title": "Location history",
@@ -1760,28 +1760,28 @@
       "stat_highlight": "Highlight",
       "highlight_selected": "Selected point",
       "highlight_none": "No selection",
-    "timeline_title": "Timeline",
-    "timeline_desc": "Click on a record to highlight the point on the map.",
-    "map_missing_key_title": "Google Maps not configured",
-    "map_missing_key_desc": "Set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to render the map.",
-    "map_load_error_title": "Unable to load Google Maps",
-    "map_load_error_desc": "Check the API key and the restrictions configured in the project.",
-    "map_card_title": "Travel map",
-    "map_points_count": "{count} plotted records",
-    "map_last_point": "Last point",
-    "col_date": "Date and time",
+      "timeline_title": "Timeline",
+      "timeline_desc": "Click on a record to highlight the point on the map.",
+      "map_missing_key_title": "Google Maps not configured",
+      "map_missing_key_desc": "Set `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` to render the map.",
+      "map_load_error_title": "Unable to load Google Maps",
+      "map_load_error_desc": "Check the API key and the restrictions configured in the project.",
+      "map_card_title": "Travel map",
+      "map_points_count": "{count} plotted records",
+      "map_last_point": "Last point",
+      "col_date": "Date and time",
       "col_coords": "Latitude / Longitude",
       "empty": "No record found."
     }
   },
   "backup": {
-  "title": "System Backup",
-  "description": "Manage snapshots, restores, and backup automation for the environment.",
-  "tabs": {
-    "history": "History",
-    "settings": "Automation"
-  },
-  "details_dialog": {
+    "title": "System Backup",
+    "description": "Manage snapshots, restores, and backup automation for the environment.",
+    "tabs": {
+      "history": "History",
+      "settings": "Automation"
+    },
+    "details_dialog": {
       "title": "Backup details",
       "desc": "Technical info of the selected file.",
       "file": "File",
@@ -1819,13 +1819,13 @@
       "format_unknown": "Unknown format",
       "records_count": "{count} records",
       "no_notes": "No notes",
-    "actions": {
-      "view": "View details",
-      "download": "Download file",
-      "restore": "Restore"
-    },
-    "open_actions": "Open actions",
-    "loading": "Loading...",
+      "actions": {
+        "view": "View details",
+        "download": "Download file",
+        "restore": "Restore"
+      },
+      "open_actions": "Open actions",
+      "loading": "Loading...",
       "empty": "No backup found.",
       "no_permission_list_title": "No permission to list backups",
       "no_permission_list_desc": "Your profile doesn't have access to the backup history yet."
@@ -1952,7 +1952,7 @@
       "assignment": "Assignment (API)",
       "screens": "Screens (Frontend)"
     },
-  "roles_tab": {
+    "roles_tab": {
       "search": "Search role...",
       "new_role": "New role",
       "col_name": "Role name",
@@ -1974,12 +1974,12 @@
       "details_desc": "Description",
       "details_created": "Created at",
       "details_updated": "Updated at",
-    "delete_dialog_title": "Delete role",
-    "delete_dialog_desc": "Are you sure you want to delete this role? This action is irreversible.",
-    "button_delete": "Delete",
-    "open_actions": "Open actions"
-  },
-  "permissions_tab": {
+      "delete_dialog_title": "Delete role",
+      "delete_dialog_desc": "Are you sure you want to delete this role? This action is irreversible.",
+      "button_delete": "Delete",
+      "open_actions": "Open actions"
+    },
+    "permissions_tab": {
       "search": "Search permission...",
       "new": "New permission",
       "col_name": "Permission",
@@ -1996,17 +1996,17 @@
       "details_group": "Group",
       "details_created": "Created at",
       "details_updated": "Updated at",
-    "delete_dialog_title": "Delete permission",
-    "delete_dialog_desc": "Are you sure you want to delete this permission? This action is irreversible.",
-    "button_delete": "Delete",
-    "actions": {
-      "view": "View details",
-      "edit": "Edit",
-      "delete": "Delete"
+      "delete_dialog_title": "Delete permission",
+      "delete_dialog_desc": "Are you sure you want to delete this permission? This action is irreversible.",
+      "button_delete": "Delete",
+      "actions": {
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "open_actions": "Open actions"
     },
-    "open_actions": "Open actions"
-  },
-  "assignment_tab": {
+    "assignment_tab": {
       "search": "Search permission...",
       "role": "Role",
       "select_role": "Select a role",
@@ -2014,16 +2014,16 @@
       "empty_title": "No permissions found",
       "empty_desc": "Adjust search to find permissions within available groups.",
       "start_title": "Select a role to start",
-    "start_desc": "Choose a role in the top bar to view and consolidate its API permissions.",
-    "success": "Permissions updated successfully.",
-    "error_roles": "Error loading roles.",
-    "error_perms": "Error loading available permissions.",
-    "error_role_perms": "Error loading permissions for this role.",
-    "error_save": "Error consolidating permissions.",
-    "fallback_group": "No group",
-    "selection_count": "{selected} of {total}"
-  },
-  "screens_tab": {
+      "start_desc": "Choose a role in the top bar to view and consolidate its API permissions.",
+      "success": "Permissions updated successfully.",
+      "error_roles": "Error loading roles.",
+      "error_perms": "Error loading available permissions.",
+      "error_role_perms": "Error loading permissions for this role.",
+      "error_save": "Error consolidating permissions.",
+      "fallback_group": "No group",
+      "selection_count": "{selected} of {total}"
+    },
+    "screens_tab": {
       "search": "Search screen...",
       "role": "Role",
       "select_role": "Select a role",
@@ -2031,27 +2031,27 @@
       "empty_title": "No screens found",
       "empty_desc": "Adjust search to find screens within available groups.",
       "start_title": "Select a role to start",
-    "start_desc": "Choose a role in the top bar to view and consolidate allowed frontend screens.",
-    "success": "Screens updated successfully. Re-login to apply to local menu.",
-    "error_roles": "Error loading roles.",
-    "error_screens": "Error loading available screens.",
-    "error_role_screens": "Error loading allowed screens for this role.",
-    "error_save": "Error consolidating screens.",
-    "fallback_group": "No group",
-    "selection_count": "{selected} of {total}"
-  },
-  "stats": {
-    "roles": "Roles",
-    "roles_desc": "Configured administrative profiles.",
-    "permissions": "API permissions",
-    "permissions_desc": "Available keys for backend authorization.",
-    "screens": "Frontend screens",
-    "screens_desc": "Routes and screens mapped for web access.",
-    "groups": "Permission groups",
-    "groups_desc": "Logical groupings used for organization.",
-    "loading": "Loading"
-  },
-  "role_form": {
+      "start_desc": "Choose a role in the top bar to view and consolidate allowed frontend screens.",
+      "success": "Screens updated successfully. Re-login to apply to local menu.",
+      "error_roles": "Error loading roles.",
+      "error_screens": "Error loading available screens.",
+      "error_role_screens": "Error loading allowed screens for this role.",
+      "error_save": "Error consolidating screens.",
+      "fallback_group": "No group",
+      "selection_count": "{selected} of {total}"
+    },
+    "stats": {
+      "roles": "Roles",
+      "roles_desc": "Configured administrative profiles.",
+      "permissions": "API permissions",
+      "permissions_desc": "Available keys for backend authorization.",
+      "screens": "Frontend screens",
+      "screens_desc": "Routes and screens mapped for web access.",
+      "groups": "Permission groups",
+      "groups_desc": "Logical groupings used for organization.",
+      "loading": "Loading"
+    },
+    "role_form": {
       "title_edit": "Edit Role",
       "title_new": "New Role",
       "desc_edit": "Update role information.",
@@ -3014,14 +3014,41 @@
         "labels": {
           "name": "Name",
           "description": "Description",
-          "latitude": "Latitude",
-          "longitude": "Longitude",
+          "coordinates": "Coordinates",
           "radius": "Radius (km)",
           "max_age": "Max location age (min)"
         },
         "placeholders": {
           "name": "Ex.: Central square",
-          "description": "Ex.: Central area for events and incidents"
+          "description": "Ex.: Central area for events and incidents",
+          "coordinates": "Ex.: -22.376534,-41.794399"
+        },
+        "actions": {
+          "select_on_map": "Select on map",
+          "adjust_on_map": "Adjust on map"
+        },
+        "map_picker": {
+          "title": "Select area on map",
+          "description": "Set the locality center and adjust the radius and the maximum location age.",
+          "map_title": "Locality area",
+          "instructions": "Click on the map to place the locality center.",
+          "settings_title": "Area settings",
+          "settings_desc": "The parameters below will be saved with the locality.",
+          "labels": {
+            "coordinates": "Coordinates",
+            "radius": "Radius (km)",
+            "max_age": "Max location age (min)"
+          },
+          "buttons": {
+            "cancel": "Cancel",
+            "confirm": "Apply selection"
+          },
+          "loading": "Loading map...",
+          "no_selection": "No point selected.",
+          "missing_key_title": "Google Maps not configured",
+          "missing_key_desc": "Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to select coordinates on the map.",
+          "load_error_title": "Could not load the map",
+          "load_error_desc": "Check the Google Maps key and try again."
         },
         "buttons": {
           "cancel": "Cancel",
@@ -3036,10 +3063,15 @@
         },
         "validations": {
           "name": "Enter the locality name.",
-          "latitude": "Enter a valid latitude.",
-          "longitude": "Enter a valid longitude.",
+          "coordinates": "Enter valid coordinates in latitude,longitude format.",
           "radius": "Enter a valid radius.",
           "max_age": "Enter a valid max age."
+        },
+        "selected_coordinates": "Selected coordinates: {coordinates}",
+        "no_coordinates": "No coordinates selected.",
+        "summary": {
+          "radius": "Selected map value",
+          "max_age": "Selected map value"
         }
       }
     }
