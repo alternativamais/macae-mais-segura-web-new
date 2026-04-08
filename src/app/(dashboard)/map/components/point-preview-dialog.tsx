@@ -165,8 +165,8 @@ export function PointPreviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex h-[min(92vh,860px)] w-[min(96vw,1180px)] max-w-[96vw] flex-col overflow-hidden p-0 sm:max-w-[1180px]">
-        <DialogHeader className="shrink-0 px-4 pt-4 pb-3 sm:px-6 sm:pt-5 sm:pb-4">
+      <DialogContent className="flex h-[min(92vh,860px)] w-[min(96vw,1180px)] max-w-[96vw] flex-col overflow-hidden sm:max-w-[1180px]">
+        <DialogHeader className="shrink-0 pb-3">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             {point
@@ -178,13 +178,13 @@ export function PointPreviewDialog({
         </DialogHeader>
 
         {!marker || !point ? (
-          <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+          <div className="pb-2">
             <div className="rounded-lg border-2 border-dashed bg-muted/30 px-6 py-10 text-center text-sm text-muted-foreground">
               {t("empty")}
             </div>
           </div>
         ) : (
-          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden px-4 pb-4 sm:px-6 sm:pb-6">
+          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden pb-1">
             <div className="grid shrink-0 grid-cols-2 gap-3 xl:grid-cols-4">
               {summaryCards.map((card) => (
                 <div
@@ -207,7 +207,7 @@ export function PointPreviewDialog({
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col gap-4 lg:grid lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
-              <div className="order-2 flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border bg-card lg:order-1">
+              <div className="order-2 flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border bg-card lg:order-1">
                 <div className="border-b px-4 py-3">
                   <h3 className="text-base font-semibold">{t("details.title")}</h3>
                 </div>
@@ -298,7 +298,7 @@ export function PointPreviewDialog({
                 </div>
               </div>
 
-              <div className="order-1 flex min-h-0 flex-[1.35] flex-col overflow-hidden rounded-xl border bg-card lg:order-2">
+              <div className="order-1 flex min-h-0 flex-[1.35] flex-col overflow-hidden rounded-lg border bg-card lg:order-2">
                 <div className="shrink-0 border-b px-4 py-3">
                   <h3 className="text-base font-semibold">{t("cameras.title")}</h3>
                 </div>
