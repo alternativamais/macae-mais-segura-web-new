@@ -27,6 +27,8 @@ import { UserLocationRecord } from "@/types/access-control"
 import { User } from "@/types/user"
 import { formatDateTime, getLocationCoordinatesLabel } from "./utils"
 import { useTranslator } from "@/lib/i18n"
+import { TablePaginationFooter } from "./table-pagination-footer"
+import { LocationReportDateRangePicker } from "./location-report-date-range-picker"
 
 const LocationHistoryMap = dynamic(
   () =>
@@ -66,37 +68,65 @@ export function LocationReportDialog({
   user,
 }: LocationReportDialogProps) {
   const [records, setRecords] = useState<UserLocationRecord[]>([])
+  const [totalRecords, setTotalRecords] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedRecordId, setSelectedRecordId] = useState<number | null>(null)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(20)
+  const [dateFrom, setDateFrom] = useState("")
+  const [dateTo, setDateTo] = useState("")
   const t = useTranslator("access_control.location_report_dialog")
   const currentLocale = t.getLocale()
 
   useEffect(() => {
     if (!open || !user?.id) {
       setRecords([])
+      setTotalRecords(0)
       setSearchTerm("")
       setSelectedRecordId(null)
+      setPage(1)
+      setPageSize(20)
+      setDateFrom("")
+      setDateTo("")
+      return
+    }
+  }, [open, user])
+
+  useEffect(() => {
+    if (!open || !user?.id) {
       return
     }
 
     const loadReport = async () => {
       setIsLoading(true)
       try {
-        const data = await accessControlService.getLocationReport(user.id)
-        setRecords(data)
-        setSelectedRecordId(data[0]?.id ?? null)
+        const data = await accessControlService.getLocationReport({
+          userId: user.id,
+          page,
+          pageSize,
+          dateFrom: dateFrom || undefined,
+          dateTo: dateTo || undefined,
+        })
+        setRecords(data.items)
+        setTotalRecords(data.total)
+        setSelectedRecordId((current) =>
+          current && data.items.some((record) => record.id === current)
+            ? current
+            : (data.items[0]?.id ?? null),
+        )
       } catch (error) {
         toast.apiError(error, t("error_load"))
         setRecords([])
+        setTotalRecords(0)
         setSelectedRecordId(null)
       } finally {
         setIsLoading(false)
       }
     }
 
-    loadReport()
-  }, [open, user])
+    void loadReport()
+  }, [dateFrom, dateTo, open, page, pageSize, t, user])
 
   const filteredRecords = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase()
@@ -185,7 +215,7 @@ export function LocationReportDialog({
                     <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                       {t("stat_records")}
                     </div>
-                    <div className="mt-2 text-2xl font-semibold">{filteredRecords.length}</div>
+                    <div className="mt-2 text-2xl font-semibold">{totalRecords}</div>
                   </CardContent>
                 </Card>
                 <Card className="gap-0 bg-muted/20 py-0">
@@ -194,7 +224,7 @@ export function LocationReportDialog({
                       {t("stat_last")}
                     </div>
                     <div className="mt-2 text-sm font-medium">
-                      {filteredRecords[0] ? formatDateTime(filteredRecords[0].createdAt, currentLocale) : "--"}
+                      {records[0] ? formatDateTime(records[0].createdAt, currentLocale) : "--"}
                     </div>
                   </CardContent>
                 </Card>
@@ -220,53 +250,80 @@ export function LocationReportDialog({
                 </div>
               </div>
 
-              <CardContent className="max-h-[480px] overflow-auto px-0">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>{t("col_date")}</TableHead>
-                      <TableHead>{t("col_coords")}</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {isLoading ? (
-                      <TableRow>
-                        <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
-                          <span className="inline-flex items-center gap-2">
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            {t("loading_records")}
-                          </span>
-                        </TableCell>
-                      </TableRow>
-                    ) : filteredRecords.length > 0 ? (
-                      filteredRecords.map((record) => {
-                        const isSelected = selectedRecordId === record.id
+              <CardContent className="space-y-4 px-0 pb-0">
+                <div className="px-4 pt-4">
+                  <LocationReportDateRangePicker
+                    dateFrom={dateFrom}
+                    dateTo={dateTo}
+                    onChange={({ dateFrom: nextDateFrom, dateTo: nextDateTo }) => {
+                      setDateFrom(nextDateFrom)
+                      setDateTo(nextDateTo)
+                      setPage(1)
+                    }}
+                  />
+                </div>
 
-                        return (
-                          <TableRow
-                            key={record.id}
-                            className="cursor-pointer"
-                            data-state={isSelected ? "selected" : undefined}
-                            onClick={() => setSelectedRecordId(record.id)}
-                          >
-                            <TableCell className="font-medium">
-                              {formatDateTime(record.createdAt, currentLocale)}
-                            </TableCell>
-                            <TableCell className="font-mono text-xs">
-                              {getLocationCoordinatesLabel(record)}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })
-                    ) : (
+                <div className="max-h-[420px] overflow-auto">
+                  <Table>
+                    <TableHeader>
                       <TableRow>
-                        <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
-                          {t("empty")}
-                        </TableCell>
+                        <TableHead>{t("col_date")}</TableHead>
+                        <TableHead>{t("col_coords")}</TableHead>
                       </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {isLoading ? (
+                        <TableRow>
+                          <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
+                            <span className="inline-flex items-center gap-2">
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                              {t("loading_records")}
+                            </span>
+                          </TableCell>
+                        </TableRow>
+                      ) : filteredRecords.length > 0 ? (
+                        filteredRecords.map((record) => {
+                          const isSelected = selectedRecordId === record.id
+
+                          return (
+                            <TableRow
+                              key={record.id}
+                              className="cursor-pointer"
+                              data-state={isSelected ? "selected" : undefined}
+                              onClick={() => setSelectedRecordId(record.id)}
+                            >
+                              <TableCell className="font-medium">
+                                {formatDateTime(record.createdAt, currentLocale)}
+                              </TableCell>
+                              <TableCell className="font-mono text-xs">
+                                {getLocationCoordinatesLabel(record)}
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={2} className="h-24 text-center text-muted-foreground">
+                            {t("empty")}
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                <div className="px-4">
+                  <TablePaginationFooter
+                    total={totalRecords}
+                    page={page}
+                    pageSize={pageSize}
+                    onPageChange={setPage}
+                    onPageSizeChange={(value) => {
+                      setPageSize(value)
+                      setPage(1)
+                    }}
+                  />
+                </div>
               </CardContent>
             </Card>
           </div>

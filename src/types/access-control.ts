@@ -1,4 +1,5 @@
 import { User } from "./user"
+import { PaginatedResponse } from "./api"
 
 export type AccessIpBlockMode = "single" | "cidr" | "range"
 export type AccessRegionAction = "allow" | "block"
@@ -124,6 +125,16 @@ export interface UserLocationRecord {
   longitude: number | string
   createdAt: string
 }
+
+export interface LocationReportQuery {
+  userId: number
+  page?: number
+  pageSize?: number
+  dateFrom?: string
+  dateTo?: string
+}
+
+export type PaginatedUserLocationReport = PaginatedResponse<UserLocationRecord>
 
 export interface AccessTrapRoute {
   id: number

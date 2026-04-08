@@ -10,12 +10,13 @@ import {
   CreateAccessTrapRoutePayload,
   CreateAccessUserIpRulePayload,
   CreateAccessUserScheduleRulePayload,
+  LocationReportQuery,
+  PaginatedUserLocationReport,
   UpdateAccessIpBlockPayload,
   UpdateAccessRegionRulePayload,
   UpdateAccessTrapRoutePayload,
   UpdateAccessUserIpRulePayload,
   UpdateAccessUserScheduleRulePayload,
-  UserLocationRecord,
 } from "@/types/access-control"
 import { User } from "@/types/user"
 
@@ -144,9 +145,11 @@ export const accessControlService = {
     await api.delete(`${basePath}/user-schedule-rules/${id}`)
   },
 
-  getLocationReport: async (userId: number): Promise<UserLocationRecord[]> => {
-    const { data } = await api.get<UserLocationRecord[]>(`${basePath}/location-report`, {
-      params: { userId },
+  getLocationReport: async (
+    params: LocationReportQuery
+  ): Promise<PaginatedUserLocationReport> => {
+    const { data } = await api.get<PaginatedUserLocationReport>(`${basePath}/location-report`, {
+      params,
     })
     return data
   },
