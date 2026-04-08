@@ -12,11 +12,6 @@ export interface CallCenterCallTotem {
   coordenadas?: string
 }
 
-export interface CallCenterLinkedOccurrence {
-  id: number
-  status?: string
-  description?: string
-}
 
 export interface CallCenterHistoryEntry {
   id: number
@@ -49,7 +44,7 @@ export interface CallCenterCall {
   fim?: string
   totem?: CallCenterCallTotem | null
   agent?: CallCenterCallAgent | null
-  chamados?: CallCenterLinkedOccurrence[]
+
   history?: CallCenterHistoryEntry[]
 }
 

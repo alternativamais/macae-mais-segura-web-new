@@ -264,7 +264,6 @@ export function CallCenterTab() {
                         <TableHead>{t("table.columns.answered")}</TableHead>
                         <TableHead>{t("table.columns.end")}</TableHead>
                         <TableHead>{t("table.columns.duration")}</TableHead>
-                        <TableHead>{t("table.columns.incidents")}</TableHead>
                         <TableHead className="w-[70px] text-right">{t("table.columns.history")}</TableHead>
                       </TableRow>
                     </TableHeader>
@@ -301,19 +300,6 @@ export function CallCenterTab() {
                             <TableCell>{call.answeredAt ? format(new Date(call.answeredAt), "HH:mm:ss") : "-"}</TableCell>
                             <TableCell>{call.endedAt ? format(new Date(call.endedAt), "HH:mm:ss") : "-"}</TableCell>
                             <TableCell>{resolveCallDuration(call, new Date(Date.now() + tick))}</TableCell>
-                            <TableCell>
-                              {call.chamados?.length ? (
-                                <div className="flex flex-wrap gap-1">
-                                  {call.chamados.map((item) => (
-                                    <Badge key={item.id} variant="outline">
-                                      #{item.id}
-                                    </Badge>
-                                  ))}
-                                </div>
-                              ) : (
-                                "-"
-                              )}
-                            </TableCell>
                             <TableCell className="text-right">
                               <Button
                                 variant="ghost"
@@ -331,7 +317,7 @@ export function CallCenterTab() {
                         ))
                       ) : (
                         <TableRow>
-                          <TableCell colSpan={10} className="h-24 text-center text-muted-foreground">
+                          <TableCell colSpan={9} className="h-24 text-center text-muted-foreground">
                             {isLoading ? t("loading") : t("table.empty")}
                           </TableCell>
                         </TableRow>
