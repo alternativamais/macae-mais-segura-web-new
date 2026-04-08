@@ -55,11 +55,7 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Hub das integrações responsáveis pelo envio de leituras de placas.",
     group: "Integrações",
   },
-  "admin.notification_center": {
-    title: "Central de Notificações",
-    description: "Envio de notificações push, histórico de campanhas e gestão de localidades.",
-    group: "Integrações",
-  },
+
   "admin.call_center": {
     title: "Central de Atendimento",
     description: "Monitoramento em tempo real das ligações do call center e gestão do ramal do agente.",

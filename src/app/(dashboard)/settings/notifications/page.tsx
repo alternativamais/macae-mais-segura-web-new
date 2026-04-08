@@ -35,16 +35,12 @@ const notificationsFormSchema = z.object({
   // New notification table fields
   orderUpdatesEmail: z.boolean(),
   orderUpdatesBrowser: z.boolean(),
-  orderUpdatesApp: z.boolean(),
   invoiceRemindersEmail: z.boolean(),
   invoiceRemindersBrowser: z.boolean(),
-  invoiceRemindersApp: z.boolean(),
   promotionalOffersEmail: z.boolean(),
   promotionalOffersBrowser: z.boolean(),
-  promotionalOffersApp: z.boolean(),
   systemMaintenanceEmail: z.boolean(),
   systemMaintenanceBrowser: z.boolean(),
-  systemMaintenanceApp: z.boolean(),
   notificationTiming: z.string(),
 })
 
@@ -69,16 +65,12 @@ export default function NotificationSettings() {
       // New notification table defaults
       orderUpdatesEmail: true,
       orderUpdatesBrowser: true,
-      orderUpdatesApp: true,
       invoiceRemindersEmail: true,
       invoiceRemindersBrowser: false,
-      invoiceRemindersApp: true,
       promotionalOffersEmail: false,
       promotionalOffersBrowser: true,
-      promotionalOffersApp: false,
       systemMaintenanceEmail: true,
       systemMaintenanceBrowser: true,
-      systemMaintenanceApp: false,
       notificationTiming: "online",
     },
   })
@@ -341,7 +333,6 @@ export default function NotificationSettings() {
                         <TableHead className="w-[200px]">TYPE</TableHead>
                         <TableHead className="text-center">EMAIL</TableHead>
                         <TableHead className="text-center">BROWSER</TableHead>
-                        <TableHead className="text-center">APP</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -379,22 +370,7 @@ export default function NotificationSettings() {
                             )}
                           />
                         </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="orderUpdatesApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
+
                       </TableRow>
                       <TableRow>
                         <TableCell className="font-medium">Invoice reminders</TableCell>
@@ -430,22 +406,7 @@ export default function NotificationSettings() {
                             )}
                           />
                         </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="invoiceRemindersApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
+
                       </TableRow>
                       <TableRow>
                         <TableCell className="font-medium">Promotional offers</TableCell>
@@ -481,22 +442,7 @@ export default function NotificationSettings() {
                             )}
                           />
                         </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="promotionalOffersApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
+
                       </TableRow>
                       <TableRow>
                         <TableCell className="font-medium">System maintenance</TableCell>
@@ -532,22 +478,7 @@ export default function NotificationSettings() {
                             )}
                           />
                         </TableCell>
-                        <TableCell className="text-center">
-                          <FormField
-                            control={form.control}
-                            name="systemMaintenanceApp"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        </TableCell>
+
                       </TableRow>
                     </TableBody>
                   </Table>
