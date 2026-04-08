@@ -192,10 +192,10 @@ export function CallCenterTab() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6 overflow-x-hidden">
       <StatCards calls={calls} isLoading={isLoading} />
 
-      <div className="grid gap-6 xl:grid-cols-[340px_minmax(0,1fr)]">
+      <div className="grid min-w-0 gap-6 xl:grid-cols-[340px_minmax(0,1fr)]">
         <SessionCard
           session={session}
           extensions={operatorExtensions}
@@ -204,19 +204,24 @@ export function CallCenterTab() {
           onSessionChange={setSession}
         />
 
-        <Card>
+        <Card className="min-w-0 overflow-hidden">
           <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <CardTitle>{t("monitor.title")}</CardTitle>
               <p className="text-sm text-muted-foreground">{t("monitor.description")}</p>
             </div>
-            <Button variant="outline" onClick={loadCalls} disabled={isLoading} className="cursor-pointer">
+            <Button
+              variant="outline"
+              onClick={loadCalls}
+              disabled={isLoading}
+              className="w-full cursor-pointer sm:w-auto"
+            >
               <RefreshCcw className="mr-2 h-4 w-4" />
               {t("monitor.refresh")}
             </Button>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2">
+          <CardContent className="min-w-0 space-y-4 overflow-x-hidden">
+            <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-wrap">
               {STATUS_FILTERS.map((status) => (
                 <Button
                   key={status}
@@ -235,7 +240,7 @@ export function CallCenterTab() {
               ))}
             </div>
 
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="min-w-0 space-y-4">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="calls" className="cursor-pointer">
                   {t("tabs.calls")}
@@ -246,9 +251,9 @@ export function CallCenterTab() {
               </TabsList>
 
               <TabsContent value="calls" className="space-y-4">
-                <div className="relative rounded-md border bg-card">
+                <div className="relative min-w-0 overflow-hidden rounded-md border bg-card">
                   {isLoading ? <TableLoadingOverlay /> : null}
-                  <Table>
+                  <Table className="min-w-[920px]">
                     <TableHeader>
                       <TableRow>
                         <TableHead>{t("table.columns.queue")}</TableHead>
@@ -338,7 +343,12 @@ export function CallCenterTab() {
 
               <TabsContent value="logs" className="space-y-4">
                 <div className="flex justify-end">
-                  <Button variant="outline" onClick={loadLogs} disabled={isLoadingLogs} className="cursor-pointer">
+                  <Button
+                    variant="outline"
+                    onClick={loadLogs}
+                    disabled={isLoadingLogs}
+                    className="w-full cursor-pointer sm:w-auto"
+                  >
                     <RefreshCcw className="mr-2 h-4 w-4" />
                     {t("logs.refresh")}
                   </Button>

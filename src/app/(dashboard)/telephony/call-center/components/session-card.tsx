@@ -70,12 +70,12 @@ export function SessionCard({
   }
 
   return (
-    <Card>
+    <Card className="min-w-0">
       <CardHeader>
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="min-w-0 space-y-4 overflow-x-hidden">
         {session?.isActive ? (
           <div className="space-y-4">
             <div className="rounded-lg border bg-muted/30 p-4">

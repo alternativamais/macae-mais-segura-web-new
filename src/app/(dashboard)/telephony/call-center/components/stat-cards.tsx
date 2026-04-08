@@ -26,13 +26,13 @@ export function StatCards({ calls, isLoading }: CallCenterStatCardsProps) {
   ]
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {cards.map((card) => {
         const Icon = card.icon
         return (
-          <Card key={card.title}>
+          <Card key={card.title} className="min-w-0">
             <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-              <div className="space-y-1">
+              <div className="min-w-0 space-y-1">
                 <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
                 <p className="text-xs text-muted-foreground">{card.description}</p>
               </div>
