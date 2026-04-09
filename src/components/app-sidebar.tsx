@@ -24,6 +24,8 @@ import {
 
 import { useTranslator } from "@/lib/i18n"
 
+import { CompanySwitcher } from "@/components/company-switcher"
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const allowedScreens = useAuthStore((state) => state.allowedScreens)
   const authUser = useAuthStore((state) => state.user)
@@ -36,18 +38,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <BrandLogo width={176} height={34} className="max-w-[176px]" priority />
-                  <span className="truncate text-xs">Admin Dashboard</span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <CompanySwitcher />
       </SidebarHeader>
       <SidebarContent>
         {filteredNavGroups.map((group) => (

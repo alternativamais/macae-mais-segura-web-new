@@ -21,6 +21,11 @@ api.interceptors.request.use(
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      
+      const { activeCompanyId } = useAuthStore.getState();
+      if (activeCompanyId) {
+        config.headers['X-Empresa-Id'] = activeCompanyId;
+      }
     }
     return config;
   },

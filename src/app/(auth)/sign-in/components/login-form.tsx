@@ -103,7 +103,10 @@ export function LoginForm({
           }
         }
 
-        login(accessToken, user, finalAllowedScreens, permissions)
+        const initialActiveCompanyId = response.empresa?.id || null;
+        const availableCompanies = response.empresas || [];
+
+        login(accessToken, user, initialActiveCompanyId, availableCompanies, finalAllowedScreens, permissions)
         toast.success("Login realizado com sucesso!")
         const next = searchParams.get("next")
         if (next && next.startsWith("/") && !next.startsWith("//")) {

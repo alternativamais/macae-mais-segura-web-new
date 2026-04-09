@@ -10,11 +10,21 @@ export interface User {
   themeModePreference?: "light" | "dark" | null;
 }
 
+export interface AppEmpresa {
+  id: number;
+  nome: string;
+  roleId: number;
+  isDefault: boolean;
+}
+
 export interface LoginResponse {
   accessToken: string;
   user: User;
   allowedScreens: string[];
   permissions: string[];
+  needsSelection?: boolean;
+  empresas?: AppEmpresa[];
+  empresa?: { id: number; nome: string };
 }
 
 export interface SessionSnapshot {

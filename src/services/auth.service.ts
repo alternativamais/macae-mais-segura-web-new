@@ -13,6 +13,15 @@ export const authService = {
     return data;
   },
 
+  selectEmpresa: async (empresaId: number, temporaryToken: string): Promise<LoginResponse> => {
+    const { data } = await api.post<LoginResponse>(
+      '/auth/select-empresa',
+      { empresaId },
+      { headers: { Authorization: `Bearer ${temporaryToken}` } }
+    );
+    return data;
+  },
+
   checkToken: async (): Promise<SessionSnapshot> => {
     const { data } = await api.get<SessionSnapshot>('/check-token');
     return data;
