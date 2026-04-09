@@ -12,7 +12,8 @@ export interface User {
   roleId: number;
   birthday?: string;
   locationRequired?: boolean;
-  empresaId?: number | null;
+  empresaId?: number | null; // Retrocompatibilidade do dropdown anterior se houver
+  empresaIds?: number[];
   empresa?: Empresa;
 }
 
@@ -24,12 +25,13 @@ export interface CreateUserPayload {
   birthday: string;
   status: string;
   roleId: number;
-  empresaId?: number | null;
+  empresaIds: number[];
   locationRequired?: boolean;
 }
 
 export type UpdateUserPayload = Partial<CreateUserPayload> & {
   avatarUrl?: string;
+  empresaIds?: number[];
 };
 
 export type UserListResponse = PaginatedResponse<User>;

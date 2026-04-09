@@ -47,6 +47,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { Checkbox } from "@/components/ui/checkbox"
 
 import { useTranslator } from "@/lib/i18n"
 
@@ -83,7 +84,7 @@ export function UserFormDialog({
     birthday: z.date(),
     status: z.enum(["active", "inactive"]),
     roleId: z.coerce.number().min(1, t("validations.role_required")),
-    empresaId: z.number().optional().nullable(),
+    empresaIds: z.array(z.number()).min(1, t("validations.empresa_required") || "Selecione ao menos uma empresa"),
     locationRequired: z.boolean().default(false),
   })
 
@@ -99,7 +100,7 @@ export function UserFormDialog({
       birthday: defaultBirthday,
       status: "active",
       roleId: 0,
-      empresaId: null,
+      empresaIds: [],
       locationRequired: false,
     },
   })
@@ -132,7 +133,7 @@ export function UserFormDialog({
       birthday: user?.birthday ? parseISO(user.birthday) : defaultBirthday,
       status: user?.status === "inactive" ? "inactive" : "active",
       roleId: user?.roleId || 0,
-      empresaId: user?.empresaId || null,
+      empresaIds: user?.empresaIds || (user?.empresaId ? [user.empresaId] : []),
       locationRequired: user?.locationRequired || false,
     })
   }, [form, open, rolesFetchErrorMessage, user])
@@ -342,28 +343,35 @@ export function UserFormDialog({
             <div className="grid items-start gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}
-                name="empresaId"
+                name="empresaIds"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t("labels.empresa")}</FormLabel>
-                    <Select
-                      value={field.value ? String(field.value) : "none"}
-                      onValueChange={(value) => field.onChange(value === "none" ? null : Number(value))}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full cursor-pointer">
-                          <SelectValue placeholder={t("placeholders.empresa")} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="none">{t("placeholders.birthday") === "Selecione" ? "Nenhuma" : "None"}</SelectItem>
-                        {empresas.map((empresa) => (
-                          <SelectItem key={empresa.id} value={String(empresa.id)}>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      {empresas.map((empresa) => (
+                        <div key={empresa.id} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`empresa-${empresa.id}`}
+                            checked={field.value?.includes(empresa.id)}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange([...field.value, empresa.id])
+                                : field.onChange(
+                                    field.value?.filter(
+                                      (value) => value !== empresa.id
+                                    )
+                                  )
+                            }}
+                          />
+                          <label
+                            htmlFor={`empresa-${empresa.id}`}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
                             {empresa.nome}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

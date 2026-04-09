@@ -141,7 +141,8 @@
         "name_min": "Nome deve ter pelo menos 2 caracteres.",
         "username_min": "Username deve ter pelo menos 3 caracteres.",
         "email_invalid": "Email inválido.",
-        "role_required": "Selecione um cargo."
+        "role_required": "Selecione um cargo.",
+        "empresa_required": "Selecione ao menos uma empresa."
       }
     },
     "details": {
