@@ -85,7 +85,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        deleteCookie(AUTH_COOKIE_KEY);
+        deleteCookie(AUTH_COOKIE_KEY, { path: '/' });
         localStorage.removeItem(AUTH_TOKEN_KEY);
         set({ 
           token: null, 

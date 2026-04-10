@@ -1,6 +1,15 @@
 "use client"
 
+import { useEffect, useMemo } from "react"
 import Link from "next/link"
+import { usePathname, useSearchParams } from "next/navigation"
+import {
+  AUTH_REDIRECT_REASON,
+  buildSafeNextPath,
+  buildSignInPath,
+  isTokenExpired,
+} from "@/lib/auth-session"
+import { useAuthStore } from "@/store/auth-store"
 import {
   ArrowLeft,
   FileSearch,
@@ -49,6 +58,30 @@ export function RouteErrorState({
   hideActions = false,
 }: RouteErrorStateProps) {
   const Icon = iconMap[icon]
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const token = useAuthStore((state) => state.token)
+  const hasHydrated = useAuthStore((state) => state.hasHydrated)
+  const logout = useAuthStore((state) => state.logout)
+  const currentPath = useMemo(() => {
+    const query = searchParams.toString()
+    return buildSafeNextPath(pathname, query ? `?${query}` : "")
+  }, [pathname, searchParams])
+
+  useEffect(() => {
+    if (!hasHydrated || !token || pathname === "/sign-in") {
+      return
+    }
+
+    if (!isTokenExpired(token)) {
+      return
+    }
+
+    logout()
+    window.location.replace(
+      buildSignInPath(currentPath, AUTH_REDIRECT_REASON.sessionExpired),
+    )
+  }, [currentPath, hasHydrated, logout, pathname, token])
 
   return (
     <div className="flex min-h-dvh items-center justify-center bg-muted/20 px-4 py-10 lg:px-6">
