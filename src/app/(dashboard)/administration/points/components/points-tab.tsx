@@ -338,7 +338,6 @@ export function PointsTab() {
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
         point={editingPoint}
-        companies={companies}
         onSuccess={loadData}
       />
 

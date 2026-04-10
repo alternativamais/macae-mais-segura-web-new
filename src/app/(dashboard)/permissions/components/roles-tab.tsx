@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { EllipsisVertical, Eye, Pencil, Plus, Search, ShieldCheck, Trash2 } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
@@ -27,13 +27,28 @@ import { roleService } from "@/services/role.service"
 import { Role } from "@/types/role"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TablePaginationFooter } from "@/app/(dashboard)/access-control/components/table-pagination-footer"
+import { TabStateCard } from "@/app/(dashboard)/access-control/components/tab-state-card"
 import { RoleFormDialog } from "./role-form-dialog"
 import { DetailsDialog } from "./details-dialog"
 import { useTranslator } from "@/lib/i18n"
+import { RoleScopeBadge } from "./role-scope-badge"
+import { CompanyNameById, canManageRole } from "./utils"
 
-export function RolesTab() {
-  const [roles, setRoles] = useState<Role[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+interface RolesTabProps {
+  roles: Role[]
+  companyNameById: CompanyNameById
+  isLoading: boolean
+  isAllCompaniesView: boolean
+  onRefresh: () => Promise<void> | void
+}
+
+export function RolesTab({
+  roles,
+  companyNameById,
+  isLoading,
+  isAllCompaniesView,
+  onRefresh,
+}: RolesTabProps) {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [searchTerm, setSearchTerm] = useState("")
@@ -46,24 +61,6 @@ export function RolesTab() {
   const [isDeleting, setIsDeleting] = useState(false)
   const t = useTranslator("permissions.roles_tab")
   const currentLocale = t.getLocale()
-
-  const loadRoles = useCallback(async () => {
-    setIsLoading(true)
-
-    try {
-      const data = await roleService.findAllNoPagination()
-      setRoles(data)
-    } catch (error) {
-      toast.apiError(error, t("load_error"))
-      setRoles([])
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    loadRoles()
-  }, [loadRoles])
 
   useEffect(() => {
     setPage(1)
@@ -95,13 +92,19 @@ export function RolesTab() {
     if (!normalizedSearch) return roles
 
     return roles.filter((role) =>
-      [role.name, role.description]
+      [
+        role.name,
+        role.description,
+        role.empresa?.nome,
+        role.empresaId != null ? companyNameById[String(role.empresaId)] : null,
+        role.empresaId == null ? t("global_role") : null,
+      ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
         .includes(normalizedSearch)
     )
-  }, [roles, searchTerm])
+  }, [companyNameById, roles, searchTerm, t])
 
   const paginatedRoles = useMemo(() => {
     const startIndex = (page - 1) * pageSize
@@ -115,13 +118,23 @@ export function RolesTab() {
     try {
       await roleService.delete(roleToDelete.id)
       toast.success(t("delete_success"))
-      await loadRoles()
+      await onRefresh()
       setIsDeleteDialogOpen(false)
     } catch (error) {
       toast.apiError(error, t("delete_error"))
     } finally {
       setIsDeleting(false)
     }
+  }
+
+  if (isAllCompaniesView) {
+    return (
+      <TabStateCard
+        icon={ShieldCheck}
+        title={t("all_companies_title")}
+        description={t("all_companies_desc")}
+      />
+    )
   }
 
   return (
@@ -143,6 +156,7 @@ export function RolesTab() {
             setIsFormOpen(true)
           }}
           className="cursor-pointer"
+          disabled={isLoading}
         >
           <Plus className="mr-2 h-4 w-4" />
           {t("new_role")}
@@ -156,6 +170,7 @@ export function RolesTab() {
           <TableHeader>
             <TableRow>
               <TableHead>{t("col_name")}</TableHead>
+              <TableHead className="hidden md:table-cell">{t("col_scope")}</TableHead>
               <TableHead className="hidden lg:table-cell">{t("col_updated")}</TableHead>
               <TableHead className="w-[80px] text-right">{t("col_actions")}</TableHead>
             </TableRow>
@@ -174,6 +189,9 @@ export function RolesTab() {
                         {role.description || t("no_desc")}
                       </div>
                     </div>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <RoleScopeBadge role={role} companyNameById={companyNameById} />
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
                     {role.updatedAt
@@ -199,27 +217,31 @@ export function RolesTab() {
                             <Eye className="mr-2 h-4 w-4" />
                             {t("actions.view")}
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          className="cursor-pointer"
-                          onClick={() => {
-                            setSelectedRole(role)
-                            setIsFormOpen(true)
-                          }}
-                        >
-                          <Pencil className="mr-2 h-4 w-4" />
-                          {t("actions.edit")}
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          className="cursor-pointer text-destructive focus:text-destructive"
-                          onClick={() => {
-                            setRoleToDelete(role)
-                            setIsDeleteDialogOpen(true)
-                          }}
-                        >
-                          <Trash2 className="mr-2 h-4 w-4" />
-                          {t("actions.delete")}
-                        </DropdownMenuItem>
+                        {canManageRole(role, isAllCompaniesView) ? (
+                          <>
+                            <DropdownMenuItem
+                              className="cursor-pointer"
+                              onClick={() => {
+                                setSelectedRole(role)
+                                setIsFormOpen(true)
+                              }}
+                            >
+                              <Pencil className="mr-2 h-4 w-4" />
+                              {t("actions.edit")}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              className="cursor-pointer text-destructive focus:text-destructive"
+                              onClick={() => {
+                                setRoleToDelete(role)
+                                setIsDeleteDialogOpen(true)
+                              }}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              {t("actions.delete")}
+                            </DropdownMenuItem>
+                          </>
+                        ) : null}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -227,7 +249,7 @@ export function RolesTab() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={3} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
                   {isLoading ? t("loading") : t("empty")}
                 </TableCell>
               </TableRow>
@@ -248,7 +270,7 @@ export function RolesTab() {
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
         role={selectedRole}
-        onRefresh={loadRoles}
+        onRefresh={onRefresh}
       />
 
       <DetailsDialog
@@ -259,6 +281,13 @@ export function RolesTab() {
           detailsRole
             ? [
                 { label: t("details_name"), value: detailsRole.name },
+                {
+                  label: t("details_scope"),
+                  value: detailsRole.empresaId == null
+                    ? t("global_role")
+                    : companyNameById[String(detailsRole.empresaId)] ||
+                      t("company_role_fallback", { id: detailsRole.empresaId }),
+                },
                 { label: t("details_desc"), value: detailsRole.description || t("no_desc") },
                 {
                   label: t("details_created"),

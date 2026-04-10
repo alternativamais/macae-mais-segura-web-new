@@ -72,7 +72,7 @@
         "user": "Usuário",
         "username": "Username",
         "role": "Cargo",
-        "empresa": "Empresa",
+        "empresa": "Empresas",
         "status": "Status",
         "actions": "Ações"
       },
@@ -83,7 +83,7 @@
         "delete": "Excluir",
         "create": "Novo Usuário",
         "view": "Ver detalhes",
-        "search_placeholder": "Buscar por nome, email, username ou cargo..."
+        "search_placeholder": "Buscar por nome, email, username, cargo ou empresa..."
       },
       "delete_dialog": {
         "title": "Excluir usuário",
@@ -91,6 +91,7 @@
         "success": "Usuário excluído com sucesso.",
         "error": "Erro ao excluir usuário."
       },
+      "linked_companies": "{count} empresas vinculadas",
       "no_results": "Nenhum usuário encontrado.",
       "loading": "Carregando...",
       "no_role": "Sem cargo",
@@ -109,7 +110,7 @@
         "password_edit_hint": "(opcional na edição)",
         "birthday": "Aniversário",
         "role": "Cargo",
-        "empresa": "Empresa",
+        "empresa": "Empresas",
         "location_required": "Requer localização",
         "status": "Status"
       },
@@ -120,9 +121,13 @@
         "password": "Informe a senha",
         "birthday": "Selecione",
         "role": "Selecione um cargo",
-        "empresa": "Selecione uma empresa",
+        "empresa": "Selecione uma ou mais empresas",
         "status": "Selecione o status"
       },
+      "search_company": "Buscar empresa",
+      "empty_companies": "Nenhuma empresa encontrada.",
+      "selected_companies": "{count} empresas selecionadas",
+      "clear_companies": "Limpar seleção",
       "buttons": {
         "cancel": "Cancelar",
         "save": "Salvar alterações",
@@ -1950,6 +1955,17 @@
   "permissions": {
     "title": "Administração de Acesso",
     "description": "Gerencie cargos, permissões de API, atribuições por perfil e telas do frontend.",
+    "shared": {
+      "global_role": "Global",
+      "company_role_fallback": "Empresa #{id}"
+    },
+    "scope": {
+      "label": "Escopo da empresa",
+      "all_companies": "Todas as empresas",
+      "no_company": "Empresa não definida",
+      "active_company_desc": "Os cargos, as atribuições de permissões API e as telas do frontend desta página usam a empresa ativa selecionada no sistema. Cargos globais continuam visíveis em qualquer empresa.",
+      "all_companies_desc": "Selecione uma empresa específica no alternador global para editar cargos, permissões e telas. O modo global fica bloqueado aqui para evitar salvar no contexto errado."
+    },
     "tabs": {
       "roles": "Cargos",
       "permissions": "Permissões (API)",
@@ -1960,9 +1976,12 @@
       "search": "Buscar cargo...",
       "new_role": "Novo cargo",
       "col_name": "Nome do cargo",
+      "col_scope": "Escopo",
       "col_updated": "Atualizado em",
       "col_actions": "Ações",
       "no_desc": "Sem descrição",
+      "global_role": "Global",
+      "company_role_fallback": "Empresa #{id}",
       "actions": {
         "view": "Ver detalhes",
         "edit": "Editar",
@@ -1975,13 +1994,16 @@
       "load_error": "Erro ao carregar cargos.",
       "details_title": "Detalhes do cargo",
       "details_name": "Nome",
+      "details_scope": "Escopo",
       "details_desc": "Descrição",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
       "delete_dialog_title": "Excluir cargo",
       "delete_dialog_desc": "Deseja realmente excluir este cargo? Esta ação é irreversível.",
       "button_delete": "Excluir",
-      "open_actions": "Abrir ações"
+      "open_actions": "Abrir ações",
+      "all_companies_title": "Selecione uma empresa para administrar cargos",
+      "all_companies_desc": "A lista de cargos depende da empresa ativa. Saia do modo global para criar, editar ou revisar cargos da empresa correta."
     },
     "permissions_tab": {
       "search": "Buscar permissão...",
@@ -2014,6 +2036,9 @@
       "search": "Buscar permissão...",
       "role": "Cargo",
       "select_role": "Selecione um cargo",
+      "selected_scope": "Escopo do cargo",
+      "global_role": "Global",
+      "company_role_fallback": "Empresa #{id}",
       "save": "Salvar atribuições",
       "empty_title": "Nenhuma permissão encontrada",
       "empty_desc": "Ajuste a busca para localizar permissões dentro dos grupos disponíveis.",
@@ -2025,12 +2050,17 @@
       "error_role_perms": "Erro ao carregar permissões deste cargo.",
       "error_save": "Erro ao consolidar permissões.",
       "fallback_group": "Sem grupo",
-      "selection_count": "{selected} de {total}"
+      "selection_count": "{selected} de {total}",
+      "all_companies_title": "Selecione uma empresa para administrar permissões",
+      "all_companies_desc": "As atribuições de permissões API são resolvidas por cargo dentro da empresa ativa. Saia do modo global para editar o contexto correto."
     },
     "screens_tab": {
       "search": "Buscar tela...",
       "role": "Cargo",
       "select_role": "Selecione um cargo",
+      "selected_scope": "Escopo do cargo",
+      "global_role": "Global",
+      "company_role_fallback": "Empresa #{id}",
       "save": "Salvar telas",
       "empty_title": "Nenhuma tela encontrada",
       "empty_desc": "Ajuste a busca para localizar telas dentro dos grupos disponíveis.",
@@ -2042,7 +2072,9 @@
       "error_role_screens": "Erro ao carregar telas permitidas deste cargo.",
       "error_save": "Erro ao consolidar telas.",
       "fallback_group": "Sem grupo",
-      "selection_count": "{selected} de {total}"
+      "selection_count": "{selected} de {total}",
+      "all_companies_title": "Selecione uma empresa para administrar telas",
+      "all_companies_desc": "As telas do frontend são vinculadas ao cargo da empresa ativa. Saia do modo global para editar as permissões da empresa certa."
     },
     "stats": {
       "roles": "Cargos",

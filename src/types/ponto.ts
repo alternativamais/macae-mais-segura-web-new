@@ -42,7 +42,6 @@ export interface CreatePointPayload {
   pontoDeReferencia?: string | null
   coordenadas?: string | null
   status?: "active" | "inactive"
-  empresaId?: number | null
 }
 
 export interface UpdatePointPayload extends Partial<CreatePointPayload> {}

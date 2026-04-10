@@ -9,18 +9,29 @@ import {
 } from "@/components/ui/dialog"
 import { formatLocalizedDate } from "@/lib/i18n/date"
 import { Separator } from "@/components/ui/separator"
+import { Empresa } from "@/types/empresa"
+import { Role } from "@/types/role"
 import { User } from "@/types/user"
 import { parseISO } from "date-fns"
+import { getUserCompanySummary, getUserRoleName } from "./utils"
 
 interface UserDetailsDialogProps {
   user: User | null
+  rolesById: Map<number, Role>
+  companiesById: Map<number, Empresa>
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
 import { useTranslator } from "@/lib/i18n"
 
-export function UserDetailsDialog({ user, open, onOpenChange }: UserDetailsDialogProps) {
+export function UserDetailsDialog({
+  user,
+  rolesById,
+  companiesById,
+  open,
+  onOpenChange,
+}: UserDetailsDialogProps) {
   const t = useTranslator("users.details")
   const tTable = useTranslator("users.table")
   const currentLocale = t.getLocale()
@@ -31,8 +42,11 @@ export function UserDetailsDialog({ user, open, onOpenChange }: UserDetailsDialo
     { label: t("labels.name"), value: user.name || t("not_informed") },
     { label: t("labels.username"), value: user.username || t("not_informed") },
     { label: t("labels.email"), value: user.email },
-    { label: t("labels.role"), value: user.role?.name || tTable("no_role") },
-    { label: tTable("columns.empresa"), value: user.empresa?.nome || t("not_informed") },
+    { label: t("labels.role"), value: getUserRoleName(user, rolesById, tTable("no_role")) },
+    {
+      label: tTable("columns.empresa"),
+      value: getUserCompanySummary(user, companiesById, t("not_informed")),
+    },
     {
       label: t("labels.status"),
       value: String(user.status).toLowerCase() === "active" ? tTable("status_active") : tTable("status_inactive"),

@@ -17,8 +17,7 @@ export interface AppEmpresa {
   isDefault: boolean;
 }
 
-export interface LoginResponse {
-  accessToken: string;
+export interface AuthSessionSnapshot {
   user: User;
   allowedScreens: string[];
   permissions: string[];
@@ -27,11 +26,11 @@ export interface LoginResponse {
   empresa?: { id: number; nome: string };
 }
 
-export interface SessionSnapshot {
-  user: User;
-  allowedScreens: string[];
-  permissions: string[];
+export interface LoginResponse extends AuthSessionSnapshot {
+  accessToken: string;
 }
+
+export type SessionSnapshot = AuthSessionSnapshot;
 
 export interface LoginCredentials {
   email: string;

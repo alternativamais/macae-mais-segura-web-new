@@ -14,7 +14,11 @@ export function StatCards({ users, isLoading }: StatCardsProps) {
   const t = useTranslator("users.stats")
   const activeUsers = users.filter((user) => String(user.status).toLowerCase() === "active").length
   const inactiveUsers = users.filter((user) => String(user.status).toLowerCase() !== "active").length
-  const uniqueRoles = new Set(users.map((user) => user.role?.name).filter(Boolean)).size
+  const uniqueRoles = new Set(
+    users
+      .map((user) => user.roleId)
+      .filter((roleId): roleId is number => typeof roleId === "number"),
+  ).size
 
   const cards = [
     {

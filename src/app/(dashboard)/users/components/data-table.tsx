@@ -26,19 +26,34 @@ import {
 } from "@/components/ui/table"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
 import { userService } from "@/services/user.service"
+import { Empresa } from "@/types/empresa"
+import { Role } from "@/types/role"
 import { User } from "@/types/user"
 import { UserDetailsDialog } from "./user-details-dialog"
 import { UserFormDialog } from "./user-form-dialog"
+import {
+  getUserCompanyNames,
+  getUserCompanySummary,
+  getUserRoleName,
+} from "./utils"
 
 interface DataTableProps {
   users: User[]
+  roles: Role[]
+  companies: Empresa[]
   isLoading?: boolean
   onRefresh: () => Promise<void> | void
 }
 
 import { useTranslator } from "@/lib/i18n"
 
-export function DataTable({ users, isLoading = false, onRefresh }: DataTableProps) {
+export function DataTable({
+  users,
+  roles,
+  companies,
+  isLoading = false,
+  onRefresh,
+}: DataTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -51,6 +66,14 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
   const [isDeleting, setIsDeleting] = useState(false)
   
   const t = useTranslator("users.table")
+  const companiesById = useMemo(
+    () => new Map(companies.map((company) => [company.id, company])),
+    [companies],
+  )
+  const rolesById = useMemo(
+    () => new Map(roles.map((role) => [role.id, role])),
+    [roles],
+  )
 
   function getStatusLabel(status?: string) {
     return String(status).toLowerCase() === "active" ? t("status_active") : t("status_inactive")
@@ -108,13 +131,19 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
     if (!normalizedSearch) return users
 
     return users.filter((user) =>
-      [user.name, user.email, user.username, user.role?.name, user.empresa?.nome]
+      [
+        user.name,
+        user.email,
+        user.username,
+        getUserRoleName(user, rolesById, t("no_role")),
+        ...getUserCompanyNames(user, companiesById),
+      ]
         .filter(Boolean)
         .join(" ")
         .toLowerCase()
         .includes(normalizedSearch)
     )
-  }, [users, searchTerm])
+  }, [companiesById, rolesById, searchTerm, t, users])
 
   const paginatedUsers = useMemo(() => {
     const startIndex = (page - 1) * pageSize
@@ -191,13 +220,20 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
                   <TableCell>
                     <div className="inline-flex items-center gap-2">
                       <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                      <span>{user.role?.name || t("no_role")}</span>
+                      <span>{getUserRoleName(user, rolesById, t("no_role"))}</span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm text-muted-foreground">
-                      {user.empresa?.nome || "-"}
-                    </span>
+                    <div className="space-y-1">
+                      <span className="block text-sm text-muted-foreground">
+                        {getUserCompanySummary(user, companiesById, "-")}
+                      </span>
+                      {(user.empresaIds?.length || 0) > 1 ? (
+                        <span className="block text-xs text-muted-foreground">
+                          {t("linked_companies", { count: user.empresaIds?.length || 0 })}
+                        </span>
+                      ) : null}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <DataTag tone={getUserStatusTag(user.status).tone}>
@@ -270,6 +306,8 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
 
       <UserDetailsDialog
         user={detailsUser}
+        rolesById={rolesById}
+        companiesById={companiesById}
         open={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />
@@ -279,6 +317,8 @@ export function DataTable({ users, isLoading = false, onRefresh }: DataTableProp
         onOpenChange={setIsFormOpen}
         onSuccess={onRefresh}
         user={editingUser || undefined}
+        roles={roles}
+        companies={companies}
       />
 
       <ConfirmDialog

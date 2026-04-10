@@ -72,7 +72,7 @@
         "user": "User",
         "username": "Username",
         "role": "Role",
-        "empresa": "Company",
+        "empresa": "Companies",
         "status": "Status",
         "actions": "Actions"
       },
@@ -83,7 +83,7 @@
         "delete": "Delete",
         "create": "New User",
         "view": "View details",
-        "search_placeholder": "Search by name, email, username or role..."
+        "search_placeholder": "Search by name, email, username, role, or company..."
       },
       "delete_dialog": {
         "title": "Delete user",
@@ -91,6 +91,7 @@
         "success": "User deleted successfully.",
         "error": "Error deleting user."
       },
+      "linked_companies": "{count} linked companies",
       "no_results": "No users found.",
       "loading": "Loading...",
       "no_role": "No role",
@@ -109,7 +110,7 @@
         "password_edit_hint": "(optional in editing)",
         "birthday": "Birthday",
         "role": "Role",
-        "empresa": "Company",
+        "empresa": "Companies",
         "location_required": "Location Required",
         "status": "Status"
       },
@@ -120,9 +121,13 @@
         "password": "Enter password",
         "birthday": "Select",
         "role": "Select a role",
-        "empresa": "Select a company",
+        "empresa": "Select one or more companies",
         "status": "Select status"
       },
+      "search_company": "Search company",
+      "empty_companies": "No companies found.",
+      "selected_companies": "{count} selected companies",
+      "clear_companies": "Clear selection",
       "buttons": {
         "cancel": "Cancel",
         "save": "Save changes",
@@ -141,7 +146,8 @@
         "name_min": "Name must be at least 2 characters.",
         "username_min": "Username must be at least 3 characters.",
         "email_invalid": "Invalid email.",
-        "role_required": "Select a role."
+        "role_required": "Select a role.",
+        "empresa_required": "Select at least one company."
       }
     },
     "details": {
@@ -1949,6 +1955,17 @@
   "permissions": {
     "title": "Access Administration",
     "description": "Manage roles, API permissions, profile assignments, and frontend screens.",
+    "shared": {
+      "global_role": "Global",
+      "company_role_fallback": "Company #{id}"
+    },
+    "scope": {
+      "label": "Company scope",
+      "all_companies": "All companies",
+      "no_company": "No company selected",
+      "active_company_desc": "Roles, API permission assignments, and frontend screens on this page use the active company selected in the system. Global roles remain visible in any company.",
+      "all_companies_desc": "Select a specific company in the global switcher to edit roles, permissions, and screens. Global view is blocked here to avoid saving in the wrong company context."
+    },
     "tabs": {
       "roles": "Roles",
       "permissions": "Permissions (API)",
@@ -1959,9 +1976,12 @@
       "search": "Search role...",
       "new_role": "New role",
       "col_name": "Role name",
+      "col_scope": "Scope",
       "col_updated": "Updated at",
       "col_actions": "Actions",
       "no_desc": "No description",
+      "global_role": "Global",
+      "company_role_fallback": "Company #{id}",
       "actions": {
         "view": "View details",
         "edit": "Edit",
@@ -1974,13 +1994,16 @@
       "load_error": "Error loading roles.",
       "details_title": "Role details",
       "details_name": "Name",
+      "details_scope": "Scope",
       "details_desc": "Description",
       "details_created": "Created at",
       "details_updated": "Updated at",
       "delete_dialog_title": "Delete role",
       "delete_dialog_desc": "Are you sure you want to delete this role? This action is irreversible.",
       "button_delete": "Delete",
-      "open_actions": "Open actions"
+      "open_actions": "Open actions",
+      "all_companies_title": "Select a company to manage roles",
+      "all_companies_desc": "The role list depends on the active company. Leave global view to create, edit, or review roles in the correct company."
     },
     "permissions_tab": {
       "search": "Search permission...",
@@ -2013,6 +2036,9 @@
       "search": "Search permission...",
       "role": "Role",
       "select_role": "Select a role",
+      "selected_scope": "Role scope",
+      "global_role": "Global",
+      "company_role_fallback": "Company #{id}",
       "save": "Save assignments",
       "empty_title": "No permissions found",
       "empty_desc": "Adjust search to find permissions within available groups.",
@@ -2024,12 +2050,17 @@
       "error_role_perms": "Error loading permissions for this role.",
       "error_save": "Error consolidating permissions.",
       "fallback_group": "No group",
-      "selection_count": "{selected} of {total}"
+      "selection_count": "{selected} of {total}",
+      "all_companies_title": "Select a company to manage permissions",
+      "all_companies_desc": "API permission assignments are resolved by role inside the active company. Leave global view to edit the correct context."
     },
     "screens_tab": {
       "search": "Search screen...",
       "role": "Role",
       "select_role": "Select a role",
+      "selected_scope": "Role scope",
+      "global_role": "Global",
+      "company_role_fallback": "Company #{id}",
       "save": "Save screens",
       "empty_title": "No screens found",
       "empty_desc": "Adjust search to find screens within available groups.",
@@ -2041,7 +2072,9 @@
       "error_role_screens": "Error loading allowed screens for this role.",
       "error_save": "Error consolidating screens.",
       "fallback_group": "No group",
-      "selection_count": "{selected} of {total}"
+      "selection_count": "{selected} of {total}",
+      "all_companies_title": "Select a company to manage screens",
+      "all_companies_desc": "Frontend screens are linked to the role in the active company. Leave global view to edit the correct company permissions."
     },
     "stats": {
       "roles": "Roles",

@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { ChevronsUpDown, Building2, Globe } from "lucide-react"
+import { ChevronsUpDown, Building2, Globe, Loader2 } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -21,10 +21,19 @@ import { useAuthStore } from "@/store/auth-store"
 import { BrandLogo } from "@/components/logo"
 import { authService } from "@/services/auth.service"
 import { notificationService } from "@/lib/notifications/notification-service"
+import { getAuthSessionCompanyState } from "@/lib/auth-session-payload"
+import { persistClientAuthToken } from "@/lib/auth-session"
 
 export function CompanySwitcher() {
   const { isMobile } = useSidebar()
-  const { activeCompanyId, availableCompanies, setActiveCompanyId } = useAuthStore()
+  const [isSwitching, setIsSwitching] = React.useState(false)
+  const {
+    activeCompanyId,
+    availableCompanies,
+    login,
+    setActiveCompanyId,
+    token,
+  } = useAuthStore()
 
   if (!availableCompanies || availableCompanies.length === 0) {
     return (
@@ -50,14 +59,41 @@ export function CompanySwitcher() {
     : availableCompanies.find(c => String(c.id) === String(activeCompanyId)) || availableCompanies[0]
 
   const onSelectCompany = async (empresaId: string | number) => {
+    if (String(empresaId) === String(activeCompanyId)) {
+      return
+    }
+
     try {
-      setActiveCompanyId(empresaId)
-      // Recarregar os dados do sistema a partir do backend (refresh na página)
-      // Como o Axios Request Interceptor agora joga o X-Empresa-Id: companyId,
-      // Todas as requisições a partir de agora vão usar essa empresa!
+      setIsSwitching(true)
+
+      if (empresaId === "ALL") {
+        setActiveCompanyId(empresaId)
+        window.location.reload()
+        return
+      }
+
+      if (!token) {
+        throw new Error("Missing auth token")
+      }
+
+      const session = await authService.selectEmpresa(Number(empresaId), token)
+      const { activeCompanyId: nextCompanyId, availableCompanies: nextCompanies } =
+        getAuthSessionCompanyState(session)
+
+      persistClientAuthToken(session.accessToken)
+      login(
+        session.accessToken,
+        session.user,
+        nextCompanyId ?? Number(empresaId),
+        nextCompanies.length > 0 ? nextCompanies : availableCompanies,
+        session.allowedScreens,
+        session.permissions,
+      )
       window.location.reload()
-    } catch(err) {
+    } catch {
       notificationService.error('Erro ao trocar a empresa.')
+    } finally {
+      setIsSwitching(false)
     }
   }
 
@@ -69,9 +105,16 @@ export function CompanySwitcher() {
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              disabled={isSwitching}
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                 {activeCompanyId === 'ALL' ? <Globe className="size-4" /> : <Building2 className="size-4" />}
+                 {isSwitching ? (
+                   <Loader2 className="size-4 animate-spin" />
+                 ) : activeCompanyId === 'ALL' ? (
+                   <Globe className="size-4" />
+                 ) : (
+                   <Building2 className="size-4" />
+                 )}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight ml-2">
                 <BrandLogo width={120} height={20} className="w-[120px] mb-1" priority />

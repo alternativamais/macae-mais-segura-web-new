@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { CalendarIcon, Loader2 } from "lucide-react"
 import { format, parseISO } from "date-fns"
 import { useForm } from "react-hook-form"
@@ -9,9 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { formatLocalizedDate, getDateFnsLocale } from "@/lib/i18n/date"
 import { cn } from "@/lib/utils"
-import { roleService } from "@/services/role.service"
 import { userService } from "@/services/user.service"
-import { empresaService } from "@/services/empresa.service"
 import { Role } from "@/types/role"
 import { User } from "@/types/user"
 import { Empresa } from "@/types/empresa"
@@ -40,6 +38,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command"
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -56,37 +63,138 @@ interface UserFormDialogProps {
   onOpenChange: (open: boolean) => void
   onSuccess: () => void | Promise<void>
   user?: User
+  roles: Role[]
+  companies: Empresa[]
 }
 
 const defaultBirthday = new Date("1995-01-01")
+
+function CompanyMultiSelectField({
+  companies,
+  selectedCompanyIds,
+  onChange,
+  t,
+}: {
+  companies: Empresa[]
+  selectedCompanyIds: number[]
+  onChange: (nextValue: number[]) => void
+  t: ReturnType<typeof useTranslator>
+}) {
+  const selectedCompanies = companies.filter((company) =>
+    selectedCompanyIds.includes(company.id),
+  )
+
+  const triggerLabel = (() => {
+    if (selectedCompanies.length === 0) {
+      return t("placeholders.empresa")
+    }
+
+    if (selectedCompanies.length <= 2) {
+      return selectedCompanies.map((company) => company.nome).join(", ")
+    }
+
+    return t("selected_companies", { count: selectedCompanies.length })
+  })()
+
+  const toggleCompany = (companyId: number) => {
+    if (selectedCompanyIds.includes(companyId)) {
+      onChange(selectedCompanyIds.filter((id) => id !== companyId))
+      return
+    }
+
+    onChange([...selectedCompanyIds, companyId])
+  }
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          className={cn(
+            "w-full cursor-pointer justify-between text-left font-normal",
+            selectedCompanies.length === 0 && "text-muted-foreground",
+          )}
+        >
+          <span className="truncate">{triggerLabel}</span>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
+        <Command>
+          <CommandInput placeholder={t("search_company")} />
+          <CommandList>
+            <CommandEmpty>{t("empty_companies")}</CommandEmpty>
+            <CommandGroup>
+              {companies.map((company) => {
+                const isSelected = selectedCompanyIds.includes(company.id)
+
+                return (
+                  <CommandItem
+                    key={company.id}
+                    value={company.nome}
+                    onSelect={() => toggleCompany(company.id)}
+                    className="cursor-pointer"
+                  >
+                    <Checkbox
+                      checked={isSelected}
+                      onClick={(event) => event.stopPropagation()}
+                      onCheckedChange={() => toggleCompany(company.id)}
+                      className="mr-2"
+                    />
+                    <span>{company.nome}</span>
+                  </CommandItem>
+                )
+              })}
+            </CommandGroup>
+            {selectedCompanyIds.length > 0 ? (
+              <>
+                <CommandSeparator />
+                <CommandGroup>
+                  <CommandItem
+                    onSelect={() => onChange([])}
+                    className="justify-center text-center cursor-pointer"
+                  >
+                    {t("clear_companies")}
+                  </CommandItem>
+                </CommandGroup>
+              </>
+            ) : null}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  )
+}
 
 export function UserFormDialog({
   open,
   onOpenChange,
   onSuccess,
   user,
+  roles,
+  companies,
 }: UserFormDialogProps) {
-  const [roles, setRoles] = useState<Role[]>([])
-  const [empresas, setEmpresas] = useState<Empresa[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isEdit = !!user
   
   const t = useTranslator("users.form")
   const tTable = useTranslator("users.table")
   const currentLocale = t.getLocale()
-  const rolesFetchErrorMessage = t("notifications.roles_fetch_error")
-
-  const userFormSchema = z.object({
-    name: z.string().trim().min(2, t("validations.name_min")),
-    username: z.string().trim().min(3, t("validations.username_min")),
-    email: z.string().email(t("validations.email_invalid")),
-    password: z.string().optional().or(z.literal("")),
-    birthday: z.date(),
-    status: z.enum(["active", "inactive"]),
-    roleId: z.coerce.number().min(1, t("validations.role_required")),
-    empresaIds: z.array(z.number()).min(1, t("validations.empresa_required") || "Selecione ao menos uma empresa"),
-    locationRequired: z.boolean().default(false),
-  })
+  const userFormSchema = useMemo(
+    () =>
+      z.object({
+        name: z.string().trim().min(2, t("validations.name_min")),
+        username: z.string().trim().min(3, t("validations.username_min")),
+        email: z.string().email(t("validations.email_invalid")),
+        password: z.string().optional().or(z.literal("")),
+        birthday: z.date(),
+        status: z.enum(["active", "inactive"]),
+        roleId: z.coerce.number().min(1, t("validations.role_required")),
+        empresaIds: z.array(z.number()).min(1, t("validations.empresa_required")),
+        locationRequired: z.boolean().default(false),
+      }),
+    [t],
+  )
 
   type UserFormValues = z.infer<typeof userFormSchema>
 
@@ -108,23 +216,6 @@ export function UserFormDialog({
   useEffect(() => {
     if (!open) return
 
-    const loadRolesAndEmpresas = async () => {
-      try {
-        const [rolesData, empresasData] = await Promise.all([
-          roleService.findAllNoPagination(),
-          empresaService.findAllNoPagination(),
-        ])
-        setRoles(rolesData)
-        setEmpresas(empresasData)
-      } catch (error) {
-        toast.apiError(error, rolesFetchErrorMessage)
-        setRoles([])
-        setEmpresas([])
-      }
-    }
-
-    loadRolesAndEmpresas()
-
     form.reset({
       name: user?.name || "",
       username: user?.username || "",
@@ -136,7 +227,7 @@ export function UserFormDialog({
       empresaIds: user?.empresaIds || (user?.empresaId ? [user.empresaId] : []),
       locationRequired: user?.locationRequired || false,
     })
-  }, [form, open, rolesFetchErrorMessage, user])
+  }, [form, open, user])
 
   const onSubmit = async (values: UserFormValues) => {
     setIsSubmitting(true)
@@ -255,6 +346,7 @@ export function UserFormDialog({
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
+                            type="button"
                             variant="outline"
                             className={cn(
                               "w-full cursor-pointer justify-start pl-3 text-left font-normal",
@@ -347,31 +439,14 @@ export function UserFormDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t("labels.empresa")}</FormLabel>
-                    <div className="grid grid-cols-2 gap-2 mt-2">
-                      {empresas.map((empresa) => (
-                        <div key={empresa.id} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`empresa-${empresa.id}`}
-                            checked={field.value?.includes(empresa.id)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, empresa.id])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== empresa.id
-                                    )
-                                  )
-                            }}
-                          />
-                          <label
-                            htmlFor={`empresa-${empresa.id}`}
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                          >
-                            {empresa.nome}
-                          </label>
-                        </div>
-                      ))}
-                    </div>
+                    <FormControl>
+                      <CompanyMultiSelectField
+                        companies={companies}
+                        selectedCompanyIds={field.value || []}
+                        onChange={field.onChange}
+                        t={t}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

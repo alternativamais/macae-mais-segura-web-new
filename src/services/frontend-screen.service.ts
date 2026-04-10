@@ -34,13 +34,14 @@ export const frontendScreenService = {
     roleId: number,
     screenIds: number[],
     platform: string = 'web',
-  ): Promise<void> => {
-    await api.put(
+  ): Promise<RoleFrontendScreenAssignment[]> => {
+    const { data } = await api.put<RoleFrontendScreenAssignment[]>(
       `/roles/${roleId}/frontend-screens`,
       { screenIds: normalizeScreenIds(screenIds) },
       {
         params: { platform },
       },
     );
+    return data;
   },
 };

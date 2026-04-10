@@ -14,6 +14,11 @@ export interface Role {
   id: number;
   name: string;
   description?: string;
+  empresaId?: number | null;
+  empresa?: {
+    id: number;
+    nome: string;
+  } | null;
   createdAt?: string;
   updatedAt?: string;
   rolePermissions?: RolePermission[];

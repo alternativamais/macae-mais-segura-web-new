@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import axios from 'axios'
+import { getAuthSessionCompanyState } from '@/lib/auth-session-payload'
 import { authService } from '@/services/auth.service'
 import { useAuthStore } from '@/store/auth-store'
 import {
@@ -20,6 +21,7 @@ export function useCheckToken() {
   const syncSession = useAuthStore((state) => state.syncSession)
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const token = useAuthStore((state) => state.token)
+  const activeCompanyId = useAuthStore((state) => state.activeCompanyId)
   const hasHydrated = useAuthStore((state) => state.hasHydrated)
 
   useEffect(() => {
@@ -37,7 +39,16 @@ export function useCheckToken() {
       try {
         const snapshot = await authService.checkToken()
         if (!cancelled) {
-          syncSession(snapshot)
+          const companyState = getAuthSessionCompanyState(snapshot)
+
+          syncSession({
+            ...snapshot,
+            activeCompanyId:
+              activeCompanyId === "ALL"
+                ? "ALL"
+                : companyState.activeCompanyId,
+            availableCompanies: companyState.availableCompanies,
+          })
         }
       } catch (error) {
         if (
@@ -58,5 +69,5 @@ export function useCheckToken() {
     return () => {
       cancelled = true
     }
-  }, [hasHydrated, isAuthenticated, logout, pathname, router, searchParams, syncSession, token])
+  }, [activeCompanyId, hasHydrated, isAuthenticated, logout, pathname, router, searchParams, syncSession, token])
 }

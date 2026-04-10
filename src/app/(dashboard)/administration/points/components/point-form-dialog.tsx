@@ -32,7 +32,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useTranslator } from "@/lib/i18n"
-import { Empresa } from "@/types/empresa"
 import { Ponto } from "@/types/ponto"
 import { pontoService } from "@/services/ponto.service"
 import {
@@ -46,10 +45,8 @@ interface PointFormDialogProps {
   onOpenChange: (open: boolean) => void
   onSuccess: () => void | Promise<void>
   point?: Ponto | null
-  companies: Empresa[]
 }
 
-const NO_COMPANY_VALUE = "__none__"
 const COORDINATES_REGEX =
   /^\s*-?\d+(?:\.\d+)?\s*,\s*-?\d+(?:\.\d+)?\s*$/
 
@@ -69,7 +66,6 @@ function createPointFormSchema(messages: {
         messages.coordinatesInvalid,
       ),
     status: z.enum(["active", "inactive"]),
-    empresaId: z.string(),
   })
 }
 
@@ -80,7 +76,6 @@ export function PointFormDialog({
   onOpenChange,
   onSuccess,
   point,
-  companies,
 }: PointFormDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMapPickerOpen, setIsMapPickerOpen] = useState(false)
@@ -105,7 +100,6 @@ export function PointFormDialog({
       pontoDeReferencia: "",
       coordenadas: "",
       status: "active",
-      empresaId: NO_COMPANY_VALUE,
     },
   })
 
@@ -123,10 +117,6 @@ export function PointFormDialog({
       pontoDeReferencia: point?.pontoDeReferencia || "",
       coordenadas: point?.coordenadas || "",
       status: point?.status === "inactive" ? "inactive" : "active",
-      empresaId:
-        typeof point?.empresaId === "number"
-          ? String(point.empresaId)
-          : NO_COMPANY_VALUE,
     })
   }, [form, open, point])
 
@@ -139,8 +129,6 @@ export function PointFormDialog({
         pontoDeReferencia: values.pontoDeReferencia?.trim() || null,
         coordenadas: values.coordenadas?.trim() || null,
         status: values.status,
-        empresaId:
-          values.empresaId === NO_COMPANY_VALUE ? null : Number(values.empresaId),
       }
 
       if (isEdit && point) {
@@ -256,34 +244,6 @@ export function PointFormDialog({
                       <SelectContent>
                         <SelectItem value="active">{tTable("status_active")}</SelectItem>
                         <SelectItem value="inactive">{tTable("status_inactive")}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="empresaId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("labels.company")}</FormLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <FormControl>
-                        <SelectTrigger className="w-full cursor-pointer">
-                          <SelectValue placeholder={t("placeholders.company")} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value={NO_COMPANY_VALUE}>
-                          {t("options.system_default")}
-                        </SelectItem>
-                        {companies.map((company) => (
-                          <SelectItem key={company.id} value={String(company.id)}>
-                            {company.nome}
-                          </SelectItem>
-                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

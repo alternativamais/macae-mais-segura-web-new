@@ -16,13 +16,12 @@ import { authService } from "@/services/auth.service"
 import { useAuthStore } from "@/store/auth-store"
 import Link from "next/link"
 import Image from "next/image"
-import { setCookie } from "cookies-next"
 import { collectFrontendScreens } from "@/lib/frontend-screens"
 import { captureBrowserLocation } from "@/lib/browser-location"
+import { getAuthSessionCompanyState } from "@/lib/auth-session-payload"
 import {
-  AUTH_COOKIE_KEY,
   AUTH_REDIRECT_REASON,
-  AUTH_TOKEN_KEY,
+  persistClientAuthToken,
 } from "@/lib/auth-session"
 
 const loginSchema = z.object({
@@ -63,12 +62,7 @@ export function LoginForm({
       const { accessToken, user, allowedScreens, permissions } = response
 
       if (accessToken) {
-        localStorage.setItem(AUTH_TOKEN_KEY, accessToken)
-        // O cookie é essencial para o Middleware do Nextjs
-        setCookie(AUTH_COOKIE_KEY, accessToken, { 
-          maxAge: 60 * 60 * 24 * 7, // 7 dias
-          path: '/',
-        })
+        persistClientAuthToken(accessToken)
 
         let finalAllowedScreens = Array.isArray(allowedScreens)
           ? Array.from(
@@ -103,10 +97,10 @@ export function LoginForm({
           }
         }
 
-        const initialActiveCompanyId = response.empresa?.id || null;
-        const availableCompanies = response.empresas || [];
+        const { activeCompanyId, availableCompanies } =
+          getAuthSessionCompanyState(response)
 
-        login(accessToken, user, initialActiveCompanyId, availableCompanies, finalAllowedScreens, permissions)
+        login(accessToken, user, activeCompanyId, availableCompanies, finalAllowedScreens, permissions)
         toast.success("Login realizado com sucesso!")
         const next = searchParams.get("next")
         if (next && next.startsWith("/") && !next.startsWith("//")) {

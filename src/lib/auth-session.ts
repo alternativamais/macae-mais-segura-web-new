@@ -1,3 +1,5 @@
+import { setCookie } from "cookies-next"
+
 export const AUTH_TOKEN_KEY = "@alternativa-base:token"
 export const AUTH_COOKIE_KEY = AUTH_TOKEN_KEY
 
@@ -107,4 +109,16 @@ export function getClientCurrentPath() {
   }
 
   return buildSafeNextPath(window.location.pathname, window.location.search)
+}
+
+export function persistClientAuthToken(token: string, maxAge = 60 * 60 * 24 * 7) {
+  if (typeof window === "undefined") {
+    return
+  }
+
+  localStorage.setItem(AUTH_TOKEN_KEY, token)
+  setCookie(AUTH_COOKIE_KEY, token, {
+    maxAge,
+    path: "/",
+  })
 }

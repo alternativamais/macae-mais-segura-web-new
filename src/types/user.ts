@@ -9,12 +9,14 @@ export interface User {
   status?: string;
   avatarUrl?: string | null;
   role?: { id: number; name: string };
-  roleId: number;
+  roleId?: number | null;
   birthday?: string;
   locationRequired?: boolean;
   empresaId?: number | null; // Retrocompatibilidade do dropdown anterior se houver
   empresaIds?: number[];
   empresa?: Empresa;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CreateUserPayload {

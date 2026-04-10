@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { Save, Search, ShieldAlert as ShieldIcon } from "lucide-react"
+import { Building2, Save, Search, ShieldAlert as ShieldIcon } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TabStateCard } from "@/app/(dashboard)/access-control/components/tab-state-card"
@@ -21,31 +21,38 @@ import {
 } from "@/components/ui/select"
 import { PermissionGroupAccordion } from "./permission-group-accordion"
 import { useTranslator } from "@/lib/i18n"
+import { RoleScopeBadge } from "./role-scope-badge"
+import { CompanyNameById, getRoleOptionLabel } from "./utils"
 
-export function AssignmentTab() {
-  const [roles, setRoles] = useState<Role[]>([])
+interface AssignmentTabProps {
+  roles: Role[]
+  companyNameById: CompanyNameById
+  isRolesLoading: boolean
+  isAllCompaniesView: boolean
+}
+
+export function AssignmentTab({
+  roles,
+  companyNameById,
+  isRolesLoading,
+  isAllCompaniesView,
+}: AssignmentTabProps) {
   const [permissions, setPermissions] = useState<Permission[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [assignedIds, setAssignedIds] = useState<number[]>([])
   const [initialAssignedIds, setInitialAssignedIds] = useState<number[]>([])
   const t = useTranslator("permissions.assignment_tab")
+  const selectedRole = useMemo(
+    () => roles.find((role) => role.id === selectedRoleId) ?? null,
+    [roles, selectedRoleId]
+  )
 
   const loadBaseData = useCallback(async () => {
     setIsLoading(true)
 
-    const [rolesResult, permissionsResult] = await Promise.allSettled([
-      roleService.findAllNoPagination(),
-      permissionService.findAllNoPagination(),
-    ])
-
-    if (rolesResult.status === "fulfilled") {
-      setRoles(rolesResult.value)
-    } else {
-      setRoles([])
-      toast.apiError(rolesResult.reason, t("error_roles"))
-    }
+    const [permissionsResult] = await Promise.allSettled([permissionService.findAllNoPagination()])
 
     if (permissionsResult.status === "fulfilled") {
       setPermissions(permissionsResult.value)
@@ -55,11 +62,27 @@ export function AssignmentTab() {
     }
 
     setIsLoading(false)
-  }, [])
+  }, [t])
 
   useEffect(() => {
-    loadBaseData()
-  }, [loadBaseData])
+    if (isAllCompaniesView) {
+      setPermissions([])
+      setSelectedRoleId(null)
+      setAssignedIds([])
+      setInitialAssignedIds([])
+      return
+    }
+
+    void loadBaseData()
+  }, [isAllCompaniesView, loadBaseData])
+
+  useEffect(() => {
+    if (selectedRoleId && !roles.some((role) => role.id === selectedRoleId)) {
+      setSelectedRoleId(null)
+      setAssignedIds([])
+      setInitialAssignedIds([])
+    }
+  }, [roles, selectedRoleId])
 
   const loadRolePermissions = useCallback(async (roleId: number) => {
     setIsLoading(true)
@@ -69,16 +92,25 @@ export function AssignmentTab() {
       setAssignedIds(permIds)
       setInitialAssignedIds(permIds)
     } catch (error) {
+      setAssignedIds([])
+      setInitialAssignedIds([])
       toast.apiError(error, t("error_role_perms"))
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [t])
 
   const handleRoleChange = (roleIdStr: string) => {
     const roleId = Number(roleIdStr)
+    if (!Number.isInteger(roleId) || roleId <= 0) {
+      setSelectedRoleId(null)
+      setAssignedIds([])
+      setInitialAssignedIds([])
+      return
+    }
+
     setSelectedRoleId(roleId)
-    loadRolePermissions(roleId)
+    void loadRolePermissions(roleId)
   }
 
   const filteredGroupedPermissions = useMemo(() => {
@@ -144,6 +176,16 @@ export function AssignmentTab() {
     }
   }
 
+  if (isAllCompaniesView) {
+    return (
+      <TabStateCard
+        icon={Building2}
+        title={t("all_companies_title")}
+        description={t("all_companies_desc")}
+      />
+    )
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -163,7 +205,7 @@ export function AssignmentTab() {
             <Select
               value={selectedRoleId ? String(selectedRoleId) : ""}
               onValueChange={handleRoleChange}
-              disabled={isLoading && roles.length === 0}
+              disabled={isRolesLoading || (isLoading && roles.length === 0)}
             >
               <SelectTrigger id="role-select" className="w-full cursor-pointer sm:w-[240px]">
                 <SelectValue placeholder={t("select_role")} />
@@ -171,16 +213,25 @@ export function AssignmentTab() {
               <SelectContent>
                 {roles.map((role) => (
                   <SelectItem key={role.id} value={String(role.id)}>
-                    {role.name}
+                    {getRoleOptionLabel(role, companyNameById, {
+                      globalRole: t("global_role"),
+                      companyFallback: (empresaId) => t("company_role_fallback", { id: empresaId }),
+                    })}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {selectedRole ? (
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>{t("selected_scope")}:</span>
+                <RoleScopeBadge role={selectedRole} companyNameById={companyNameById} />
+              </div>
+            ) : null}
           </div>
 
           <Button
             onClick={handleSave}
-            disabled={!selectedRoleId || !isDirty || isLoading}
+            disabled={!selectedRoleId || !isDirty || isLoading || isRolesLoading}
             className="cursor-pointer self-end"
           >
             <Save className="mr-2 h-4 w-4" />

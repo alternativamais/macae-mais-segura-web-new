@@ -1,13 +1,12 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutTemplate as ScreenIcon, Save, Search } from "lucide-react"
+import { Building2, LayoutTemplate as ScreenIcon, Save, Search } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TabStateCard } from "@/app/(dashboard)/access-control/components/tab-state-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { roleService } from "@/services/role.service"
 import { frontendScreenService } from "@/services/frontend-screen.service"
 import { FrontendScreen } from "@/types/frontend-screen"
 import { Role } from "@/types/role"
@@ -20,34 +19,41 @@ import {
 } from "@/components/ui/select"
 import { ScreenGroupAccordion } from "./screen-group-accordion"
 import { useTranslator } from "@/lib/i18n"
+import { RoleScopeBadge } from "./role-scope-badge"
+import { CompanyNameById, getRoleOptionLabel } from "./utils"
 
 const normalizeAssignedIds = (screenIds: number[]) =>
   Array.from(new Set(screenIds.filter((screenId) => Number.isInteger(screenId))))
 
-export function ScreensTab() {
-  const [roles, setRoles] = useState<Role[]>([])
+interface ScreensTabProps {
+  roles: Role[]
+  companyNameById: CompanyNameById
+  isRolesLoading: boolean
+  isAllCompaniesView: boolean
+}
+
+export function ScreensTab({
+  roles,
+  companyNameById,
+  isRolesLoading,
+  isAllCompaniesView,
+}: ScreensTabProps) {
   const [screens, setScreens] = useState<FrontendScreen[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [assignedIds, setAssignedIds] = useState<number[]>([])
   const [initialAssignedIds, setInitialAssignedIds] = useState<number[]>([])
   const t = useTranslator("permissions.screens_tab")
+  const selectedRole = useMemo(
+    () => roles.find((role) => role.id === selectedRoleId) ?? null,
+    [roles, selectedRoleId]
+  )
 
   const loadBaseData = useCallback(async () => {
     setIsLoading(true)
 
-    const [rolesResult, screensResult] = await Promise.allSettled([
-      roleService.findAllNoPagination(),
-      frontendScreenService.findAll("web"),
-    ])
-
-    if (rolesResult.status === "fulfilled") {
-      setRoles(rolesResult.value)
-    } else {
-      setRoles([])
-      toast.apiError(rolesResult.reason, t("error_roles"))
-    }
+    const [screensResult] = await Promise.allSettled([frontendScreenService.findAll("web")])
 
     if (screensResult.status === "fulfilled") {
       setScreens(screensResult.value)
@@ -57,11 +63,27 @@ export function ScreensTab() {
     }
 
     setIsLoading(false)
-  }, [])
+  }, [t])
 
   useEffect(() => {
-    loadBaseData()
-  }, [loadBaseData])
+    if (isAllCompaniesView) {
+      setScreens([])
+      setSelectedRoleId(null)
+      setAssignedIds([])
+      setInitialAssignedIds([])
+      return
+    }
+
+    void loadBaseData()
+  }, [isAllCompaniesView, loadBaseData])
+
+  useEffect(() => {
+    if (selectedRoleId && !roles.some((role) => role.id === selectedRoleId)) {
+      setSelectedRoleId(null)
+      setAssignedIds([])
+      setInitialAssignedIds([])
+    }
+  }, [roles, selectedRoleId])
 
   const loadRoleScreens = useCallback(async (roleId: number) => {
     setIsLoading(true)
@@ -73,16 +95,26 @@ export function ScreensTab() {
       setAssignedIds(screenIds)
       setInitialAssignedIds(screenIds)
     } catch (error) {
+      setAssignedIds([])
+      setInitialAssignedIds([])
       toast.apiError(error, t("error_role_screens"))
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [t])
 
   const handleRoleChange = (roleIdStr: string) => {
     const roleId = Number(roleIdStr)
+
+     if (!Number.isInteger(roleId) || roleId <= 0) {
+      setSelectedRoleId(null)
+      setAssignedIds([])
+      setInitialAssignedIds([])
+      return
+    }
+
     setSelectedRoleId(roleId)
-    loadRoleScreens(roleId)
+    void loadRoleScreens(roleId)
   }
 
   const filteredGroupedScreens = useMemo(() => {
@@ -150,6 +182,16 @@ export function ScreensTab() {
     }
   }
 
+  if (isAllCompaniesView) {
+    return (
+      <TabStateCard
+        icon={Building2}
+        title={t("all_companies_title")}
+        description={t("all_companies_desc")}
+      />
+    )
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -169,7 +211,7 @@ export function ScreensTab() {
             <Select
               value={selectedRoleId ? String(selectedRoleId) : ""}
               onValueChange={handleRoleChange}
-              disabled={isLoading && roles.length === 0}
+              disabled={isRolesLoading || (isLoading && roles.length === 0)}
             >
               <SelectTrigger id="role-select" className="w-full cursor-pointer sm:w-[240px]">
                 <SelectValue placeholder={t("select_role")} />
@@ -177,16 +219,25 @@ export function ScreensTab() {
               <SelectContent>
                 {roles.map((role) => (
                   <SelectItem key={role.id} value={String(role.id)}>
-                    {role.name}
+                    {getRoleOptionLabel(role, companyNameById, {
+                      globalRole: t("global_role"),
+                      companyFallback: (empresaId) => t("company_role_fallback", { id: empresaId }),
+                    })}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {selectedRole ? (
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>{t("selected_scope")}:</span>
+                <RoleScopeBadge role={selectedRole} companyNameById={companyNameById} />
+              </div>
+            ) : null}
           </div>
 
           <Button
             onClick={handleSave}
-            disabled={!selectedRoleId || !isDirty || isLoading}
+            disabled={!selectedRoleId || !isDirty || isLoading || isRolesLoading}
             className="cursor-pointer self-end"
           >
             <Save className="mr-2 h-4 w-4" />
