@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { Button } from "@/components/ui/button"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useTranslator } from "@/lib/i18n"
 import { Ponto } from "@/types/ponto"
 import { pontoService } from "@/services/ponto.service"
@@ -53,20 +55,32 @@ const COORDINATES_REGEX =
 function createPointFormSchema(messages: {
   nameMin: string
   coordinatesInvalid: string
-}) {
-  return z.object({
-    nome: z.string().trim().min(2, messages.nameMin),
-    pontoDeReferencia: z.string().trim().optional(),
-    coordenadas: z
-      .string()
-      .trim()
-      .optional()
-      .refine(
-        (value) => !value || COORDINATES_REGEX.test(value),
-        messages.coordinatesInvalid,
-      ),
-    status: z.enum(["active", "inactive"]),
-  })
+  companyRequired: string
+}, requireCompanySelection: boolean) {
+  return z
+    .object({
+      nome: z.string().trim().min(2, messages.nameMin),
+      pontoDeReferencia: z.string().trim().optional(),
+      coordenadas: z
+        .string()
+        .trim()
+        .optional()
+        .refine(
+          (value) => !value || COORDINATES_REGEX.test(value),
+          messages.coordinatesInvalid,
+        ),
+      status: z.enum(["active", "inactive"]),
+      empresaId: z.string().optional(),
+    })
+    .superRefine((values, context) => {
+      if (requireCompanySelection && !values.empresaId) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["empresaId"],
+          message: messages.companyRequired,
+        })
+      }
+    })
 }
 
 type PointFormValues = z.infer<ReturnType<typeof createPointFormSchema>>
@@ -80,17 +94,24 @@ export function PointFormDialog({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isMapPickerOpen, setIsMapPickerOpen] = useState(false)
   const isEdit = !!point
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
 
   const t = useTranslator("points.form")
   const tTable = useTranslator("points.table")
+  const tCompany = useTranslator("company_field")
 
   const pointFormSchema = useMemo(
     () =>
-      createPointFormSchema({
-        nameMin: t("validations.name_min"),
-        coordinatesInvalid: t("validations.coordinates_invalid"),
-      }),
-    [t],
+      createPointFormSchema(
+        {
+          nameMin: t("validations.name_min"),
+          coordinatesInvalid: t("validations.coordinates_invalid"),
+          companyRequired: tCompany("required"),
+        },
+        showCompanySelector && !isEdit,
+      ),
+    [isEdit, showCompanySelector, t, tCompany],
   )
 
   const form = useForm<PointFormValues>({
@@ -100,6 +121,7 @@ export function PointFormDialog({
       pontoDeReferencia: "",
       coordenadas: "",
       status: "active",
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
@@ -117,18 +139,30 @@ export function PointFormDialog({
       pontoDeReferencia: point?.pontoDeReferencia || "",
       coordenadas: point?.coordenadas || "",
       status: point?.status === "inactive" ? "inactive" : "active",
+      empresaId:
+        typeof point?.empresaId === "number"
+          ? String(point.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
     })
-  }, [form, open, point])
+  }, [defaultCompanyId, form, open, point])
 
   const onSubmit = async (values: PointFormValues) => {
     setIsSubmitting(true)
 
     try {
+      const empresaId =
+        values.empresaId && values.empresaId.trim()
+          ? Number(values.empresaId)
+          : defaultCompanyId ?? undefined
+
       const payload = {
         nome: values.nome.trim(),
         pontoDeReferencia: values.pontoDeReferencia?.trim() || null,
         coordenadas: values.coordenadas?.trim() || null,
         status: values.status,
+        ...(empresaId ? { empresaId } : {}),
       }
 
       if (isEdit && point) {
@@ -163,6 +197,15 @@ export function PointFormDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <FormField
               control={form.control}
               name="nome"

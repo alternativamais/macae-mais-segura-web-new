@@ -31,11 +31,19 @@ export interface Camera {
   rtspPath?: string
   pontoId?: number
   totemId?: number
+  empresaId?: number | null
   status: "active" | "inactive" | string
   createdAt: string
   updatedAt: string
   ponto?: Ponto
   totem?: Totem
+}
+
+export interface CameraListParams {
+  page?: number
+  limit?: number
+  search?: string
+  empresaId?: number
 }
 
 export interface CreateCameraPayload {
@@ -50,6 +58,7 @@ export interface CreateCameraPayload {
   pontoId?: number
   totemId?: number
   status?: string
+  empresaId?: number
 }
 
 export interface UpdateCameraPayload extends Partial<CreateCameraPayload> {}

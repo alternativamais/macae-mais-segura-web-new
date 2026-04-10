@@ -14,7 +14,7 @@ interface UiSettingsContextValue {
   settings: UiSettings | null
   isLoading: boolean
   applySettings: (settings: UiSettings) => void
-  reloadSettings: () => Promise<UiSettings | null>
+  reloadSettings: (empresaId?: number) => Promise<UiSettings | null>
 }
 
 const UiSettingsContext = React.createContext<UiSettingsContextValue | null>(null)
@@ -23,11 +23,26 @@ function normalizeThemeMode(mode: UiSettings["themeMode"]) {
   return mode === "dark" ? "dark" : "light"
 }
 
+function normalizeScopedCompanyId(value: string | number | null) {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value
+  }
+
+  if (typeof value === "string" && value.trim() && value !== "ALL") {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : null
+  }
+
+  return null
+}
+
 export function UiSettingsProvider({ children }: { children: React.ReactNode }) {
   const { config: sidebarConfig, updateConfig } = useSidebarConfig()
   const userThemeModePreference = useAuthStore(
     (state) => state.user?.themeModePreference ?? null,
   )
+  const activeCompanyId = useAuthStore((state) => state.activeCompanyId)
+  const hasHydrated = useAuthStore((state) => state.hasHydrated)
   const {
     setTheme,
     resetTheme,
@@ -41,8 +56,14 @@ export function UiSettingsProvider({ children }: { children: React.ReactNode }) 
   const [isLoading, setIsLoading] = React.useState(true)
   const sidebarConfigRef = React.useRef(sidebarConfig)
   const userThemeModePreferenceRef = React.useRef(userThemeModePreference)
-  const reloadPromiseRef = React.useRef<Promise<UiSettings | null> | null>(null)
-  const initialLoadStartedRef = React.useRef(false)
+  const reloadPromiseRef = React.useRef<{
+    key: string
+    promise: Promise<UiSettings | null>
+  } | null>(null)
+  const activeScopedCompanyId = React.useMemo(
+    () => normalizeScopedCompanyId(activeCompanyId),
+    [activeCompanyId],
+  )
 
   React.useEffect(() => {
     sidebarConfigRef.current = sidebarConfig
@@ -119,16 +140,22 @@ export function UiSettingsProvider({ children }: { children: React.ReactNode }) 
     ],
   )
 
-  const reloadSettings = React.useCallback(async () => {
-    if (reloadPromiseRef.current) {
-      return reloadPromiseRef.current
+  const reloadSettings = React.useCallback(async (empresaId?: number) => {
+    const targetEmpresaId =
+      typeof empresaId === "number" && Number.isFinite(empresaId)
+        ? empresaId
+        : activeScopedCompanyId ?? undefined
+    const requestKey = String(targetEmpresaId ?? "current")
+
+    if (reloadPromiseRef.current?.key === requestKey) {
+      return reloadPromiseRef.current.promise
     }
 
     setIsLoading(true)
 
     const request = (async () => {
       try {
-        const currentSettings = await uiSettingsService.getSettings()
+        const currentSettings = await uiSettingsService.getSettings(targetEmpresaId)
         applySettings(currentSettings)
         return currentSettings
       } catch (error) {
@@ -136,22 +163,26 @@ export function UiSettingsProvider({ children }: { children: React.ReactNode }) 
         return DEFAULT_UI_SETTINGS
       } finally {
         setIsLoading(false)
-        reloadPromiseRef.current = null
+        if (reloadPromiseRef.current?.key === requestKey) {
+          reloadPromiseRef.current = null
+        }
       }
     })()
 
-    reloadPromiseRef.current = request
+    reloadPromiseRef.current = {
+      key: requestKey,
+      promise: request,
+    }
     return request
-  }, [applySettings])
+  }, [activeScopedCompanyId, applySettings])
 
   React.useEffect(() => {
-    if (initialLoadStartedRef.current) {
+    if (!hasHydrated) {
       return
     }
 
-    initialLoadStartedRef.current = true
     void reloadSettings()
-  }, [reloadSettings])
+  }, [activeCompanyId, hasHydrated, reloadSettings])
 
   React.useEffect(() => {
     if (!settings) {

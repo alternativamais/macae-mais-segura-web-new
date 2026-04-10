@@ -16,6 +16,7 @@ export type DayOfWeek =
 
 export interface AccessIpBlock {
   id: number
+  empresaId?: number | null
   label?: string
   mode: AccessIpBlockMode
   ipValue?: string
@@ -36,12 +37,14 @@ export interface CreateAccessIpBlockPayload {
   rangeEnd?: string
   description?: string
   active?: boolean
+  empresaId?: number
 }
 
 export type UpdateAccessIpBlockPayload = Partial<CreateAccessIpBlockPayload>
 
 export interface AccessRegionRule {
   id: number
+  empresaId?: number | null
   action: AccessRegionAction
   regionType?: "country"
   code: string
@@ -56,6 +59,7 @@ export interface CreateAccessRegionRulePayload {
   code: string
   description?: string
   active?: boolean
+  empresaId?: number
 }
 
 export type UpdateAccessRegionRulePayload = Partial<CreateAccessRegionRulePayload>

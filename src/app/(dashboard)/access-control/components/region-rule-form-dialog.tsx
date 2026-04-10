@@ -6,6 +6,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { accessControlService } from "@/services/access-control.service"
 import { AccessRegionRule } from "@/types/access-control"
 import { useTranslator } from "@/lib/i18n"
@@ -44,6 +46,7 @@ type RegionRuleFormValues = {
   code: string
   description?: string
   active: boolean
+  empresaId?: string
 }
 
 interface RegionRuleFormDialogProps {
@@ -61,8 +64,11 @@ export function RegionRuleFormDialog({
 }: RegionRuleFormDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isEdit = !!regionRule
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
   const t = useTranslator("access_control.region_rule_form")
   const tAccess = useTranslator("access_control")
+  const tCompany = useTranslator("company_field")
   const actionOptions = useMemo(() => getRegionActionOptions(tAccess), [tAccess])
   const validationCodeLength = t("val_code_length")
 
@@ -76,8 +82,17 @@ export function RegionRuleFormDialog({
           .length(2, validationCodeLength),
         description: z.string().optional(),
         active: z.boolean(),
+        empresaId: z.string().optional(),
+      }).superRefine((values, context) => {
+        if (showCompanySelector && !isEdit && !values.empresaId) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["empresaId"],
+            message: tCompany("required"),
+          })
+        }
       }),
-    [validationCodeLength],
+    [isEdit, showCompanySelector, tCompany, validationCodeLength],
   )
 
   const form = useForm<RegionRuleFormValues>({
@@ -87,6 +102,7 @@ export function RegionRuleFormDialog({
       code: "",
       description: "",
       active: true,
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
@@ -98,22 +114,38 @@ export function RegionRuleFormDialog({
       code: regionRule?.code || "",
       description: regionRule?.description || "",
       active: regionRule?.active ?? true,
+      empresaId:
+        typeof regionRule?.empresaId === "number"
+          ? String(regionRule.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
     })
-  }, [open, regionRule, form])
+  }, [defaultCompanyId, open, regionRule, form])
 
   const onSubmit = async (values: RegionRuleFormValues) => {
     setIsSubmitting(true)
 
     try {
+      const empresaId =
+        values.empresaId && values.empresaId.trim()
+          ? Number(values.empresaId)
+          : defaultCompanyId ?? undefined
       const payload = {
         action: values.action,
         code: values.code.trim().toUpperCase(),
         description: values.description?.trim() || undefined,
         active: values.active,
+        ...(empresaId ? { empresaId } : {}),
       }
 
       if (isEdit && regionRule) {
-        await accessControlService.updateRegionRule(regionRule.id, payload)
+        await accessControlService.updateRegionRule(regionRule.id, {
+          action: payload.action,
+          code: payload.code,
+          description: payload.description,
+          active: payload.active,
+        })
         toast.success(t("success_edit"))
       } else {
         await accessControlService.createRegionRule(payload)
@@ -141,6 +173,15 @@ export function RegionRuleFormDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <div className="grid items-start gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}

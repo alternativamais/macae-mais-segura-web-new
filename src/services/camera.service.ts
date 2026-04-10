@@ -1,6 +1,7 @@
 import api from "@/lib/api-client"
 import {
   Camera,
+  CameraListParams,
   CreateCameraPayload,
   UpdateCameraPayload,
   Ponto,
@@ -10,7 +11,7 @@ import {
 const basePath = "/cameras"
 
 export const cameraService = {
-  findAll: async (params?: { page?: number; limit?: number; search?: string }) => {
+  findAll: async (params?: CameraListParams) => {
     const { data } = await api.get<{ data: Camera[]; total: number }>(basePath, {
       params,
     })

@@ -32,4 +32,5 @@ export interface UpdateUiSettingsPayload {
   sidebarVariant: UiSidebarVariant
   sidebarCollapsible: UiSidebarCollapsible
   sidebarSide: UiSidebarSide
+  empresaId?: number
 }

@@ -7,6 +7,13 @@
     "logout": "Sair",
     "language": "Idioma"
   },
+  "company_field": {
+    "label": "Empresa",
+    "placeholder": "Selecione a empresa",
+    "required": "Selecione a empresa responsável.",
+    "edit_locked": "A empresa deste cadastro não pode ser alterada nesta edição.",
+    "select_first": "Selecione a empresa para carregar os vínculos disponíveis."
+  },
   "dashboard": {
     "title": "Dashboard",
     "description": "Uma visão geral do sistema"

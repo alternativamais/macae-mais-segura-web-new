@@ -15,6 +15,7 @@ export interface CallCenterExtensionTotem {
 
 export interface CallCenterExtension {
   id: number
+  empresaId?: number | null
   numeroRamal: string
   descricao?: string | null
   queueName?: string | null
@@ -38,4 +39,5 @@ export interface CallCenterExtensionPayload {
   queueName?: string
   status?: CallCenterExtensionStatus
   type?: CallCenterExtensionType
+  empresaId?: number
 }

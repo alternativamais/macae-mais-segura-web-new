@@ -75,16 +75,21 @@ export const climateEquipmentService = {
     await api.delete(`${basePath}/${id}`)
   },
 
-  listHomeAssistantDevices: async () => {
+  listHomeAssistantDevices: async (empresaId?: number) => {
     const { data } = await api.get<HomeAssistantClimateDeviceOption[]>(
       `${basePath}/home-assistant/devices`,
+      {
+        params: empresaId ? { empresaId } : undefined,
+      },
     )
 
     return data
   },
 
-  listTotemOptions: async () => {
-    const { data } = await api.get<ClimateTotemOption[]>(`${basePath}/totems`)
+  listTotemOptions: async (empresaId?: number) => {
+    const { data } = await api.get<ClimateTotemOption[]>(`${basePath}/totems`, {
+      params: empresaId ? { empresaId } : undefined,
+    })
     return data
   },
 

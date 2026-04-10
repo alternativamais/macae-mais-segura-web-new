@@ -18,6 +18,7 @@ export interface ConfirmDialogProps {
   onOpenChange: (open: boolean) => void
   title: string
   description: string
+  children?: React.ReactNode
   confirmText?: string
   cancelText?: string
   onConfirm: () => void | Promise<void>
@@ -32,6 +33,7 @@ export function ConfirmDialog({
   onOpenChange,
   title,
   description,
+  children,
   confirmText = "Confirmar",
   cancelText = "Cancelar",
   onConfirm,
@@ -64,6 +66,8 @@ export function ConfirmDialog({
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+
+        {children ? <div className="mt-4">{children}</div> : null}
         
         <AlertDialogFooter className="mt-8">
           <AlertDialogCancel onClick={handleCancel} disabled={isLoading} className="flex-1">

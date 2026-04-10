@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { Button } from "@/components/ui/button"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Accordion,
   AccordionContent,
@@ -41,6 +42,7 @@ import {
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useTranslator } from "@/lib/i18n"
 import { networkEquipmentService } from "@/services/network-equipment.service"
 import { pontoService } from "@/services/ponto.service"
@@ -72,7 +74,8 @@ const NO_TOTEM_VALUE = "__none_totem__"
 function createFormSchema(messages: {
   nameRequired: string
   ipRequired: string
-}) {
+  companyRequired: string
+}, requireCompanySelection: boolean) {
   return z.object({
     nome: z.string().trim().min(1, messages.nameRequired),
     ip: z.string().trim().min(1, messages.ipRequired),
@@ -95,6 +98,15 @@ function createFormSchema(messages: {
     frequencia: z.string().optional(),
     gerenciavel: z.boolean(),
     vlans: z.string().optional(),
+    empresaId: z.string().optional(),
+  }).superRefine((values, context) => {
+    if (requireCompanySelection && !values.empresaId) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["empresaId"],
+        message: messages.companyRequired,
+      })
+    }
   })
 }
 
@@ -136,18 +148,25 @@ export function NetworkEquipmentFormDialog({
   const [totens, setTotens] = useState<Totem[]>([])
   const [openSection, setOpenSection] = useState("identification")
   const isEdit = !!item
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
 
   const t = useTranslator("network_equipment.form")
   const tRoot = useTranslator("network_equipment")
   const tShared = useTranslator("network_equipment.shared")
+  const tCompany = useTranslator("company_field")
 
   const schema = useMemo(
     () =>
-      createFormSchema({
-        nameRequired: t("validations.name_required"),
-        ipRequired: t("validations.ip_required"),
-      }),
-    [t],
+      createFormSchema(
+        {
+          nameRequired: t("validations.name_required"),
+          ipRequired: t("validations.ip_required"),
+          companyRequired: tCompany("required"),
+        },
+        showCompanySelector && !isEdit,
+      ),
+    [isEdit, showCompanySelector, t, tCompany],
   )
 
   const form = useForm<NetworkEquipmentFormValues>({
@@ -174,6 +193,7 @@ export function NetworkEquipmentFormDialog({
       frequencia: "2.4GHz",
       gerenciavel: false,
       vlans: "",
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
@@ -181,6 +201,11 @@ export function NetworkEquipmentFormDialog({
   const equipmentType = form.watch("tipoEquipamento")
   const onuMode = form.watch("modoOnu")
   const isManagedSwitch = form.watch("gerenciavel")
+  const rawCompanyId = form.watch("empresaId")
+  const selectedCompanyId =
+    rawCompanyId && rawCompanyId.trim()
+      ? Number(rawCompanyId)
+      : defaultCompanyId ?? null
 
   const loadDependenciesErrorMessage = t("notifications.load_dependencies_error")
   const createSuccessMessage = t("notifications.create_success")
@@ -191,27 +216,6 @@ export function NetworkEquipmentFormDialog({
   useEffect(() => {
     if (!open) return
 
-    async function loadDependencies() {
-      setIsLoadingDependencies(true)
-
-      try {
-        const [pointsData, totensData] = await Promise.all([
-          pontoService.findAllNoPagination(),
-          totemService.findAllNoPagination(),
-        ])
-
-        setPoints(pointsData)
-        setTotens(totensData)
-      } catch (error) {
-        toast.apiError(error, loadDependenciesErrorMessage)
-        setPoints([])
-        setTotens([])
-      } finally {
-        setIsLoadingDependencies(false)
-      }
-    }
-
-    loadDependencies()
     setOpenSection("identification")
 
     const destinationValue: NetworkEquipmentDestination = item
@@ -252,8 +256,47 @@ export function NetworkEquipmentFormDialog({
       frequencia: item?.frequencia || "2.4GHz",
       gerenciavel: !!item?.gerenciavel,
       vlans: item?.vlans || "",
+      empresaId:
+        typeof item?.empresaId === "number"
+          ? String(item.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
     })
-  }, [form, item, loadDependenciesErrorMessage, open])
+  }, [defaultCompanyId, form, item, open])
+
+  useEffect(() => {
+    if (!open) return
+
+    if (showCompanySelector && !selectedCompanyId) {
+      setPoints([])
+      setTotens([])
+      return
+    }
+
+    async function loadDependencies() {
+      setIsLoadingDependencies(true)
+
+      try {
+        const params = selectedCompanyId ? { empresaId: selectedCompanyId } : undefined
+        const [pointsData, totensData] = await Promise.all([
+          pontoService.findAllNoPagination(params),
+          totemService.findAllNoPagination(params),
+        ])
+
+        setPoints(pointsData)
+        setTotens(totensData)
+      } catch (error) {
+        toast.apiError(error, loadDependenciesErrorMessage)
+        setPoints([])
+        setTotens([])
+      } finally {
+        setIsLoadingDependencies(false)
+      }
+    }
+
+    void loadDependencies()
+  }, [loadDependenciesErrorMessage, open, selectedCompanyId, showCompanySelector])
 
   const handleDestinationChange = (value: NetworkEquipmentDestination) => {
     form.setValue("destino", value, { shouldDirty: true, shouldValidate: true })
@@ -273,7 +316,8 @@ export function NetworkEquipmentFormDialog({
       const payload = buildNetworkEquipmentPayload(values)
 
       if (isEdit && item) {
-        await networkEquipmentService.update(item.id, payload)
+        const { empresaId, ...updatePayload } = payload
+        await networkEquipmentService.update(item.id, updatePayload)
         toast.success(updateSuccessMessage)
       } else {
         await networkEquipmentService.create(payload)
@@ -318,6 +362,15 @@ export function NetworkEquipmentFormDialog({
             onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)}
             className="space-y-6"
           >
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <Accordion
               type="single"
               collapsible
@@ -554,7 +607,7 @@ export function NetworkEquipmentFormDialog({
                                 <FormControl>
                                   <SelectTrigger
                                     className="w-full cursor-pointer"
-                                    disabled={isLoadingDependencies}
+                                    disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                                   >
                                     <SelectValue
                                       placeholder={
@@ -592,7 +645,7 @@ export function NetworkEquipmentFormDialog({
                                 <FormControl>
                                   <SelectTrigger
                                     className="w-full cursor-pointer"
-                                    disabled={isLoadingDependencies}
+                                    disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                                   >
                                     <SelectValue
                                       placeholder={

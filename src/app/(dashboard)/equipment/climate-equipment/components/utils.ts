@@ -33,6 +33,7 @@ export interface ClimateSensorTypeLabels {
 
 export interface ClimateEquipmentFormValuesLike {
   nome: string
+  empresaId?: string
   homeAssistantDeviceKey: string
   homeAssistantLabel?: string
   descricao?: string
@@ -180,6 +181,7 @@ export function buildClimateEquipmentPayload(values: ClimateEquipmentFormValuesL
 
   return {
     nome: values.nome.trim(),
+    empresaId: normalizeOptionalNumber(values.empresaId) ?? undefined,
     homeAssistantDeviceKey: values.homeAssistantDeviceKey.trim(),
     homeAssistantLabel: normalizeOptionalString(values.homeAssistantLabel),
     descricao: normalizeOptionalString(values.descricao),

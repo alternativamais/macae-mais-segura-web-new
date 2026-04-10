@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { Button } from "@/components/ui/button"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Dialog,
   DialogContent,
@@ -33,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useTranslator } from "@/lib/i18n"
 import { pontoService } from "@/services/ponto.service"
 import { smartSwitchService } from "@/services/smart-switch.service"
@@ -66,7 +68,8 @@ function createFormSchema(messages: {
   entityRequired: string
   totemRequired: string
   pointRequired: string
-}) {
+  companyRequired: string
+}, requireCompanySelection: boolean) {
   return z
     .object({
       nome: z.string().trim().optional(),
@@ -75,8 +78,17 @@ function createFormSchema(messages: {
       totemId: z.string(),
       pontoId: z.string(),
       status: z.enum(["active", "inactive"]),
+      empresaId: z.string().optional(),
     })
     .superRefine((values, context) => {
+      if (requireCompanySelection && !values.empresaId) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["empresaId"],
+          message: messages.companyRequired,
+        })
+      }
+
       if (values.destino === "totem" && values.totemId === NO_TOTEM_VALUE) {
         context.addIssue({
           code: z.ZodIssueCode.custom,
@@ -119,19 +131,26 @@ export function SmartSwitchFormDialog({
   const [points, setPoints] = useState<Ponto[]>([])
   const [entities, setEntities] = useState<HomeAssistantSwitchEntity[]>([])
   const isEdit = !!item
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
 
   const t = useTranslator("smart_switches.form")
   const tTable = useTranslator("smart_switches.table")
   const tShared = useTranslator("smart_switches.shared")
+  const tCompany = useTranslator("company_field")
 
   const schema = useMemo(
     () =>
-      createFormSchema({
-        entityRequired: t("validations.entity_required"),
-        totemRequired: t("validations.totem_required"),
-        pointRequired: t("validations.point_required"),
-      }),
-    [t],
+      createFormSchema(
+        {
+          entityRequired: t("validations.entity_required"),
+          totemRequired: t("validations.totem_required"),
+          pointRequired: t("validations.point_required"),
+          companyRequired: tCompany("required"),
+        },
+        showCompanySelector && !isEdit,
+      ),
+    [isEdit, showCompanySelector, t, tCompany],
   )
 
   const form = useForm<SmartSwitchFormValues>({
@@ -143,6 +162,7 @@ export function SmartSwitchFormDialog({
       totemId: NO_TOTEM_VALUE,
       pontoId: NO_POINT_VALUE,
       status: "active",
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
@@ -150,6 +170,11 @@ export function SmartSwitchFormDialog({
   const selectedEntityId = form.watch("homeAssistantEntityId")
   const selectedTotemId = form.watch("totemId")
   const selectedPointId = form.watch("pontoId")
+  const rawCompanyId = form.watch("empresaId")
+  const selectedCompanyId =
+    rawCompanyId && rawCompanyId.trim()
+      ? Number(rawCompanyId)
+      : defaultCompanyId ?? null
 
   const notInformed = tShared("not_informed")
 
@@ -194,8 +219,15 @@ export function SmartSwitchFormDialog({
   const updateErrorMessage = t("notifications.update_error")
   const refreshEntitiesErrorMessage = t("notifications.refresh_entities_error")
 
-  async function loadEntities(currentId?: number, currentItem?: SmartSwitch | null) {
-    const data = await smartSwitchService.listAssignableHomeAssistantEntities(currentId)
+  async function loadEntities(
+    currentId?: number,
+    currentItem?: SmartSwitch | null,
+    empresaId?: number | null,
+  ) {
+    const data = await smartSwitchService.listAssignableHomeAssistantEntities(
+      currentId,
+      empresaId ?? undefined,
+    )
     const currentEntityId = currentItem?.homeAssistantEntityId?.trim()
 
     if (
@@ -217,14 +249,51 @@ export function SmartSwitchFormDialog({
   useEffect(() => {
     if (!open) return
 
+    const destinationValue: SmartSwitchDestination = item
+      ? getSmartSwitchDestination(item)
+      : "totem"
+
+    form.reset({
+      nome: item?.nome || "",
+      homeAssistantEntityId: item?.homeAssistantEntityId || "",
+      destino: destinationValue,
+      totemId:
+        destinationValue === "totem" && typeof item?.totemId === "number"
+          ? String(item.totemId)
+          : NO_TOTEM_VALUE,
+      pontoId:
+        destinationValue === "ponto" && typeof item?.pontoId === "number"
+          ? String(item.pontoId)
+          : NO_POINT_VALUE,
+      status: item?.status === "inactive" ? "inactive" : "active",
+      empresaId:
+        typeof item?.empresaId === "number"
+          ? String(item.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
+    })
+  }, [defaultCompanyId, form, item, open])
+
+  useEffect(() => {
+    if (!open) return
+
+    if (showCompanySelector && !selectedCompanyId) {
+      setTotens([])
+      setPoints([])
+      setEntities([])
+      return
+    }
+
     async function loadDependencies() {
       setIsLoadingDependencies(true)
 
       try {
+        const params = selectedCompanyId ? { empresaId: selectedCompanyId } : undefined
         const [totensData, pointsData, entitiesData] = await Promise.all([
-          totemService.findAllNoPagination(),
-          pontoService.findAllNoPagination(),
-          loadEntities(item?.id, item),
+          totemService.findAllNoPagination(params),
+          pontoService.findAllNoPagination(params),
+          loadEntities(item?.id, item, selectedCompanyId),
         ])
 
         setTotens(totensData)
@@ -240,33 +309,14 @@ export function SmartSwitchFormDialog({
       }
     }
 
-    const destinationValue: SmartSwitchDestination = item
-      ? getSmartSwitchDestination(item)
-      : "totem"
-
-    loadDependencies()
-
-    form.reset({
-      nome: item?.nome || "",
-      homeAssistantEntityId: item?.homeAssistantEntityId || "",
-      destino: destinationValue,
-      totemId:
-        destinationValue === "totem" && typeof item?.totemId === "number"
-          ? String(item.totemId)
-          : NO_TOTEM_VALUE,
-      pontoId:
-        destinationValue === "ponto" && typeof item?.pontoId === "number"
-          ? String(item.pontoId)
-          : NO_POINT_VALUE,
-      status: item?.status === "inactive" ? "inactive" : "active",
-    })
-  }, [form, item, loadDependenciesErrorMessage, open])
+    void loadDependencies()
+  }, [item, loadDependenciesErrorMessage, open, selectedCompanyId, showCompanySelector])
 
   const handleRefreshEntities = async () => {
     setIsRefreshingEntities(true)
 
     try {
-      const data = await loadEntities(item?.id, item)
+      const data = await loadEntities(item?.id, item, selectedCompanyId)
       setEntities(data)
     } catch (error) {
       toast.apiError(error, refreshEntitiesErrorMessage)
@@ -305,6 +355,7 @@ export function SmartSwitchFormDialog({
     setIsSubmitting(true)
 
     try {
+      const empresaId = selectedCompanyId ?? undefined
       const payload = {
         homeAssistantEntityId: values.homeAssistantEntityId.trim(),
         status: values.status,
@@ -319,7 +370,10 @@ export function SmartSwitchFormDialog({
         await smartSwitchService.update(item.id, payload)
         toast.success(updateSuccessMessage)
       } else {
-        await smartSwitchService.create(payload)
+        await smartSwitchService.create({
+          ...payload,
+          ...(empresaId ? { empresaId } : {}),
+        })
         toast.success(createSuccessMessage)
       }
 
@@ -344,6 +398,15 @@ export function SmartSwitchFormDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <FormField
               control={form.control}
               name="homeAssistantEntityId"
@@ -353,7 +416,7 @@ export function SmartSwitchFormDialog({
                   <Select
                     value={field.value}
                     onValueChange={(value) => handleEntityChange(value, field.onChange)}
-                    disabled={isLoadingDependencies}
+                    disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                   >
                     <FormControl>
                       <SelectTrigger
@@ -471,7 +534,7 @@ export function SmartSwitchFormDialog({
                     <Select
                       value={field.value}
                       onValueChange={field.onChange}
-                      disabled={isLoadingDependencies}
+                      disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                     >
                       <FormControl>
                         <SelectTrigger
@@ -515,7 +578,7 @@ export function SmartSwitchFormDialog({
                     <Select
                       value={field.value}
                       onValueChange={field.onChange}
-                      disabled={isLoadingDependencies}
+                      disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                     >
                       <FormControl>
                         <SelectTrigger

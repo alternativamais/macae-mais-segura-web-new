@@ -25,6 +25,7 @@ export interface NetworkEquipmentLocationLabels {
 
 export interface NetworkEquipmentFormValuesLike {
   nome: string
+  empresaId?: string
   ip: string
   status: "active" | "inactive"
   online: boolean
@@ -194,6 +195,7 @@ export function buildNetworkEquipmentPayload(values: NetworkEquipmentFormValuesL
 
   const payload = {
     nome: values.nome.trim(),
+    empresaId: normalizeOptionalNumber(values.empresaId) ?? undefined,
     ip: values.ip.trim(),
     status: values.status,
     online: values.online,

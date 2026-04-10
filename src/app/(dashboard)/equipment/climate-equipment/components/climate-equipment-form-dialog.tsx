@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { Button } from "@/components/ui/button"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Accordion,
   AccordionContent,
@@ -40,6 +41,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useTranslator } from "@/lib/i18n"
 import { climateEquipmentService } from "@/services/climate-equipment.service"
 import { pontoService } from "@/services/ponto.service"
@@ -71,17 +73,29 @@ const NO_TOTEM_VALUE = "__none_totem__"
 function createFormSchema(messages: {
   nameRequired: string
   deviceRequired: string
-}) {
-  return z.object({
-    nome: z.string().trim().min(1, messages.nameRequired),
-    homeAssistantDeviceKey: z.string().trim().min(1, messages.deviceRequired),
-    homeAssistantLabel: z.string().optional(),
-    descricao: z.string().optional(),
-    destino: z.enum(["totem", "ponto"]),
-    pontoId: z.string().optional(),
-    totemId: z.string().optional(),
-    status: z.enum(["active", "inactive"]),
-  })
+  companyRequired: string
+}, requireCompanySelection: boolean) {
+  return z
+    .object({
+      nome: z.string().trim().min(1, messages.nameRequired),
+      homeAssistantDeviceKey: z.string().trim().min(1, messages.deviceRequired),
+      homeAssistantLabel: z.string().optional(),
+      descricao: z.string().optional(),
+      destino: z.enum(["totem", "ponto"]),
+      pontoId: z.string().optional(),
+      totemId: z.string().optional(),
+      status: z.enum(["active", "inactive"]),
+      empresaId: z.string().optional(),
+    })
+    .superRefine((data, context) => {
+      if (requireCompanySelection && !data.empresaId) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["empresaId"],
+          message: messages.companyRequired,
+        })
+      }
+    })
 }
 
 type ClimateEquipmentFormValues = z.infer<ReturnType<typeof createFormSchema>>
@@ -111,17 +125,24 @@ export function ClimateEquipmentFormDialog({
   const [devices, setDevices] = useState<HomeAssistantClimateDeviceOption[]>([])
   const [openSection, setOpenSection] = useState("identification")
   const isEdit = !!item
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
 
   const t = useTranslator("climate_equipment.form")
   const tShared = useTranslator("climate_equipment.shared")
+  const tCompany = useTranslator("company_field")
 
   const schema = useMemo(
     () =>
-      createFormSchema({
-        nameRequired: t("validations.name_required"),
-        deviceRequired: t("validations.device_required"),
-      }),
-    [t],
+      createFormSchema(
+        {
+          nameRequired: t("validations.name_required"),
+          deviceRequired: t("validations.device_required"),
+          companyRequired: tCompany("required"),
+        },
+        showCompanySelector && !isEdit,
+      ),
+    [isEdit, showCompanySelector, t, tCompany],
   )
 
   const form = useForm<ClimateEquipmentFormValues>({
@@ -135,10 +156,16 @@ export function ClimateEquipmentFormDialog({
       pontoId: NO_POINT_VALUE,
       totemId: NO_TOTEM_VALUE,
       status: "active",
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
   const destination = form.watch("destino")
+  const rawCompanyId = form.watch("empresaId")
+  const selectedCompanyId =
+    rawCompanyId && rawCompanyId.trim()
+      ? Number(rawCompanyId)
+      : defaultCompanyId ?? null
 
   const ensureDeviceOptions = useMemo(() => {
     if (!item) {
@@ -169,11 +196,13 @@ export function ClimateEquipmentFormDialog({
 
   const loadDependenciesErrorMessage = t("notifications.load_dependencies_error")
 
-  const loadDevices = async () => {
+  const loadDevices = async (empresaId?: number | null) => {
     setIsRefreshingDevices(true)
 
     try {
-      const data = await climateEquipmentService.listHomeAssistantDevices()
+      const data = await climateEquipmentService.listHomeAssistantDevices(
+        empresaId ?? undefined,
+      )
       setDevices(data)
     } catch (error) {
       toast.apiError(error, t("notifications.load_devices_error"))
@@ -186,14 +215,22 @@ export function ClimateEquipmentFormDialog({
   useEffect(() => {
     if (!open) return
 
+    if (showCompanySelector && !selectedCompanyId) {
+      setPoints([])
+      setTotens([])
+      setDevices([])
+      return
+    }
+
     async function loadDependencies() {
       setIsLoadingDependencies(true)
 
       try {
+        const params = selectedCompanyId ? { empresaId: selectedCompanyId } : undefined
         const [pointsData, totemsData, devicesData] = await Promise.all([
-          pontoService.findAllNoPagination(),
-          totemService.findAllNoPagination(),
-          climateEquipmentService.listHomeAssistantDevices(),
+          pontoService.findAllNoPagination(params),
+          totemService.findAllNoPagination(params),
+          climateEquipmentService.listHomeAssistantDevices(selectedCompanyId ?? undefined),
         ])
 
         setPoints(pointsData)
@@ -210,6 +247,16 @@ export function ClimateEquipmentFormDialog({
     }
 
     void loadDependencies()
+  }, [
+    loadDependenciesErrorMessage,
+    open,
+    selectedCompanyId,
+    showCompanySelector,
+  ])
+
+  useEffect(() => {
+    if (!open) return
+
     setOpenSection("identification")
 
     const destinationValue: ClimateEquipmentDestination = item
@@ -231,8 +278,14 @@ export function ClimateEquipmentFormDialog({
           ? String(item.totem.id)
           : NO_TOTEM_VALUE,
       status: item?.status === "inactive" ? "inactive" : "active",
+      empresaId:
+        typeof item?.empresaId === "number"
+          ? String(item.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
     })
-  }, [form, item, loadDependenciesErrorMessage, open])
+  }, [defaultCompanyId, form, item, open])
 
   const handleDestinationChange = (value: ClimateEquipmentDestination) => {
     form.setValue("destino", value, { shouldDirty: true, shouldValidate: true })
@@ -281,7 +334,8 @@ export function ClimateEquipmentFormDialog({
       const payload = buildClimateEquipmentPayload(values)
 
       if (item) {
-        await climateEquipmentService.update(item.id, payload)
+        const { empresaId: _empresaId, ...updatePayload } = payload
+        await climateEquipmentService.update(item.id, updatePayload)
         toast.success(t("notifications.update_success"))
       } else {
         await climateEquipmentService.create(payload)
@@ -315,6 +369,17 @@ export function ClimateEquipmentFormDialog({
             onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)}
             className="space-y-6"
           >
+            {showCompanySelector || (isEdit && item?.empresaId) ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={
+                  isEdit ? tCompany("edit_locked") : tCompany("select_first")
+                }
+              />
+            ) : null}
+
             <Accordion
               type="single"
               collapsible
@@ -404,8 +469,11 @@ export function ClimateEquipmentFormDialog({
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={loadDevices}
-                        disabled={isRefreshingDevices}
+                        onClick={() => void loadDevices(selectedCompanyId)}
+                        disabled={
+                          isRefreshingDevices ||
+                          (showCompanySelector && !selectedCompanyId)
+                        }
                         className="cursor-pointer"
                       >
                         {isRefreshingDevices ? (
@@ -426,7 +494,11 @@ export function ClimateEquipmentFormDialog({
                           <Select
                             value={field.value}
                             onValueChange={handleDeviceChange}
-                            disabled={isLoadingDependencies || isRefreshingDevices}
+                            disabled={
+                              isLoadingDependencies ||
+                              isRefreshingDevices ||
+                              (showCompanySelector && !selectedCompanyId)
+                            }
                           >
                             <FormControl>
                               <SelectTrigger className="w-full cursor-pointer">
@@ -543,7 +615,10 @@ export function ClimateEquipmentFormDialog({
                             <Select
                               value={field.value || NO_TOTEM_VALUE}
                               onValueChange={field.onChange}
-                              disabled={isLoadingDependencies}
+                              disabled={
+                                isLoadingDependencies ||
+                                (showCompanySelector && !selectedCompanyId)
+                              }
                             >
                               <FormControl>
                                 <SelectTrigger className="w-full cursor-pointer">
@@ -579,7 +654,10 @@ export function ClimateEquipmentFormDialog({
                             <Select
                               value={field.value || NO_POINT_VALUE}
                               onValueChange={field.onChange}
-                              disabled={isLoadingDependencies}
+                              disabled={
+                                isLoadingDependencies ||
+                                (showCompanySelector && !selectedCompanyId)
+                              }
                             >
                               <FormControl>
                                 <SelectTrigger className="w-full cursor-pointer">

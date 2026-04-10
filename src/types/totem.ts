@@ -25,6 +25,7 @@ export interface TotemCallCenterExtension {
 
 export interface Totem {
   id: number
+  empresaId?: number | null
   pontoId?: number | null
   ponto?: TotemPoint | null
   numero: string
@@ -52,6 +53,7 @@ export interface TotemListParams {
   limit?: number
   search?: string
   status?: string
+  empresaId?: number
 }
 
 export interface CreateTotemPayload {
@@ -59,6 +61,7 @@ export interface CreateTotemPayload {
   pontoId?: number | null
   status?: "active" | "inactive"
   callCenterExtensionId?: number | null
+  empresaId?: number
 }
 
 export interface UpdateTotemPayload {

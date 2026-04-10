@@ -8,6 +8,7 @@ export type NetworkEquipmentDestination = "ponto" | "totem"
 export interface NetworkEquipment {
   id: number
   nome: string
+  empresaId?: number | null
   pontoId?: number | null
   ponto?: Ponto | null
   totemId?: number | null
@@ -45,10 +46,12 @@ export interface NetworkEquipmentListParams {
   limit?: number
   search?: string
   status?: string
+  empresaId?: number
 }
 
 export interface CreateNetworkEquipmentPayload {
   nome: string
+  empresaId?: number
   pontoId?: number | null
   totemId?: number | null
   tipoEquipamento?: NetworkEquipmentType | string | null

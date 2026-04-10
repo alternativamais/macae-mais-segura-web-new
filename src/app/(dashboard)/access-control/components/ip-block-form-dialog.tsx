@@ -6,6 +6,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { accessControlService } from "@/services/access-control.service"
 import { AccessIpBlock } from "@/types/access-control"
 import { useTranslator } from "@/lib/i18n"
@@ -47,6 +49,7 @@ type IpBlockFormValues = {
   rangeEnd?: string
   description?: string
   active: boolean
+  empresaId?: string
 }
 
 interface IpBlockFormDialogProps {
@@ -64,8 +67,11 @@ export function IpBlockFormDialog({
 }: IpBlockFormDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isEdit = !!ipBlock
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
   const t = useTranslator("access_control.ip_block_form")
   const tAccess = useTranslator("access_control")
+  const tCompany = useTranslator("company_field")
   const validationStartIp = t("val_start_ip")
   const validationEndIp = t("val_end_ip")
   const validationCidr = t("val_cidr")
@@ -83,8 +89,17 @@ export function IpBlockFormDialog({
           rangeEnd: z.string().optional(),
           description: z.string().optional(),
           active: z.boolean(),
+          empresaId: z.string().optional(),
         })
         .superRefine((values, context) => {
+          if (showCompanySelector && !isEdit && !values.empresaId) {
+            context.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["empresaId"],
+              message: tCompany("required"),
+            })
+          }
+
           if (values.mode === "range") {
             if (!values.rangeStart?.trim()) {
               context.addIssue({
@@ -116,7 +131,7 @@ export function IpBlockFormDialog({
             })
           }
         }),
-    [validationCidr, validationEndIp, validationIp, validationStartIp],
+    [isEdit, showCompanySelector, tCompany, validationCidr, validationEndIp, validationIp, validationStartIp],
   )
 
   const form = useForm<IpBlockFormValues>({
@@ -129,6 +144,7 @@ export function IpBlockFormDialog({
       rangeEnd: "",
       description: "",
       active: true,
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
@@ -146,13 +162,23 @@ export function IpBlockFormDialog({
       rangeEnd: ipBlock?.rangeEnd || "",
       description: ipBlock?.description || "",
       active: ipBlock?.active ?? true,
+      empresaId:
+        typeof ipBlock?.empresaId === "number"
+          ? String(ipBlock.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
     })
-  }, [open, ipBlock, form])
+  }, [defaultCompanyId, open, ipBlock, form])
 
   const onSubmit = async (values: IpBlockFormValues) => {
     setIsSubmitting(true)
 
     try {
+      const empresaId =
+        values.empresaId && values.empresaId.trim()
+          ? Number(values.empresaId)
+          : defaultCompanyId ?? undefined
       const payload = {
         label: values.label?.trim() || undefined,
         mode: values.mode,
@@ -161,10 +187,19 @@ export function IpBlockFormDialog({
         rangeEnd: values.mode === "range" ? values.rangeEnd?.trim() : undefined,
         description: values.description?.trim() || undefined,
         active: values.active,
+        ...(empresaId ? { empresaId } : {}),
       }
 
       if (isEdit && ipBlock) {
-        await accessControlService.updateIpBlock(ipBlock.id, payload)
+        await accessControlService.updateIpBlock(ipBlock.id, {
+          label: payload.label,
+          mode: payload.mode,
+          value: payload.value,
+          rangeStart: payload.rangeStart,
+          rangeEnd: payload.rangeEnd,
+          description: payload.description,
+          active: payload.active,
+        })
         toast.success(t("success_edit"))
       } else {
         await accessControlService.createIpBlock(payload)
@@ -192,6 +227,15 @@ export function IpBlockFormDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <div className="grid gap-4 md:grid-cols-2">
               <FormField
                 control={form.control}

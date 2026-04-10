@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { Button } from "@/components/ui/button"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Dialog,
   DialogContent,
@@ -32,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useTranslator } from "@/lib/i18n"
 import { pontoService } from "@/services/ponto.service"
 import { totemService } from "@/services/totem.service"
@@ -58,7 +60,8 @@ function createTotemFormSchema(messages: {
   numberMin: string
   pointRequired: string
   pointEditableInfo: string
-}, isEdit: boolean) {
+  companyRequired: string
+}, isEdit: boolean, requireCompanySelection: boolean) {
   return z.object({
     numero: z.string().trim().min(1, messages.numberMin),
     pontoId: isEdit
@@ -67,6 +70,15 @@ function createTotemFormSchema(messages: {
     status: z.enum(["active", "inactive"]),
     callCenterExtensionId: z.string(),
     pointEditableInfo: z.string().optional(),
+    empresaId: z.string().optional(),
+  }).superRefine((values, context) => {
+    if (requireCompanySelection && !values.empresaId) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["empresaId"],
+        message: messages.companyRequired,
+      })
+    }
   })
 }
 
@@ -83,10 +95,13 @@ export function TotemFormDialog({
   const [extensions, setExtensions] = useState<TotemCallCenterExtension[]>([])
   const [isLoadingDependencies, setIsLoadingDependencies] = useState(false)
   const isEdit = !!totem
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
 
   const t = useTranslator("totens.form")
   const tTable = useTranslator("totens.table")
   const tDetails = useTranslator("totens.details")
+  const tCompany = useTranslator("company_field")
 
   const numberMinMessage = t("validations.number_min")
   const pointRequiredMessage = t("validations.point_required")
@@ -104,10 +119,12 @@ export function TotemFormDialog({
           numberMin: numberMinMessage,
           pointRequired: pointRequiredMessage,
           pointEditableInfo: pointEditableInfoMessage,
+          companyRequired: tCompany("required"),
         },
         isEdit,
+        showCompanySelector && !isEdit,
       ),
-    [isEdit, numberMinMessage, pointEditableInfoMessage, pointRequiredMessage],
+    [isEdit, numberMinMessage, pointEditableInfoMessage, pointRequiredMessage, showCompanySelector, tCompany],
   )
 
   const form = useForm<TotemFormValues>({
@@ -118,8 +135,14 @@ export function TotemFormDialog({
       status: "active",
       callCenterExtensionId: NO_EXTENSION_VALUE,
       pointEditableInfo: "",
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
+  const rawCompanyId = form.watch("empresaId")
+  const selectedCompanyId =
+    rawCompanyId && rawCompanyId.trim()
+      ? Number(rawCompanyId)
+      : defaultCompanyId ?? null
 
   const currentPointLabel = useMemo(() => {
     if (!totem) return ""
@@ -145,13 +168,45 @@ export function TotemFormDialog({
   useEffect(() => {
     if (!open) return
 
+    form.reset({
+      numero: totem?.numero || "",
+      pontoId:
+        typeof totem?.pontoId === "number"
+          ? String(totem.pontoId)
+          : NO_POINT_VALUE,
+      status: totem?.status === "inactive" ? "inactive" : "active",
+      callCenterExtensionId:
+        typeof totem?.callCenterExtension?.id === "number"
+          ? String(totem.callCenterExtension.id)
+          : NO_EXTENSION_VALUE,
+      pointEditableInfo: currentPointLabel,
+      empresaId:
+        typeof totem?.empresaId === "number"
+          ? String(totem.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
+    })
+  }, [currentPointLabel, defaultCompanyId, form, open, totem])
+
+  useEffect(() => {
+    if (!open) return
+
+    if (showCompanySelector && !selectedCompanyId) {
+      setPoints([])
+      setExtensions([])
+      return
+    }
+
     async function loadDependencies() {
       setIsLoadingDependencies(true)
 
       try {
         const [pointsData, extensionsData] = await Promise.all([
-          pontoService.findAllNoPagination(),
-          totemService.listCallCenterExtensions(),
+          pontoService.findAllNoPagination(
+            selectedCompanyId ? { empresaId: selectedCompanyId } : undefined,
+          ),
+          totemService.listCallCenterExtensions(selectedCompanyId ?? undefined),
         ])
 
         setPoints(pointsData)
@@ -165,27 +220,14 @@ export function TotemFormDialog({
       }
     }
 
-    loadDependencies()
-
-    form.reset({
-      numero: totem?.numero || "",
-      pontoId:
-        typeof totem?.pontoId === "number"
-          ? String(totem.pontoId)
-          : NO_POINT_VALUE,
-      status: totem?.status === "inactive" ? "inactive" : "active",
-      callCenterExtensionId:
-        typeof totem?.callCenterExtension?.id === "number"
-          ? String(totem.callCenterExtension.id)
-          : NO_EXTENSION_VALUE,
-      pointEditableInfo: currentPointLabel,
-    })
-  }, [currentPointLabel, form, loadDependenciesErrorMessage, open, totem])
+    void loadDependencies()
+  }, [loadDependenciesErrorMessage, open, selectedCompanyId, showCompanySelector])
 
   const onSubmit = async (values: TotemFormValues) => {
     setIsSubmitting(true)
 
     try {
+      const empresaId = selectedCompanyId ?? undefined
       if (isEdit && totem) {
         await totemService.update(totem.id, {
           numero: values.numero.trim(),
@@ -208,6 +250,7 @@ export function TotemFormDialog({
             values.callCenterExtensionId === NO_EXTENSION_VALUE
               ? null
               : Number(values.callCenterExtensionId),
+          ...(empresaId ? { empresaId } : {}),
         })
         toast.success(createSuccessMessage)
       }
@@ -233,6 +276,15 @@ export function TotemFormDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <FormField
               control={form.control}
               name="numero"
@@ -273,7 +325,7 @@ export function TotemFormDialog({
                     <Select
                       value={field.value}
                       onValueChange={field.onChange}
-                      disabled={isLoadingDependencies}
+                      disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full cursor-pointer">
@@ -310,11 +362,11 @@ export function TotemFormDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("labels.extension")}</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={isLoadingDependencies}
-                  >
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
+                    >
                     <FormControl>
                       <SelectTrigger className="w-full cursor-pointer">
                         <SelectValue placeholder={t("placeholders.extension")} />

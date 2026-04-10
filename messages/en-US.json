@@ -7,6 +7,13 @@
     "logout": "Logout",
     "language": "Language"
   },
+  "company_field": {
+    "label": "Company",
+    "placeholder": "Select the company",
+    "required": "Select the responsible company.",
+    "edit_locked": "The company of this record cannot be changed in this edit.",
+    "select_first": "Select the company to load the available links."
+  },
   "dashboard": {
     "title": "Dashboard",
     "description": "A system overview"

@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { Button } from "@/components/ui/button"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useTranslator } from "@/lib/i18n"
 import { callCenterExtensionService } from "@/services/call-center-extension.service"
 import { CallCenterExtension } from "@/types/call-center-extension"
@@ -46,13 +48,23 @@ function createExtensionFormSchema(messages: {
   numberMin: string
   descriptionMin: string
   queueMin: string
-}) {
+  companyRequired: string
+}, requireCompanySelection: boolean) {
   return z.object({
     numeroRamal: z.string().trim().min(1, messages.numberMin),
     descricao: z.string().trim().min(1, messages.descriptionMin),
     queueName: z.string().trim().min(1, messages.queueMin),
     type: z.enum(["operator", "totem"]),
     status: z.enum(["active", "inactive"]),
+    empresaId: z.string().optional(),
+  }).superRefine((values, context) => {
+    if (requireCompanySelection && !values.empresaId) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["empresaId"],
+        message: messages.companyRequired,
+      })
+    }
   })
 }
 
@@ -67,15 +79,22 @@ export function ExtensionFormDialog({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const isEdit = !!extension
   const t = useTranslator("call_center_extensions.form")
+  const tCompany = useTranslator("company_field")
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
 
   const formSchema = useMemo(
     () =>
-      createExtensionFormSchema({
-        numberMin: t("validations.number_min"),
-        descriptionMin: t("validations.description_min"),
-        queueMin: t("validations.queue_min"),
-      }),
-    [t],
+      createExtensionFormSchema(
+        {
+          numberMin: t("validations.number_min"),
+          descriptionMin: t("validations.description_min"),
+          queueMin: t("validations.queue_min"),
+          companyRequired: tCompany("required"),
+        },
+        showCompanySelector && !isEdit,
+      ),
+    [isEdit, showCompanySelector, t, tCompany],
   )
 
   const form = useForm<ExtensionFormValues>({
@@ -86,6 +105,7 @@ export function ExtensionFormDialog({
       queueName: "",
       type: "operator",
       status: "active",
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
@@ -98,18 +118,42 @@ export function ExtensionFormDialog({
       queueName: extension?.queueName || "",
       type: extension?.type === "totem" ? "totem" : "operator",
       status: extension?.status === "inactive" ? "inactive" : "active",
+      empresaId:
+        typeof extension?.empresaId === "number"
+          ? String(extension.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
     })
-  }, [extension, form, open])
+  }, [defaultCompanyId, extension, form, open])
 
   const onSubmit = async (values: ExtensionFormValues) => {
     setIsSubmitting(true)
 
     try {
+      const empresaId =
+        values.empresaId && values.empresaId.trim()
+          ? Number(values.empresaId)
+          : defaultCompanyId ?? undefined
+
       if (isEdit && extension) {
-        await callCenterExtensionService.update(extension.id, values)
+        await callCenterExtensionService.update(extension.id, {
+          numeroRamal: values.numeroRamal.trim(),
+          descricao: values.descricao.trim(),
+          queueName: values.queueName.trim(),
+          type: values.type,
+          status: values.status,
+        })
         toast.success(t("notifications.update_success"))
       } else {
-        await callCenterExtensionService.create(values)
+        await callCenterExtensionService.create({
+          numeroRamal: values.numeroRamal.trim(),
+          descricao: values.descricao.trim(),
+          queueName: values.queueName.trim(),
+          type: values.type,
+          status: values.status,
+          ...(empresaId ? { empresaId } : {}),
+        })
         toast.success(t("notifications.create_success"))
       }
 
@@ -134,6 +178,15 @@ export function ExtensionFormDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <FormField
               control={form.control}
               name="numeroRamal"

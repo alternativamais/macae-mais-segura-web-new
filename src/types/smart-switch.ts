@@ -8,6 +8,7 @@ export interface SmartSwitch {
   id: number
   nome?: string | null
   homeAssistantEntityId: string
+  empresaId?: number | null
   totemId?: number | null
   totem?: Totem | null
   pontoId?: number | null
@@ -29,6 +30,7 @@ export interface SmartSwitchListParams {
   limit?: number
   search?: string
   status?: string
+  empresaId?: number
 }
 
 export interface CreateSmartSwitchPayload {
@@ -37,6 +39,7 @@ export interface CreateSmartSwitchPayload {
   totemId?: number | null
   pontoId?: number | null
   status?: "active" | "inactive"
+  empresaId?: number
 }
 
 export interface UpdateSmartSwitchPayload extends Partial<CreateSmartSwitchPayload> {}

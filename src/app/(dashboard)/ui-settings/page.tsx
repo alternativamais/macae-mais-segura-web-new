@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { PaintbrushVertical, RefreshCcw, Save } from "lucide-react"
 import { useNotification } from "@/lib/notifications/notification-context"
 import { DEFAULT_UI_SETTINGS } from "@/lib/default-ui-settings"
@@ -8,7 +8,16 @@ import { ScreenGuard } from "@/components/shared/screen-guard"
 import { DataTag } from "@/components/shared/data-tag"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useHasPermission } from "@/hooks/use-has-permission"
 import { useUiSettings } from "@/contexts/ui-settings-context"
 import { uiSettingsService } from "@/services/ui-settings.service"
@@ -47,27 +56,76 @@ function createDefaultSettings(base?: UiSettings | null): UiSettings {
 export default function UiSettingsPage() {
   const notification = useNotification()
   const { hasPermission } = useHasPermission()
-  const { settings, isLoading, applySettings, reloadSettings } = useUiSettings()
+  const { settings, isLoading, applySettings } = useUiSettings()
+  const {
+    companies,
+    showCompanySelector,
+    defaultCompanyId,
+    activeScopedCompanyId,
+  } = useTenantCompanySelection()
   const [activeTab, setActiveTab] = useState("theme")
   const [importDialogOpen, setImportDialogOpen] = useState(false)
   const [savedSettings, setSavedSettings] = useState<UiSettings | null>(null)
   const [draftSettings, setDraftSettings] = useState<UiSettings | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [isLoadingTargetSettings, setIsLoadingTargetSettings] = useState(false)
+  const [targetCompanyId, setTargetCompanyId] = useState<number | null>(
+    activeScopedCompanyId ?? defaultCompanyId ?? null,
+  )
   const savedSettingsRef = useRef<UiSettings | null>(null)
   const draftSettingsRef = useRef<UiSettings | null>(null)
   const applySettingsRef = useRef(applySettings)
+  const entrySettingsRef = useRef<UiSettings | null>(null)
 
   const canManage = hasPermission("configurar_ui_settings")
   const t = useTranslator("ui_settings")
+  const tCompany = useTranslator("company_field")
 
   useEffect(() => {
-    if (!settings || savedSettings) {
+    if (!entrySettingsRef.current && settings) {
+      entrySettingsRef.current = settings
+    }
+  }, [settings])
+
+  useEffect(() => {
+    if (showCompanySelector) {
       return
     }
 
-    setSavedSettings(settings)
-    setDraftSettings(settings)
-  }, [savedSettings, settings])
+    setTargetCompanyId(activeScopedCompanyId ?? defaultCompanyId ?? null)
+  }, [activeScopedCompanyId, defaultCompanyId, showCompanySelector])
+
+  const loadTargetSettings = useCallback(
+    async (empresaId: number | null) => {
+      if (showCompanySelector && !empresaId) {
+        setSavedSettings(null)
+        setDraftSettings(null)
+        return null
+      }
+
+      setIsLoadingTargetSettings(true)
+
+      try {
+        const currentSettings = await uiSettingsService.getSettings(
+          empresaId ?? undefined,
+        )
+        setSavedSettings(currentSettings)
+        setDraftSettings(currentSettings)
+        return currentSettings
+      } catch {
+        setSavedSettings(null)
+        setDraftSettings(null)
+        return null
+      } finally {
+        setIsLoadingTargetSettings(false)
+      }
+    },
+    [showCompanySelector],
+  )
+
+  useEffect(() => {
+    void loadTargetSettings(targetCompanyId)
+  }, [loadTargetSettings, targetCompanyId])
 
   useEffect(() => {
     savedSettingsRef.current = savedSettings
@@ -88,6 +146,11 @@ export default function UiSettingsPage() {
 
   useEffect(() => {
     return () => {
+      if (showCompanySelector && entrySettingsRef.current) {
+        applySettings(entrySettingsRef.current)
+        return
+      }
+
       const saved = savedSettingsRef.current
       const draft = draftSettingsRef.current
 
@@ -102,7 +165,7 @@ export default function UiSettingsPage() {
         applySettings(saved)
       }
     }
-  }, [])
+  }, [applySettings, showCompanySelector])
 
   const isDirty = useMemo(() => {
     if (!draftSettings || !savedSettings) {
@@ -147,6 +210,7 @@ export default function UiSettingsPage() {
     try {
       const response = await uiSettingsService.updateSettings(
         toUpdatePayload(draftSettings),
+        targetCompanyId ?? undefined,
       )
       setSavedSettings(response)
       setDraftSettings(response)
@@ -158,7 +222,13 @@ export default function UiSettingsPage() {
     }
   }
 
+  const handleRetryLoad = () => {
+    void loadTargetSettings(targetCompanyId)
+  }
+
   const currentSettings = draftSettings ?? savedSettings
+  const isCompanySelectionMissing = showCompanySelector && !targetCompanyId
+  const isPageLoading = isLoadingTargetSettings || (isLoading && !currentSettings)
 
   return (
     <ScreenGuard screenKey="admin.ui_settings">
@@ -172,7 +242,29 @@ export default function UiSettingsPage() {
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-col gap-3 xl:items-end">
+              {showCompanySelector ? (
+                <div className="min-w-64 space-y-2">
+                  <Label>{tCompany("label")}</Label>
+                  <Select
+                    value={targetCompanyId ? String(targetCompanyId) : ""}
+                    onValueChange={(value) => setTargetCompanyId(Number(value))}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={tCompany("placeholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {companies.map((company) => (
+                        <SelectItem key={company.id} value={String(company.id)}>
+                          {company.nome}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : null}
+
+              <div className="flex flex-wrap items-center gap-2">
               {canManage ? (
                 <DataTag tone={isDirty ? "warning" : "success"}>
                   {isDirty ? t("tags.dirty") : t("tags.synced")}
@@ -195,7 +287,7 @@ export default function UiSettingsPage() {
                     type="button"
                     variant="outline"
                     onClick={handleApplyDefaults}
-                    disabled={isSaving}
+                    disabled={isSaving || isCompanySelectionMissing}
                   >
                     <PaintbrushVertical className="h-4 w-4" />
                     {t("actions.apply_base")}
@@ -210,12 +302,26 @@ export default function UiSettingsPage() {
                   </Button>
                 </>
               ) : null}
+              </div>
             </div>
           </div>
 
-          <StatCards settings={currentSettings} isLoading={isLoading && !currentSettings} />
+          <StatCards settings={currentSettings} isLoading={isPageLoading} />
 
-          {currentSettings ? (
+          {isCompanySelectionMissing ? (
+            <Card className="mt-8">
+              <CardContent className="flex min-h-52 flex-col items-center justify-center gap-4 text-center">
+                <div className="max-w-md space-y-2">
+                  <h3 className="text-lg font-semibold">
+                    {tCompany("label")}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {tCompany("select_first")}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ) : currentSettings ? (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8 w-full">
               <TabsList className="mb-4">
                 <TabsTrigger value="theme">{t("tabs.theme")}</TabsTrigger>
@@ -240,7 +346,7 @@ export default function UiSettingsPage() {
                 />
               </TabsContent>
             </Tabs>
-          ) : !isLoading ? (
+          ) : !isPageLoading ? (
             <Card className="mt-8">
               <CardContent className="flex min-h-52 flex-col items-center justify-center gap-4 text-center">
                 <div className="max-w-md space-y-2">
@@ -254,9 +360,7 @@ export default function UiSettingsPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => {
-                    void reloadSettings()
-                  }}
+                  onClick={handleRetryLoad}
                 >
                   <RefreshCcw className="h-4 w-4" />
                   {t("actions.retry")}

@@ -35,6 +35,7 @@ export interface PointListParams {
   limit?: number
   search?: string
   status?: string
+  empresaId?: number
 }
 
 export interface CreatePointPayload {
@@ -42,6 +43,7 @@ export interface CreatePointPayload {
   pontoDeReferencia?: string | null
   coordenadas?: string | null
   status?: "active" | "inactive"
+  empresaId?: number
 }
 
 export interface UpdatePointPayload extends Partial<CreatePointPayload> {}

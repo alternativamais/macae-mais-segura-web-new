@@ -71,11 +71,14 @@ export const smartSwitchService = {
     await api.delete(`${basePath}/${id}`)
   },
 
-  listAssignableHomeAssistantEntities: async (currentId?: number) => {
+  listAssignableHomeAssistantEntities: async (currentId?: number, empresaId?: number) => {
     const { data } = await api.get<HomeAssistantSwitchEntity[]>(
       `${basePath}/home-assistant/entities`,
       {
-        params: currentId ? { currentId } : undefined,
+        params: {
+          ...(currentId ? { currentId } : {}),
+          ...(empresaId ? { empresaId } : {}),
+        },
       },
     )
 

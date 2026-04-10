@@ -41,6 +41,7 @@ export interface ClimateSensor {
 export interface ClimateEquipment {
   id: number
   nome: string
+  empresaId?: number | null
   descricao?: string | null
   status: ClimateEquipmentStatus | string
   homeAssistantDeviceKey: string
@@ -90,10 +91,12 @@ export interface ClimateEquipmentListParams {
   limit?: number
   search?: string
   status?: string
+  empresaId?: number
 }
 
 export interface CreateClimateEquipmentPayload {
   nome: string
+  empresaId?: number
   descricao?: string
   homeAssistantDeviceKey: string
   homeAssistantLabel?: string

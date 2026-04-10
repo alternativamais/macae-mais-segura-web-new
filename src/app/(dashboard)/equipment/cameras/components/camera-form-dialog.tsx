@@ -7,6 +7,7 @@ import { z } from "zod"
 import { CheckCircle2, Loader2, Wifi, XCircle } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { Button } from "@/components/ui/button"
+import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
   Accordion,
   AccordionContent,
@@ -42,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTenantCompanySelection } from "@/hooks/use-tenant-company-selection"
 import { useTranslator } from "@/lib/i18n"
 import { cameraService } from "@/services/camera.service"
 import { pontoService } from "@/services/ponto.service"
@@ -55,7 +57,8 @@ function createCameraFormSchema(messages: {
   ipRequired: string
   userRequired: string
   locationRequired: string
-}) {
+  companyRequired: string
+}, requireCompanySelection: boolean) {
   return z
     .object({
       nome: z.string().trim().min(2, messages.nameMin),
@@ -70,8 +73,17 @@ function createCameraFormSchema(messages: {
       destino: z.enum(["ponto", "totem"]),
       pontoId: z.string().optional(),
       totemId: z.string().optional(),
+      empresaId: z.string().optional(),
     })
     .superRefine((data, ctx) => {
+      if (requireCompanySelection && !data.empresaId) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["empresaId"],
+          message: messages.companyRequired,
+        })
+      }
+
       const isPointSelected = data.destino === "ponto" && !!data.pontoId
       const isTotemSelected = data.destino === "totem" && !!data.totemId
 
@@ -104,6 +116,7 @@ export function CameraFormDialog({
 }: CameraFormDialogProps) {
   const t = useTranslator("cameras.form")
   const tTable = useTranslator("cameras")
+  const tCompany = useTranslator("company_field")
   const [pontos, setPontos] = useState<Ponto[]>([])
   const [totens, setTotens] = useState<Totem[]>([])
   const [isLoadingDependencies, setIsLoadingDependencies] = useState(false)
@@ -111,6 +124,8 @@ export function CameraFormDialog({
   const [isTesting, setIsTesting] = useState(false)
   const [testState, setTestState] = useState<ConnectionTestState>("idle")
   const [openSection, setOpenSection] = useState("identification")
+  const { companies, showCompanySelector, defaultCompanyId } =
+    useTenantCompanySelection()
 
   const isEdit = !!camera
 
@@ -129,13 +144,25 @@ export function CameraFormDialog({
 
   const cameraFormSchema = useMemo(
     () =>
-      createCameraFormSchema({
-        nameMin: nameMinMessage,
-        ipRequired: ipRequiredMessage,
-        userRequired: userRequiredMessage,
-        locationRequired: locationRequiredMessage,
-      }),
-    [ipRequiredMessage, locationRequiredMessage, nameMinMessage, userRequiredMessage]
+      createCameraFormSchema(
+        {
+          nameMin: nameMinMessage,
+          ipRequired: ipRequiredMessage,
+          userRequired: userRequiredMessage,
+          locationRequired: locationRequiredMessage,
+          companyRequired: tCompany("required"),
+        },
+        showCompanySelector && !isEdit,
+      ),
+    [
+      ipRequiredMessage,
+      isEdit,
+      locationRequiredMessage,
+      nameMinMessage,
+      showCompanySelector,
+      tCompany,
+      userRequiredMessage,
+    ],
   )
 
   const form = useForm<CameraFormValues>({
@@ -153,11 +180,17 @@ export function CameraFormDialog({
       destino: "ponto",
       pontoId: "",
       totemId: "",
+      empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
     },
   })
 
   const destination = form.watch("destino")
   const hasIp = !!form.watch("ip")?.trim()
+  const rawCompanyId = form.watch("empresaId")
+  const selectedCompanyId =
+    rawCompanyId && rawCompanyId.trim()
+      ? Number(rawCompanyId)
+      : defaultCompanyId ?? null
   const brandOptions = [
     { value: "Hikvision", label: "Hikvision" },
     { value: "Intelbras", label: "Intelbras" },
@@ -168,28 +201,6 @@ export function CameraFormDialog({
 
   useEffect(() => {
     if (!open) return
-
-    async function loadDependencies() {
-      setIsLoadingDependencies(true)
-
-      try {
-        const [pointsData, totemsData] = await Promise.all([
-          pontoService.findAllNoPagination(),
-          totemService.findAllNoPagination(),
-        ])
-
-        setPontos(Array.isArray(pointsData) ? pointsData : [])
-        setTotens(Array.isArray(totemsData) ? totemsData : [])
-      } catch (error) {
-        toast.apiError(error, loadDependenciesErrorMessage)
-        setPontos([])
-        setTotens([])
-      } finally {
-        setIsLoadingDependencies(false)
-      }
-    }
-
-    loadDependencies()
     setTestState("idle")
     setOpenSection("identification")
     form.reset({
@@ -205,8 +216,47 @@ export function CameraFormDialog({
       destino: camera?.totemId ? "totem" : "ponto",
       pontoId: camera?.pontoId ? String(camera.pontoId) : "",
       totemId: camera?.totemId ? String(camera.totemId) : "",
+      empresaId:
+        typeof camera?.empresaId === "number"
+          ? String(camera.empresaId)
+          : defaultCompanyId
+            ? String(defaultCompanyId)
+            : "",
     })
-  }, [camera, form, loadDependenciesErrorMessage, open])
+  }, [camera, defaultCompanyId, form, open])
+
+  useEffect(() => {
+    if (!open) return
+
+    if (showCompanySelector && !selectedCompanyId) {
+      setPontos([])
+      setTotens([])
+      return
+    }
+
+    async function loadDependencies() {
+      setIsLoadingDependencies(true)
+
+      try {
+        const params = selectedCompanyId ? { empresaId: selectedCompanyId } : undefined
+        const [pointsData, totemsData] = await Promise.all([
+          pontoService.findAllNoPagination(params),
+          totemService.findAllNoPagination(params),
+        ])
+
+        setPontos(Array.isArray(pointsData) ? pointsData : [])
+        setTotens(Array.isArray(totemsData) ? totemsData : [])
+      } catch (error) {
+        toast.apiError(error, loadDependenciesErrorMessage)
+        setPontos([])
+        setTotens([])
+      } finally {
+        setIsLoadingDependencies(false)
+      }
+    }
+
+    void loadDependencies()
+  }, [loadDependenciesErrorMessage, open, selectedCompanyId, showCompanySelector])
 
   const handleTestConnection = async () => {
     const ip = form.getValues("ip")?.trim()
@@ -260,9 +310,17 @@ export function CameraFormDialog({
     setIsSubmitting(true)
 
     try {
+      const empresaId = selectedCompanyId ?? undefined
       const payload = {
-        ...values,
+        nome: values.nome.trim(),
         marca: values.marca?.trim() || undefined,
+        status: values.status,
+        ip: values.ip.trim(),
+        usuario: values.usuario.trim(),
+        senha: values.senha || undefined,
+        rtspScheme: values.rtspScheme,
+        rtspPort: values.rtspPort,
+        rtspPath: values.rtspPath?.trim() || undefined,
         pontoId:
           values.destino === "ponto" && values.pontoId
             ? Number(values.pontoId)
@@ -271,6 +329,7 @@ export function CameraFormDialog({
           values.destino === "totem" && values.totemId
             ? Number(values.totemId)
             : undefined,
+        ...(empresaId ? { empresaId } : {}),
       }
 
       if (isEdit && !payload.senha) {
@@ -306,6 +365,15 @@ export function CameraFormDialog({
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {showCompanySelector ? (
+              <TenantCompanyFormField
+                control={form.control}
+                companies={companies}
+                disabled={isEdit}
+                description={isEdit ? tCompany("edit_locked") : undefined}
+              />
+            ) : null}
+
             <Accordion
               type="single"
               collapsible
@@ -549,7 +617,7 @@ export function CameraFormDialog({
                                 <FormControl>
                                   <SelectTrigger
                                     className="w-full cursor-pointer"
-                                    disabled={isLoadingDependencies}
+                                    disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                                   >
                                     <SelectValue
                                       placeholder={
@@ -583,7 +651,7 @@ export function CameraFormDialog({
                                 <FormControl>
                                   <SelectTrigger
                                     className="w-full cursor-pointer"
-                                    disabled={isLoadingDependencies}
+                                    disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
                                   >
                                     <SelectValue
                                       placeholder={

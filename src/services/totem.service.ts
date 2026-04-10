@@ -68,8 +68,10 @@ export const totemService = {
     await api.delete(`${basePath}/${id}`)
   },
 
-  listCallCenterExtensions: async () => {
-    const { data } = await api.get<TotemCallCenterExtension[]>(`${basePath}/call-center/extensions`)
+  listCallCenterExtensions: async (empresaId?: number) => {
+    const { data } = await api.get<TotemCallCenterExtension[]>(`${basePath}/call-center/extensions`, {
+      params: empresaId ? { empresaId } : undefined,
+    })
     return data
   },
 }

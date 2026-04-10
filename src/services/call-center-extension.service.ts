@@ -11,6 +11,7 @@ interface FindAllParams {
   limit?: number
   search?: string
   type?: CallCenterExtensionType
+  empresaId?: number
 }
 
 export const callCenterExtensionService = {
