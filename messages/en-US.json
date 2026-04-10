@@ -1954,7 +1954,7 @@
   },
   "permissions": {
     "title": "Access Administration",
-    "description": "Manage roles, API permissions, profile assignments, and frontend screens.",
+    "description": "Manage roles, API permissions, role assignments, and frontend screens by company.",
     "shared": {
       "global_role": "Global",
       "company_role_fallback": "Company #{id}"
@@ -1963,8 +1963,14 @@
       "label": "Company scope",
       "all_companies": "All companies",
       "no_company": "No company selected",
-      "active_company_desc": "Roles, API permission assignments, and frontend screens on this page use the active company selected in the system. Global roles remain visible in any company.",
-      "all_companies_desc": "Select a specific company in the global switcher to edit roles, permissions, and screens. Global view is blocked here to avoid saving in the wrong company context."
+      "active_company_desc": "The active session company still controls your authentication. Maintenance on this page now uses its own target company, selected below.",
+      "all_companies_desc": "Even with global view enabled, this page uses the target company below to manage roles, API permissions, and frontend screens."
+    },
+    "target_company": {
+      "label": "Company",
+      "placeholder": "Select the company",
+      "description": "The roles, API permissions, and frontend screens shown below belong to {company}.",
+      "empty": "Select the company you want to manage on this page."
     },
     "tabs": {
       "roles": "Roles",
@@ -1976,7 +1982,7 @@
       "search": "Search role...",
       "new_role": "New role",
       "col_name": "Role name",
-      "col_scope": "Scope",
+      "col_scope": "Company",
       "col_updated": "Updated at",
       "col_actions": "Actions",
       "no_desc": "No description",
@@ -1994,7 +2000,7 @@
       "load_error": "Error loading roles.",
       "details_title": "Role details",
       "details_name": "Name",
-      "details_scope": "Scope",
+      "details_scope": "Company",
       "details_desc": "Description",
       "details_created": "Created at",
       "details_updated": "Updated at",
@@ -2034,9 +2040,11 @@
     },
     "assignment_tab": {
       "search": "Search permission...",
+      "target_company": "Company",
+      "target_company_empty": "No company selected",
       "role": "Role",
       "select_role": "Select a role",
-      "selected_scope": "Role scope",
+      "selected_scope": "Role company",
       "global_role": "Global",
       "company_role_fallback": "Company #{id}",
       "save": "Save assignments",
@@ -2050,15 +2058,15 @@
       "error_role_perms": "Error loading permissions for this role.",
       "error_save": "Error consolidating permissions.",
       "fallback_group": "No group",
-      "selection_count": "{selected} of {total}",
-      "all_companies_title": "Select a company to manage permissions",
-      "all_companies_desc": "API permission assignments are resolved by role inside the active company. Leave global view to edit the correct context."
+      "selection_count": "{selected} of {total}"
     },
     "screens_tab": {
       "search": "Search screen...",
+      "target_company": "Company",
+      "target_company_empty": "No company selected",
       "role": "Role",
       "select_role": "Select a role",
-      "selected_scope": "Role scope",
+      "selected_scope": "Role company",
       "global_role": "Global",
       "company_role_fallback": "Company #{id}",
       "save": "Save screens",
@@ -2072,9 +2080,7 @@
       "error_role_screens": "Error loading allowed screens for this role.",
       "error_save": "Error consolidating screens.",
       "fallback_group": "No group",
-      "selection_count": "{selected} of {total}",
-      "all_companies_title": "Select a company to manage screens",
-      "all_companies_desc": "Frontend screens are linked to the role in the active company. Leave global view to edit the correct company permissions."
+      "selection_count": "{selected} of {total}"
     },
     "stats": {
       "roles": "Roles",
@@ -2093,15 +2099,19 @@
       "desc_edit": "Update role information.",
       "desc_new": "Fill in the details to create a new role.",
       "label_name": "Name",
+      "label_company": "Company",
       "placeholder_name": "E.g.: Operator",
+      "placeholder_company": "Select the company",
       "label_desc": "Description",
       "placeholder_desc": "Brief description of the responsibilities for this role...",
+      "company_edit_locked": "The role company cannot be changed in this edit.",
       "button_cancel": "Cancel",
       "button_save": "Save",
       "success_edit": "Role updated successfully!",
       "success_new": "Role created successfully!",
       "error_save": "An error occurred while saving the role.",
-      "val_name_min": "The name must be at least 2 characters."
+      "val_name_min": "The name must be at least 2 characters.",
+      "val_company_required": "Select the role company."
     },
     "permission_form": {
       "title_edit": "Edit Permission",

@@ -27,6 +27,7 @@ export interface Role {
 export interface CreateRolePayload {
   name: string;
   description?: string;
+  empresaId?: number;
 }
 
 export type UpdateRolePayload = Partial<CreateRolePayload>;

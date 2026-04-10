@@ -1954,7 +1954,7 @@
   },
   "permissions": {
     "title": "Administração de Acesso",
-    "description": "Gerencie cargos, permissões de API, atribuições por perfil e telas do frontend.",
+    "description": "Gerencie cargos, permissões de API, atribuições por cargo e telas do frontend por empresa.",
     "shared": {
       "global_role": "Global",
       "company_role_fallback": "Empresa #{id}"
@@ -1963,8 +1963,14 @@
       "label": "Escopo da empresa",
       "all_companies": "Todas as empresas",
       "no_company": "Empresa não definida",
-      "active_company_desc": "Os cargos, as atribuições de permissões API e as telas do frontend desta página usam a empresa ativa selecionada no sistema. Cargos globais continuam visíveis em qualquer empresa.",
-      "all_companies_desc": "Selecione uma empresa específica no alternador global para editar cargos, permissões e telas. O modo global fica bloqueado aqui para evitar salvar no contexto errado."
+      "active_company_desc": "A empresa ativa da sessão continua controlando sua autenticação. A manutenção desta tela agora usa uma empresa-alvo própria, escolhida abaixo.",
+      "all_companies_desc": "Mesmo com a visualização global ativa, esta tela usa a empresa-alvo abaixo para administrar cargos, permissões API e telas do frontend."
+    },
+    "target_company": {
+      "label": "Empresa",
+      "placeholder": "Selecione a empresa",
+      "description": "Os cargos, permissões API e telas do frontend exibidos abaixo pertencem a {company}.",
+      "empty": "Selecione a empresa que você deseja administrar nesta tela."
     },
     "tabs": {
       "roles": "Cargos",
@@ -1976,7 +1982,7 @@
       "search": "Buscar cargo...",
       "new_role": "Novo cargo",
       "col_name": "Nome do cargo",
-      "col_scope": "Escopo",
+      "col_scope": "Empresa",
       "col_updated": "Atualizado em",
       "col_actions": "Ações",
       "no_desc": "Sem descrição",
@@ -1994,7 +2000,7 @@
       "load_error": "Erro ao carregar cargos.",
       "details_title": "Detalhes do cargo",
       "details_name": "Nome",
-      "details_scope": "Escopo",
+      "details_scope": "Empresa",
       "details_desc": "Descrição",
       "details_created": "Criado em",
       "details_updated": "Atualizado em",
@@ -2034,9 +2040,11 @@
     },
     "assignment_tab": {
       "search": "Buscar permissão...",
+      "target_company": "Empresa",
+      "target_company_empty": "Nenhuma empresa selecionada",
       "role": "Cargo",
       "select_role": "Selecione um cargo",
-      "selected_scope": "Escopo do cargo",
+      "selected_scope": "Empresa do cargo",
       "global_role": "Global",
       "company_role_fallback": "Empresa #{id}",
       "save": "Salvar atribuições",
@@ -2050,15 +2058,15 @@
       "error_role_perms": "Erro ao carregar permissões deste cargo.",
       "error_save": "Erro ao consolidar permissões.",
       "fallback_group": "Sem grupo",
-      "selection_count": "{selected} de {total}",
-      "all_companies_title": "Selecione uma empresa para administrar permissões",
-      "all_companies_desc": "As atribuições de permissões API são resolvidas por cargo dentro da empresa ativa. Saia do modo global para editar o contexto correto."
+      "selection_count": "{selected} de {total}"
     },
     "screens_tab": {
       "search": "Buscar tela...",
+      "target_company": "Empresa",
+      "target_company_empty": "Nenhuma empresa selecionada",
       "role": "Cargo",
       "select_role": "Selecione um cargo",
-      "selected_scope": "Escopo do cargo",
+      "selected_scope": "Empresa do cargo",
       "global_role": "Global",
       "company_role_fallback": "Empresa #{id}",
       "save": "Salvar telas",
@@ -2072,9 +2080,7 @@
       "error_role_screens": "Erro ao carregar telas permitidas deste cargo.",
       "error_save": "Erro ao consolidar telas.",
       "fallback_group": "Sem grupo",
-      "selection_count": "{selected} de {total}",
-      "all_companies_title": "Selecione uma empresa para administrar telas",
-      "all_companies_desc": "As telas do frontend são vinculadas ao cargo da empresa ativa. Saia do modo global para editar as permissões da empresa certa."
+      "selection_count": "{selected} de {total}"
     },
     "stats": {
       "roles": "Cargos",
@@ -2093,15 +2099,19 @@
       "desc_edit": "Atualize as informações do cargo.",
       "desc_new": "Preencha as informações para criar um novo cargo.",
       "label_name": "Nome",
+      "label_company": "Empresa",
       "placeholder_name": "Ex: Operador",
+      "placeholder_company": "Selecione a empresa",
       "label_desc": "Descrição",
       "placeholder_desc": "Breve descrição sobre as responsabilidades deste cargo...",
+      "company_edit_locked": "A empresa do cargo não pode ser alterada nesta edição.",
       "button_cancel": "Cancelar",
       "button_save": "Salvar",
       "success_edit": "Cargo atualizado com sucesso!",
       "success_new": "Cargo criado com sucesso!",
       "error_save": "Ocorreu um erro ao salvar o cargo.",
-      "val_name_min": "O nome deve ter pelo menos 2 caracteres."
+      "val_name_min": "O nome deve ter pelo menos 2 caracteres.",
+      "val_company_required": "Selecione a empresa do cargo."
     },
     "permission_form": {
       "title_edit": "Editar Permissão",

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Building2, LayoutTemplate as ScreenIcon, Save, Search } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
@@ -29,14 +29,14 @@ interface ScreensTabProps {
   roles: Role[]
   companyNameById: CompanyNameById
   isRolesLoading: boolean
-  isAllCompaniesView: boolean
+  targetCompanyName?: string | null
 }
 
 export function ScreensTab({
   roles,
   companyNameById,
   isRolesLoading,
-  isAllCompaniesView,
+  targetCompanyName,
 }: ScreensTabProps) {
   const [screens, setScreens] = useState<FrontendScreen[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -44,6 +44,7 @@ export function ScreensTab({
   const [searchTerm, setSearchTerm] = useState("")
   const [assignedIds, setAssignedIds] = useState<number[]>([])
   const [initialAssignedIds, setInitialAssignedIds] = useState<number[]>([])
+  const loadRoleScreensRequestId = useRef(0)
   const t = useTranslator("permissions.screens_tab")
   const selectedRole = useMemo(
     () => roles.find((role) => role.id === selectedRoleId) ?? null,
@@ -66,16 +67,8 @@ export function ScreensTab({
   }, [t])
 
   useEffect(() => {
-    if (isAllCompaniesView) {
-      setScreens([])
-      setSelectedRoleId(null)
-      setAssignedIds([])
-      setInitialAssignedIds([])
-      return
-    }
-
     void loadBaseData()
-  }, [isAllCompaniesView, loadBaseData])
+  }, [loadBaseData])
 
   useEffect(() => {
     if (selectedRoleId && !roles.some((role) => role.id === selectedRoleId)) {
@@ -86,20 +79,27 @@ export function ScreensTab({
   }, [roles, selectedRoleId])
 
   const loadRoleScreens = useCallback(async (roleId: number) => {
+    const requestId = ++loadRoleScreensRequestId.current
     setIsLoading(true)
     try {
       const assignedScreens = await frontendScreenService.findForRole(roleId, "web")
       const screenIds = normalizeAssignedIds(
         assignedScreens.filter((screen) => screen.assigned).map((screen) => screen.id)
       )
-      setAssignedIds(screenIds)
-      setInitialAssignedIds(screenIds)
+      if (loadRoleScreensRequestId.current === requestId) {
+        setAssignedIds(screenIds)
+        setInitialAssignedIds(screenIds)
+      }
     } catch (error) {
-      setAssignedIds([])
-      setInitialAssignedIds([])
-      toast.apiError(error, t("error_role_screens"))
+      if (loadRoleScreensRequestId.current === requestId) {
+        setAssignedIds([])
+        setInitialAssignedIds([])
+        toast.apiError(error, t("error_role_screens"))
+      }
     } finally {
-      setIsLoading(false)
+      if (loadRoleScreensRequestId.current === requestId) {
+        setIsLoading(false)
+      }
     }
   }, [t])
 
@@ -114,6 +114,8 @@ export function ScreensTab({
     }
 
     setSelectedRoleId(roleId)
+    setAssignedIds([])
+    setInitialAssignedIds([])
     void loadRoleScreens(roleId)
   }
 
@@ -182,16 +184,6 @@ export function ScreensTab({
     }
   }
 
-  if (isAllCompaniesView) {
-    return (
-      <TabStateCard
-        icon={Building2}
-        title={t("all_companies_title")}
-        description={t("all_companies_desc")}
-      />
-    )
-  }
-
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
@@ -207,6 +199,14 @@ export function ScreensTab({
 
         <div className="flex w-full flex-col gap-3 sm:flex-row xl:w-auto">
           <div className="grid gap-2">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Building2 className="size-3.5" />
+              <span>
+                {t("target_company")}:
+                {" "}
+                {targetCompanyName || t("target_company_empty")}
+              </span>
+            </div>
             <span className="text-sm font-medium text-muted-foreground">{t("role")}</span>
             <Select
               value={selectedRoleId ? String(selectedRoleId) : ""}

@@ -7,16 +7,20 @@ import {
 } from '@/types/role';
 
 export const roleService = {
-  findAll: async (page = 1, pageSize = 10): Promise<RoleListResponse> => {
+  findAll: async (
+    page = 1,
+    pageSize = 10,
+    empresaId?: number,
+  ): Promise<RoleListResponse> => {
     const { data } = await api.get<RoleListResponse>('/roles', {
-      params: { page, pageSize },
+      params: { page, pageSize, ...(empresaId ? { empresaId } : {}) },
     });
     return data;
   },
 
-  findAllNoPagination: async (): Promise<Role[]> => {
+  findAllNoPagination: async (empresaId?: number): Promise<Role[]> => {
     const { data } = await api.get<{ items: Role[] }>('/roles', {
-      params: { pagination: 'false' },
+      params: { pagination: 'false', ...(empresaId ? { empresaId } : {}) },
     });
     return data.items;
   },

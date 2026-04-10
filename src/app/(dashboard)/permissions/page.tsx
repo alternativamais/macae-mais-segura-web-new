@@ -1,10 +1,16 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { Building2, ShieldAlert } from "lucide-react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { Building2, BriefcaseBusiness } from "lucide-react"
 import { ScreenGuard } from "@/components/shared/screen-guard"
-import { DataTag } from "@/components/shared/data-tag"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { AssignmentTab } from "./components/assignment-tab"
 import { PermissionsTab } from "./components/permissions-tab"
 import { RolesTab } from "./components/roles-tab"
@@ -20,22 +26,46 @@ export default function PermissionsPage() {
   const t = useTranslator("permissions")
   const [roles, setRoles] = useState<Role[]>([])
   const [isRolesLoading, setIsRolesLoading] = useState(true)
+  const [targetCompanyId, setTargetCompanyId] = useState<number | null>(null)
+  const loadRolesRequestId = useRef(0)
   const activeCompanyId = useAuthStore((state) => state.activeCompanyId)
   const availableCompanies = useAuthStore((state) => state.availableCompanies)
 
-  const isAllCompaniesView = String(activeCompanyId).toUpperCase() === "ALL"
-  const activeCompany = useMemo(
-    () =>
-      availableCompanies.find((company) => String(company.id) === String(activeCompanyId)) ?? null,
-    [activeCompanyId, availableCompanies]
-  )
   const companyNameById = useMemo(
     () => buildCompanyNameById(availableCompanies),
     [availableCompanies]
   )
+  const targetCompany = useMemo(
+    () =>
+      availableCompanies.find((company) => company.id === targetCompanyId) ?? null,
+    [availableCompanies, targetCompanyId]
+  )
+
+  useEffect(() => {
+    if (!availableCompanies.length) {
+      setTargetCompanyId(null)
+      return
+    }
+
+    const preferredCompanyId = availableCompanies.some(
+      (company) => String(company.id) === String(activeCompanyId)
+    )
+      ? Number(activeCompanyId)
+      : (availableCompanies[0]?.id ?? null)
+
+    setTargetCompanyId((current) => {
+      if (current && availableCompanies.some((company) => company.id === current)) {
+        return current
+      }
+
+      return preferredCompanyId
+    })
+  }, [activeCompanyId, availableCompanies])
 
   const loadRoles = useCallback(async () => {
-    if (isAllCompaniesView) {
+    const requestId = ++loadRolesRequestId.current
+
+    if (!targetCompanyId) {
       setRoles([])
       setIsRolesLoading(false)
       return
@@ -44,14 +74,20 @@ export default function PermissionsPage() {
     setIsRolesLoading(true)
 
     try {
-      const data = await roleService.findAllNoPagination()
-      setRoles(data)
+      const data = await roleService.findAllNoPagination(targetCompanyId)
+      if (loadRolesRequestId.current === requestId) {
+        setRoles(data)
+      }
     } catch {
-      setRoles([])
+      if (loadRolesRequestId.current === requestId) {
+        setRoles([])
+      }
     } finally {
-      setIsRolesLoading(false)
+      if (loadRolesRequestId.current === requestId) {
+        setIsRolesLoading(false)
+      }
     }
-  }, [isAllCompaniesView])
+  }, [targetCompanyId])
 
   useEffect(() => {
     void loadRoles()
@@ -66,29 +102,42 @@ export default function PermissionsPage() {
             {t("description")}
           </p>
 
-          <StatCards />
+          <StatCards rolesCount={roles.length} isRolesLoading={isRolesLoading} />
 
-          <div className="mt-6 rounded-lg border bg-muted/30 p-4">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+          <div className="mt-6 rounded-lg border bg-card p-4">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-2">
-                <div className="flex flex-wrap items-center gap-2">
-                  {isAllCompaniesView ? (
-                    <ShieldAlert className="h-4 w-4 text-amber-600" />
-                  ) : (
-                    <Building2 className="h-4 w-4 text-muted-foreground" />
-                  )}
-                  <span className="text-sm font-medium">{t("scope.label")}</span>
-                  <DataTag tone={isAllCompaniesView ? "warning" : "info"}>
-                    {isAllCompaniesView
-                      ? t("scope.all_companies")
-                      : activeCompany?.nome || t("scope.no_company")}
-                  </DataTag>
+                <div className="flex items-center gap-2 text-sm font-medium">
+                  <Building2 className="h-4 w-4 text-muted-foreground" />
+                  <span>{t("target_company.label")}</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {isAllCompaniesView
-                    ? t("scope.all_companies_desc")
-                    : t("scope.active_company_desc")}
+                  {targetCompany
+                    ? t("target_company.description", { company: targetCompany.nome })
+                    : t("target_company.empty")}
                 </p>
+              </div>
+
+              <div className="grid gap-2 lg:min-w-[320px]">
+                <Select
+                  value={targetCompanyId ? String(targetCompanyId) : ""}
+                  onValueChange={(value) => setTargetCompanyId(Number(value))}
+                  disabled={availableCompanies.length === 0}
+                >
+                  <SelectTrigger className="w-full cursor-pointer">
+                    <SelectValue placeholder={t("target_company.placeholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableCompanies.map((company) => (
+                      <SelectItem key={company.id} value={String(company.id)}>
+                        <span className="flex items-center gap-2">
+                          <BriefcaseBusiness className="size-4 text-muted-foreground" />
+                          {company.nome}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
@@ -106,8 +155,9 @@ export default function PermissionsPage() {
                 roles={roles}
                 companyNameById={companyNameById}
                 isLoading={isRolesLoading}
-                isAllCompaniesView={isAllCompaniesView}
                 onRefresh={loadRoles}
+                companies={availableCompanies}
+                targetCompanyId={targetCompanyId}
               />
             </TabsContent>
 
@@ -120,7 +170,7 @@ export default function PermissionsPage() {
                 roles={roles}
                 companyNameById={companyNameById}
                 isRolesLoading={isRolesLoading}
-                isAllCompaniesView={isAllCompaniesView}
+                targetCompanyName={targetCompany?.nome ?? null}
               />
             </TabsContent>
 
@@ -129,7 +179,7 @@ export default function PermissionsPage() {
                 roles={roles}
                 companyNameById={companyNameById}
                 isRolesLoading={isRolesLoading}
-                isAllCompaniesView={isAllCompaniesView}
+                targetCompanyName={targetCompany?.nome ?? null}
               />
             </TabsContent>
           </Tabs>

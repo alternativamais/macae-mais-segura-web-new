@@ -10,6 +10,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { useSidebarConfig } from "@/hooks/use-sidebar-config";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth-store";
+import { getAuthSessionCompanyState } from "@/lib/auth-session-payload";
 import {
   AUTH_REDIRECT_REASON,
   buildSafeNextPath,
@@ -30,6 +31,7 @@ export default function DashboardLayout({
   const hasHydrated = useAuthStore((state) => state.hasHydrated);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const token = useAuthStore((state) => state.token);
+  const activeCompanyId = useAuthStore((state) => state.activeCompanyId);
   const syncSession = useAuthStore((state) => state.syncSession);
   const logout = useAuthStore((state) => state.logout);
   const currentPath = React.useMemo(() => {
@@ -65,7 +67,16 @@ export default function DashboardLayout({
       try {
         const snapshot = await authService.checkToken();
         if (!cancelled) {
-          syncSession(snapshot);
+          const companyState = getAuthSessionCompanyState(snapshot);
+
+          syncSession({
+            ...snapshot,
+            activeCompanyId:
+              activeCompanyId === "ALL"
+                ? "ALL"
+                : companyState.activeCompanyId,
+            availableCompanies: companyState.availableCompanies,
+          });
         }
       } catch (error) {
         if (
@@ -92,6 +103,7 @@ export default function DashboardLayout({
     };
   }, [
     currentPath,
+    activeCompanyId,
     hasHydrated,
     isAuthenticated,
     logout,

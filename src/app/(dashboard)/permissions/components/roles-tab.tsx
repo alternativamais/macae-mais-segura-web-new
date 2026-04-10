@@ -25,9 +25,9 @@ import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import { roleService } from "@/services/role.service"
 import { Role } from "@/types/role"
+import { AppEmpresa } from "@/types/auth"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TablePaginationFooter } from "@/app/(dashboard)/access-control/components/table-pagination-footer"
-import { TabStateCard } from "@/app/(dashboard)/access-control/components/tab-state-card"
 import { RoleFormDialog } from "./role-form-dialog"
 import { DetailsDialog } from "./details-dialog"
 import { useTranslator } from "@/lib/i18n"
@@ -38,16 +38,18 @@ interface RolesTabProps {
   roles: Role[]
   companyNameById: CompanyNameById
   isLoading: boolean
-  isAllCompaniesView: boolean
   onRefresh: () => Promise<void> | void
+  companies: AppEmpresa[]
+  targetCompanyId: number | null
 }
 
 export function RolesTab({
   roles,
   companyNameById,
   isLoading,
-  isAllCompaniesView,
   onRefresh,
+  companies,
+  targetCompanyId,
 }: RolesTabProps) {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -65,6 +67,10 @@ export function RolesTab({
   useEffect(() => {
     setPage(1)
   }, [searchTerm, pageSize])
+
+  useEffect(() => {
+    setPage(1)
+  }, [roles])
 
   useEffect(() => {
     if (isDetailsOpen) return
@@ -127,16 +133,6 @@ export function RolesTab({
     }
   }
 
-  if (isAllCompaniesView) {
-    return (
-      <TabStateCard
-        icon={ShieldCheck}
-        title={t("all_companies_title")}
-        description={t("all_companies_desc")}
-      />
-    )
-  }
-
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -156,7 +152,7 @@ export function RolesTab({
             setIsFormOpen(true)
           }}
           className="cursor-pointer"
-          disabled={isLoading}
+          disabled={isLoading || !targetCompanyId}
         >
           <Plus className="mr-2 h-4 w-4" />
           {t("new_role")}
@@ -217,7 +213,7 @@ export function RolesTab({
                             <Eye className="mr-2 h-4 w-4" />
                             {t("actions.view")}
                         </DropdownMenuItem>
-                        {canManageRole(role, isAllCompaniesView) ? (
+                        {canManageRole(role, false) ? (
                           <>
                             <DropdownMenuItem
                               className="cursor-pointer"
@@ -271,6 +267,8 @@ export function RolesTab({
         onOpenChange={setIsFormOpen}
         role={selectedRole}
         onRefresh={onRefresh}
+        companies={companies}
+        defaultEmpresaId={targetCompanyId}
       />
 
       <DetailsDialog

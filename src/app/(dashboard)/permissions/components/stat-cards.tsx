@@ -5,24 +5,29 @@ import { KeyRound, LayoutTemplate, ShieldCheck, Shapes } from "lucide-react"
 import { SummaryStatCards } from "@/components/shared/summary-stat-cards"
 import { useTranslator } from "@/lib/i18n"
 import { permissionService } from "@/services/permission.service"
-import { roleService } from "@/services/role.service"
 import { frontendScreenService } from "@/services/frontend-screen.service"
 
 interface SummaryState {
-  roles: number | null
   permissions: number | null
   webScreens: number | null
   permissionGroups: number | null
 }
 
 const initialSummary: SummaryState = {
-  roles: null,
   permissions: null,
   webScreens: null,
   permissionGroups: null,
 }
 
-export function StatCards() {
+interface StatCardsProps {
+  rolesCount?: number | null
+  isRolesLoading?: boolean
+}
+
+export function StatCards({
+  rolesCount = null,
+  isRolesLoading = true,
+}: StatCardsProps) {
   const [summary, setSummary] = useState<SummaryState>(initialSummary)
   const [isLoading, setIsLoading] = useState(true)
   const t = useTranslator("permissions.stats")
@@ -31,8 +36,7 @@ export function StatCards() {
     const loadSummary = async () => {
       setIsLoading(true)
 
-      const [rolesResult, permissionsResult, screensResult] = await Promise.allSettled([
-        roleService.findAllNoPagination(),
+      const [permissionsResult, screensResult] = await Promise.allSettled([
         permissionService.findAllNoPagination(),
         frontendScreenService.findAll("web"),
       ])
@@ -41,7 +45,6 @@ export function StatCards() {
         permissionsResult.status === "fulfilled" ? permissionsResult.value : []
 
       setSummary({
-        roles: rolesResult.status === "fulfilled" ? rolesResult.value.length : null,
         permissions:
           permissionsResult.status === "fulfilled" ? permissionsResult.value.length : null,
         webScreens: screensResult.status === "fulfilled" ? screensResult.value.length : null,
@@ -62,27 +65,31 @@ export function StatCards() {
   const cards = [
     {
       title: t("roles"),
-      value: summary.roles,
+      value: rolesCount,
       description: t("roles_desc"),
       icon: ShieldCheck,
+      loading: isRolesLoading,
     },
     {
       title: t("permissions"),
       value: summary.permissions,
       description: t("permissions_desc"),
       icon: KeyRound,
+      loading: isLoading,
     },
     {
       title: t("screens"),
       value: summary.webScreens,
       description: t("screens_desc"),
       icon: LayoutTemplate,
+      loading: isLoading,
     },
     {
       title: t("groups"),
       value: summary.permissionGroups,
       description: t("groups_desc"),
       icon: Shapes,
+      loading: isLoading,
     },
   ]
 
@@ -91,7 +98,7 @@ export function StatCards() {
       items={cards.map((card) => ({
         ...card,
         value: card.value === null ? "--" : card.value,
-        loading: isLoading,
+        loading: card.loading,
       }))}
       className="grid-cols-2 xl:grid-cols-4"
       loadingLabel={t("loading")}

@@ -29,15 +29,26 @@ import { roleService } from "@/services/role.service"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 
 import { useTranslator } from "@/lib/i18n"
+import { AppEmpresa } from "@/types/auth"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type RoleFormValues = {
   name: string
   description?: string
+  empresaId: string
 }
 
 interface RoleFormDialogProps {
   onRefresh: () => void
   role?: Role
+  companies: AppEmpresa[]
+  defaultEmpresaId: number | null
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }
@@ -45,6 +56,8 @@ interface RoleFormDialogProps {
 export function RoleFormDialog({ 
   onRefresh, 
   role, 
+  companies,
+  defaultEmpresaId,
   open: controlledOpen,
   onOpenChange: setControlledOpen
 }: RoleFormDialogProps) {
@@ -54,6 +67,7 @@ export function RoleFormDialog({
   const setOpen = setControlledOpen !== undefined ? setControlledOpen : setInternalOpen
   const t = useTranslator("permissions.role_form")
   const validationNameMin = t("val_name_min")
+  const validationEmpresaRequired = t("val_company_required")
 
   const isEdit = !!role
 
@@ -62,8 +76,9 @@ export function RoleFormDialog({
       z.object({
         name: z.string().min(2, validationNameMin),
         description: z.string().optional(),
+        empresaId: z.string().min(1, validationEmpresaRequired),
       }),
-    [validationNameMin],
+    [validationEmpresaRequired, validationNameMin],
   )
 
   const form = useForm<RoleFormValues>({
@@ -71,6 +86,7 @@ export function RoleFormDialog({
     defaultValues: {
       name: "",
       description: "",
+      empresaId: defaultEmpresaId ? String(defaultEmpresaId) : "",
     },
   })
 
@@ -80,15 +96,17 @@ export function RoleFormDialog({
         form.reset({
           name: role.name,
           description: role.description || "",
+          empresaId: role.empresaId ? String(role.empresaId) : "",
         })
       } else {
         form.reset({
           name: "",
           description: "",
+          empresaId: defaultEmpresaId ? String(defaultEmpresaId) : "",
         })
       }
     }
-  }, [open, role, form])
+  }, [defaultEmpresaId, form, open, role])
 
   const onSubmit = async (data: RoleFormValues) => {
     setIsSubmitting(true)
@@ -103,6 +121,7 @@ export function RoleFormDialog({
         await roleService.create({
           name: data.name,
           description: data.description || undefined,
+          empresaId: Number(data.empresaId),
         })
         toast.success(t("success_new"))
       }
@@ -137,6 +156,37 @@ export function RoleFormDialog({
                   <FormControl>
                     <Input placeholder={t("placeholder_name")} {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="empresaId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("label_company")}</FormLabel>
+                  <Select
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    disabled={isEdit || companies.length === 0}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full cursor-pointer">
+                        <SelectValue placeholder={t("placeholder_company")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {companies.map((company) => (
+                        <SelectItem key={company.id} value={String(company.id)}>
+                          {company.nome}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {isEdit ? (
+                    <p className="text-xs text-muted-foreground">{t("company_edit_locked")}</p>
+                  ) : null}
                   <FormMessage />
                 </FormItem>
               )}
