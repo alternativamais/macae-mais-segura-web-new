@@ -170,7 +170,6 @@ export default function PermissionsPage() {
                 roles={roles}
                 companyNameById={companyNameById}
                 isRolesLoading={isRolesLoading}
-                targetCompanyName={targetCompany?.nome ?? null}
               />
             </TabsContent>
 
@@ -179,7 +178,6 @@ export default function PermissionsPage() {
                 roles={roles}
                 companyNameById={companyNameById}
                 isRolesLoading={isRolesLoading}
-                targetCompanyName={targetCompany?.nome ?? null}
               />
             </TabsContent>
           </Tabs>

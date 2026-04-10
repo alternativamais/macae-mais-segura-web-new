@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Building2, Save, Search, ShieldAlert as ShieldIcon } from "lucide-react"
+import { Save, Search, ShieldAlert as ShieldIcon } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TabStateCard } from "@/app/(dashboard)/access-control/components/tab-state-card"
@@ -21,21 +21,18 @@ import {
 } from "@/components/ui/select"
 import { PermissionGroupAccordion } from "./permission-group-accordion"
 import { useTranslator } from "@/lib/i18n"
-import { RoleScopeBadge } from "./role-scope-badge"
 import { CompanyNameById, getRoleOptionLabel } from "./utils"
 
 interface AssignmentTabProps {
   roles: Role[]
   companyNameById: CompanyNameById
   isRolesLoading: boolean
-  targetCompanyName?: string | null
 }
 
 export function AssignmentTab({
   roles,
   companyNameById,
   isRolesLoading,
-  targetCompanyName,
 }: AssignmentTabProps) {
   const [permissions, setPermissions] = useState<Permission[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -45,11 +42,6 @@ export function AssignmentTab({
   const [initialAssignedIds, setInitialAssignedIds] = useState<number[]>([])
   const loadRolePermissionsRequestId = useRef(0)
   const t = useTranslator("permissions.assignment_tab")
-  const selectedRole = useMemo(
-    () => roles.find((role) => role.id === selectedRoleId) ?? null,
-    [roles, selectedRoleId]
-  )
-
   const loadBaseData = useCallback(async () => {
     setIsLoading(true)
 
@@ -193,14 +185,6 @@ export function AssignmentTab({
 
         <div className="flex w-full flex-col gap-3 sm:flex-row xl:w-auto">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Building2 className="size-3.5" />
-              <span>
-                {t("target_company")}:
-                {" "}
-                {targetCompanyName || t("target_company_empty")}
-              </span>
-            </div>
             <span className="text-sm font-medium text-muted-foreground">{t("role")}</span>
             <Select
               value={selectedRoleId ? String(selectedRoleId) : ""}
@@ -221,12 +205,6 @@ export function AssignmentTab({
                 ))}
               </SelectContent>
             </Select>
-            {selectedRole ? (
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>{t("selected_scope")}:</span>
-                <RoleScopeBadge role={selectedRole} companyNameById={companyNameById} />
-              </div>
-            ) : null}
           </div>
 
           <Button

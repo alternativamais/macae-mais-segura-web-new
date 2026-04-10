@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Building2, LayoutTemplate as ScreenIcon, Save, Search } from "lucide-react"
+import { LayoutTemplate as ScreenIcon, Save, Search } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TabStateCard } from "@/app/(dashboard)/access-control/components/tab-state-card"
@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/select"
 import { ScreenGroupAccordion } from "./screen-group-accordion"
 import { useTranslator } from "@/lib/i18n"
-import { RoleScopeBadge } from "./role-scope-badge"
 import { CompanyNameById, getRoleOptionLabel } from "./utils"
 
 const normalizeAssignedIds = (screenIds: number[]) =>
@@ -29,14 +28,12 @@ interface ScreensTabProps {
   roles: Role[]
   companyNameById: CompanyNameById
   isRolesLoading: boolean
-  targetCompanyName?: string | null
 }
 
 export function ScreensTab({
   roles,
   companyNameById,
   isRolesLoading,
-  targetCompanyName,
 }: ScreensTabProps) {
   const [screens, setScreens] = useState<FrontendScreen[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -46,11 +43,6 @@ export function ScreensTab({
   const [initialAssignedIds, setInitialAssignedIds] = useState<number[]>([])
   const loadRoleScreensRequestId = useRef(0)
   const t = useTranslator("permissions.screens_tab")
-  const selectedRole = useMemo(
-    () => roles.find((role) => role.id === selectedRoleId) ?? null,
-    [roles, selectedRoleId]
-  )
-
   const loadBaseData = useCallback(async () => {
     setIsLoading(true)
 
@@ -199,14 +191,6 @@ export function ScreensTab({
 
         <div className="flex w-full flex-col gap-3 sm:flex-row xl:w-auto">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Building2 className="size-3.5" />
-              <span>
-                {t("target_company")}:
-                {" "}
-                {targetCompanyName || t("target_company_empty")}
-              </span>
-            </div>
             <span className="text-sm font-medium text-muted-foreground">{t("role")}</span>
             <Select
               value={selectedRoleId ? String(selectedRoleId) : ""}
@@ -227,12 +211,6 @@ export function ScreensTab({
                 ))}
               </SelectContent>
             </Select>
-            {selectedRole ? (
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <span>{t("selected_scope")}:</span>
-                <RoleScopeBadge role={selectedRole} companyNameById={companyNameById} />
-              </div>
-            ) : null}
           </div>
 
           <Button
