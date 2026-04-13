@@ -53,5 +53,10 @@ export interface HomeAssistantSwitchEntity {
 export interface SmartSwitchPowerResponse {
   id: number
   entityId: string
-  on: boolean
+  state: SmartSwitchPowerState
+  rawState?: string
+  on: boolean | null
+  available: boolean
+  confirmed: boolean
+  requestedAction?: "turn_on" | "turn_off"
 }

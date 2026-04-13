@@ -6,6 +6,7 @@ import {
   HomeAssistantSwitchEntity,
   SmartSwitchDestination,
   SmartSwitch,
+  SmartSwitchPowerResponse,
   SmartSwitchPowerState,
 } from "@/types/smart-switch"
 
@@ -145,6 +146,16 @@ export function normalizePowerState(on?: boolean | null): SmartSwitchPowerState 
   if (on === true) return "on"
   if (on === false) return "off"
   return "unknown"
+}
+
+export function normalizePowerResponseState(
+  response?: Pick<SmartSwitchPowerResponse, "state" | "on"> | null,
+): SmartSwitchPowerState {
+  if (response?.state) {
+    return response.state
+  }
+
+  return normalizePowerState(response?.on)
 }
 
 export function buildHomeAssistantEntityLabel(

@@ -722,7 +722,7 @@
       "notifications": {
         "refresh_success": "Estado do smart switch atualizado.",
         "refresh_error": "Erro ao atualizar o estado do smart switch.",
-        "toggle_success": "Comando enviado ao smart switch.",
+        "toggle_success": "Estado do smart switch confirmado com sucesso.",
         "toggle_error": "Erro ao alternar o smart switch."
       },
       "open_actions": "Abrir ações",
@@ -1370,7 +1370,7 @@
         "load_totem": "Falha ao carregar informações detalhadas do totem."
       },
       "notifications": {
-        "switch_toggle_success": "Comando enviado ao smart switch.",
+        "switch_toggle_success": "Estado do smart switch confirmado com sucesso.",
         "switch_toggle_error": "Não foi possível alternar o smart switch."
       },
       "summary": {
@@ -1398,7 +1398,8 @@
         "offline": "Offline",
         "unknown": "Desconhecido",
         "turn_on": "Ligar alarme",
-        "turn_off": "Desligar alarme"
+        "turn_off": "Desligar alarme",
+        "toggle": "Alternar alarme"
       },
       "cameras": {
         "title": "Câmeras do ponto",

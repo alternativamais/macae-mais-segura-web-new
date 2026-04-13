@@ -722,7 +722,7 @@
       "notifications": {
         "refresh_success": "Smart switch state updated.",
         "refresh_error": "Error refreshing smart switch state.",
-        "toggle_success": "Command sent to the smart switch.",
+        "toggle_success": "Smart switch state confirmed successfully.",
         "toggle_error": "Error toggling the smart switch."
       },
       "open_actions": "Open actions",
@@ -1370,7 +1370,7 @@
         "load_totem": "Failed to load detailed totem information."
       },
       "notifications": {
-        "switch_toggle_success": "Command sent to the smart switch.",
+        "switch_toggle_success": "Smart switch state confirmed successfully.",
         "switch_toggle_error": "Unable to toggle the smart switch."
       },
       "summary": {
@@ -1398,7 +1398,8 @@
         "offline": "Offline",
         "unknown": "Unknown",
         "turn_on": "Turn alarm on",
-        "turn_off": "Turn alarm off"
+        "turn_off": "Turn alarm off",
+        "toggle": "Toggle alarm"
       },
       "cameras": {
         "title": "Point cameras",

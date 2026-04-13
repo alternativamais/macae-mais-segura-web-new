@@ -52,7 +52,7 @@ import {
   getSmartSwitchLocationPrimaryLabel,
   getSmartSwitchPointLabel,
   getSmartSwitchTotemLabel,
-  normalizePowerState,
+  normalizePowerResponseState,
 } from "./utils"
 
 export function SmartSwitchesTab() {
@@ -110,7 +110,7 @@ export function SmartSwitchesTab() {
           if (!itemId) return
 
           if (result.status === "fulfilled") {
-            next[itemId] = normalizePowerState(result.value.on)
+            next[itemId] = normalizePowerResponseState(result.value)
           } else {
             next[itemId] = "offline"
           }
@@ -219,7 +219,7 @@ export function SmartSwitchesTab() {
       const result = await smartSwitchService.getPowerState(item.id)
       setPowerStates((previous) => ({
         ...previous,
-        [item.id]: normalizePowerState(result.on),
+        [item.id]: normalizePowerResponseState(result),
       }))
       toast.success(t("table.notifications.refresh_success"))
     } catch (error) {
@@ -240,7 +240,7 @@ export function SmartSwitchesTab() {
       const result = await smartSwitchService.togglePower(item.id)
       setPowerStates((previous) => ({
         ...previous,
-        [item.id]: normalizePowerState(result.on),
+        [item.id]: normalizePowerResponseState(result),
       }))
       toast.success(t("table.notifications.toggle_success"))
     } catch (error) {

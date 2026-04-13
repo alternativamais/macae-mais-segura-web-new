@@ -25,6 +25,7 @@ import {
   getPrimarySmartSwitch,
 } from "./utils"
 import { useTranslator } from "@/lib/i18n"
+import { normalizePowerResponseState } from "@/app/(dashboard)/equipment/smart-switches/components/utils"
 
 interface PointPreviewDialogProps {
   open: boolean
@@ -97,7 +98,7 @@ export function PointPreviewDialog({
       .getPowerState(smartSwitch.id)
       .then((response) => {
         if (disposed) return
-        setSwitchState(response.on ? "on" : "off")
+        setSwitchState(normalizePowerResponseState(response))
       })
       .catch(() => {
         if (disposed) return
@@ -123,7 +124,7 @@ export function PointPreviewDialog({
 
     try {
       const response = await smartSwitchService.togglePower(smartSwitch.id)
-      setSwitchState(response.on ? "on" : "off")
+      setSwitchState(normalizePowerResponseState(response))
       toast.success(t("notifications.switch_toggle_success"))
     } catch (error) {
       setSwitchState("offline")
@@ -277,8 +278,10 @@ export function PointPreviewDialog({
                         </>
                       ) : switchState === "on" ? (
                         t("switch.turn_off")
-                      ) : (
+                      ) : switchState === "off" ? (
                         t("switch.turn_on")
+                      ) : (
+                        t("switch.toggle")
                       )}
                     </Button>
                   </div>
