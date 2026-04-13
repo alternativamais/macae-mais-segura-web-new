@@ -55,6 +55,8 @@ export function CompanyDetailsDialog({ company, open, onOpenChange }: CompanyDet
   const darkLogoUrl = resolveCompanyLogoUrl(company.logoDarkUrl)
   const squareLightLogoUrl = resolveCompanyLogoUrl(company.logoSquareLightUrl)
   const squareDarkLogoUrl = resolveCompanyLogoUrl(company.logoSquareDarkUrl)
+  const pointPinUrl = resolveCompanyLogoUrl(company.pointPinUrl)
+  const totemPinUrl = resolveCompanyLogoUrl(company.totemPinUrl)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,7 +69,7 @@ export function CompanyDetailsDialog({ company, open, onOpenChange }: CompanyDet
         </DialogHeader>
 
         <div className="space-y-3">
-          {(fullLogoUrl || iconLogoUrl || lightLogoUrl || darkLogoUrl || squareLightLogoUrl || squareDarkLogoUrl) ? (
+          {(fullLogoUrl || iconLogoUrl || lightLogoUrl || darkLogoUrl || squareLightLogoUrl || squareDarkLogoUrl || pointPinUrl || totemPinUrl) ? (
             <>
               <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/20 p-3">
                 {iconLogoUrl ? (
@@ -110,6 +112,20 @@ export function CompanyDetailsDialog({ company, open, onOpenChange }: CompanyDet
                     src={squareDarkLogoUrl}
                     alt={`${company.nome} quadrada tema escuro`}
                     className="size-12 rounded bg-zinc-950 p-1 object-contain"
+                  />
+                ) : null}
+                {pointPinUrl ? (
+                  <img
+                    src={pointPinUrl}
+                    alt={`${company.nome} pin de ponto`}
+                    className="size-12 object-contain"
+                  />
+                ) : null}
+                {totemPinUrl ? (
+                  <img
+                    src={totemPinUrl}
+                    alt={`${company.nome} pin de totem`}
+                    className="size-12 object-contain"
                   />
                 ) : null}
               </div>

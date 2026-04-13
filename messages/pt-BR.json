@@ -2823,7 +2823,9 @@
         "logo_light": "Logo tema claro",
         "logo_dark": "Logo tema escuro",
         "logo_square_light": "Logo quadrada tema claro",
-        "logo_square_dark": "Logo quadrada tema escuro"
+        "logo_square_dark": "Logo quadrada tema escuro",
+        "point_pin": "Pin de ponto",
+        "totem_pin": "Pin de totem"
       },
       "placeholders": {
         "name": "Ex.: Alternativa Tecnologia",
@@ -2832,7 +2834,9 @@
         "logo_light": "Clique para enviar a logo usada no tema claro",
         "logo_dark": "Clique para enviar a logo usada no tema escuro",
         "logo_square_light": "Clique para enviar a logo quadrada usada no tema claro",
-        "logo_square_dark": "Clique para enviar a logo quadrada usada no tema escuro"
+        "logo_square_dark": "Clique para enviar a logo quadrada usada no tema escuro",
+        "point_pin": "Clique para enviar o pin usado em pontos no mapa",
+        "totem_pin": "Clique para enviar o pin usado em totens no mapa"
       },
       "buttons": {
         "cancel": "Cancelar",

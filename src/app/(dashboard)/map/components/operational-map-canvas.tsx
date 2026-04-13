@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api"
 import { Loader2, MapPinned } from "lucide-react"
+import { resolveMapPinUrl } from "@/lib/company-map-pin"
 import { useTranslator } from "@/lib/i18n"
 import { GOOGLE_MAPS_LOADER_ID } from "@/lib/google-maps-loader"
 import { OperationalMapMarker } from "@/types/map"
@@ -132,6 +133,31 @@ export function OperationalMapCanvas({
     }
   }, [isLoaded])
 
+  const resolveMarkerIcon = (marker: OperationalMapMarker) => {
+    if (!isLoaded || !window.google?.maps) {
+      return undefined
+    }
+
+    const isSelected = marker.id === selectedMarkerId
+    const companyPinUrl = resolveMapPinUrl(marker.point)
+
+    if (companyPinUrl) {
+      const size = isSelected ? 58 : 52
+
+      return {
+        url: companyPinUrl,
+        scaledSize: new window.google.maps.Size(size, size),
+        anchor: new window.google.maps.Point(size / 2, size),
+      }
+    }
+
+    return isSelected
+      ? selectedPointIcon
+      : marker.point.totem?.id
+        ? pointIcon
+        : standalonePointIcon
+  }
+
   if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
     return (
       <div className="flex h-full min-h-0 flex-col items-center justify-center px-6 text-center">
@@ -189,13 +215,7 @@ export function OperationalMapCanvas({
               position={marker.position}
               title={marker.point.nome}
               zIndex={isSelected ? 20 : hasTotem ? 12 : 8}
-              icon={
-                isSelected
-                  ? selectedPointIcon
-                  : hasTotem
-                    ? pointIcon
-                    : standalonePointIcon
-              }
+              icon={resolveMarkerIcon(marker)}
               onClick={() => onSelectMarker(marker.id)}
             />
           )

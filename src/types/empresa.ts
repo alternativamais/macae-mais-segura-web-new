@@ -9,6 +9,8 @@ export interface Empresa {
   logoDarkUrl?: string | null;
   logoSquareLightUrl?: string | null;
   logoSquareDarkUrl?: string | null;
+  pointPinUrl?: string | null;
+  totemPinUrl?: string | null;
   createdAt?: string;
   updatedAt?: string;
 }

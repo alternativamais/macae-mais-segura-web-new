@@ -43,7 +43,13 @@ interface CompanyFormDialogProps {
   company?: Empresa
 }
 
-type LogoSlot = "wideLight" | "wideDark" | "squareLight" | "squareDark"
+type AssetSlot =
+  | "wideLight"
+  | "wideDark"
+  | "squareLight"
+  | "squareDark"
+  | "pointPin"
+  | "totemPin"
 
 function LogoUploadCard({
   label,
@@ -100,10 +106,14 @@ export function CompanyFormDialog({
   const [wideDarkFile, setWideDarkFile] = useState<File | null>(null)
   const [squareLightFile, setSquareLightFile] = useState<File | null>(null)
   const [squareDarkFile, setSquareDarkFile] = useState<File | null>(null)
+  const [pointPinFile, setPointPinFile] = useState<File | null>(null)
+  const [totemPinFile, setTotemPinFile] = useState<File | null>(null)
   const [wideLightPreviewUrl, setWideLightPreviewUrl] = useState<string | null>(null)
   const [wideDarkPreviewUrl, setWideDarkPreviewUrl] = useState<string | null>(null)
   const [squareLightPreviewUrl, setSquareLightPreviewUrl] = useState<string | null>(null)
   const [squareDarkPreviewUrl, setSquareDarkPreviewUrl] = useState<string | null>(null)
+  const [pointPinPreviewUrl, setPointPinPreviewUrl] = useState<string | null>(null)
+  const [totemPinPreviewUrl, setTotemPinPreviewUrl] = useState<string | null>(null)
   const isEdit = !!company
 
   const t = useTranslator("companies.form")
@@ -139,6 +149,8 @@ export function CompanyFormDialog({
     setWideDarkFile(null)
     setSquareLightFile(null)
     setSquareDarkFile(null)
+    setPointPinFile(null)
+    setTotemPinFile(null)
   }, [company, form, open])
 
   useEffect(() => {
@@ -148,6 +160,8 @@ export function CompanyFormDialog({
         wideDarkPreviewUrl,
         squareLightPreviewUrl,
         squareDarkPreviewUrl,
+        pointPinPreviewUrl,
+        totemPinPreviewUrl,
       ]
         .filter(Boolean)
         .forEach((url) => {
@@ -156,14 +170,16 @@ export function CompanyFormDialog({
           }
         })
     }
-  }, [wideLightPreviewUrl, wideDarkPreviewUrl, squareLightPreviewUrl, squareDarkPreviewUrl])
+  }, [wideLightPreviewUrl, wideDarkPreviewUrl, squareLightPreviewUrl, squareDarkPreviewUrl, pointPinPreviewUrl, totemPinPreviewUrl])
 
-  const updatePreview = (slot: LogoSlot, file: File | null) => {
-    const fallbackBySlot: Record<LogoSlot, string | null> = {
+  const updatePreview = (slot: AssetSlot, file: File | null) => {
+    const fallbackBySlot: Record<AssetSlot, string | null> = {
       wideLight: resolveCompanyLogoUrl(company?.logoLightUrl || company?.logoUrl),
       wideDark: resolveCompanyLogoUrl(company?.logoDarkUrl || company?.logoUrl),
       squareLight: resolveCompanyLogoUrl(company?.logoSquareLightUrl || company?.logoIconUrl),
       squareDark: resolveCompanyLogoUrl(company?.logoSquareDarkUrl || company?.logoIconUrl),
+      pointPin: resolveCompanyLogoUrl(company?.pointPinUrl),
+      totemPin: resolveCompanyLogoUrl(company?.totemPinUrl),
     }
 
     const previewUrl = file ? URL.createObjectURL(file) : fallbackBySlot[slot]
@@ -172,6 +188,8 @@ export function CompanyFormDialog({
     if (slot === "wideDark") setWideDarkPreviewUrl(previewUrl)
     if (slot === "squareLight") setSquareLightPreviewUrl(previewUrl)
     if (slot === "squareDark") setSquareDarkPreviewUrl(previewUrl)
+    if (slot === "pointPin") setPointPinPreviewUrl(previewUrl)
+    if (slot === "totemPin") setTotemPinPreviewUrl(previewUrl)
   }
 
   useEffect(() => {
@@ -190,6 +208,14 @@ export function CompanyFormDialog({
     updatePreview("squareDark", squareDarkFile)
   }, [company?.logoSquareDarkUrl, company?.logoIconUrl, squareDarkFile])
 
+  useEffect(() => {
+    updatePreview("pointPin", pointPinFile)
+  }, [company?.pointPinUrl, pointPinFile])
+
+  useEffect(() => {
+    updatePreview("totemPin", totemPinFile)
+  }, [company?.totemPinUrl, totemPinFile])
+
   const onSubmit = async (values: CompanyFormValues) => {
     setIsSubmitting(true)
 
@@ -200,14 +226,18 @@ export function CompanyFormDialog({
         | "logoDarkUrl"
         | "logoSquareLightUrl"
         | "logoSquareDarkUrl"
+        | "pointPinUrl"
+        | "totemPinUrl"
       > = {}
 
-      if (wideLightFile || wideDarkFile || squareLightFile || squareDarkFile) {
+      if (wideLightFile || wideDarkFile || squareLightFile || squareDarkFile || pointPinFile || totemPinFile) {
         uploadedAssets = await empresaService.uploadAssets({
           logoLight: wideLightFile,
           logoDark: wideDarkFile,
           logoSquareLight: squareLightFile,
           logoSquareDark: squareDarkFile,
+          pointPin: pointPinFile,
+          totemPin: totemPinFile,
         })
       }
 
@@ -219,6 +249,8 @@ export function CompanyFormDialog({
           uploadedAssets.logoSquareLightUrl ?? company?.logoSquareLightUrl ?? null,
         logoSquareDarkUrl:
           uploadedAssets.logoSquareDarkUrl ?? company?.logoSquareDarkUrl ?? null,
+        pointPinUrl: uploadedAssets.pointPinUrl ?? company?.pointPinUrl ?? null,
+        totemPinUrl: uploadedAssets.totemPinUrl ?? company?.totemPinUrl ?? null,
       }
 
       if (isEdit && company) {
@@ -342,6 +374,24 @@ export function CompanyFormDialog({
                 previewUrl={squareDarkPreviewUrl}
                 square
                 onChange={setSquareDarkFile}
+              />
+
+              <LogoUploadCard
+                label={t("labels.point_pin")}
+                placeholder={t("placeholders.point_pin")}
+                alt={company?.nome || "Pin de ponto da empresa"}
+                previewUrl={pointPinPreviewUrl}
+                square
+                onChange={setPointPinFile}
+              />
+
+              <LogoUploadCard
+                label={t("labels.totem_pin")}
+                placeholder={t("placeholders.totem_pin")}
+                alt={company?.nome || "Pin de totem da empresa"}
+                previewUrl={totemPinPreviewUrl}
+                square
+                onChange={setTotemPinFile}
               />
             </div>
 

@@ -30,6 +30,8 @@ export interface OperationalMapPoint {
   empresa?: {
     id: number
     nome?: string | null
+    pointPinUrl?: string | null
+    totemPinUrl?: string | null
   } | null
   devices?: MapPointDeviceGroup
   totem?: MapPointTotemSummary | null

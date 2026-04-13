@@ -45,6 +45,8 @@ export const empresaService = {
     logoDark?: File | null;
     logoSquareLight?: File | null;
     logoSquareDark?: File | null;
+    pointPin?: File | null;
+    totemPin?: File | null;
   }): Promise<
     Pick<
       Empresa,
@@ -54,6 +56,8 @@ export const empresaService = {
       | 'logoDarkUrl'
       | 'logoSquareLightUrl'
       | 'logoSquareDarkUrl'
+      | 'pointPinUrl'
+      | 'totemPinUrl'
     >
   > => {
     const formData = new FormData();
@@ -82,6 +86,14 @@ export const empresaService = {
       formData.append('logoSquareDark', files.logoSquareDark);
     }
 
+    if (files.pointPin) {
+      formData.append('pointPin', files.pointPin);
+    }
+
+    if (files.totemPin) {
+      formData.append('totemPin', files.totemPin);
+    }
+
     const { data } = await api.post<
       Pick<
         Empresa,
@@ -91,6 +103,8 @@ export const empresaService = {
         | 'logoDarkUrl'
         | 'logoSquareLightUrl'
         | 'logoSquareDarkUrl'
+        | 'pointPinUrl'
+        | 'totemPinUrl'
       >
     >(
       '/empresas/upload-assets',

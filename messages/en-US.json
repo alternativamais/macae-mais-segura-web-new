@@ -2823,7 +2823,9 @@
         "logo_light": "Light theme logo",
         "logo_dark": "Dark theme logo",
         "logo_square_light": "Light theme square logo",
-        "logo_square_dark": "Dark theme square logo"
+        "logo_square_dark": "Dark theme square logo",
+        "point_pin": "Point pin",
+        "totem_pin": "Totem pin"
       },
       "placeholders": {
         "name": "e.g.: Alternativa Technology",
@@ -2832,7 +2834,9 @@
         "logo_light": "Click to upload the logo used in light theme",
         "logo_dark": "Click to upload the logo used in dark theme",
         "logo_square_light": "Click to upload the square logo used in light theme",
-        "logo_square_dark": "Click to upload the square logo used in dark theme"
+        "logo_square_dark": "Click to upload the square logo used in dark theme",
+        "point_pin": "Click to upload the pin used for map points",
+        "totem_pin": "Click to upload the pin used for map totems"
       },
       "buttons": {
         "cancel": "Cancel",
