@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { ArrowLeft } from "lucide-react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { CommandSearch, SearchTrigger } from "@/components/command-search"
@@ -15,11 +15,10 @@ export function SiteHeader({ floating = false }: { floating?: boolean }) {
   const [searchOpen, setSearchOpen] = React.useState(false)
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
   const t = useTranslator("plate_sending")
-  const isPlateSendingRoute =
-    pathname === "/administration/integrations/plate-sending"
-  const selectedIntegration = searchParams.get("integration")
+  const isPlateSendingIntegrationRoute = pathname.startsWith(
+    "/administration/integrations/plate-sending/",
+  )
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -48,21 +47,14 @@ export function SiteHeader({ floating = false }: { floating?: boolean }) {
             orientation="vertical"
             className="mx-2 data-[orientation=vertical]:h-4"
           />
-          {isPlateSendingRoute && selectedIntegration ? (
+          {isPlateSendingIntegrationRoute ? (
             <>
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 className="cursor-pointer"
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString())
-                  params.delete("integration")
-                  const query = params.toString()
-                  router.replace(
-                    query ? `${pathname}?${query}` : pathname,
-                  )
-                }}
+                onClick={() => router.back()}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {t("actions.back_to_list")}

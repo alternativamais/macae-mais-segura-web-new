@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
 import { ArrowRight, EllipsisVertical, RefreshCcw, Search, ShieldCheck } from "lucide-react"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TablePaginationFooter } from "@/app/(dashboard)/access-control/components/table-pagination-footer"
@@ -31,16 +32,16 @@ interface PlateSendingOverviewTabProps {
   integrations: Integration[]
   isLoading?: boolean
   onReload: () => Promise<void> | void
-  onEnterIntegration: (integration: Integration) => void
 }
 
 export function PlateSendingOverviewTab({
   integrations,
   isLoading = false,
   onReload,
-  onEnterIntegration,
 }: PlateSendingOverviewTabProps) {
   const t = useTranslator("plate_sending")
+  const router = useRouter()
+  const pathname = usePathname()
   const [searchTerm, setSearchTerm] = useState("")
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -146,7 +147,11 @@ export function PlateSendingOverviewTab({
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
                             className="cursor-pointer"
-                            onClick={() => onEnterIntegration(integration)}
+                            onClick={() =>
+                              router.push(
+                                `${pathname}/${integration.code.trim().toLowerCase()}`,
+                              )
+                            }
                           >
                             <ArrowRight className="mr-2 h-4 w-4" />
                             {t("actions.enter_integration")}

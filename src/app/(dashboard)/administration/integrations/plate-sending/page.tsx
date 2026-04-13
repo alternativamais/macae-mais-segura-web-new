@@ -1,7 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useCallback, useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScreenGuard } from "@/components/shared/screen-guard"
 import { useTranslator } from "@/lib/i18n"
@@ -15,13 +14,9 @@ import { StatCards } from "./components/stat-cards"
 
 export default function PlateSendingPage() {
   const t = useTranslator("plate_sending")
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState("overview")
   const [integrations, setIntegrations] = useState<Integration[]>([])
   const [isLoadingIntegrations, setIsLoadingIntegrations] = useState(true)
-  const selectedIntegrationCode = searchParams.get("integration")?.trim().toLowerCase() || null
 
   const loadIntegrations = useCallback(async () => {
     setIsLoadingIntegrations(true)
@@ -41,50 +36,6 @@ export default function PlateSendingPage() {
     void loadIntegrations()
   }, [loadIntegrations])
 
-  const selectedIntegration = useMemo(
-    () =>
-      selectedIntegrationCode
-        ? integrations.find(
-            (integration) =>
-              integration.code.trim().toLowerCase() === selectedIntegrationCode,
-          ) || null
-        : null,
-    [integrations, selectedIntegrationCode],
-  )
-
-  useEffect(() => {
-    if (!selectedIntegrationCode) return
-    if (isLoadingIntegrations) return
-
-    const stillExists = integrations.some(
-      (integration) =>
-        integration.code.trim().toLowerCase() === selectedIntegrationCode,
-    )
-
-    if (!stillExists) {
-      const params = new URLSearchParams(searchParams.toString())
-      params.delete("integration")
-      const query = params.toString()
-      router.replace(query ? `${pathname}?${query}` : pathname)
-    }
-  }, [
-    integrations,
-    isLoadingIntegrations,
-    pathname,
-    router,
-    searchParams,
-    selectedIntegrationCode,
-  ])
-
-  const handleEnterIntegration = useCallback(
-    (integration: Integration) => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set("integration", integration.code.trim().toLowerCase())
-      router.replace(`${pathname}?${params.toString()}`)
-    },
-    [pathname, router, searchParams],
-  )
-
   return (
     <ScreenGuard screenKey="admin.integracoes">
       <div className="flex flex-col gap-4">
@@ -103,16 +54,11 @@ export default function PlateSendingPage() {
             </TabsList>
 
             <TabsContent value="overview" className="mt-4">
-              {selectedIntegration ? (
-                <IntegrationManagementTab integration={selectedIntegration} />
-              ) : (
-                <PlateSendingOverviewTab
-                  integrations={integrations}
-                  isLoading={isLoadingIntegrations}
-                  onReload={loadIntegrations}
-                  onEnterIntegration={handleEnterIntegration}
-                />
-              )}
+              <PlateSendingOverviewTab
+                integrations={integrations}
+                isLoading={isLoadingIntegrations}
+                onReload={loadIntegrations}
+              />
             </TabsContent>
 
             <TabsContent value="lpr" className="mt-4">
