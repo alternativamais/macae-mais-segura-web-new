@@ -740,6 +740,14 @@
       "title_edit": "Edit smart switch",
       "description_create": "Register a Home Assistant device and choose whether it will be installed in a totem or directly at a point.",
       "description_edit": "Update the device data, linked entity, and installation location.",
+      "sections": {
+        "general": "General Data",
+        "general_desc": "Home Assistant entity and device identification.",
+        "location": "Location",
+        "location_desc": "Define where the smart switch is installed.",
+        "system": "System Status",
+        "system_desc": "Operational state of the smart switch in the system."
+      },
       "labels": {
         "name": "Name",
         "entity_id": "Home Assistant entity",
@@ -773,7 +781,8 @@
         "destination_totem": "Uses the totem as the primary equipment.",
         "destination_point": "Installs the smart switch without a totem link.",
         "totem": "Select the totem where the smart switch will be installed.",
-        "point": "Select the point where the smart switch will be installed."
+        "point": "Select the point where the smart switch will be installed.",
+        "status": "Defines whether the smart switch is available for operation in the system."
       },
       "buttons": {
         "cancel": "Cancel",

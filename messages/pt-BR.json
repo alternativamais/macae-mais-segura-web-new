@@ -740,6 +740,14 @@
       "title_edit": "Editar smart switch",
       "description_create": "Cadastre um dispositivo do Home Assistant e escolha se ele será instalado em um totem ou direto no ponto.",
       "description_edit": "Atualize os dados do dispositivo, a entidade vinculada e o local de instalação.",
+      "sections": {
+        "general": "Dados Gerais",
+        "general_desc": "Entidade do Home Assistant e identificação do dispositivo.",
+        "location": "Localização",
+        "location_desc": "Defina onde o smart switch está instalado.",
+        "system": "Status do Sistema",
+        "system_desc": "Situação operacional do smart switch no sistema."
+      },
       "labels": {
         "name": "Nome",
         "entity_id": "Entidade do Home Assistant",
@@ -773,7 +781,8 @@
         "destination_totem": "Usa o totem como equipamento principal.",
         "destination_point": "Instala o smart switch sem vínculo com totem.",
         "totem": "Selecione o totem onde o smart switch será instalado.",
-        "point": "Selecione o ponto onde o smart switch será instalado."
+        "point": "Selecione o ponto onde o smart switch será instalado.",
+        "status": "Define se o smart switch está disponível para operação no sistema."
       },
       "buttons": {
         "cancel": "Cancelar",

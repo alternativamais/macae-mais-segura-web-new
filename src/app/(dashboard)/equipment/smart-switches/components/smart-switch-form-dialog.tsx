@@ -9,6 +9,12 @@ import { notificationService as toast } from "@/lib/notifications/notification-s
 import { Button } from "@/components/ui/button"
 import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -109,6 +115,15 @@ function createFormSchema(messages: {
 
 type SmartSwitchFormValues = z.infer<ReturnType<typeof createFormSchema>>
 
+const SECTION_BY_FIELD: Partial<Record<keyof SmartSwitchFormValues, string>> = {
+  nome: "general",
+  homeAssistantEntityId: "general",
+  destino: "location",
+  totemId: "location",
+  pontoId: "location",
+  status: "system",
+}
+
 function buildTotemOptionLabel(totem: Totem, fallback: string) {
   const pointLabel = getPointDisplayName(totem.ponto, fallback)
   return `${totem.numero} - ${pointLabel}`
@@ -130,6 +145,7 @@ export function SmartSwitchFormDialog({
   const [totens, setTotens] = useState<Totem[]>([])
   const [points, setPoints] = useState<Ponto[]>([])
   const [entities, setEntities] = useState<HomeAssistantSwitchEntity[]>([])
+  const [openSection, setOpenSection] = useState("general")
   const isEdit = !!item
   const { companies, showCompanySelector, defaultCompanyId } =
     useTenantCompanySelection()
@@ -248,6 +264,8 @@ export function SmartSwitchFormDialog({
 
   useEffect(() => {
     if (!open) return
+
+    setOpenSection("general")
 
     const destinationValue: SmartSwitchDestination = item
       ? getSmartSwitchDestination(item)
@@ -386,9 +404,27 @@ export function SmartSwitchFormDialog({
     }
   }
 
+  const handleInvalidSubmit = (
+    errors: Partial<Record<keyof SmartSwitchFormValues, unknown>>,
+  ) => {
+    const firstField = Object.keys(errors)[0] as
+      | keyof SmartSwitchFormValues
+      | undefined
+
+    if (!firstField) {
+      return
+    }
+
+    const section = SECTION_BY_FIELD[firstField]
+
+    if (section) {
+      setOpenSection(section)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{isEdit ? t("title_edit") : t("title_create")}</DialogTitle>
           <DialogDescription>
@@ -397,7 +433,10 @@ export function SmartSwitchFormDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit, handleInvalidSubmit)}
+            className="space-y-6"
+          >
             {showCompanySelector ? (
               <TenantCompanyFormField
                 control={form.control}
@@ -407,254 +446,326 @@ export function SmartSwitchFormDialog({
               />
             ) : null}
 
-            <FormField
-              control={form.control}
-              name="homeAssistantEntityId"
-              render={({ field }) => (
-                <FormItem className="min-w-0">
-                  <FormLabel>{t("labels.entity_id")}</FormLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value) => handleEntityChange(value, field.onChange)}
-                    disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
-                  >
-                    <FormControl>
-                      <SelectTrigger
-                        className="w-full cursor-pointer"
-                        title={selectedEntityLabel}
-                      >
-                        <SelectValue placeholder={t("placeholders.entity_id")} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {entities.map((entity) => {
-                        const fullLabel = buildHomeAssistantEntityLabel(entity, {
-                          friendlyNameFallback: t("options.entity_without_name"),
-                        })
-
-                        return (
-                          <SelectItem key={entity.entityId} value={entity.entityId}>
-                            <span title={fullLabel}>
-                              {truncateWithEllipsis(fullLabel, 40)}
-                            </span>
-                          </SelectItem>
-                        )
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <div className="flex justify-end">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="cursor-pointer"
-                      onClick={handleRefreshEntities}
-                      disabled={isRefreshingEntities || isLoadingDependencies}
-                    >
-                      {isRefreshingEntities ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <RefreshCcw className="mr-2 h-4 w-4" />
-                      )}
-                      {t("actions.refresh_entities")}
-                    </Button>
+            <Accordion
+              type="single"
+              collapsible
+              value={openSection}
+              onValueChange={(value) => setOpenSection(value || "")}
+              className="rounded-md border bg-card"
+            >
+              <AccordionItem value="general" className="px-4">
+                <AccordionTrigger className="cursor-pointer py-4 hover:no-underline">
+                  <div className="space-y-1">
+                    <div>{t("sections.general")}</div>
+                    <div className="text-xs font-normal text-muted-foreground">
+                      {t("sections.general_desc")}
+                    </div>
                   </div>
-                  <FormDescription>{t("descriptions.entity_id")}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                </AccordionTrigger>
+                <AccordionContent className="pb-0">
+                  <div className="space-y-4 pb-4">
+                    <div className="grid items-start gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
+                      <FormField
+                        control={form.control}
+                        name="homeAssistantEntityId"
+                        render={({ field }) => (
+                          <FormItem className="min-w-0">
+                            <FormLabel>{t("labels.entity_id")}</FormLabel>
+                            <Select
+                              value={field.value}
+                              onValueChange={(value) => handleEntityChange(value, field.onChange)}
+                              disabled={
+                                isLoadingDependencies ||
+                                (showCompanySelector && !selectedCompanyId)
+                              }
+                            >
+                              <FormControl>
+                                <SelectTrigger
+                                  className="w-full cursor-pointer"
+                                  title={selectedEntityLabel}
+                                >
+                                  <SelectValue placeholder={t("placeholders.entity_id")} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {entities.map((entity) => {
+                                  const fullLabel = buildHomeAssistantEntityLabel(entity, {
+                                    friendlyNameFallback: t("options.entity_without_name"),
+                                  })
 
-            <FormField
-              control={form.control}
-              name="nome"
-              render={({ field }) => (
-                <FormItem className="min-w-0">
-                  <FormLabel>{t("labels.name")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t("placeholders.name")}
-                      {...field}
-                      value={field.value ?? ""}
+                                  return (
+                                    <SelectItem key={entity.entityId} value={entity.entityId}>
+                                      <span title={fullLabel}>
+                                        {truncateWithEllipsis(fullLabel, 40)}
+                                      </span>
+                                    </SelectItem>
+                                  )
+                                })}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>{t("descriptions.entity_id")}</FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="flex items-end">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full cursor-pointer md:w-auto"
+                          onClick={handleRefreshEntities}
+                          disabled={
+                            isRefreshingEntities ||
+                            isLoadingDependencies ||
+                            (showCompanySelector && !selectedCompanyId)
+                          }
+                        >
+                          {isRefreshingEntities ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          ) : (
+                            <RefreshCcw className="mr-2 h-4 w-4" />
+                          )}
+                          {t("actions.refresh_entities")}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="nome"
+                      render={({ field }) => (
+                        <FormItem className="min-w-0">
+                          <FormLabel>{t("labels.name")}</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder={t("placeholders.name")}
+                              {...field}
+                              value={field.value ?? ""}
+                            />
+                          </FormControl>
+                          <FormDescription>{t("descriptions.name")}</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormDescription>{t("descriptions.name")}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
 
-            <FormField
-              control={form.control}
-              name="destino"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("labels.destination")}</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      className="grid gap-3 sm:grid-cols-2"
-                      value={field.value}
-                      onValueChange={(value) =>
-                        handleDestinationChange(value as SmartSwitchDestination)
-                      }
-                    >
-                      <label className="border-input hover:bg-accent/40 flex cursor-pointer items-center gap-3 rounded-md border px-3 py-3 text-sm">
-                        <RadioGroupItem value="totem" />
-                        <div className="space-y-1">
-                          <div className="font-medium">{t("options.install_in_totem")}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {t("descriptions.destination_totem")}
-                          </div>
-                        </div>
-                      </label>
-                      <label className="border-input hover:bg-accent/40 flex cursor-pointer items-center gap-3 rounded-md border px-3 py-3 text-sm">
-                        <RadioGroupItem value="ponto" />
-                        <div className="space-y-1">
-                          <div className="font-medium">{t("options.install_in_point")}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {t("descriptions.destination_point")}
-                          </div>
-                        </div>
-                      </label>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormDescription>{t("descriptions.destination")}</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <AccordionItem value="location" className="px-4">
+                <AccordionTrigger className="cursor-pointer py-4 hover:no-underline">
+                  <div className="space-y-1">
+                    <div>{t("sections.location")}</div>
+                    <div className="text-xs font-normal text-muted-foreground">
+                      {t("sections.location_desc")}
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-0">
+                  <div className="space-y-4 pb-4">
+                    <FormField
+                      control={form.control}
+                      name="destino"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("labels.destination")}</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              className="grid gap-3 sm:grid-cols-2"
+                              value={field.value}
+                              onValueChange={(value) =>
+                                handleDestinationChange(value as SmartSwitchDestination)
+                              }
+                            >
+                              <label className="border-input hover:bg-accent/40 flex cursor-pointer items-center gap-3 rounded-md border px-3 py-3 text-sm">
+                                <RadioGroupItem value="totem" />
+                                <div className="space-y-1">
+                                  <div className="font-medium">
+                                    {t("options.install_in_totem")}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground">
+                                    {t("descriptions.destination_totem")}
+                                  </div>
+                                </div>
+                              </label>
+                              <label className="border-input hover:bg-accent/40 flex cursor-pointer items-center gap-3 rounded-md border px-3 py-3 text-sm">
+                                <RadioGroupItem value="ponto" />
+                                <div className="space-y-1">
+                                  <div className="font-medium">
+                                    {t("options.install_in_point")}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground">
+                                    {t("descriptions.destination_point")}
+                                  </div>
+                                </div>
+                              </label>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormDescription>{t("descriptions.destination")}</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-            {destination === "totem" ? (
-              <FormField
-                control={form.control}
-                name="totemId"
-                render={({ field }) => (
-                  <FormItem className="min-w-0">
-                    <FormLabel>{t("labels.totem")}</FormLabel>
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
-                    >
-                      <FormControl>
-                        <SelectTrigger
-                          className="w-full cursor-pointer"
-                          title={selectedTotemLabel}
-                        >
-                          <SelectValue placeholder={t("placeholders.totem")} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value={NO_TOTEM_VALUE}>
-                          {isLoadingDependencies
-                            ? t("placeholders.loading")
-                            : t("options.select_totem")}
-                        </SelectItem>
-                        {totens.map((totem) => {
-                          const fullLabel = buildTotemOptionLabel(totem, notInformed)
+                    {destination === "totem" ? (
+                      <FormField
+                        control={form.control}
+                        name="totemId"
+                        render={({ field }) => (
+                          <FormItem className="min-w-0">
+                            <FormLabel>{t("labels.totem")}</FormLabel>
+                            <Select
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              disabled={
+                                isLoadingDependencies ||
+                                (showCompanySelector && !selectedCompanyId)
+                              }
+                            >
+                              <FormControl>
+                                <SelectTrigger
+                                  className="w-full cursor-pointer"
+                                  title={selectedTotemLabel}
+                                >
+                                  <SelectValue placeholder={t("placeholders.totem")} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value={NO_TOTEM_VALUE}>
+                                  {isLoadingDependencies
+                                    ? t("placeholders.loading")
+                                    : t("options.select_totem")}
+                                </SelectItem>
+                                {totens.map((totem) => {
+                                  const fullLabel = buildTotemOptionLabel(totem, notInformed)
 
-                          return (
-                            <SelectItem key={totem.id} value={String(totem.id)}>
-                              <span title={fullLabel}>
-                                {truncateWithEllipsis(fullLabel, 40)}
-                              </span>
-                            </SelectItem>
-                          )
+                                  return (
+                                    <SelectItem key={totem.id} value={String(totem.id)}>
+                                      <span title={fullLabel}>
+                                        {truncateWithEllipsis(fullLabel, 40)}
+                                      </span>
+                                    </SelectItem>
+                                  )
+                                })}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>{t("descriptions.totem")}</FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    ) : (
+                      <FormField
+                        control={form.control}
+                        name="pontoId"
+                        render={({ field }) => (
+                          <FormItem className="min-w-0">
+                            <FormLabel>{t("labels.point")}</FormLabel>
+                            <Select
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              disabled={
+                                isLoadingDependencies ||
+                                (showCompanySelector && !selectedCompanyId)
+                              }
+                            >
+                              <FormControl>
+                                <SelectTrigger
+                                  className="w-full cursor-pointer"
+                                  title={selectedPointLabel}
+                                >
+                                  <SelectValue placeholder={t("placeholders.point")} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value={NO_POINT_VALUE}>
+                                  {isLoadingDependencies
+                                    ? t("placeholders.loading")
+                                    : t("options.select_point")}
+                                </SelectItem>
+                                {points.map((point) => {
+                                  const fullLabel = buildPointOptionLabel(point, notInformed)
+
+                                  return (
+                                    <SelectItem key={point.id} value={String(point.id)}>
+                                      <span title={fullLabel}>
+                                        {truncateWithEllipsis(fullLabel, 40)}
+                                      </span>
+                                    </SelectItem>
+                                  )
+                                })}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>{t("descriptions.point")}</FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+
+                    {destination === "totem" && selectedTotem ? (
+                      <div className="rounded-md border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+                        {t("selected_point", {
+                          point: getSmartSwitchPointLabel(
+                            { totemId: selectedTotem.id, totem: selectedTotem } as SmartSwitch,
+                            totemsById,
+                            notInformed,
+                          ),
                         })}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>{t("descriptions.totem")}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ) : (
-              <FormField
-                control={form.control}
-                name="pontoId"
-                render={({ field }) => (
-                  <FormItem className="min-w-0">
-                    <FormLabel>{t("labels.point")}</FormLabel>
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                      disabled={isLoadingDependencies || (showCompanySelector && !selectedCompanyId)}
-                    >
-                      <FormControl>
-                        <SelectTrigger
-                          className="w-full cursor-pointer"
-                          title={selectedPointLabel}
-                        >
-                          <SelectValue placeholder={t("placeholders.point")} />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value={NO_POINT_VALUE}>
-                          {isLoadingDependencies
-                            ? t("placeholders.loading")
-                            : t("options.select_point")}
-                        </SelectItem>
-                        {points.map((point) => {
-                          const fullLabel = buildPointOptionLabel(point, notInformed)
+                      </div>
+                    ) : null}
 
-                          return (
-                            <SelectItem key={point.id} value={String(point.id)}>
-                              <span title={fullLabel}>
-                                {truncateWithEllipsis(fullLabel, 40)}
-                              </span>
-                            </SelectItem>
-                          )
+                    {destination === "ponto" && selectedPoint ? (
+                      <div className="rounded-md border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
+                        {t("selected_direct_point", {
+                          point: getPointDisplayName(selectedPoint, notInformed),
                         })}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>{t("descriptions.point")}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+                      </div>
+                    ) : null}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
 
-            {destination === "totem" && selectedTotem ? (
-              <div className="rounded-md border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
-                {t("selected_point", {
-                  point: getSmartSwitchPointLabel(
-                    { totemId: selectedTotem.id, totem: selectedTotem } as SmartSwitch,
-                    totemsById,
-                    notInformed,
-                  ),
-                })}
-              </div>
-            ) : null}
-
-            {destination === "ponto" && selectedPoint ? (
-              <div className="rounded-md border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
-                {t("selected_direct_point", {
-                  point: getPointDisplayName(selectedPoint, notInformed),
-                })}
-              </div>
-            ) : null}
-
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem className="min-w-0">
-                  <FormLabel>{t("labels.status")}</FormLabel>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <FormControl>
-                      <SelectTrigger className="w-full cursor-pointer">
-                        <SelectValue placeholder={t("placeholders.status")} />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="active">{tTable("status_active")}</SelectItem>
-                      <SelectItem value="inactive">{tTable("status_inactive")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <AccordionItem value="system" className="px-4">
+                <AccordionTrigger className="cursor-pointer py-4 hover:no-underline">
+                  <div className="space-y-1">
+                    <div>{t("sections.system")}</div>
+                    <div className="text-xs font-normal text-muted-foreground">
+                      {t("sections.system_desc")}
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-0">
+                  <div className="space-y-4 pb-4">
+                    <FormField
+                      control={form.control}
+                      name="status"
+                      render={({ field }) => (
+                        <FormItem className="min-w-0">
+                          <FormLabel>{t("labels.status")}</FormLabel>
+                          <Select value={field.value} onValueChange={field.onChange}>
+                            <FormControl>
+                              <SelectTrigger className="w-full cursor-pointer">
+                                <SelectValue placeholder={t("placeholders.status")} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="active">{tTable("status_active")}</SelectItem>
+                              <SelectItem value="inactive">
+                                {tTable("status_inactive")}
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>{t("descriptions.status")}</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
 
             <DialogFooter className="pt-4">
               <Button
