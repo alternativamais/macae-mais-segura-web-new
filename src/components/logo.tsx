@@ -1,7 +1,8 @@
 import Image from "next/image"
 import { cn } from "@/lib/utils"
-import iconFull from "../../icon.svg"
-import iconMini from "../../icon_mini.svg"
+
+const iconFull = "/brand/icon.svg"
+const iconMini = "/brand/icon_mini.svg"
 
 interface BaseLogoProps {
   className?: string
