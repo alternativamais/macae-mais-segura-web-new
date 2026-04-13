@@ -8,6 +8,10 @@ export function resolveCompanyLogoUrl(value?: string | null) {
     return null
   }
 
+  if (/^(blob:|data:)/i.test(value)) {
+    return value
+  }
+
   if (/^https?:\/\//i.test(value)) {
     return value
   }

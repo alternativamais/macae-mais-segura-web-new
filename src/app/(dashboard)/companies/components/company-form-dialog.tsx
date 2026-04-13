@@ -1,15 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ImagePlus, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { empresaService } from "@/services/empresa.service"
-import { Empresa } from "@/types/empresa"
+import { CompanyAssetDraft, Empresa } from "@/types/empresa"
 import { Button } from "@/components/ui/button"
-import { resolveCompanyLogoUrl } from "@/lib/company-logo"
 import {
   Dialog,
   DialogContent,
@@ -34,7 +33,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  CardAction,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import { useTranslator } from "@/lib/i18n"
+import {
+  COMPANY_ASSET_TYPE_ORDER,
+  getCompanyAssetUrl,
+} from "@/lib/company-assets"
+import { resolveCompanyLogoUrl } from "@/lib/company-logo"
+import { CompanyAssetsDialog } from "./company-assets-dialog"
+import {
+  CompanyDropdownPreview,
+  CompanyMapPinPreview,
+  CompanySelectorButtonPreview,
+} from "./company-branding-preview"
 
 interface CompanyFormDialogProps {
   open: boolean
@@ -43,56 +66,12 @@ interface CompanyFormDialogProps {
   company?: Empresa
 }
 
-type AssetSlot =
-  | "wideLight"
-  | "wideDark"
-  | "squareLight"
-  | "squareDark"
-  | "pointPin"
-  | "totemPin"
-
-function LogoUploadCard({
-  label,
-  placeholder,
-  alt,
-  previewUrl,
-  square = false,
-  onChange,
-}: {
-  label: string
-  placeholder: string
-  alt: string
-  previewUrl: string | null
-  square?: boolean
-  onChange: (file: File | null) => void
-}) {
-  return (
-    <div className="space-y-2">
-      <FormLabel>{label}</FormLabel>
-      <label className="flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed bg-muted/20 px-4 py-3 text-center transition-colors hover:border-primary/60 hover:bg-muted/40">
-        {previewUrl ? (
-          <img
-            src={previewUrl}
-            alt={alt}
-            className={
-              square
-                ? "size-14 rounded-md object-contain"
-                : "max-h-12 max-w-full object-contain"
-            }
-          />
-        ) : (
-          <ImagePlus className="mb-2 h-5 w-5 text-muted-foreground" />
-        )}
-        <span className="text-xs text-muted-foreground">{placeholder}</span>
-        <Input
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(event) => onChange(event.target.files?.[0] ?? null)}
-        />
-      </label>
-    </div>
-  )
+function revokeDraftPreviews(draftAssets: Partial<Record<string, CompanyAssetDraft>>) {
+  Object.values(draftAssets).forEach((draft) => {
+    if (draft?.previewUrl?.startsWith("blob:")) {
+      URL.revokeObjectURL(draft.previewUrl)
+    }
+  })
 }
 
 export function CompanyFormDialog({
@@ -102,22 +81,17 @@ export function CompanyFormDialog({
   company,
 }: CompanyFormDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [wideLightFile, setWideLightFile] = useState<File | null>(null)
-  const [wideDarkFile, setWideDarkFile] = useState<File | null>(null)
-  const [squareLightFile, setSquareLightFile] = useState<File | null>(null)
-  const [squareDarkFile, setSquareDarkFile] = useState<File | null>(null)
-  const [pointPinFile, setPointPinFile] = useState<File | null>(null)
-  const [totemPinFile, setTotemPinFile] = useState<File | null>(null)
-  const [wideLightPreviewUrl, setWideLightPreviewUrl] = useState<string | null>(null)
-  const [wideDarkPreviewUrl, setWideDarkPreviewUrl] = useState<string | null>(null)
-  const [squareLightPreviewUrl, setSquareLightPreviewUrl] = useState<string | null>(null)
-  const [squareDarkPreviewUrl, setSquareDarkPreviewUrl] = useState<string | null>(null)
-  const [pointPinPreviewUrl, setPointPinPreviewUrl] = useState<string | null>(null)
-  const [totemPinPreviewUrl, setTotemPinPreviewUrl] = useState<string | null>(null)
+  const [isAssetsDialogOpen, setIsAssetsDialogOpen] = useState(false)
+  const [draftAssets, setDraftAssets] = useState<
+    Partial<Record<typeof COMPANY_ASSET_TYPE_ORDER[number], CompanyAssetDraft>>
+  >({})
+  const draftAssetsRef = useRef(draftAssets)
+  const [managedCompany, setManagedCompany] = useState<Empresa | undefined>(company)
   const isEdit = !!company
 
   const t = useTranslator("companies.form")
   const tTable = useTranslator("companies.table")
+  const tAssets = useTranslator("companies.assets")
 
   const companyFormSchema = z.object({
     nome: z.string().trim().min(2, t("validations.name_min")),
@@ -137,7 +111,9 @@ export function CompanyFormDialog({
   })
 
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      return
+    }
 
     form.reset({
       nome: company?.nome || "",
@@ -145,119 +121,47 @@ export function CompanyFormDialog({
       status: company?.status || "active",
     })
 
-    setWideLightFile(null)
-    setWideDarkFile(null)
-    setSquareLightFile(null)
-    setSquareDarkFile(null)
-    setPointPinFile(null)
-    setTotemPinFile(null)
+    setManagedCompany(company)
+    setDraftAssets((current) => {
+      revokeDraftPreviews(current)
+      return {}
+    })
   }, [company, form, open])
 
   useEffect(() => {
+    draftAssetsRef.current = draftAssets
+  }, [draftAssets])
+
+  useEffect(() => {
     return () => {
-      ;[
-        wideLightPreviewUrl,
-        wideDarkPreviewUrl,
-        squareLightPreviewUrl,
-        squareDarkPreviewUrl,
-        pointPinPreviewUrl,
-        totemPinPreviewUrl,
-      ]
-        .filter(Boolean)
-        .forEach((url) => {
-          if (url?.startsWith("blob:")) {
-            URL.revokeObjectURL(url)
-          }
-        })
+      revokeDraftPreviews(draftAssetsRef.current)
     }
-  }, [wideLightPreviewUrl, wideDarkPreviewUrl, squareLightPreviewUrl, squareDarkPreviewUrl, pointPinPreviewUrl, totemPinPreviewUrl])
-
-  const updatePreview = (slot: AssetSlot, file: File | null) => {
-    const fallbackBySlot: Record<AssetSlot, string | null> = {
-      wideLight: resolveCompanyLogoUrl(company?.logoLightUrl || company?.logoUrl),
-      wideDark: resolveCompanyLogoUrl(company?.logoDarkUrl || company?.logoUrl),
-      squareLight: resolveCompanyLogoUrl(company?.logoSquareLightUrl || company?.logoIconUrl),
-      squareDark: resolveCompanyLogoUrl(company?.logoSquareDarkUrl || company?.logoIconUrl),
-      pointPin: resolveCompanyLogoUrl(company?.pointPinUrl),
-      totemPin: resolveCompanyLogoUrl(company?.totemPinUrl),
-    }
-
-    const previewUrl = file ? URL.createObjectURL(file) : fallbackBySlot[slot]
-
-    if (slot === "wideLight") setWideLightPreviewUrl(previewUrl)
-    if (slot === "wideDark") setWideDarkPreviewUrl(previewUrl)
-    if (slot === "squareLight") setSquareLightPreviewUrl(previewUrl)
-    if (slot === "squareDark") setSquareDarkPreviewUrl(previewUrl)
-    if (slot === "pointPin") setPointPinPreviewUrl(previewUrl)
-    if (slot === "totemPin") setTotemPinPreviewUrl(previewUrl)
-  }
-
-  useEffect(() => {
-    updatePreview("wideLight", wideLightFile)
-  }, [company?.logoLightUrl, company?.logoUrl, wideLightFile])
-
-  useEffect(() => {
-    updatePreview("wideDark", wideDarkFile)
-  }, [company?.logoDarkUrl, company?.logoUrl, wideDarkFile])
-
-  useEffect(() => {
-    updatePreview("squareLight", squareLightFile)
-  }, [company?.logoSquareLightUrl, company?.logoIconUrl, squareLightFile])
-
-  useEffect(() => {
-    updatePreview("squareDark", squareDarkFile)
-  }, [company?.logoSquareDarkUrl, company?.logoIconUrl, squareDarkFile])
-
-  useEffect(() => {
-    updatePreview("pointPin", pointPinFile)
-  }, [company?.pointPinUrl, pointPinFile])
-
-  useEffect(() => {
-    updatePreview("totemPin", totemPinFile)
-  }, [company?.totemPinUrl, totemPinFile])
+  }, [])
 
   const onSubmit = async (values: CompanyFormValues) => {
     setIsSubmitting(true)
 
     try {
-      let uploadedAssets: Pick<
-        Empresa,
-        | "logoLightUrl"
-        | "logoDarkUrl"
-        | "logoSquareLightUrl"
-        | "logoSquareDarkUrl"
-        | "pointPinUrl"
-        | "totemPinUrl"
-      > = {}
-
-      if (wideLightFile || wideDarkFile || squareLightFile || squareDarkFile || pointPinFile || totemPinFile) {
-        uploadedAssets = await empresaService.uploadAssets({
-          logoLight: wideLightFile,
-          logoDark: wideDarkFile,
-          logoSquareLight: squareLightFile,
-          logoSquareDark: squareDarkFile,
-          pointPin: pointPinFile,
-          totemPin: totemPinFile,
-        })
-      }
-
-      const payload: Partial<Empresa> = {
-        ...values,
-        logoLightUrl: uploadedAssets.logoLightUrl ?? company?.logoLightUrl ?? null,
-        logoDarkUrl: uploadedAssets.logoDarkUrl ?? company?.logoDarkUrl ?? null,
-        logoSquareLightUrl:
-          uploadedAssets.logoSquareLightUrl ?? company?.logoSquareLightUrl ?? null,
-        logoSquareDarkUrl:
-          uploadedAssets.logoSquareDarkUrl ?? company?.logoSquareDarkUrl ?? null,
-        pointPinUrl: uploadedAssets.pointPinUrl ?? company?.pointPinUrl ?? null,
-        totemPinUrl: uploadedAssets.totemPinUrl ?? company?.totemPinUrl ?? null,
-      }
-
       if (isEdit && company) {
-        await empresaService.update(company.id, payload)
+        await empresaService.update(company.id, values)
         toast.success(t("notifications.update_success"))
       } else {
-        await empresaService.create(payload)
+        const createdCompany = await empresaService.create(values)
+
+        for (const assetType of COMPANY_ASSET_TYPE_ORDER) {
+          const draftAsset = draftAssets[assetType]
+          if (!draftAsset) {
+            continue
+          }
+
+          await empresaService.uploadAsset(
+            createdCompany.id,
+            assetType,
+            draftAsset.file,
+            true,
+          )
+        }
+
         toast.success(t("notifications.create_success"))
       }
 
@@ -273,150 +177,255 @@ export function CompanyFormDialog({
     }
   }
 
+  const previewUrls = {
+    wideDark:
+      draftAssets.logo_dark?.previewUrl ||
+      resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "logo_dark")),
+    squareDark:
+      draftAssets.logo_square_dark?.previewUrl ||
+      resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "logo_square_dark")),
+    pointPin:
+      draftAssets.point_pin?.previewUrl ||
+      resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "point_pin")),
+    totemPin:
+      draftAssets.totem_pin?.previewUrl ||
+      resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "totem_pin")),
+  }
+
+  const configuredCount = COMPANY_ASSET_TYPE_ORDER.filter((assetType) => {
+    return (
+      draftAssets[assetType] ||
+      resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, assetType))
+    )
+  }).length
+  const hasSwitcherPreview = Boolean(previewUrls.wideDark || previewUrls.squareDark)
+  const hasMapPreview = Boolean(previewUrls.pointPin || previewUrls.totemPin)
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>{isEdit ? t("title_edit") : t("title_create")}</DialogTitle>
-          <DialogDescription>
-            {isEdit ? t("description_edit") : t("description_create")}
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{isEdit ? t("title_edit") : t("title_create")}</DialogTitle>
+            <DialogDescription>
+              {isEdit ? t("description_edit") : t("description_create")}
+            </DialogDescription>
+          </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="nome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("labels.name")}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={t("placeholders.name")} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid gap-4 sm:grid-cols-2">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="cnpj"
+                name="nome"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("labels.cnpj")}</FormLabel>
+                    <FormLabel>{t("labels.name")}</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={t("placeholders.cnpj")}
-                        {...field}
-                        value={field.value ?? ""}
-                      />
+                      <Input placeholder={t("placeholders.name")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("labels.status")}</FormLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="cnpj"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("labels.cnpj")}</FormLabel>
                       <FormControl>
-                        <SelectTrigger className="w-full cursor-pointer">
-                          <SelectValue placeholder={t("placeholders.status")} />
-                        </SelectTrigger>
+                        <Input
+                          placeholder={t("placeholders.cnpj")}
+                          {...field}
+                          value={field.value ?? ""}
+                        />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="active">{tTable("status_active")}</SelectItem>
-                        <SelectItem value="inactive">{tTable("status_inactive")}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <LogoUploadCard
-                label={t("labels.logo_light")}
-                placeholder={t("placeholders.logo_light")}
-                alt={company?.nome || "Logo clara da empresa"}
-                previewUrl={wideLightPreviewUrl}
-                onChange={setWideLightFile}
-              />
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("labels.status")}</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger className="w-full cursor-pointer">
+                            <SelectValue placeholder={t("placeholders.status")} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="active">{tTable("status_active")}</SelectItem>
+                          <SelectItem value="inactive">{tTable("status_inactive")}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-              <LogoUploadCard
-                label={t("labels.logo_dark")}
-                placeholder={t("placeholders.logo_dark")}
-                alt={company?.nome || "Logo escura da empresa"}
-                previewUrl={wideDarkPreviewUrl}
-                onChange={setWideDarkFile}
-              />
+              <div className="space-y-4">
+                <CardHeader className="px-0 pb-0">
+                  <div className="flex items-center gap-3">
+                    <CardTitle className="text-base">{t("assets.title")}</CardTitle>
+                    <Badge variant="outline">
+                      {t("assets.configured_count", {
+                        count: configuredCount,
+                        total: COMPANY_ASSET_TYPE_ORDER.length,
+                      })}
+                    </Badge>
+                  </div>
+                  <CardDescription>
+                    {isEdit ? t("assets.description_edit") : t("assets.description_create")}
+                  </CardDescription>
+                  <CardAction>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="cursor-pointer"
+                      onClick={() => setIsAssetsDialogOpen(true)}
+                    >
+                      <ImagePlus className="mr-2 h-4 w-4" />
+                      {t("buttons.manage_assets")}
+                    </Button>
+                  </CardAction>
+                </CardHeader>
 
-              <LogoUploadCard
-                label={t("labels.logo_square_light")}
-                placeholder={t("placeholders.logo_square_light")}
-                alt={company?.nome || "Logo quadrada clara da empresa"}
-                previewUrl={squareLightPreviewUrl}
-                square
-                onChange={setSquareLightFile}
-              />
+                <Accordion type="multiple" className="rounded-xl border">
+                  {hasSwitcherPreview ? (
+                    <AccordionItem value="switcher" className="px-4">
+                      <AccordionTrigger className="hover:no-underline">
+                        <div className="space-y-1 text-left">
+                          <div className="text-sm font-semibold">{t("assets.sections.switcher_title")}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {t("assets.sections.switcher_description")}
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-4">
+                        <div className="grid gap-4 lg:grid-cols-2">
+                          {previewUrls.wideDark ? (
+                            <div className="space-y-2">
+                              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                                {tAssets("types.logo_dark.title")}
+                              </div>
+                              <CompanySelectorButtonPreview
+                                companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
+                                logoUrl={previewUrls.wideDark}
+                                darkMode
+                              />
+                            </div>
+                          ) : null}
+                          {previewUrls.squareDark ? (
+                            <div className="space-y-2">
+                              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                                {tAssets("types.logo_square_dark.title")}
+                              </div>
+                              <CompanyDropdownPreview
+                                companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
+                                logoUrl={previewUrls.squareDark}
+                                darkMode
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ) : null}
 
-              <LogoUploadCard
-                label={t("labels.logo_square_dark")}
-                placeholder={t("placeholders.logo_square_dark")}
-                alt={company?.nome || "Logo quadrada escura da empresa"}
-                previewUrl={squareDarkPreviewUrl}
-                square
-                onChange={setSquareDarkFile}
-              />
+                  {hasMapPreview ? (
+                    <AccordionItem value="map" className="px-4">
+                      <AccordionTrigger className="hover:no-underline">
+                        <div className="space-y-1 text-left">
+                          <div className="text-sm font-semibold">{t("assets.sections.map_title")}</div>
+                          <div className="text-sm text-muted-foreground">
+                            {t("assets.sections.map_description")}
+                          </div>
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="pb-4">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          {previewUrls.pointPin ? (
+                            <div className="space-y-2">
+                              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                                {tAssets("types.point_pin.title")}
+                              </div>
+                              <CompanyMapPinPreview
+                                companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
+                                logoUrl={previewUrls.pointPin}
+                                darkMode
+                              />
+                            </div>
+                          ) : null}
+                          {previewUrls.totemPin ? (
+                            <div className="space-y-2">
+                              <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                                {tAssets("types.totem_pin.title")}
+                              </div>
+                              <CompanyMapPinPreview
+                                companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
+                                logoUrl={previewUrls.totemPin}
+                                darkMode
+                                totem
+                              />
+                            </div>
+                          ) : null}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ) : null}
+                </Accordion>
 
-              <LogoUploadCard
-                label={t("labels.point_pin")}
-                placeholder={t("placeholders.point_pin")}
-                alt={company?.nome || "Pin de ponto da empresa"}
-                previewUrl={pointPinPreviewUrl}
-                square
-                onChange={setPointPinFile}
-              />
+                {!hasSwitcherPreview && !hasMapPreview ? (
+                  <div className="rounded-xl border border-dashed px-4 py-6 text-sm text-muted-foreground">
+                    {t("assets.empty_state")}
+                  </div>
+                ) : null}
+              </div>
 
-              <LogoUploadCard
-                label={t("labels.totem_pin")}
-                placeholder={t("placeholders.totem_pin")}
-                alt={company?.nome || "Pin de totem da empresa"}
-                previewUrl={totemPinPreviewUrl}
-                square
-                onChange={setTotemPinFile}
-              />
-            </div>
+              <DialogFooter className="pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                  className="cursor-pointer"
+                  disabled={isSubmitting}
+                >
+                  {t("buttons.cancel")}
+                </Button>
+                <Button type="submit" className="cursor-pointer" disabled={isSubmitting}>
+                  {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                  {isSubmitting
+                    ? t("buttons.saving")
+                    : isEdit
+                      ? t("buttons.save")
+                      : t("buttons.create")}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
 
-            <DialogFooter className="pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-                className="cursor-pointer"
-                disabled={isSubmitting}
-              >
-                {t("buttons.cancel")}
-              </Button>
-              <Button type="submit" className="cursor-pointer" disabled={isSubmitting}>
-                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                {isSubmitting
-                  ? t("buttons.saving")
-                  : isEdit
-                    ? t("buttons.save")
-                    : t("buttons.create")}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+      <CompanyAssetsDialog
+        open={isAssetsDialogOpen}
+        onOpenChange={setIsAssetsDialogOpen}
+        company={managedCompany}
+        draftAssets={draftAssets}
+        onDraftAssetsChange={(updater) => {
+          setDraftAssets((current) =>
+            typeof updater === "function" ? updater(current) : updater,
+          )
+        }}
+        onCompanyChange={setManagedCompany}
+        onCompanyMutated={onSuccess}
+      />
+    </>
   )
 }

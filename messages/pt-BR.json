@@ -2838,11 +2838,26 @@
         "point_pin": "Clique para enviar o pin usado em pontos no mapa",
         "totem_pin": "Clique para enviar o pin usado em totens no mapa"
       },
+      "assets": {
+        "title": "Imagens da empresa",
+        "description_create": "Gerencie logos e pins antes de concluir o cadastro da empresa.",
+        "description_edit": "Gerencie logos e pins da empresa em um fluxo separado, com histórico por tipo.",
+        "empty": "Sem imagem",
+        "empty_state": "Nenhuma imagem foi configurada ainda. Use o gerenciador para subir a primeira logo ou pin.",
+        "configured_count": "{count} de {total} configuradas",
+        "sections": {
+          "switcher_title": "Experiência do seletor de empresas",
+          "switcher_description": "Visual principal e menu lateral com a identidade ativa da empresa.",
+          "map_title": "Representação no mapa",
+          "map_description": "Pins usados no mapa operacional para ponto e totem."
+        }
+      },
       "buttons": {
         "cancel": "Cancelar",
         "save": "Salvar alterações",
         "create": "Criar empresa",
-        "saving": "Salvando..."
+        "saving": "Salvando...",
+        "manage_assets": "Gerenciar imagens"
       },
       "notifications": {
         "create_success": "Empresa criada com sucesso.",
@@ -2868,6 +2883,116 @@
         "id": "ID"
       },
       "not_informed": "Não informado"
+    },
+    "assets": {
+      "title": "Gerenciador de imagens",
+      "description_create": "Prepare as imagens da empresa. O histórico completo ficará disponível após o cadastro.",
+      "description_edit": "Gerencie o histórico de logos e pins da empresa, definindo a imagem ativa de cada tipo.",
+      "workspace_title": "Workspace visual da empresa",
+      "helper_live": "As ações realizadas aqui são aplicadas imediatamente na empresa e já entram para o histórico.",
+      "helper_draft": "As imagens adicionadas aqui ficam em rascunho local e serão publicadas depois que a empresa for criada.",
+      "configured_count": "{count} de {total} tipos configurados",
+      "selectors": {
+        "category_label": "Categoria visual",
+        "variant_label": "Variação",
+        "configured": "configurada"
+      },
+      "categories": {
+        "wide": {
+          "title": "Retangular"
+        },
+        "square": {
+          "title": "Quadrada"
+        },
+        "map": {
+          "title": "Mapa"
+        }
+      },
+      "current_image": "Imagem atual",
+      "current_context_title": "Contexto de uso",
+      "active_ready": "A imagem ativa já está pronta para uso no sistema.",
+      "empty_current": "Nenhuma imagem ativa ou rascunho foi definida para esta variação.",
+      "history": "Histórico",
+      "history_description": "Versões anteriores deste tipo, com ativação rápida e exclusão segura.",
+      "history_item": "Imagem do histórico",
+      "empty_history_title": "Nenhuma versão salva",
+      "empty_history": "Ainda não há imagens salvas para este tipo.",
+      "draft_mode_title": "Modo rascunho",
+      "history_after_create": "O histórico fica disponível assim que a empresa for criada. Por enquanto, você pode preparar a imagem em rascunho.",
+      "no_image": "Nenhuma imagem ativa",
+      "unknown_file": "Arquivo sem nome",
+      "active_badge": "Em uso",
+      "draft_badge": "Rascunho",
+      "loading": "Carregando histórico...",
+      "saving": "Salvando alterações...",
+      "buttons": {
+        "add_image": "Nova imagem",
+        "use_now": "Usar agora",
+        "delete": "Excluir"
+      },
+      "notifications": {
+        "load_error": "Não foi possível carregar o histórico de imagens da empresa.",
+        "upload_success": "Nova imagem salva e aplicada com sucesso.",
+        "upload_error": "Não foi possível salvar a nova imagem.",
+        "activate_success": "Imagem aplicada com sucesso.",
+        "activate_error": "Não foi possível aplicar a imagem selecionada.",
+        "delete_success": "Imagem removida do histórico.",
+        "delete_error": "Não foi possível excluir a imagem selecionada."
+      },
+      "types": {
+        "logo_light": {
+          "title": "Logo principal tema claro",
+          "description": "Logo retangular mostrada no seletor principal quando o sistema estiver em tema claro.",
+          "format": "Retangular"
+        },
+        "logo_dark": {
+          "title": "Logo principal tema escuro",
+          "description": "Logo retangular mostrada no seletor principal quando o sistema estiver em tema escuro.",
+          "format": "Retangular"
+        },
+        "logo_square_light": {
+          "title": "Logo quadrada tema claro",
+          "description": "Logo quadrada usada somente no menu de empresas quando o sistema estiver em tema claro.",
+          "format": "Quadrada"
+        },
+        "logo_square_dark": {
+          "title": "Logo quadrada tema escuro",
+          "description": "Logo quadrada usada somente no menu de empresas quando o sistema estiver em tema escuro.",
+          "format": "Quadrada"
+        },
+        "point_pin": {
+          "title": "Pin de ponto",
+          "description": "Imagem final do pin usada no mapa para pontos sem totem.",
+          "format": "Mapa"
+        },
+        "totem_pin": {
+          "title": "Pin de totem",
+          "description": "Imagem final do pin usada no mapa para pontos que possuem totem.",
+          "format": "Mapa"
+        }
+      }
+    },
+    "asset_editor": {
+      "title": "Editor de imagem",
+      "description": "Ajuste posição, zoom e visualização antes de salvar a imagem transparente no padrão do sistema.",
+      "crop_area": "Área de edição",
+      "controls": {
+        "zoom": "Zoom",
+        "horizontal": "Posição horizontal",
+        "vertical": "Posição vertical"
+      },
+      "preview": {
+        "title": "Pré-visualização",
+        "description": "Veja como a imagem vai aparecer no sistema.",
+        "light": "Claro",
+        "dark": "Escuro"
+      },
+      "output_size": "Saída padrão do sistema: {width} x {height} px",
+      "buttons": {
+        "cancel": "Cancelar",
+        "save": "Salvar imagem",
+        "saving": "Salvando..."
+      }
     }
   },
   "points": {

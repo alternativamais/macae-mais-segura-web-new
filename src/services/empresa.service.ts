@@ -1,5 +1,7 @@
 import api from '@/lib/api-client';
 import { 
+  CompanyAsset,
+  CompanyAssetType,
   Empresa 
 } from '@/types/empresa';
 
@@ -117,5 +119,47 @@ export const empresaService = {
     );
 
     return data;
+  },
+
+  listAssets: async (companyId: number): Promise<CompanyAsset[]> => {
+    const { data } = await api.get<CompanyAsset[]>(`/empresas/${companyId}/assets`);
+    return data;
+  },
+
+  uploadAsset: async (
+    companyId: number,
+    assetType: CompanyAssetType,
+    file: File,
+    activate = true,
+  ): Promise<{ asset: CompanyAsset; company: Empresa }> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('activate', String(activate));
+
+    const { data } = await api.post<{ asset: CompanyAsset; company: Empresa }>(
+      `/empresas/${companyId}/assets/${assetType}/upload`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    return data;
+  },
+
+  activateAsset: async (
+    companyId: number,
+    assetId: number,
+  ): Promise<{ asset: CompanyAsset; company: Empresa }> => {
+    const { data } = await api.post<{ asset: CompanyAsset; company: Empresa }>(
+      `/empresas/${companyId}/assets/${assetId}/activate`,
+    );
+    return data;
+  },
+
+  deleteAsset: async (companyId: number, assetId: number): Promise<void> => {
+    await api.delete(`/empresas/${companyId}/assets/${assetId}`);
   },
 };

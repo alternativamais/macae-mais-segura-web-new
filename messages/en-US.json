@@ -2838,11 +2838,26 @@
         "point_pin": "Click to upload the pin used for map points",
         "totem_pin": "Click to upload the pin used for map totems"
       },
+      "assets": {
+        "title": "Company images",
+        "description_create": "Manage logos and pins before finishing the company registration.",
+        "description_edit": "Manage company logos and pins in a separate flow, with per-type history.",
+        "empty": "No image",
+        "empty_state": "No image has been configured yet. Use the manager to upload the first logo or pin.",
+        "configured_count": "{count} of {total} configured",
+        "sections": {
+          "switcher_title": "Company switcher experience",
+          "switcher_description": "Primary visual and dropdown menu with the active company identity.",
+          "map_title": "Map representation",
+          "map_description": "Pins used on the operational map for point and totem."
+        }
+      },
       "buttons": {
         "cancel": "Cancel",
         "save": "Save changes",
         "create": "Create company",
-        "saving": "Saving..."
+        "saving": "Saving...",
+        "manage_assets": "Manage images"
       },
       "notifications": {
         "create_success": "Company created successfully.",
@@ -2868,6 +2883,116 @@
         "id": "ID"
       },
       "not_informed": "Not informed"
+    },
+    "assets": {
+      "title": "Image manager",
+      "description_create": "Prepare company images. Full history will be available after the company is created.",
+      "description_edit": "Manage the company logo and pin history, choosing the active image for each type.",
+      "workspace_title": "Company visual workspace",
+      "helper_live": "Actions performed here are applied immediately to the company and already become part of the history.",
+      "helper_draft": "Images added here stay as local drafts and will be published after the company is created.",
+      "configured_count": "{count} of {total} types configured",
+      "selectors": {
+        "category_label": "Visual category",
+        "variant_label": "Variant",
+        "configured": "configured"
+      },
+      "categories": {
+        "wide": {
+          "title": "Wide"
+        },
+        "square": {
+          "title": "Square"
+        },
+        "map": {
+          "title": "Map"
+        }
+      },
+      "current_image": "Current image",
+      "current_context_title": "Usage context",
+      "active_ready": "The active image is already ready to be used in the system.",
+      "empty_current": "No active image or draft has been defined for this variant yet.",
+      "history": "History",
+      "history_description": "Previous versions of this type, with quick activation and safe deletion.",
+      "history_item": "History image",
+      "empty_history_title": "No saved version yet",
+      "empty_history": "There are no saved images for this type yet.",
+      "draft_mode_title": "Draft mode",
+      "history_after_create": "History becomes available as soon as the company is created. For now, you can prepare the image as a local draft.",
+      "no_image": "No active image",
+      "unknown_file": "Unnamed file",
+      "active_badge": "Active",
+      "draft_badge": "Draft",
+      "loading": "Loading history...",
+      "saving": "Saving changes...",
+      "buttons": {
+        "add_image": "New image",
+        "use_now": "Use now",
+        "delete": "Delete"
+      },
+      "notifications": {
+        "load_error": "Could not load company image history.",
+        "upload_success": "New image saved and applied successfully.",
+        "upload_error": "Could not save the new image.",
+        "activate_success": "Image applied successfully.",
+        "activate_error": "Could not apply the selected image.",
+        "delete_success": "Image removed from history.",
+        "delete_error": "Could not delete the selected image."
+      },
+      "types": {
+        "logo_light": {
+          "title": "Main logo light theme",
+          "description": "Wide logo shown in the main switcher when the system is in light theme.",
+          "format": "Wide"
+        },
+        "logo_dark": {
+          "title": "Main logo dark theme",
+          "description": "Wide logo shown in the main switcher when the system is in dark theme.",
+          "format": "Wide"
+        },
+        "logo_square_light": {
+          "title": "Square logo light theme",
+          "description": "Square logo used only in the company menu when the system is in light theme.",
+          "format": "Square"
+        },
+        "logo_square_dark": {
+          "title": "Square logo dark theme",
+          "description": "Square logo used only in the company menu when the system is in dark theme.",
+          "format": "Square"
+        },
+        "point_pin": {
+          "title": "Point pin",
+          "description": "Final pin image used on the map for points without a totem.",
+          "format": "Map"
+        },
+        "totem_pin": {
+          "title": "Totem pin",
+          "description": "Final pin image used on the map for points that have a totem.",
+          "format": "Map"
+        }
+      }
+    },
+    "asset_editor": {
+      "title": "Image editor",
+      "description": "Adjust position, zoom and preview before saving the transparent image in the system standard.",
+      "crop_area": "Editing area",
+      "controls": {
+        "zoom": "Zoom",
+        "horizontal": "Horizontal position",
+        "vertical": "Vertical position"
+      },
+      "preview": {
+        "title": "Preview",
+        "description": "See how the image will appear in the system.",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "output_size": "System standard output: {width} x {height} px",
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save image",
+        "saving": "Saving..."
+      }
     }
   },
   "points": {
