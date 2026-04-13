@@ -29,7 +29,11 @@ export interface LprDetectionFilters {
   page?: number
   limit?: number
   plateText?: string
+  plateSearchMode?: "smart" | "exact" | "contains" | "pattern"
   cameraId?: number
+  direction?: string
+  minConfidence?: number
+  maxConfidence?: number
   startDate?: string
   endDate?: string
 }

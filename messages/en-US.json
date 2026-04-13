@@ -3546,13 +3546,29 @@
       },
       "filters": {
         "plate": "Plate",
+        "plate_search_mode": "Search mode",
+        "plate_hint": "Smart search is default. Use * to skip segments, such as CK*2*29.",
         "camera": "Camera",
+        "direction": "Direction",
+        "all_directions": "All directions",
+        "min_confidence": "Minimum confidence",
+        "max_confidence": "Maximum confidence",
         "start_date": "Start",
         "end_date": "End",
         "all_cameras": "All cameras",
+        "search_modes": {
+          "smart": "Smart",
+          "exact": "Exact",
+          "contains": "Contains",
+          "pattern": "Pattern with *"
+        },
         "placeholders": {
-          "plate": "Ex.: ABC1D23",
-          "camera": "Select a camera"
+          "plate": "Ex.: ABC1D23 or CK*2*29",
+          "plate_search_mode": "Select the mode",
+          "camera": "Select a camera",
+          "direction": "Select a direction",
+          "min_confidence": "Ex.: 80",
+          "max_confidence": "Ex.: 100"
         }
       },
       "actions": {

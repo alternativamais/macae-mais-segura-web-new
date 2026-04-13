@@ -3546,13 +3546,29 @@
       },
       "filters": {
         "plate": "Placa",
+        "plate_search_mode": "Modo de busca",
+        "plate_hint": "Busca inteligente por padrão. Use * para pular trechos, como CK*2*29.",
         "camera": "Câmera",
+        "direction": "Direção",
+        "all_directions": "Todas as direções",
+        "min_confidence": "Confiança mínima",
+        "max_confidence": "Confiança máxima",
         "start_date": "Início",
         "end_date": "Fim",
         "all_cameras": "Todas as câmeras",
+        "search_modes": {
+          "smart": "Inteligente",
+          "exact": "Exata",
+          "contains": "Contém",
+          "pattern": "Padrão com *"
+        },
         "placeholders": {
-          "plate": "Ex.: ABC1D23",
-          "camera": "Selecione uma câmera"
+          "plate": "Ex.: ABC1D23 ou CK*2*29",
+          "plate_search_mode": "Selecione o modo",
+          "camera": "Selecione uma câmera",
+          "direction": "Selecione a direção",
+          "min_confidence": "Ex.: 80",
+          "max_confidence": "Ex.: 100"
         }
       },
       "actions": {

@@ -63,12 +63,20 @@ export function LprDetectionsTab() {
   const [pageSize, setPageSize] = useState(10)
 
   const [plateFilter, setPlateFilter] = useState("")
+  const [plateSearchMode, setPlateSearchMode] = useState("smart")
   const [cameraFilter, setCameraFilter] = useState("all")
+  const [directionFilter, setDirectionFilter] = useState("all")
+  const [minConfidenceFilter, setMinConfidenceFilter] = useState("")
+  const [maxConfidenceFilter, setMaxConfidenceFilter] = useState("")
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
   const [appliedFilters, setAppliedFilters] = useState({
     plateText: "",
+    plateSearchMode: "smart",
     cameraId: "all",
+    direction: "all",
+    minConfidence: "",
+    maxConfidence: "",
     startDate: "",
     endDate: "",
   })
@@ -113,8 +121,24 @@ export function LprDetectionsTab() {
         page,
         limit: pageSize,
         plateText: appliedFilters.plateText || undefined,
+        plateSearchMode:
+          appliedFilters.plateText && appliedFilters.plateSearchMode !== "smart"
+            ? (appliedFilters.plateSearchMode as "exact" | "contains" | "pattern")
+            : appliedFilters.plateText
+              ? "smart"
+              : undefined,
         cameraId:
           appliedFilters.cameraId !== "all" ? Number(appliedFilters.cameraId) : undefined,
+        direction:
+          appliedFilters.direction !== "all" ? appliedFilters.direction : undefined,
+        minConfidence:
+          appliedFilters.minConfidence.trim() !== ""
+            ? Number(appliedFilters.minConfidence)
+            : undefined,
+        maxConfidence:
+          appliedFilters.maxConfidence.trim() !== ""
+            ? Number(appliedFilters.maxConfidence)
+            : undefined,
         startDate: appliedFilters.startDate
           ? new Date(appliedFilters.startDate).toISOString()
           : undefined,
@@ -130,7 +154,7 @@ export function LprDetectionsTab() {
     } finally {
       setIsLoading(false)
     }
-  }, [appliedFilters.cameraId, appliedFilters.endDate, appliedFilters.plateText, appliedFilters.startDate, canRead, page, pageSize, t])
+  }, [appliedFilters.cameraId, appliedFilters.direction, appliedFilters.endDate, appliedFilters.maxConfidence, appliedFilters.minConfidence, appliedFilters.plateSearchMode, appliedFilters.plateText, appliedFilters.startDate, canRead, page, pageSize, t])
 
   useEffect(() => {
     void loadDetections()
@@ -154,7 +178,11 @@ export function LprDetectionsTab() {
     setPage(1)
     setAppliedFilters({
       plateText: plateFilter.trim(),
+      plateSearchMode,
       cameraId: cameraFilter,
+      direction: directionFilter,
+      minConfidence: minConfidenceFilter.trim(),
+      maxConfidence: maxConfidenceFilter.trim(),
       startDate,
       endDate,
     })
@@ -162,13 +190,21 @@ export function LprDetectionsTab() {
 
   const resetFilters = () => {
     setPlateFilter("")
+    setPlateSearchMode("smart")
     setCameraFilter("all")
+    setDirectionFilter("all")
+    setMinConfidenceFilter("")
+    setMaxConfidenceFilter("")
     setStartDate("")
     setEndDate("")
     setPage(1)
     setAppliedFilters({
       plateText: "",
+      plateSearchMode: "smart",
       cameraId: "all",
+      direction: "all",
+      minConfidence: "",
+      maxConfidence: "",
       startDate: "",
       endDate: "",
     })
@@ -238,7 +274,7 @@ export function LprDetectionsTab() {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 rounded-lg border bg-card p-4 lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto]">
+      <div className="grid gap-4 rounded-lg border bg-card p-4 xl:grid-cols-[1.4fr_0.9fr_1fr_0.9fr_0.9fr_1fr_1fr_auto]">
         <div className="space-y-2">
           <Label htmlFor="lpr-plate-filter">{t("lpr.filters.plate")}</Label>
           <Input
@@ -247,6 +283,24 @@ export function LprDetectionsTab() {
             onChange={(event) => setPlateFilter(event.target.value.toUpperCase())}
             placeholder={t("lpr.filters.placeholders.plate")}
           />
+          <p className="text-xs text-muted-foreground">
+            {t("lpr.filters.plate_hint")}
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label>{t("lpr.filters.plate_search_mode")}</Label>
+          <Select value={plateSearchMode} onValueChange={setPlateSearchMode}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t("lpr.filters.placeholders.plate_search_mode")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="smart">{t("lpr.filters.search_modes.smart")}</SelectItem>
+              <SelectItem value="exact">{t("lpr.filters.search_modes.exact")}</SelectItem>
+              <SelectItem value="contains">{t("lpr.filters.search_modes.contains")}</SelectItem>
+              <SelectItem value="pattern">{t("lpr.filters.search_modes.pattern")}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -264,6 +318,48 @@ export function LprDetectionsTab() {
               ))}
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label>{t("lpr.filters.direction")}</Label>
+          <Select value={directionFilter} onValueChange={setDirectionFilter}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={t("lpr.filters.placeholders.direction")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("lpr.filters.all_directions")}</SelectItem>
+              <SelectItem value="forward">{t("lpr.directions.obverse")}</SelectItem>
+              <SelectItem value="reverse">{t("lpr.directions.reverse")}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="lpr-min-confidence">{t("lpr.filters.min_confidence")}</Label>
+          <Input
+            id="lpr-min-confidence"
+            type="number"
+            min="0"
+            max="100"
+            step="0.1"
+            value={minConfidenceFilter}
+            onChange={(event) => setMinConfidenceFilter(event.target.value)}
+            placeholder={t("lpr.filters.placeholders.min_confidence")}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="lpr-max-confidence">{t("lpr.filters.max_confidence")}</Label>
+          <Input
+            id="lpr-max-confidence"
+            type="number"
+            min="0"
+            max="100"
+            step="0.1"
+            value={maxConfidenceFilter}
+            onChange={(event) => setMaxConfidenceFilter(event.target.value)}
+            placeholder={t("lpr.filters.placeholders.max_confidence")}
+          />
         </div>
 
         <div className="space-y-2">
