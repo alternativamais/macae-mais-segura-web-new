@@ -1289,6 +1289,62 @@
         "search_context_value": "{visible} ponto(s) no filtro de um total de {total}."
       }
     },
+    "manager": {
+      "open": "Gerenciador",
+      "title": "Gerenciador do mapa",
+      "description": "Filtre, organize e navegue pelos dados operacionais plotados no mapa.",
+      "search_placeholder": "Buscar por ponto, referência, empresa ou totem...",
+      "show_points": "Exibir marcadores",
+      "show_points_desc": "Mantém os pontos visíveis no canvas do mapa.",
+      "results": "{visible} de {total} ponto(s)",
+      "assets_count": "{count} ativo(s)",
+      "companies_count": "{count} empresa(s)",
+      "focus_title": "Ponto em destaque",
+      "focus_desc": "{point} lidera o recorte atual com {count} ativo(s).",
+      "focus_empty": "Nenhum ponto se destaca no recorte atual.",
+      "point_assets": "{count} ativo(s)",
+      "totem_label": "Totem {value}",
+      "no_totem": "Sem totem",
+      "filters": {
+        "status": "Status",
+        "totem": "Totem",
+        "assets": "Ativos",
+        "sort": "Ordenação",
+        "company": "Empresa"
+      },
+      "options": {
+        "all_status": "Todos os status",
+        "active": "Ativos",
+        "inactive": "Inativos",
+        "all_totem": "Com e sem totem",
+        "with_totem": "Somente com totem",
+        "without_totem": "Somente sem totem",
+        "all_assets": "Todos os ativos",
+        "camera": "Com câmeras",
+        "smart_switch": "Com smart switch",
+        "climate": "Com clima",
+        "empty_assets": "Sem ativos",
+        "sort_assets": "Mais ativos primeiro",
+        "sort_name": "Nome A-Z",
+        "sort_reference": "Referência A-Z",
+        "all_companies": "Todas as empresas"
+      },
+      "summary": {
+        "points": "Pontos visíveis",
+        "with_totem": "Com totem",
+        "assets": "Ativos no recorte",
+        "companies": "Empresas visíveis"
+      },
+      "assets": {
+        "camera": "Câmeras",
+        "smart_switch": "Switches",
+        "climate": "Clima"
+      },
+      "actions": {
+        "focus": "Focar no mapa",
+        "details": "Abrir detalhes"
+      }
+    },
     "preview": {
       "title_totem": "Preview do Totem {value}",
       "title_point_fallback": "Preview do ponto",

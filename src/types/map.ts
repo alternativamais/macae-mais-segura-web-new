@@ -27,6 +27,10 @@ export interface OperationalMapPoint {
   coordenadas: string
   pontoDeReferencia?: string | null
   status?: "active" | "inactive" | string
+  empresa?: {
+    id: number
+    nome?: string | null
+  } | null
   devices?: MapPointDeviceGroup
   totem?: MapPointTotemSummary | null
 }

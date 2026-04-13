@@ -1289,6 +1289,62 @@
         "search_context_value": "{visible} point(s) in filter out of {total}."
       }
     },
+    "manager": {
+      "open": "Manager",
+      "title": "Map manager",
+      "description": "Filter, organize, and navigate the operational data plotted on the map.",
+      "search_placeholder": "Search by point, reference, company, or totem...",
+      "show_points": "Show markers",
+      "show_points_desc": "Keeps point markers visible on the map canvas.",
+      "results": "{visible} of {total} point(s)",
+      "assets_count": "{count} asset(s)",
+      "companies_count": "{count} companies",
+      "focus_title": "Highlighted point",
+      "focus_desc": "{point} leads the current slice with {count} asset(s).",
+      "focus_empty": "No point stands out in the current slice.",
+      "point_assets": "{count} asset(s)",
+      "totem_label": "Totem {value}",
+      "no_totem": "No totem",
+      "filters": {
+        "status": "Status",
+        "totem": "Totem",
+        "assets": "Assets",
+        "sort": "Sort",
+        "company": "Company"
+      },
+      "options": {
+        "all_status": "All statuses",
+        "active": "Active",
+        "inactive": "Inactive",
+        "all_totem": "With and without totem",
+        "with_totem": "Only with totem",
+        "without_totem": "Only without totem",
+        "all_assets": "All assets",
+        "camera": "With cameras",
+        "smart_switch": "With smart switch",
+        "climate": "With climate",
+        "empty_assets": "Without assets",
+        "sort_assets": "Most assets first",
+        "sort_name": "Name A-Z",
+        "sort_reference": "Reference A-Z",
+        "all_companies": "All companies"
+      },
+      "summary": {
+        "points": "Visible points",
+        "with_totem": "With totem",
+        "assets": "Assets in slice",
+        "companies": "Visible companies"
+      },
+      "assets": {
+        "camera": "Cameras",
+        "smart_switch": "Switches",
+        "climate": "Climate"
+      },
+      "actions": {
+        "focus": "Focus on map",
+        "details": "Open details"
+      }
+    },
     "preview": {
       "title_totem": "Totem Preview {value}",
       "title_point_fallback": "Point preview",

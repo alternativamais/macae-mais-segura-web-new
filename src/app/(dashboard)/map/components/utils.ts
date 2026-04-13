@@ -140,6 +140,7 @@ export function buildMapSearchIndex(marker: OperationalMapMarker) {
   const values = [
     marker.point.nome,
     marker.point.pontoDeReferencia,
+    marker.point.empresa?.nome,
     marker.point.totem?.numero,
     marker.point.id,
   ]
@@ -159,6 +160,10 @@ export function matchesMapSearch(marker: OperationalMapMarker, query: string) {
 
 export function getPointReference(point: OperationalMapPoint, fallback: string) {
   return point.pontoDeReferencia?.trim() || point.nome?.trim() || fallback
+}
+
+export function getPointCompanyName(point: OperationalMapPoint, fallback: string) {
+  return point.empresa?.nome?.trim() || fallback
 }
 
 export function countPointCameras(point: OperationalMapPoint) {
