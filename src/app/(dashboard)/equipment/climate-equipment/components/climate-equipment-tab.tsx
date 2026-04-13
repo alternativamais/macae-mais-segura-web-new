@@ -34,6 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useHasPermission } from "@/hooks/use-has-permission"
 import { climateEquipmentService } from "@/services/climate-equipment.service"
 import { ClimateEquipment } from "@/types/climate-equipment"
@@ -42,6 +43,7 @@ import { ClimateEquipmentFormDialog } from "./climate-equipment-form-dialog"
 import { ClimateEquipmentStatusBadge } from "./status-badges"
 import {
   formatClimateDateTime,
+  getClimateEquipmentCompanyName,
   getClimateEquipmentDisplayName,
   getClimateLocationPrimaryLabel,
   getClimateLocationSecondaryLabel,
@@ -63,6 +65,7 @@ export function ClimateEquipmentTab({
   const { hasPermission } = useHasPermission()
   const t = useTranslator("climate_equipment")
   const currentLocale = t.getLocale()
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
 
   const canCreate = hasPermission("criar_climate_equipments")
   const canUpdate = hasPermission("atualizar_climate_equipments")
@@ -203,6 +206,7 @@ export function ClimateEquipmentTab({
               <TableHead>{t("table.columns.name")}</TableHead>
               <TableHead>{t("table.columns.installation")}</TableHead>
               <TableHead className="hidden lg:table-cell">{t("table.columns.sensors")}</TableHead>
+              {isAllCompanies ? <TableHead>{t("table.columns.company")}</TableHead> : null}
               <TableHead>{t("table.columns.status")}</TableHead>
               <TableHead className="hidden xl:table-cell">
                 {t("table.columns.last_synced_at")}
@@ -240,6 +244,11 @@ export function ClimateEquipmentTab({
                       {t("table.sensors_count", { count: item.sensors.length })}
                     </div>
                   </TableCell>
+                  {isAllCompanies ? (
+                    <TableCell className="text-sm text-muted-foreground">
+                      {getClimateEquipmentCompanyName(item, companiesById, t("shared.not_informed"))}
+                    </TableCell>
+                  ) : null}
                   <TableCell>
                     <ClimateEquipmentStatusBadge status={item.status} />
                   </TableCell>

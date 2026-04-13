@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useTranslator } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 import { ClimateEquipment } from "@/types/climate-equipment"
@@ -17,6 +18,7 @@ import {
 } from "./status-badges"
 import {
   formatClimateDateTime,
+  getClimateEquipmentCompanyName,
   getClimateEquipmentDisplayName,
   getClimateLocationPrimaryLabel,
   getClimateLocationSecondaryLabel,
@@ -34,6 +36,7 @@ export function ClimateEquipmentDetailsDialog({
   onOpenChange,
 }: ClimateEquipmentDetailsDialogProps) {
   const t = useTranslator("climate_equipment.details")
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
   const locale = t.getLocale()
   const notInformed = t("not_informed")
 
@@ -117,6 +120,13 @@ export function ClimateEquipmentDetailsDialog({
       value: `#${item.id}`,
     },
   ]
+
+  if (isAllCompanies) {
+    items.splice(5, 0, {
+      label: t("labels.company"),
+      value: getClimateEquipmentCompanyName(item, companiesById, notInformed),
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

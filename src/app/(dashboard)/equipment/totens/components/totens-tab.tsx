@@ -34,6 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useHasPermission } from "@/hooks/use-has-permission"
 import { totemService } from "@/services/totem.service"
 import { Totem } from "@/types/totem"
@@ -43,6 +44,7 @@ import { TotemFormDialog } from "./totem-form-dialog"
 import { TotemStatusBadge } from "./status-badges"
 import {
   formatTotemDateTime,
+  getTotemCompanyName,
   getTotemExtensionLabel,
   getTotemIntegratedEquipmentCount,
   getTotemPointLabel,
@@ -53,6 +55,7 @@ export function TotensTab() {
   const { hasPermission } = useHasPermission()
   const t = useTranslator("totens")
   const currentLocale = t.getLocale()
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
 
   const canCreate = hasPermission("criar_toten")
   const canUpdate = hasPermission("atualizar_toten")
@@ -213,6 +216,7 @@ export function TotensTab() {
                 <TableHead>{t("table.columns.point")}</TableHead>
                 <TableHead>{t("table.columns.extension")}</TableHead>
                 <TableHead>{t("table.columns.integrations")}</TableHead>
+                {isAllCompanies ? <TableHead>{t("table.columns.company")}</TableHead> : null}
                 <TableHead className="hidden md:table-cell">{t("table.columns.status")}</TableHead>
                 <TableHead className="hidden xl:table-cell">{t("table.columns.updated_at")}</TableHead>
                 <TableHead className="w-[80px] text-right">{t("table.columns.actions")}</TableHead>
@@ -258,6 +262,11 @@ export function TotensTab() {
                         })}
                       </div>
                     </TableCell>
+                    {isAllCompanies ? (
+                      <TableCell className="text-sm text-muted-foreground">
+                        {getTotemCompanyName(totem, companiesById, notInformed)}
+                      </TableCell>
+                    ) : null}
                     <TableCell className="hidden md:table-cell">
                       <TotemStatusBadge status={totem.status} />
                     </TableCell>

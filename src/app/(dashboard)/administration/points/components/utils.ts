@@ -1,6 +1,6 @@
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import { Locale } from "@/lib/i18n"
-import { Empresa } from "@/types/empresa"
+import { CompanyMap, getCompanyNameById } from "@/lib/company-display"
 import { Ponto } from "@/types/ponto"
 
 export interface PointCoordinates {
@@ -14,18 +14,14 @@ export function getPointEquipmentCount(point: Ponto) {
 
 export function getPointCompanyName(
   point: Ponto,
-  companiesById: Map<number, Empresa>,
+  companiesById: CompanyMap,
   fallback: string,
 ) {
   if (point.empresa?.nome) {
     return point.empresa.nome
   }
 
-  if (typeof point.empresaId === "number") {
-    return companiesById.get(point.empresaId)?.nome || fallback
-  }
-
-  return fallback
+  return getCompanyNameById(point.empresaId, companiesById, fallback)
 }
 
 export function formatPointDateTime(value: string | undefined, locale: Locale) {

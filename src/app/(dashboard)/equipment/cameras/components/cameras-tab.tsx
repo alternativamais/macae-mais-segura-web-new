@@ -26,6 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useHasPermission } from "@/hooks/use-has-permission"
 import { cameraService } from "@/services/camera.service"
 import { Camera } from "@/types/camera"
@@ -33,7 +34,7 @@ import { CameraDetailsDialog } from "./camera-details-dialog"
 import { CameraFormDialog } from "./camera-form-dialog"
 import { CameraStatusBadge } from "./status-badges"
 import { StatCards } from "./stat-cards"
-import { getCameraLocationLabel } from "./utils"
+import { getCameraCompanyName, getCameraLocationLabel } from "./utils"
 
 const FETCH_PAGE_SIZE = 100
 
@@ -41,6 +42,7 @@ export function CamerasTab() {
   const { hasPermission } = useHasPermission()
   const t = useTranslator("cameras")
   const currentLocale = t.getLocale()
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
 
   const canCreate = hasPermission("criar_camera")
   const canUpdate = hasPermission("atualizar_camera")
@@ -246,6 +248,7 @@ export function CamerasTab() {
                 <TableHead>{t("table.columns.name")}</TableHead>
                 <TableHead>{t("table.columns.access")}</TableHead>
                 <TableHead>{t("table.columns.location")}</TableHead>
+                {isAllCompanies ? <TableHead>{t("table.columns.company")}</TableHead> : null}
                 <TableHead>{t("table.columns.status")}</TableHead>
                 <TableHead className="hidden lg:table-cell">{t("table.columns.updatedAt")}</TableHead>
                 <TableHead className="w-[80px] text-right">{t("table.columns.actions")}</TableHead>
@@ -270,6 +273,11 @@ export function CamerasTab() {
                     <TableCell className="text-sm text-muted-foreground">
                       {getCameraLocationLabel(item, locationLabels)}
                     </TableCell>
+                    {isAllCompanies ? (
+                      <TableCell className="text-sm text-muted-foreground">
+                        {getCameraCompanyName(item, companiesById, notInformed)}
+                      </TableCell>
+                    ) : null}
                     <TableCell>
                       <CameraStatusBadge status={item.status} />
                     </TableCell>

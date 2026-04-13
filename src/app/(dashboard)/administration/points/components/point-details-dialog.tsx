@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useTranslator } from "@/lib/i18n"
-import { Empresa } from "@/types/empresa"
 import { Ponto } from "@/types/ponto"
 import { PointStatusBadge } from "./status-badges"
 import {
@@ -20,18 +20,17 @@ import {
 
 interface PointDetailsDialogProps {
   point: Ponto | null
-  companiesById: Map<number, Empresa>
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
 export function PointDetailsDialog({
   point,
-  companiesById,
   open,
   onOpenChange,
 }: PointDetailsDialogProps) {
   const t = useTranslator("points.details")
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
   const locale = t.getLocale()
   const notInformed = t("not_informed")
 
@@ -49,10 +48,6 @@ export function PointDetailsDialog({
     {
       label: t("labels.coordinates"),
       value: point.coordenadas || notInformed,
-    },
-    {
-      label: t("labels.company"),
-      value: getPointCompanyName(point, companiesById, t("system_default")),
     },
     {
       label: t("labels.cameras"),
@@ -80,6 +75,13 @@ export function PointDetailsDialog({
     },
     { label: t("labels.id"), value: `#${point.id}` },
   ]
+
+  if (isAllCompanies) {
+    items.splice(3, 0, {
+      label: t("labels.company"),
+      value: getPointCompanyName(point, companiesById, t("system_default")),
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n"
+import { CompanyMap, getCompanyNameById } from "@/lib/company-display"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import { Totem } from "@/types/totem"
 import {
@@ -123,6 +124,21 @@ export function getSmartSwitchLocationPrimaryLabel(
   }
 
   return getSmartSwitchTotemLabel(item, totemsById, fallback)
+}
+
+export function getSmartSwitchCompanyName(
+  item: SmartSwitch,
+  companiesById: CompanyMap,
+  fallback: string,
+) {
+  return getCompanyNameById(
+    item.empresaId ??
+      item.ponto?.empresaId ??
+      item.totem?.empresaId ??
+      item.totem?.ponto?.empresaId,
+    companiesById,
+    fallback,
+  )
 }
 
 export function normalizePowerState(on?: boolean | null): SmartSwitchPowerState {

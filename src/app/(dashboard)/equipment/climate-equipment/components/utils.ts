@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n"
+import { CompanyMap, getCompanyNameById } from "@/lib/company-display"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import {
   ClimateDashboardRange,
@@ -148,6 +149,21 @@ export function getClimateLocationSecondaryLabel(
   }
 
   return labels.noReference
+}
+
+export function getClimateEquipmentCompanyName(
+  item: ClimateEquipment,
+  companiesById: CompanyMap,
+  fallback: string,
+) {
+  return getCompanyNameById(
+    item.empresaId ??
+      item.ponto?.empresaId ??
+      item.totem?.empresaId ??
+      item.totem?.ponto?.empresaId,
+    companiesById,
+    fallback,
+  )
 }
 
 export function buildClimatePointOptionLabel(point: Ponto, fallback: string) {

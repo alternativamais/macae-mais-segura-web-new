@@ -34,6 +34,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useHasPermission } from "@/hooks/use-has-permission"
 import { smartSwitchService } from "@/services/smart-switch.service"
 import { totemService } from "@/services/totem.service"
@@ -45,6 +46,7 @@ import { SmartSwitchPowerBadge, SmartSwitchStatusBadge } from "./status-badges"
 import { StatCards } from "./stat-cards"
 import {
   formatSmartSwitchDateTime,
+  getSmartSwitchCompanyName,
   getSmartSwitchDestination,
   getSmartSwitchDisplayName,
   getSmartSwitchLocationPrimaryLabel,
@@ -57,6 +59,7 @@ export function SmartSwitchesTab() {
   const { hasPermission } = useHasPermission()
   const t = useTranslator("smart_switches")
   const currentLocale = t.getLocale()
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
 
   const canCreate = hasPermission("criar_smart_switch")
   const canUpdate = hasPermission("atualizar_smart_switch")
@@ -303,6 +306,7 @@ export function SmartSwitchesTab() {
                   <TableHead>{t("table.columns.name")}</TableHead>
                   <TableHead>{t("table.columns.entity_id")}</TableHead>
                   <TableHead>{t("table.columns.installation")}</TableHead>
+                {isAllCompanies ? <TableHead>{t("table.columns.company")}</TableHead> : null}
                 <TableHead>{t("table.columns.power_state")}</TableHead>
                 <TableHead className="hidden md:table-cell">{t("table.columns.status")}</TableHead>
                 <TableHead className="hidden xl:table-cell">{t("table.columns.updated_at")}</TableHead>
@@ -349,6 +353,11 @@ export function SmartSwitchesTab() {
                           </div>
                         </div>
                       </TableCell>
+                      {isAllCompanies ? (
+                        <TableCell className="text-sm text-muted-foreground">
+                          {getSmartSwitchCompanyName(item, companiesById, notInformed)}
+                        </TableCell>
+                      ) : null}
                       <TableCell>
                         <SmartSwitchPowerBadge state={currentPowerState} />
                       </TableCell>

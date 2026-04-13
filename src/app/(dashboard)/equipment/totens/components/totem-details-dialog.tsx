@@ -8,11 +8,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useTranslator } from "@/lib/i18n"
 import { Totem } from "@/types/totem"
 import { TotemStatusBadge } from "./status-badges"
 import {
   formatTotemDateTime,
+  getTotemCompanyName,
   getTotemExtensionLabel,
   getTotemIntegratedEquipmentCount,
   getTotemPointLabel,
@@ -31,6 +33,7 @@ export function TotemDetailsDialog({
   onOpenChange,
 }: TotemDetailsDialogProps) {
   const t = useTranslator("totens.details")
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
   const locale = t.getLocale()
   const notInformed = t("not_informed")
 
@@ -87,6 +90,13 @@ export function TotemDetailsDialog({
       value: `#${totem.id}`,
     },
   ]
+
+  if (isAllCompanies) {
+    items.splice(3, 0, {
+      label: t("labels.company"),
+      value: getTotemCompanyName(totem, companiesById, notInformed),
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

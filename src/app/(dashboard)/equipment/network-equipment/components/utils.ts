@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n"
+import { CompanyMap, getCompanyNameById } from "@/lib/company-display"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import {
   NetworkEquipment,
@@ -131,6 +132,21 @@ export function getNetworkEquipmentLocationSecondaryLabel(
   }
 
   return labels.noReference
+}
+
+export function getNetworkEquipmentCompanyName(
+  item: NetworkEquipment,
+  companiesById: CompanyMap,
+  fallback: string,
+) {
+  return getCompanyNameById(
+    item.empresaId ??
+      item.ponto?.empresaId ??
+      item.totem?.empresaId ??
+      item.totem?.ponto?.empresaId,
+    companiesById,
+    fallback,
+  )
 }
 
 export function getNetworkEquipmentTypeLabel(

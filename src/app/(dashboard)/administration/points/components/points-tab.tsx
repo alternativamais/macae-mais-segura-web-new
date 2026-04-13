@@ -33,10 +33,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useHasPermission } from "@/hooks/use-has-permission"
-import { empresaService } from "@/services/empresa.service"
 import { pontoService } from "@/services/ponto.service"
-import { Empresa } from "@/types/empresa"
 import { Ponto } from "@/types/ponto"
 import { PointDetailsDialog } from "./point-details-dialog"
 import { PointFormDialog } from "./point-form-dialog"
@@ -52,13 +51,13 @@ export function PointsTab() {
   const { hasPermission } = useHasPermission()
   const t = useTranslator("points")
   const currentLocale = t.getLocale()
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
 
   const canCreate = hasPermission("criar_ponto")
   const canUpdate = hasPermission("atualizar_ponto")
   const canDelete = hasPermission("deletar_ponto")
 
   const [points, setPoints] = useState<Ponto[]>([])
-  const [companies, setCompanies] = useState<Empresa[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [page, setPage] = useState(1)
@@ -72,26 +71,15 @@ export function PointsTab() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const companiesById = useMemo(
-    () => new Map(companies.map((company) => [company.id, company])),
-    [companies],
-  )
-
   const loadData = useCallback(async () => {
     setIsLoading(true)
 
     try {
-      const [pointsData, companiesData] = await Promise.all([
-        pontoService.findAllNoPagination(),
-        empresaService.findAllNoPagination(),
-      ])
-
+      const pointsData = await pontoService.findAllNoPagination()
       setPoints(pointsData)
-      setCompanies(companiesData)
     } catch (error) {
       toast.apiError(error, t("fetch_error"))
       setPoints([])
-      setCompanies([])
     } finally {
       setIsLoading(false)
     }
@@ -217,6 +205,7 @@ export function PointsTab() {
                 <TableHead>{t("table.columns.reference")}</TableHead>
                 <TableHead className="hidden lg:table-cell">{t("table.columns.coordinates")}</TableHead>
                 <TableHead>{t("table.columns.equipment")}</TableHead>
+                {isAllCompanies ? <TableHead>{t("table.columns.company")}</TableHead> : null}
                 <TableHead className="hidden md:table-cell">{t("table.columns.status")}</TableHead>
                 <TableHead className="hidden xl:table-cell">{t("table.columns.updatedAt")}</TableHead>
                 <TableHead className="w-[80px] text-right">{t("table.columns.actions")}</TableHead>
@@ -227,12 +216,7 @@ export function PointsTab() {
                 paginatedPoints.map((point) => (
                   <TableRow key={point.id}>
                     <TableCell>
-                      <div className="space-y-1">
-                        <div className="font-medium">{point.nome}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {getPointCompanyName(point, companiesById, t("system_default"))}
-                        </div>
-                      </div>
+                      <div className="font-medium">{point.nome}</div>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {point.pontoDeReferencia || "-"}
@@ -250,6 +234,11 @@ export function PointsTab() {
                         })}
                       </div>
                     </TableCell>
+                    {isAllCompanies ? (
+                      <TableCell className="text-sm text-muted-foreground">
+                        {getPointCompanyName(point, companiesById, t("system_default"))}
+                      </TableCell>
+                    ) : null}
                     <TableCell className="hidden md:table-cell">
                       <PointStatusBadge status={point.status} />
                     </TableCell>
@@ -329,7 +318,6 @@ export function PointsTab() {
 
       <PointDetailsDialog
         point={detailsPoint}
-        companiesById={companiesById}
         open={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />

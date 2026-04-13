@@ -8,10 +8,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useTranslator } from "@/lib/i18n"
 import { Camera } from "@/types/camera"
 import { CameraStatusBadge } from "./status-badges"
-import { formatCameraDateTime, getCameraLocationLabel, getRtspUrl } from "./utils"
+import {
+  formatCameraDateTime,
+  getCameraCompanyName,
+  getCameraLocationLabel,
+  getRtspUrl,
+} from "./utils"
 
 interface CameraDetailsDialogProps {
   camera: Camera | null
@@ -25,6 +31,7 @@ export function CameraDetailsDialog({
   onOpenChange,
 }: CameraDetailsDialogProps) {
   const t = useTranslator("cameras.details")
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
   const locale = t.getLocale()
   const notInformed = t("not_informed")
 
@@ -64,6 +71,13 @@ export function CameraDetailsDialog({
     },
     { label: t("labels.id"), value: `#${camera.id}` },
   ]
+
+  if (isAllCompanies) {
+    items.splice(6, 0, {
+      label: t("labels.company"),
+      value: getCameraCompanyName(camera, companiesById, notInformed),
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

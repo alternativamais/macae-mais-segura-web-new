@@ -8,12 +8,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useTranslator } from "@/lib/i18n"
 import { SmartSwitch, SmartSwitchPowerState } from "@/types/smart-switch"
 import { Totem } from "@/types/totem"
 import { SmartSwitchPowerBadge, SmartSwitchStatusBadge } from "./status-badges"
 import {
   formatSmartSwitchDateTime,
+  getSmartSwitchCompanyName,
   getSmartSwitchDestination,
   getSmartSwitchDisplayName,
   getSmartSwitchLocationPrimaryLabel,
@@ -37,6 +39,7 @@ export function SmartSwitchDetailsDialog({
   onOpenChange,
 }: SmartSwitchDetailsDialogProps) {
   const t = useTranslator("smart_switches.details")
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
   const locale = t.getLocale()
   const notInformed = t("not_informed")
 
@@ -94,6 +97,13 @@ export function SmartSwitchDetailsDialog({
       value: `#${item.id}`,
     },
   ]
+
+  if (isAllCompanies) {
+    items.splice(6, 0, {
+      label: t("labels.company"),
+      value: getSmartSwitchCompanyName(item, companiesById, notInformed),
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

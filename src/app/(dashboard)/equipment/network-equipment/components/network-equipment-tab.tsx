@@ -32,6 +32,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useHasPermission } from "@/hooks/use-has-permission"
 import { networkEquipmentService } from "@/services/network-equipment.service"
 import { NetworkEquipment } from "@/types/network-equipment"
@@ -45,6 +46,7 @@ import {
 import { StatCards } from "./stat-cards"
 import {
   formatNetworkEquipmentDateTime,
+  getNetworkEquipmentCompanyName,
   getNetworkEquipmentLocationPrimaryLabel,
   getNetworkEquipmentLocationSecondaryLabel,
 } from "./utils"
@@ -53,6 +55,7 @@ export function NetworkEquipmentTab() {
   const { hasPermission } = useHasPermission()
   const t = useTranslator("network_equipment")
   const currentLocale = t.getLocale()
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
 
   const canCreate = hasPermission("criar_wifi_macae")
   const canUpdate = hasPermission("atualizar_wifi_macae")
@@ -221,6 +224,7 @@ export function NetworkEquipmentTab() {
                 <TableHead>{t("table.columns.type")}</TableHead>
                 <TableHead>{t("table.columns.location")}</TableHead>
                 <TableHead>{t("table.columns.network")}</TableHead>
+                {isAllCompanies ? <TableHead>{t("table.columns.company")}</TableHead> : null}
                 <TableHead>{t("table.columns.online")}</TableHead>
                 <TableHead className="hidden md:table-cell">{t("table.columns.status")}</TableHead>
                 <TableHead className="hidden xl:table-cell">{t("table.columns.updated_at")}</TableHead>
@@ -260,6 +264,11 @@ export function NetworkEquipmentTab() {
                         </div>
                       </div>
                     </TableCell>
+                    {isAllCompanies ? (
+                      <TableCell className="text-sm text-muted-foreground">
+                        {getNetworkEquipmentCompanyName(item, companiesById, notInformed)}
+                      </TableCell>
+                    ) : null}
                     <TableCell>
                       <NetworkEquipmentOnlineBadge online={item.online} />
                     </TableCell>

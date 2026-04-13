@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n"
+import { CompanyMap, getCompanyNameById } from "@/lib/company-display"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import { Camera } from "@/types/camera"
 
@@ -21,6 +22,18 @@ export function getCameraLocationLabel(
   }
 
   return labels.fallback
+}
+
+export function getCameraCompanyName(
+  item: Camera,
+  companiesById: CompanyMap,
+  fallback: string,
+) {
+  return getCompanyNameById(
+    item.empresaId ?? item.ponto?.empresaId ?? item.totem?.ponto?.empresaId,
+    companiesById,
+    fallback,
+  )
 }
 
 export function getRtspUrl(item: Camera): string {

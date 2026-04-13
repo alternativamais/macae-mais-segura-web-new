@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n"
+import { CompanyMap, getCompanyNameById } from "@/lib/company-display"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import { Totem, TotemCallCenterExtension } from "@/types/totem"
 
@@ -41,6 +42,18 @@ export function getTotemExtensionLabel(totem: Totem, fallback: string) {
   }
 
   return fallback
+}
+
+export function getTotemCompanyName(
+  totem: Totem,
+  companiesById: CompanyMap,
+  fallback: string,
+) {
+  return getCompanyNameById(
+    totem.empresaId ?? totem.ponto?.empresaId,
+    companiesById,
+    fallback,
+  )
 }
 
 export function buildCallCenterExtensionLabel(

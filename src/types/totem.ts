@@ -1,5 +1,6 @@
 export interface TotemPoint {
   id: number
+  empresaId?: number | null
   nome?: string | null
   pontoDeReferencia?: string | null
   coordenadas?: string | null

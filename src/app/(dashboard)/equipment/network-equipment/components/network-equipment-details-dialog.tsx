@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Separator } from "@/components/ui/separator"
+import { useCompanyVisibility } from "@/hooks/use-company-visibility"
 import { useTranslator } from "@/lib/i18n"
 import { NetworkEquipment } from "@/types/network-equipment"
 import {
@@ -17,6 +18,7 @@ import {
 } from "./status-badges"
 import {
   formatNetworkEquipmentDateTime,
+  getNetworkEquipmentCompanyName,
   getNetworkEquipmentLocationPrimaryLabel,
   getNetworkEquipmentLocationSecondaryLabel,
   maskSecret,
@@ -34,6 +36,7 @@ export function NetworkEquipmentDetailsDialog({
   onOpenChange,
 }: NetworkEquipmentDetailsDialogProps) {
   const t = useTranslator("network_equipment.details")
+  const { isAllCompanies, companiesById } = useCompanyVisibility()
   const locale = t.getLocale()
   const notInformed = t("not_informed")
 
@@ -108,6 +111,13 @@ export function NetworkEquipmentDetailsDialog({
     },
     { label: t("labels.id"), value: `#${item.id}` },
   ]
+
+  if (isAllCompanies) {
+    items.splice(4, 0, {
+      label: t("labels.company"),
+      value: getNetworkEquipmentCompanyName(item, companiesById, notInformed),
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
