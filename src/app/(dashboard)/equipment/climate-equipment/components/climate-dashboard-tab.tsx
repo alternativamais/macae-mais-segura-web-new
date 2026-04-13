@@ -2,6 +2,7 @@
 
 import { Loader2, RefreshCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
   Select,
   SelectContent,
@@ -148,8 +149,8 @@ export function ClimateDashboardTab(props: ClimateDashboardTabProps) {
         </div>
       </div>
 
-      {props.isLoading ? (
-        <div className="flex min-h-[240px] items-center justify-center rounded-lg border bg-card">
+      {props.isLoading && activeSensors.length === 0 ? (
+        <div className="flex min-h-[400px] items-center justify-center rounded-lg border bg-card">
           <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" />
             {t("loading")}
@@ -160,9 +161,17 @@ export function ClimateDashboardTab(props: ClimateDashboardTabProps) {
           {props.error}
         </div>
       ) : activeSensors.length > 0 ? (
-        <div className="grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+        <div
+          className={cn(
+            "grid gap-4 transition-opacity duration-300 lg:grid-cols-2 2xl:grid-cols-3",
+            props.isLoading ? "pointer-events-none opacity-50" : "opacity-100",
+          )}
+        >
           {activeSensors.map((sensor) => (
-            <SensorChartCard key={`${sensor.equipmentId || "eq"}-${sensor.id}`} sensor={sensor} />
+            <SensorChartCard
+              key={`${sensor.equipmentId}-${sensor.type}`}
+              sensor={sensor}
+            />
           ))}
         </div>
       ) : (
