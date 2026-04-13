@@ -23,10 +23,87 @@ import { authService } from "@/services/auth.service"
 import { notificationService } from "@/lib/notifications/notification-service"
 import { getAuthSessionCompanyState } from "@/lib/auth-session-payload"
 import { persistClientAuthToken } from "@/lib/auth-session"
+import { resolveCompanyLogoUrl } from "@/lib/company-logo"
+import { useTheme } from "@/hooks/use-theme"
+
+function CompanySquareLogo({
+  companyName,
+  logoIconUrl,
+  logoSquareLightUrl,
+  logoSquareDarkUrl,
+  darkMode,
+  fallback,
+  className,
+}: {
+  companyName: string
+  logoIconUrl?: string | null
+  logoSquareLightUrl?: string | null
+  logoSquareDarkUrl?: string | null
+  darkMode: boolean
+  fallback: React.ReactNode
+  className?: string
+}) {
+  const resolvedLogo = resolveCompanyLogoUrl(
+    darkMode
+      ? logoSquareDarkUrl || logoIconUrl
+      : logoSquareLightUrl || logoIconUrl,
+  )
+
+  if (!resolvedLogo) {
+    return <>{fallback}</>
+  }
+
+  return (
+    <img
+      src={resolvedLogo}
+      alt={companyName}
+      className={className ?? "size-4 object-contain"}
+    />
+  )
+}
+
+function CompanyWideLogo({
+  companyName,
+  logoUrl,
+  logoLightUrl,
+  logoDarkUrl,
+  darkMode,
+}: {
+  companyName: string
+  logoUrl?: string | null
+  logoLightUrl?: string | null
+  logoDarkUrl?: string | null
+  darkMode: boolean
+}) {
+  const resolvedLogo = resolveCompanyLogoUrl(
+    darkMode ? logoDarkUrl || logoUrl : logoLightUrl || logoUrl,
+  )
+
+  if (!resolvedLogo) {
+    return (
+      <BrandLogo
+        width={144}
+        height={28}
+        className="h-7 w-auto max-w-full object-contain"
+        priority
+      />
+    )
+  }
+
+  return (
+    <img
+      src={resolvedLogo}
+      alt={companyName}
+      className="block h-7 w-auto max-w-full object-contain"
+    />
+  )
+}
 
 export function CompanySwitcher() {
   const { isMobile } = useSidebar()
+  const { theme } = useTheme()
   const [isSwitching, setIsSwitching] = React.useState(false)
+  const [isDarkMode, setIsDarkMode] = React.useState(false)
   const {
     activeCompanyId,
     availableCompanies,
@@ -34,6 +111,26 @@ export function CompanySwitcher() {
     setActiveCompanyId,
     token,
   } = useAuthStore()
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+
+    const applyThemeMode = () => {
+      setIsDarkMode(theme === "dark" || (theme === "system" && mediaQuery.matches))
+    }
+
+    applyThemeMode()
+
+    mediaQuery.addEventListener("change", applyThemeMode)
+
+    return () => {
+      mediaQuery.removeEventListener("change", applyThemeMode)
+    }
+  }, [theme])
 
   if (!availableCompanies || availableCompanies.length === 0) {
     return (
@@ -104,23 +201,27 @@ export function CompanySwitcher() {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="justify-between data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               disabled={isSwitching}
             >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                 {isSwitching ? (
-                   <Loader2 className="size-4 animate-spin" />
-                 ) : activeCompanyId === 'ALL' ? (
-                   <Globe className="size-4" />
-                 ) : (
-                   <Building2 className="size-4" />
-                 )}
+              <div className="flex min-w-0 flex-1 items-center">
+                {isSwitching ? (
+                  <div className="flex h-8 w-full items-center justify-center">
+                    <Loader2 className="size-4 animate-spin" />
+                  </div>
+                ) : (
+                  <div className="flex h-9 w-full items-center justify-center overflow-hidden">
+                    <CompanyWideLogo
+                      companyName={activeCompany?.nome || "Empresa"}
+                      logoUrl={activeCompany && "logoUrl" in activeCompany ? activeCompany.logoUrl : null}
+                      logoLightUrl={activeCompany && "logoLightUrl" in activeCompany ? activeCompany.logoLightUrl : null}
+                      logoDarkUrl={activeCompany && "logoDarkUrl" in activeCompany ? activeCompany.logoDarkUrl : null}
+                      darkMode={isDarkMode}
+                    />
+                  </div>
+                )}
               </div>
-              <div className="grid flex-1 text-left text-sm leading-tight ml-2">
-                <BrandLogo width={120} height={20} className="w-[120px] mb-1" priority />
-                <span className="truncate text-xs font-medium">{activeCompany?.nome || "Selecione..."}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className="ml-2 size-4 shrink-0" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -155,7 +256,15 @@ export function CompanySwitcher() {
                 className="gap-2 p-2 cursor-pointer"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <Building2 className="size-4 shrink-0" />
+                  <CompanySquareLogo
+                    companyName={empresa.nome}
+                    logoIconUrl={empresa.logoIconUrl}
+                    logoSquareLightUrl={empresa.logoSquareLightUrl}
+                    logoSquareDarkUrl={empresa.logoSquareDarkUrl}
+                    darkMode={isDarkMode}
+                    fallback={<Building2 className="size-4 shrink-0" />}
+                    className="size-4 shrink-0 object-contain"
+                  />
                 </div>
                 <span className="truncate">{empresa.nome}</span>
               </DropdownMenuItem>

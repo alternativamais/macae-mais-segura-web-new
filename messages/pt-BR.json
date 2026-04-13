@@ -2799,12 +2799,20 @@
       "labels": {
         "name": "Nome da Empresa",
         "cnpj": "CNPJ",
-        "status": "Status"
+        "status": "Status",
+        "logo_light": "Logo tema claro",
+        "logo_dark": "Logo tema escuro",
+        "logo_square_light": "Logo quadrada tema claro",
+        "logo_square_dark": "Logo quadrada tema escuro"
       },
       "placeholders": {
         "name": "Ex.: Alternativa Tecnologia",
         "cnpj": "00.000.000/0000-00",
-        "status": "Selecione o status"
+        "status": "Selecione o status",
+        "logo_light": "Clique para enviar a logo usada no tema claro",
+        "logo_dark": "Clique para enviar a logo usada no tema escuro",
+        "logo_square_light": "Clique para enviar a logo quadrada usada no tema claro",
+        "logo_square_dark": "Clique para enviar a logo quadrada usada no tema escuro"
       },
       "buttons": {
         "cancel": "Cancelar",

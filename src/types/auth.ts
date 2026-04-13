@@ -13,6 +13,12 @@ export interface User {
 export interface AppEmpresa {
   id: number;
   nome: string;
+  logoUrl?: string | null;
+  logoIconUrl?: string | null;
+  logoLightUrl?: string | null;
+  logoDarkUrl?: string | null;
+  logoSquareLightUrl?: string | null;
+  logoSquareDarkUrl?: string | null;
   roleId: number;
   isDefault: boolean;
 }
@@ -23,7 +29,16 @@ export interface AuthSessionSnapshot {
   permissions: string[];
   needsSelection?: boolean;
   empresas?: AppEmpresa[];
-  empresa?: { id: number; nome: string };
+  empresa?: {
+    id: number;
+    nome: string;
+    logoUrl?: string | null;
+    logoIconUrl?: string | null;
+    logoLightUrl?: string | null;
+    logoDarkUrl?: string | null;
+    logoSquareLightUrl?: string | null;
+    logoSquareDarkUrl?: string | null;
+  };
 }
 
 export interface LoginResponse extends AuthSessionSnapshot {

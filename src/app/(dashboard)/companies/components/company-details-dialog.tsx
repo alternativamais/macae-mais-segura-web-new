@@ -13,6 +13,7 @@ import { Empresa } from "@/types/empresa"
 import { parseISO } from "date-fns"
 import { useTranslator } from "@/lib/i18n"
 import { CompanyStatusBadge } from "./status-badges"
+import { resolveCompanyLogoUrl } from "@/lib/company-logo"
 
 interface CompanyDetailsDialogProps {
   company: Empresa | null
@@ -48,6 +49,13 @@ export function CompanyDetailsDialog({ company, open, onOpenChange }: CompanyDet
     { label: t("labels.id"), value: `#${company.id}` },
   ]
 
+  const fullLogoUrl = resolveCompanyLogoUrl(company.logoUrl)
+  const iconLogoUrl = resolveCompanyLogoUrl(company.logoIconUrl)
+  const lightLogoUrl = resolveCompanyLogoUrl(company.logoLightUrl)
+  const darkLogoUrl = resolveCompanyLogoUrl(company.logoDarkUrl)
+  const squareLightLogoUrl = resolveCompanyLogoUrl(company.logoSquareLightUrl)
+  const squareDarkLogoUrl = resolveCompanyLogoUrl(company.logoSquareDarkUrl)
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl">
@@ -59,6 +67,56 @@ export function CompanyDetailsDialog({ company, open, onOpenChange }: CompanyDet
         </DialogHeader>
 
         <div className="space-y-3">
+          {(fullLogoUrl || iconLogoUrl || lightLogoUrl || darkLogoUrl || squareLightLogoUrl || squareDarkLogoUrl) ? (
+            <>
+              <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/20 p-3">
+                {iconLogoUrl ? (
+                  <img
+                    src={iconLogoUrl}
+                    alt={company.nome}
+                    className="size-12 rounded-lg object-contain"
+                  />
+                ) : null}
+                {fullLogoUrl ? (
+                  <img
+                    src={fullLogoUrl}
+                    alt={company.nome}
+                    className="max-h-10 max-w-[220px] object-contain"
+                  />
+                ) : null}
+                {lightLogoUrl ? (
+                  <img
+                    src={lightLogoUrl}
+                    alt={`${company.nome} tema claro`}
+                    className="max-h-10 max-w-[220px] rounded bg-white p-1 object-contain"
+                  />
+                ) : null}
+                {darkLogoUrl ? (
+                  <img
+                    src={darkLogoUrl}
+                    alt={`${company.nome} tema escuro`}
+                    className="max-h-10 max-w-[220px] rounded bg-zinc-950 p-1 object-contain"
+                  />
+                ) : null}
+                {squareLightLogoUrl ? (
+                  <img
+                    src={squareLightLogoUrl}
+                    alt={`${company.nome} quadrada tema claro`}
+                    className="size-12 rounded bg-white p-1 object-contain"
+                  />
+                ) : null}
+                {squareDarkLogoUrl ? (
+                  <img
+                    src={squareDarkLogoUrl}
+                    alt={`${company.nome} quadrada tema escuro`}
+                    className="size-12 rounded bg-zinc-950 p-1 object-contain"
+                  />
+                ) : null}
+              </div>
+              <Separator />
+            </>
+          ) : null}
+
           {items.map((item, index) => (
             <div key={`${item.label}-${index}`} className="space-y-3">
               <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">

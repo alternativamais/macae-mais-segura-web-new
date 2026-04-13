@@ -37,4 +37,71 @@ export const empresaService = {
   delete: async (id: number): Promise<void> => {
     await api.delete(`/empresas/${id}`);
   },
+
+  uploadAssets: async (files: {
+    logo?: File | null;
+    logoIcon?: File | null;
+    logoLight?: File | null;
+    logoDark?: File | null;
+    logoSquareLight?: File | null;
+    logoSquareDark?: File | null;
+  }): Promise<
+    Pick<
+      Empresa,
+      | 'logoUrl'
+      | 'logoIconUrl'
+      | 'logoLightUrl'
+      | 'logoDarkUrl'
+      | 'logoSquareLightUrl'
+      | 'logoSquareDarkUrl'
+    >
+  > => {
+    const formData = new FormData();
+
+    if (files.logo) {
+      formData.append('logo', files.logo);
+    }
+
+    if (files.logoIcon) {
+      formData.append('logoIcon', files.logoIcon);
+    }
+
+    if (files.logoLight) {
+      formData.append('logoLight', files.logoLight);
+    }
+
+    if (files.logoDark) {
+      formData.append('logoDark', files.logoDark);
+    }
+
+    if (files.logoSquareLight) {
+      formData.append('logoSquareLight', files.logoSquareLight);
+    }
+
+    if (files.logoSquareDark) {
+      formData.append('logoSquareDark', files.logoSquareDark);
+    }
+
+    const { data } = await api.post<
+      Pick<
+        Empresa,
+        | 'logoUrl'
+        | 'logoIconUrl'
+        | 'logoLightUrl'
+        | 'logoDarkUrl'
+        | 'logoSquareLightUrl'
+        | 'logoSquareDarkUrl'
+      >
+    >(
+      '/empresas/upload-assets',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+
+    return data;
+  },
 };
