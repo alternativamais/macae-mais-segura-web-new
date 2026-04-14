@@ -48,6 +48,7 @@ import {
 import { COMPANY_ASSET_PRESETS, COMPANY_ASSET_TYPE_ORDER } from "@/lib/company-assets"
 import { useTranslator } from "@/lib/i18n"
 import { formatLocalizedDate } from "@/lib/i18n/date"
+import { resolveCompanyLogoUrl } from "@/lib/company-logo"
 import { CompanyAssetEditorDialog } from "./company-asset-editor-dialog"
 import {
   CompanyDropdownPreview,
@@ -107,12 +108,13 @@ function AssetThumb({
   alt: string
 }) {
   const variant = COMPANY_ASSET_PRESETS[assetType].variant
+  const resolvedSrc = resolveCompanyLogoUrl(src)
 
   return (
     <div className="flex h-28 items-center justify-center rounded-xl border bg-muted/20 p-4">
-      {src ? (
+      {resolvedSrc ? (
         <img
-          src={src}
+          src={resolvedSrc}
           alt={alt}
           className={
             variant === "wide"
