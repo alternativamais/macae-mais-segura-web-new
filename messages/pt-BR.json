@@ -3351,6 +3351,7 @@
     "description_fallback": "Sem descrição operacional cadastrada para esta integração.",
     "tabs": {
       "overview": "Envio de placas",
+      "studio": "Studio configurável",
       "lpr_management": "Gerenciar placas (LPR)"
     },
     "statuses": {
@@ -3358,7 +3359,8 @@
       "inactive": "Inativa"
     },
     "shared": {
-      "not_informed": "Não informado"
+      "not_informed": "Não informado",
+      "delete": "Excluir"
     },
     "actions": {
       "reload": "Atualizar",
@@ -3415,6 +3417,7 @@
       "camera_name_fallback": "Câmera #{id}",
       "meta": {
         "identifier_prefix": "Identificador",
+        "identifier_custom": "Template configurável",
         "direction_prefix": "Direções",
         "direction_value": "Aproximando / Partindo",
         "tokens_prefix": "Webhook",
@@ -3460,10 +3463,12 @@
         "add": "Adicionar",
         "monitor": "Monitor em tempo real",
         "edit_identifier": "Editar identificador",
+        "edit_binding": "Editar vínculo",
         "manage_tokens": "Gerenciar tokens",
         "view_logs": "Ver logs",
         "remove": "Remover"
       },
+      "custom_identifier_helper": "Para integrações configuráveis, o vínculo só define câmera, direção e tokens. O payload de saída é controlado no Studio.",
       "empty_configured": "Nenhuma câmera configurada nesta integração.",
       "empty_available": "Todas as câmeras já estão configuradas nesta integração.",
       "notifications": {
@@ -3492,10 +3497,12 @@
         "identifier_reverse": "{label} - Partindo (opcional)",
         "identifier_placeholder": "Se vazio, o sistema usará o nome da câmera.",
         "identifier_help": "Se nenhum valor for informado, o backend utiliza o nome da câmera como fallback.",
+        "custom_identifier_help": "Integrações configuráveis não exigem identificador legado nesta etapa.",
         "cancel": "Cancelar",
         "save": "Salvar",
         "saving": "Salvando...",
-        "add": "Adicionar"
+        "add": "Adicionar",
+        "select": "Selecionar..."
       },
       "delete_dialog": {
         "title": "Remover câmera da integração",
@@ -3618,6 +3625,154 @@
         "subscribing": "Inscrevendo monitoramento da câmera {cameraId}...",
         "stopped": "Monitoramento interrompido.",
         "manual_disconnect": "Desconectado manualmente."
+      }
+    },
+    "studio": {
+      "title": "Integrações configuráveis",
+      "description": "Cadastre destinos editáveis, modele o payload de saída e configure como cada câmera salva a leitura recebida.",
+      "tabs": {
+        "integrations": "Integrações ({count})",
+        "cameras": "Câmeras ({count})"
+      },
+      "integrations": {
+        "search_placeholder": "Buscar por nome, código, descrição ou endpoint...",
+        "empty": "Nenhuma integração configurável foi cadastrada.",
+        "actions": {
+          "create": "Nova integração",
+          "manage_bindings": "Gerenciar vínculos",
+          "edit": "Editar integração",
+          "delete": "Remover integração"
+        },
+        "table": {
+          "columns": {
+            "integration": "Integração",
+            "environment": "Ambiente",
+            "endpoint": "Endpoint",
+            "status": "Status",
+            "updated_at": "Atualizado em",
+            "actions": "Ações"
+          }
+        },
+        "notifications": {
+          "create_success": "Integração criada com sucesso.",
+          "create_error": "Erro ao criar integração.",
+          "edit_success": "Integração atualizada com sucesso.",
+          "edit_error": "Erro ao atualizar integração.",
+          "delete_success": "Integração removida com sucesso.",
+          "delete_error": "Erro ao remover integração."
+        },
+        "delete_dialog": {
+          "title": "Remover integração configurável",
+          "description": "Deseja remover a integração {integration}?",
+          "confirm": "Remover",
+          "cancel": "Cancelar"
+        },
+        "form": {
+          "create_title": "Nova integração configurável",
+          "edit_title": "Editar integração configurável",
+          "create_description": "Defina o destino, o ambiente e o template JSON usado no envio.",
+          "edit_description": "Atualize endpoint, headers e estrutura do envio desta integração.",
+          "code": "Código",
+          "code_help": "Use um identificador curto, único e estável para esta integração.",
+          "name": "Nome",
+          "description": "Descrição",
+          "environment": "Ambiente",
+          "method": "Método HTTP",
+          "status": "Status",
+          "endpoint": "Endpoint",
+          "headers_template": "Headers HTTP",
+          "request_template": "Estrutura do payload",
+          "headers_help": "Defina os headers HTTP enviados junto à requisição (JSON).",
+          "request_skeleton_help": "Defina a estrutura do JSON que será enviado. O preenchimento dos valores será feito por câmera, no mapeamento.",
+          "create_action": "Criar integração"
+        }
+      },
+      "db_fields": {
+        "plate_text": "Texto da placa",
+        "confidence": "Confiança",
+        "detected_at": "Data/hora da detecção",
+        "direction": "Direção (sentido)",
+        "device_id": "ID do dispositivo",
+        "plate_color": "Cor da placa",
+        "vehicle_color": "Cor do veículo",
+        "vehicle_type": "Tipo do veículo",
+        "vehicle_brand": "Marca do veículo",
+        "plate_type": "Tipo da placa",
+        "region": "Região",
+        "channel": "Canal",
+        "is_exist": "Placa existente",
+        "snap_address": "Endereço do snapshot",
+        "vehicle_series": "Série do veículo"
+      },
+      "cameras": {
+        "search_placeholder": "Buscar câmera por nome, IP, totem ou ponto...",
+        "not_found": "Nenhuma câmera encontrada para configuração.",
+        "table": {
+          "columns": {
+            "camera": "Câmera",
+            "location": "Localização",
+            "sample": "Amostra",
+            "mapping": "Persistência",
+            "status": "Status",
+            "actions": "Ações"
+          }
+        },
+        "status": {
+          "enabled": "Configuração ativa",
+          "disabled": "Configuração inativa",
+          "capture_armed": "Captura armada",
+          "sample_ready": "Amostra capturada",
+          "sample_missing": "Sem amostra",
+          "mapping_ready": "Mapeamento pronto",
+          "mapping_missing": "Sem mapeamento",
+          "last_sampled": "Última amostra: {date}"
+        },
+        "actions": {
+          "configure": "Configurar câmera",
+          "arm_capture": "Capturar próxima requisição",
+          "saving": "Salvando..."
+        },
+        "notifications": {
+          "load_error": "Erro ao carregar as câmeras para o Studio.",
+          "load_config_error": "Erro ao carregar a configuração desta câmera.",
+          "save_success": "Configuração da câmera atualizada com sucesso.",
+          "save_error": "Erro ao salvar a configuração da câmera.",
+          "arm_success": "A próxima requisição desta câmera será usada como amostra.",
+          "arm_error": "Erro ao armar a captura da câmera.",
+          "mapping_invalid": "O JSON do mapeamento está inválido."
+        },
+        "dialog": {
+          "title": "Configuração da câmera",
+          "description": "Defina como a leitura recebida é salva no banco e quais caminhos do payload podem ser usados."
+        },
+        "form": {
+          "enabled": "Captura configurável ativa",
+          "enabled_help": "Quando desativada, a câmera continua podendo enviar pelo fluxo legado, mas o mapeamento editável fica desligado.",
+          "sample_payload": "Amostra do JSON recebido",
+          "sample_payload_help": "Esta é a última requisição recebida da câmera. Capture uma nova para atualizar.",
+          "db_mapping_title": "Mapeamento para o banco de dados",
+          "db_mapping_help": "Associe cada campo do banco ao caminho correspondente no JSON da câmera.",
+          "edit_manual_json": "Editar JSON",
+          "advanced_fields": "Campos avançados ({count})"
+        },
+        "presets": {
+          "load_preset": "Carregar preset",
+          "save_preset": "Salvar preset como",
+          "preset_name": "Nome do preset",
+          "preset_save_success": "Preset salvo com sucesso.",
+          "preset_load_success": "Preset '{name}' aplicado com sucesso.",
+          "preset_delete_success": "Preset excluído com sucesso.",
+          "preset_delete_confirm": "Excluir preset",
+          "preset_delete_description": "Tem certeza que deseja remover o preset '{name}'?",
+          "select_placeholder": "Selecione um preset...",
+          "empty": "Nenhum preset encontrado"
+        },
+        "empty": {
+          "catalog": "Arme a captura da próxima requisição para descobrir a estrutura do payload desta câmera.",
+          "capture_waiting": "A captura está armada. Envie uma leitura da câmera para preencher esta estrutura.",
+          "payload": "Nenhuma amostra foi capturada ainda para esta câmera.",
+          "no_sample": "Nenhuma amostra capturada. Use o botão \"Capturar próxima requisição\" e envie dados da câmera para ver a estrutura do JSON."
+        }
       }
     },
     "details": {

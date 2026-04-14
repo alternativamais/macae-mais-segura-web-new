@@ -5,6 +5,10 @@ import {
   IntegrationCameraMutationPayload,
   IntegrationGeneratedToken,
   IntegrationLogsResponse,
+  IntegrationMutationPayload,
+  PlateCameraConfig,
+  PlateCameraConfigPreset,
+  PlateCameraConfigPresetMutationPayload,
 } from "@/types/integration"
 
 export const integrationService = {
@@ -15,6 +19,21 @@ export const integrationService = {
 
   getIntegrationByCode: async (code: string) => {
     const { data } = await api.get<Integration>(`/integrations/${code}`)
+    return data
+  },
+
+  createIntegration: async (payload: IntegrationMutationPayload) => {
+    const { data } = await api.post<Integration>("/integrations", payload)
+    return data
+  },
+
+  updateIntegration: async (code: string, payload: Partial<IntegrationMutationPayload>) => {
+    const { data } = await api.patch<Integration>(`/integrations/${code}`, payload)
+    return data
+  },
+
+  removeIntegration: async (code: string) => {
+    const { data } = await api.delete(`/integrations/${code}`)
     return data
   },
 
@@ -92,6 +111,64 @@ export const integrationService = {
       `/integrations/${code}/cameras/${integrationCameraId}/logs?page=${page}&limit=${limit}`,
     )
 
+    return data
+  },
+
+  getPlateCameraConfig: async (cameraId: number) => {
+    const { data } = await api.get<PlateCameraConfig>(
+      `/integrations/plate-camera-configs/${cameraId}`,
+    )
+    return data
+  },
+
+  updatePlateCameraConfig: async (
+    cameraId: number,
+    payload: {
+      enabled?: boolean
+      saveMapping?: string
+    },
+  ) => {
+    const { data } = await api.patch<PlateCameraConfig>(
+      `/integrations/plate-camera-configs/${cameraId}`,
+      payload,
+    )
+    return data
+  },
+
+  armPlateCameraCapture: async (cameraId: number) => {
+    const { data } = await api.post(
+      `/integrations/plate-camera-configs/${cameraId}/arm-capture`,
+    )
+    return data
+  },
+
+  listPresets: async () => {
+    const { data } = await api.get<PlateCameraConfigPreset[]>(
+      "/integrations/plate-camera-config-presets",
+    )
+    return Array.isArray(data) ? data : []
+  },
+
+  createPreset: async (payload: PlateCameraConfigPresetMutationPayload) => {
+    const { data } = await api.post<PlateCameraConfigPreset>(
+      "/integrations/plate-camera-config-presets",
+      payload,
+    )
+    return data
+  },
+
+  updatePreset: async (id: number, payload: Partial<PlateCameraConfigPresetMutationPayload>) => {
+    const { data } = await api.patch<PlateCameraConfigPreset>(
+      `/integrations/plate-camera-config-presets/${id}`,
+      payload,
+    )
+    return data
+  },
+
+  removePreset: async (id: number) => {
+    const { data } = await api.delete(
+      `/integrations/plate-camera-config-presets/${id}`,
+    )
     return data
   },
 }

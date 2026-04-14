@@ -7,8 +7,8 @@ import { useTranslator } from "@/lib/i18n"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { integrationService } from "@/services/integration.service"
 import { Integration } from "@/types/integration"
+import { ConfigurableStudioTab } from "./components/configurable-studio-tab"
 import { PlateSendingOverviewTab } from "./components/plate-sending-tab"
-import { IntegrationManagementTab } from "./components/integration-management-tab"
 import { LprDetectionsTab } from "./components/lpr-detections-tab"
 import { StatCards } from "./components/stat-cards"
 
@@ -50,6 +50,7 @@ export default function PlateSendingPage() {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8 w-full">
             <TabsList className="mb-4">
               <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
+              <TabsTrigger value="studio">{t("tabs.studio")}</TabsTrigger>
               <TabsTrigger value="lpr">{t("tabs.lpr_management")}</TabsTrigger>
             </TabsList>
 
@@ -58,6 +59,14 @@ export default function PlateSendingPage() {
                 integrations={integrations}
                 isLoading={isLoadingIntegrations}
                 onReload={loadIntegrations}
+              />
+            </TabsContent>
+
+            <TabsContent value="studio" className="mt-4">
+              <ConfigurableStudioTab
+                integrations={integrations}
+                isLoadingIntegrations={isLoadingIntegrations}
+                onReloadIntegrations={loadIntegrations}
               />
             </TabsContent>
 

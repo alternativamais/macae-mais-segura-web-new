@@ -4,6 +4,13 @@ export interface Integration {
   name: string
   description?: string | null
   enabled: boolean
+  driver?: "legacy_pmrj" | "legacy_prf" | "custom_webhook" | string
+  editable?: boolean
+  environmentTag?: "prod" | "dev" | string
+  endpointUrl?: string | null
+  httpMethod?: "POST" | "PUT" | "PATCH" | string
+  headersTemplate?: string | null
+  requestTemplate?: string | null
   createdAt?: string
   updatedAt?: string
 }
@@ -69,6 +76,18 @@ export interface IntegrationCameraMutationPayload {
   directionFilter?: IntegrationDirectionFilter
 }
 
+export interface IntegrationMutationPayload {
+  code?: string
+  name: string
+  description?: string
+  enabled?: boolean
+  environmentTag?: "prod" | "dev"
+  endpointUrl?: string
+  httpMethod?: "POST" | "PUT" | "PATCH"
+  headersTemplate?: string
+  requestTemplate?: string
+}
+
 export interface IntegrationLog {
   id: number
   integrationCameraId: number
@@ -96,6 +115,39 @@ export interface IntegrationLogsResponse {
 
 export interface IntegrationGeneratedToken {
   token: string
+}
+
+export interface PlateCameraCatalogItem {
+  path: string
+  type: string
+  example: string
+}
+
+export interface PlateCameraConfig {
+  id: number | null
+  cameraId: number
+  enabled: boolean
+  captureNextRequest: boolean
+  samplePayload?: string | null
+  sampleCatalog: PlateCameraCatalogItem[]
+  saveMapping: Record<string, string>
+  lastSampledAt?: string | null
+  createdAt?: string | null
+  updatedAt?: string | null
+  camera?: IntegrationCameraSummary | null
+}
+
+export interface PlateCameraConfigPreset {
+  id: number
+  name: string
+  saveMapping: Record<string, string>
+  createdAt?: string | null
+  updatedAt?: string | null
+}
+
+export interface PlateCameraConfigPresetMutationPayload {
+  name: string
+  saveMapping?: string
 }
 
 export interface IntegrationRealtimeLogLine {

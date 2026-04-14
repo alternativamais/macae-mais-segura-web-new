@@ -79,6 +79,7 @@ export function IntegrationCameraFormDialog({
 }: IntegrationCameraFormDialogProps) {
   const t = useTranslator("plate_sending")
   const identifierLabel = getIdentifierLabel(integration.code, t)
+  const isCustomIntegration = integration.driver === "custom_webhook"
   const targetCamera = binding?.camera || camera
   const isEditing = Boolean(binding)
 
@@ -152,12 +153,14 @@ export function IntegrationCameraFormDialog({
     const payload = {
       active: binding?.active ?? false,
       directionFilter: values.directionFilter,
-      ...buildDirectionalCodePayload({
-        directionFilter: values.directionFilter,
-        singleCode: values.singleCode,
-        obverseCode: values.obverseCode,
-        reverseCode: values.reverseCode,
-      }),
+      ...(isCustomIntegration
+        ? {}
+        : buildDirectionalCodePayload({
+            directionFilter: values.directionFilter,
+            singleCode: values.singleCode,
+            obverseCode: values.obverseCode,
+            reverseCode: values.reverseCode,
+          })),
     }
 
     try {
@@ -249,7 +252,7 @@ export function IntegrationCameraFormDialog({
               )}
             />
 
-            {directionFilter === "ALL" ? (
+            {!isCustomIntegration && directionFilter === "ALL" ? (
               <div className="grid gap-4">
                 <FormField
                   control={form.control}
@@ -295,7 +298,7 @@ export function IntegrationCameraFormDialog({
                   )}
                 />
               </div>
-            ) : (
+            ) : !isCustomIntegration ? (
               <FormField
                 control={form.control}
                 name="singleCode"
@@ -320,6 +323,10 @@ export function IntegrationCameraFormDialog({
                   </FormItem>
                 )}
               />
+            ) : (
+              <div className="rounded-lg border bg-muted/20 p-4 text-sm text-muted-foreground">
+                {t("management.form.custom_identifier_help")}
+              </div>
             )}
 
             <DialogFooter>

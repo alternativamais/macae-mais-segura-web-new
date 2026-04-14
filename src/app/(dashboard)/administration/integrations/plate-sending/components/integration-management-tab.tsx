@@ -84,11 +84,14 @@ export function IntegrationManagementTab({
   const t = useTranslator("plate_sending")
   const currentLocale = t.getLocale()
   const { hasPermission } = useHasPermission()
+  const isCustomIntegration = integration.driver === "custom_webhook"
 
   const canManage = hasPermission("configurar_integracao")
   const canRead = hasPermission("listar_integracoes")
   const identifierLabel = getIntegrationIdentifierLabel(integration.code, t)
-  const identifierHelper = getIntegrationIdentifierHelper(integration.code, t)
+  const identifierHelper = isCustomIntegration
+    ? t("management.custom_identifier_helper")
+    : getIntegrationIdentifierHelper(integration.code, t)
   const notInformed = t("shared.not_informed")
 
   const [details, setDetails] = useState<IntegrationCameraDetails | null>(null)
@@ -241,7 +244,9 @@ export function IntegrationManagementTab({
             </p>
             <div className="flex flex-wrap gap-2 pt-2 text-xs text-muted-foreground">
               <span className="rounded-md border bg-muted/20 px-2 py-1">
-                {t("management.meta.identifier_prefix")}: {identifierLabel}
+                {t("management.meta.identifier_prefix")}: {isCustomIntegration
+                  ? t("management.meta.identifier_custom")
+                  : identifierLabel}
               </span>
               <span className="rounded-md border bg-muted/20 px-2 py-1">
                 {t("management.meta.direction_prefix")}: {t("management.meta.direction_value")}
@@ -304,7 +309,7 @@ export function IntegrationManagementTab({
                   <TableHead>{t("management.table.columns.camera")}</TableHead>
                   <TableHead>{t("management.table.columns.ip")}</TableHead>
                   <TableHead>{t("management.table.columns.location")}</TableHead>
-                  <TableHead>{identifierLabel}</TableHead>
+                  {!isCustomIntegration ? <TableHead>{identifierLabel}</TableHead> : null}
                   <TableHead>{t("management.table.columns.active")}</TableHead>
                   <TableHead>{t("management.table.columns.tokens")}</TableHead>
                   <TableHead className="hidden xl:table-cell">
@@ -331,26 +336,28 @@ export function IntegrationManagementTab({
                       </TableCell>
                       <TableCell>{binding.camera?.ip || notInformed}</TableCell>
                       <TableCell>{getCameraLocationLabel(binding.camera, notInformed)}</TableCell>
-                      <TableCell>
-                        {formatDirectionFilter(binding.directionFilter) === "ALL" ? (
-                          <div className="space-y-1 text-sm">
-                            <div>
-                              <span className="text-muted-foreground">
-                                {t("management.direction_values.obverse")}:
-                              </span>{" "}
-                              {getDirectionalIdentifier(binding, "OBVERSE")}
+                      {!isCustomIntegration ? (
+                        <TableCell>
+                          {formatDirectionFilter(binding.directionFilter) === "ALL" ? (
+                            <div className="space-y-1 text-sm">
+                              <div>
+                                <span className="text-muted-foreground">
+                                  {t("management.direction_values.obverse")}:
+                                </span>{" "}
+                                {getDirectionalIdentifier(binding, "OBVERSE")}
+                              </div>
+                              <div>
+                                <span className="text-muted-foreground">
+                                  {t("management.direction_values.reverse")}:
+                                </span>{" "}
+                                {getDirectionalIdentifier(binding, "REVERSE")}
+                              </div>
                             </div>
-                            <div>
-                              <span className="text-muted-foreground">
-                                {t("management.direction_values.reverse")}:
-                              </span>{" "}
-                              {getDirectionalIdentifier(binding, "REVERSE")}
-                            </div>
-                          </div>
-                        ) : (
-                          <span>{getDirectionalIdentifier(binding, formatDirectionFilter(binding.directionFilter))}</span>
-                        )}
-                      </TableCell>
+                          ) : (
+                            <span>{getDirectionalIdentifier(binding, formatDirectionFilter(binding.directionFilter))}</span>
+                          )}
+                        </TableCell>
+                      ) : null}
                       <TableCell>
                         <Switch
                           checked={binding.active}
@@ -382,15 +389,17 @@ export function IntegrationManagementTab({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setTestBinding(binding)
-                                setIsTestOpen(true)
-                              }}
-                            >
-                              <Play className="mr-2 h-4 w-4" />
-                              {t("management.actions.monitor")}
-                            </DropdownMenuItem>
+                            {!isCustomIntegration ? (
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setTestBinding(binding)
+                                  setIsTestOpen(true)
+                                }}
+                              >
+                                <Play className="mr-2 h-4 w-4" />
+                                {t("management.actions.monitor")}
+                              </DropdownMenuItem>
+                            ) : null}
                             <DropdownMenuItem
                               disabled={!canManage}
                               onClick={() => {
@@ -400,7 +409,9 @@ export function IntegrationManagementTab({
                               }}
                             >
                               <Pencil className="mr-2 h-4 w-4" />
-                              {t("management.actions.edit_identifier")}
+                              {isCustomIntegration
+                                ? t("management.actions.edit_binding")
+                                : t("management.actions.edit_identifier")}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => {
@@ -439,7 +450,7 @@ export function IntegrationManagementTab({
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={8} className="h-32 text-center text-muted-foreground">
+                    <TableCell colSpan={isCustomIntegration ? 7 : 8} className="h-32 text-center text-muted-foreground">
                       {isLoading
                         ? t("loading")
                         : t("management.empty_configured")}
@@ -573,12 +584,14 @@ export function IntegrationManagementTab({
         binding={logsBinding}
       />
 
-      <IntegrationTestDialog
-        open={isTestOpen}
-        onOpenChange={setIsTestOpen}
-        integration={integration}
-        binding={testBinding}
-      />
+      {!isCustomIntegration ? (
+        <IntegrationTestDialog
+          open={isTestOpen}
+          onOpenChange={setIsTestOpen}
+          integration={integration}
+          binding={testBinding}
+        />
+      ) : null}
 
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
