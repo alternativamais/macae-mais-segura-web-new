@@ -2886,11 +2886,11 @@
     },
     "assets": {
       "title": "Gerenciador de imagens",
-      "description_create": "Prepare as imagens da empresa. O histórico completo ficará disponível após o cadastro.",
-      "description_edit": "Gerencie o histórico de logos e pins da empresa, definindo a imagem ativa de cada tipo.",
+      "description_create": "Prepare as imagens. O histórico aparece após o cadastro.",
+      "description_edit": "Gerencie logos e pins, definindo a imagem ativa de cada tipo.",
       "workspace_title": "Workspace visual da empresa",
-      "helper_live": "As ações realizadas aqui são aplicadas imediatamente na empresa e já entram para o histórico.",
-      "helper_draft": "As imagens adicionadas aqui ficam em rascunho local e serão publicadas depois que a empresa for criada.",
+      "helper_live": "As ações aqui já entram no histórico da empresa.",
+      "helper_draft": "As imagens ficam em rascunho até a empresa ser criada.",
       "configured_count": "{count} de {total} tipos configurados",
       "selectors": {
         "category_label": "Categoria visual",
@@ -2913,12 +2913,12 @@
       "active_ready": "A imagem ativa já está pronta para uso no sistema.",
       "empty_current": "Nenhuma imagem ativa ou rascunho foi definida para esta variação.",
       "history": "Histórico",
-      "history_description": "Versões anteriores deste tipo, com ativação rápida e exclusão segura.",
+      "history_description": "Versões anteriores com ativação e exclusão rápidas.",
       "history_item": "Imagem do histórico",
       "empty_history_title": "Nenhuma versão salva",
-      "empty_history": "Ainda não há imagens salvas para este tipo.",
+      "empty_history": "Ainda não há imagens salvas.",
       "draft_mode_title": "Modo rascunho",
-      "history_after_create": "O histórico fica disponível assim que a empresa for criada. Por enquanto, você pode preparar a imagem em rascunho.",
+      "history_after_create": "O histórico aparece após criar a empresa.",
       "no_image": "Nenhuma imagem ativa",
       "unknown_file": "Arquivo sem nome",
       "active_badge": "Em uso",
@@ -2942,39 +2942,39 @@
       "types": {
         "logo_light": {
           "title": "Logo principal tema claro",
-          "description": "Logo retangular mostrada no seletor principal quando o sistema estiver em tema claro.",
+          "description": "Logo retangular do seletor no tema claro.",
           "format": "Retangular"
         },
         "logo_dark": {
           "title": "Logo principal tema escuro",
-          "description": "Logo retangular mostrada no seletor principal quando o sistema estiver em tema escuro.",
+          "description": "Logo retangular do seletor no tema escuro.",
           "format": "Retangular"
         },
         "logo_square_light": {
           "title": "Logo quadrada tema claro",
-          "description": "Logo quadrada usada somente no menu de empresas quando o sistema estiver em tema claro.",
+          "description": "Logo quadrada do menu no tema claro.",
           "format": "Quadrada"
         },
         "logo_square_dark": {
           "title": "Logo quadrada tema escuro",
-          "description": "Logo quadrada usada somente no menu de empresas quando o sistema estiver em tema escuro.",
+          "description": "Logo quadrada do menu no tema escuro.",
           "format": "Quadrada"
         },
         "point_pin": {
           "title": "Pin de ponto",
-          "description": "Imagem final do pin usada no mapa para pontos sem totem.",
+          "description": "Pin usado no mapa para pontos sem totem.",
           "format": "Mapa"
         },
         "totem_pin": {
           "title": "Pin de totem",
-          "description": "Imagem final do pin usada no mapa para pontos que possuem totem.",
+          "description": "Pin usado no mapa para pontos com totem.",
           "format": "Mapa"
         }
       }
     },
     "asset_editor": {
       "title": "Editor de imagem",
-      "description": "Ajuste posição, zoom e visualização antes de salvar a imagem transparente no padrão do sistema.",
+      "description": "Ajuste posição e zoom antes de salvar.",
       "crop_area": "Área de edição",
       "controls": {
         "zoom": "Zoom",
@@ -2983,7 +2983,7 @@
       },
       "preview": {
         "title": "Pré-visualização",
-        "description": "Veja como a imagem vai aparecer no sistema.",
+        "description": "Veja como a imagem aparece.",
         "light": "Claro",
         "dark": "Escuro"
       },

@@ -29,7 +29,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
 import {
   Select,
   SelectContent,
@@ -115,7 +114,12 @@ function AssetThumb({
 
   if (variant === "pin") {
     return (
-      <div className="h-28 overflow-hidden rounded-xl border">
+      <div
+        className={cn(
+          "h-28 overflow-hidden rounded-lg border",
+          darkMode ? "border-zinc-800 bg-zinc-950" : "border-zinc-200 bg-white",
+        )}
+      >
         <CompanyMapPinPreview
           companyName={alt}
           logoUrl={resolvedSrc}
@@ -130,8 +134,10 @@ function AssetThumb({
   return (
     <div
       className={cn(
-        "flex h-28 items-center justify-center rounded-xl border p-4",
-        darkMode ? "border-zinc-800 bg-[#171717]" : "border-zinc-200 bg-white",
+        "flex h-28 items-center justify-center rounded-lg border p-4",
+        darkMode
+          ? "border-zinc-800 bg-zinc-950 text-zinc-100"
+          : "border-zinc-200 bg-white",
       )}
     >
       {resolvedSrc ? (
@@ -356,13 +362,12 @@ export function CompanyAssetsDialog({
   }
 
   const history = assets.filter((asset) => asset.assetType === selectedAssetType)
-  const activeAsset = history.find((asset) => asset.isActive)
   const draftAsset = draftAssets[selectedAssetType]
+  const activeAsset = history.find((asset) => asset.isActive)
   const activePreviewUrl = draftAsset?.previewUrl || activeAsset?.fileUrl || null
-  const selectedVariantDarkMode = !(
-    selectedAssetType === "logo_light" ||
-    selectedAssetType === "logo_square_light"
-  )
+  const selectedVariantDarkMode =
+    selectedAssetType !== "logo_light" &&
+    selectedAssetType !== "logo_square_light"
   const totalConfigured = COMPANY_ASSET_TYPE_ORDER.filter(
     (assetType) =>
       draftAssets[assetType] ||
@@ -372,7 +377,7 @@ export function CompanyAssetsDialog({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-7xl">
+        <DialogContent className="max-h-[88vh] overflow-hidden sm:max-w-5xl">
           <DialogHeader>
             <DialogTitle>{t("title")}</DialogTitle>
             <DialogDescription>
@@ -380,40 +385,40 @@ export function CompanyAssetsDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <Card className="gap-0 overflow-hidden py-0">
-            <CardHeader className="border-b px-6 py-5">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <LayoutTemplate className="h-4 w-4 text-primary" />
-                {t("workspace_title")}
-              </CardTitle>
-              <CardDescription>
-                {company?.id ? t("helper_live") : t("helper_draft")}
-              </CardDescription>
-              <CardAction>
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline">
-                    {t("configured_count", {
-                      count: totalConfigured,
-                      total: COMPANY_ASSET_TYPE_ORDER.length,
-                    })}
-                  </Badge>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="cursor-pointer"
-                    onClick={() => openFilePicker(selectedAssetType)}
-                    disabled={isMutating}
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    {t("buttons.add_image")}
-                  </Button>
-                </div>
-              </CardAction>
-            </CardHeader>
+          <div className="flex min-h-0 flex-col gap-4 overflow-hidden lg:h-full">
+            <Card className="gap-0 overflow-hidden py-0">
+              <CardHeader className="border-b px-4 py-4 sm:px-6">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <LayoutTemplate className="h-4 w-4 text-primary" />
+                  {t("workspace_title")}
+                </CardTitle>
+                <CardDescription>
+                  {company?.id ? t("helper_live") : t("helper_draft")}
+                </CardDescription>
+                <CardAction className="w-full sm:w-auto">
+                  <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
+                    <Badge variant="outline" className="justify-center sm:justify-start">
+                      {t("configured_count", {
+                        count: totalConfigured,
+                        total: COMPANY_ASSET_TYPE_ORDER.length,
+                      })}
+                    </Badge>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="cursor-pointer"
+                      onClick={() => openFilePicker(selectedAssetType)}
+                      disabled={isMutating}
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      {t("buttons.add_image")}
+                    </Button>
+                  </div>
+                </CardAction>
+              </CardHeader>
 
-            <CardContent className="px-0">
-              <div className="border-b px-6 py-4">
-                <div className="grid gap-4 md:grid-cols-2">
+              <CardContent className="px-4 py-4 sm:px-6">
+                <div className="grid items-start gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <div className="text-sm font-medium">
                       {t("selectors.category_label")}
@@ -471,209 +476,189 @@ export function CompanyAssetsDialog({
                     </Select>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <div className="px-6 py-6">
-                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_420px]">
-                  <div className="space-y-6">
-                    <Card className="gap-0 overflow-hidden py-0">
-                      <CardHeader className="border-b px-6 py-5">
-                        <div className="flex items-center gap-2">
-                          <CardTitle className="text-lg">
-                            {t(`types.${selectedAssetType}.title`)}
-                          </CardTitle>
-                          <Badge variant="outline">
-                            {t(`types.${selectedAssetType}.format`)}
-                          </Badge>
-                          {draftAsset ? <Badge>{t("draft_badge")}</Badge> : null}
-                        </div>
-                        <CardDescription>
-                          {t(`types.${selectedAssetType}.description`)}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-5 px-6 py-6">
-                        {activePreviewUrl ? (
-                          <>
-                            <AssetSystemPreview
-                              assetType={selectedAssetType}
-                              companyName={company?.nome || "Empresa Exemplo"}
-                              src={activePreviewUrl}
-                            />
-                            <Separator />
-                          </>
-                        ) : null}
-
-                        <div className="grid gap-4 md:grid-cols-[280px_minmax(0,1fr)]">
-                          <div className="space-y-3">
-                            <div className="text-sm font-medium">
-                              {t("current_image")}
-                            </div>
-                            <AssetThumb
-                              src={activePreviewUrl}
-                              assetType={selectedAssetType}
-                              alt={t("no_image")}
-                              darkMode={selectedVariantDarkMode}
-                            />
-                          </div>
-                          <div className="space-y-3 rounded-xl border bg-muted/10 p-4">
-                            <div className="text-sm font-medium">
-                              {t("current_context_title")}
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                              {t(`types.${selectedAssetType}.description`)}
-                            </p>
-                            {draftAsset ? (
-                              <div className="flex items-center justify-between rounded-lg border bg-background px-3 py-2 text-xs">
-                                <span className="truncate">
-                                  {draftAsset.fileName}
-                                </span>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  className="h-8 w-8 cursor-pointer"
-                                  onClick={() =>
-                                    handleRemoveDraftAsset(selectedAssetType)
-                                  }
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            ) : (
-                              <div className="rounded-lg border bg-background px-3 py-3 text-sm text-muted-foreground">
-                                {activeAsset
-                                  ? t("active_ready")
-                                  : t("empty_current")}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+            <div className="grid min-h-0 gap-4 lg:flex-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)] lg:items-start">
+              <Card className="flex min-h-0 flex-col gap-0 overflow-hidden py-0">
+                <CardHeader className="border-b px-4 py-4 sm:px-6">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <CardTitle className="text-base sm:text-lg">
+                      {t(`types.${selectedAssetType}.title`)}
+                    </CardTitle>
+                    <Badge variant="outline">
+                      {t(`types.${selectedAssetType}.format`)}
+                    </Badge>
+                    {draftAsset ? <Badge>{t("draft_badge")}</Badge> : null}
                   </div>
+                  <CardDescription>
+                    {t(`types.${selectedAssetType}.description`)}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex min-h-0 flex-col gap-5 px-4 py-4 sm:px-6">
+                  {activePreviewUrl ? (
+                    <AssetSystemPreview
+                      assetType={selectedAssetType}
+                      companyName={company?.nome || "Empresa Exemplo"}
+                      src={activePreviewUrl}
+                    />
+                  ) : (
+                    <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed bg-muted/30 px-6 text-center">
+                      <AssetThumb
+                        src={null}
+                        assetType={selectedAssetType}
+                        alt={t("no_image")}
+                        darkMode={selectedVariantDarkMode}
+                      />
+                      <div className="space-y-1">
+                        <div className="font-medium">{t("no_image")}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {t(`types.${selectedAssetType}.description`)}
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-                  <Card className="gap-0 overflow-hidden py-0">
-                    <CardHeader className="border-b px-6 py-5">
-                      <CardTitle className="text-base">{t("history")}</CardTitle>
-                      <CardDescription>
-                        {company?.id
-                          ? t("history_description")
-                          : t("history_after_create")}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="px-0 py-0">
-                      {company?.id ? (
-                        history.length > 0 ? (
-                          <ScrollArea className="h-[34rem]">
-                            <div className="space-y-3 p-4">
-                              {history.map((asset) => (
-                                <div
-                                  key={asset.id}
-                                  className="rounded-2xl border bg-muted/10 p-4 transition-colors hover:border-primary/30"
-                                >
-                                  <div className="space-y-4">
-                                    <AssetThumb
-                                      src={asset.fileUrl}
-                                      assetType={selectedAssetType}
-                                      alt={t("history_item")}
-                                      darkMode={selectedVariantDarkMode}
-                                    />
+                  {draftAsset ? (
+                    <div className="flex items-center justify-between gap-2 rounded-md border bg-muted/30 px-3 py-2 text-xs">
+                      <span className="min-w-0 flex-1 truncate">
+                        {draftAsset.fileName}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 shrink-0 cursor-pointer"
+                        onClick={() =>
+                          handleRemoveDraftAsset(selectedAssetType)
+                        }
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : null}
+                </CardContent>
+              </Card>
 
-                                    <div className="space-y-2">
-                                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                        <Clock3 className="h-3.5 w-3.5" />
-                                        {formatLocalizedDate(
-                                          parseISO(asset.createdAt),
-                                          currentLocale,
-                                        )}
-                                      </div>
-                                      <div className="truncate text-sm text-muted-foreground">
-                                        {asset.originalFileName ||
-                                          t("unknown_file")}
-                                      </div>
-                                    </div>
+              <Card className="flex min-h-0 flex-col gap-0 overflow-hidden py-0">
+                <CardHeader className="border-b px-4 py-4 sm:px-6">
+                  <CardTitle className="text-base">{t("history")}</CardTitle>
+                  <CardDescription>
+                    {company?.id
+                      ? t("history_description")
+                      : t("history_after_create")}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="min-h-0 flex-1 px-0 py-0">
+                  {company?.id ? (
+                    history.length > 0 ? (
+                      <ScrollArea className="max-h-[28vh] lg:max-h-[calc(88vh-24rem)] xl:max-h-[calc(88vh-23rem)]">
+                        <div className="space-y-3 p-4">
+                          {history.map((asset) => (
+                            <div
+                              key={asset.id}
+                              className="rounded-lg border bg-muted/30 p-4 transition-colors hover:border-primary/30"
+                            >
+                              <div className="space-y-4">
+                                <AssetThumb
+                                  src={asset.fileUrl}
+                                  assetType={selectedAssetType}
+                                  alt={t("history_item")}
+                                  darkMode={selectedVariantDarkMode}
+                                />
 
-                                    <div className="flex items-center gap-2">
-                                      {asset.isActive ? (
-                                        <Badge>
-                                          <Check className="mr-1 h-3 w-3" />
-                                          {t("active_badge")}
-                                        </Badge>
-                                      ) : (
-                                        <>
-                                          <Button
-                                            type="button"
-                                            size="sm"
-                                            className="cursor-pointer"
-                                            onClick={() =>
-                                              handleActivateAsset(asset)
-                                            }
-                                            disabled={isMutating}
-                                          >
-                                            {t("buttons.use_now")}
-                                          </Button>
-                                          <Button
-                                            type="button"
-                                            size="sm"
-                                            variant="outline"
-                                            className="cursor-pointer"
-                                            onClick={() =>
-                                              handleDeleteAsset(asset)
-                                            }
-                                            disabled={isMutating}
-                                          >
-                                            <Trash2 className="mr-2 h-4 w-4" />
-                                            {t("buttons.delete")}
-                                          </Button>
-                                        </>
-                                      )}
-                                    </div>
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <Clock3 className="h-3.5 w-3.5" />
+                                    {formatLocalizedDate(
+                                      parseISO(asset.createdAt),
+                                      currentLocale,
+                                    )}
+                                  </div>
+                                  <div className="truncate text-sm text-muted-foreground">
+                                    {asset.originalFileName || t("unknown_file")}
                                   </div>
                                 </div>
-                              ))}
-                            </div>
-                          </ScrollArea>
-                        ) : (
-                          <div className="flex h-[34rem] flex-col items-center justify-center gap-3 p-8 text-center">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border bg-muted/20">
-                              <ImagePlus className="h-5 w-5 text-muted-foreground" />
-                            </div>
-                            <div className="space-y-1">
-                              <div className="font-medium">
-                                {t("empty_history_title")}
+
+                                <div className="flex flex-wrap items-center gap-2">
+                                  {asset.isActive ? (
+                                    <Badge>
+                                      <Check className="mr-1 h-3 w-3" />
+                                      {t("active_badge")}
+                                    </Badge>
+                                  ) : (
+                                    <>
+                                      <Button
+                                        type="button"
+                                        size="sm"
+                                        className="cursor-pointer"
+                                        onClick={() =>
+                                          handleActivateAsset(asset)
+                                        }
+                                        disabled={isMutating}
+                                      >
+                                        {t("buttons.use_now")}
+                                      </Button>
+                                      <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        className="cursor-pointer"
+                                        onClick={() =>
+                                          handleDeleteAsset(asset)
+                                        }
+                                        disabled={isMutating}
+                                      >
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        {t("buttons.delete")}
+                                      </Button>
+                                    </>
+                                  )}
+                                </div>
                               </div>
-                              <div className="text-sm text-muted-foreground">
-                                {t("empty_history")}
-                              </div>
                             </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    ) : (
+                      <div className="flex min-h-[260px] flex-col items-center justify-center gap-3 p-8 text-center">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-lg border bg-muted/20">
+                          <ImagePlus className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="font-medium">
+                            {t("empty_history_title")}
                           </div>
-                        )
-                      ) : (
-                        <div className="flex h-[34rem] flex-col items-center justify-center gap-3 p-8 text-center">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border bg-muted/20">
-                            <ImagePlus className="h-5 w-5 text-muted-foreground" />
-                          </div>
-                          <div className="space-y-1">
-                            <div className="font-medium">{t("draft_mode_title")}</div>
-                            <div className="text-sm text-muted-foreground">
-                              {t("history_after_create")}
-                            </div>
+                          <div className="text-sm text-muted-foreground">
+                            {t("empty_history")}
                           </div>
                         </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {(isLoading || isMutating) ? (
-            <div className="flex items-center justify-center gap-2 rounded-xl border bg-muted/10 px-4 py-3 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              {isLoading ? t("loading") : t("saving")}
+                      </div>
+                    )
+                  ) : (
+                    <div className="flex min-h-[260px] flex-col items-center justify-center gap-3 p-8 text-center">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-lg border bg-muted/20">
+                        <ImagePlus className="h-5 w-5 text-muted-foreground" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-medium">{t("draft_mode_title")}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {t("history_after_create")}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
-          ) : null}
+
+            {(isLoading || isMutating) ? (
+              <div className="flex items-center justify-center gap-2 rounded-lg border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {isLoading ? t("loading") : t("saving")}
+              </div>
+            ) : null}
+          </div>
 
           {COMPANY_ASSET_TYPE_ORDER.map((assetType) => (
             <input

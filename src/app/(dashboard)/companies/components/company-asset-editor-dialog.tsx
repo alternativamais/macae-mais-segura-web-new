@@ -268,7 +268,7 @@ export function CompanyAssetEditorDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-5xl">
+      <DialogContent className="max-h-[88vh] overflow-hidden sm:max-w-5xl">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
@@ -276,129 +276,131 @@ export function CompanyAssetEditorDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_360px]">
-          <div className="space-y-4">
-            <div className="rounded-xl border bg-muted/20 p-4">
-              <div className="mb-3 flex items-center gap-2 text-sm font-medium">
-                <Crop className="h-4 w-4" />
-                {t("crop_area")}
-              </div>
-              <div
-                className={cn(
-                  "overflow-hidden rounded-xl border",
-                  previewTheme === "dark" ? "bg-zinc-950" : "bg-white",
-                )}
-              >
-                <canvas
-                  ref={canvasRef}
-                  className="h-auto w-full object-contain"
-                  style={{ aspectRatio: `${previewWidth} / ${previewHeight}` }}
-                />
-              </div>
-            </div>
-
-            <div className="grid gap-4 rounded-xl border bg-muted/10 p-4 sm:grid-cols-3">
-              <div className="space-y-2">
-                <div className="text-sm font-medium">{t("controls.zoom")}</div>
-                <Slider
-                  value={zoom}
-                  onValueChange={setZoom}
-                  min={-80}
-                  max={220}
-                  step={1}
-                />
-                <div className="text-xs text-muted-foreground">
-                  {zoom[0] > 0 ? "+" : ""}
-                  {zoom[0]}%
+        <div className="flex min-h-0 flex-col gap-4 overflow-hidden">
+          <div className="grid min-h-0 gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)] lg:items-start">
+            <div className="space-y-4">
+              <div className="rounded-lg border bg-muted/20 p-4">
+                <div className="mb-3 flex items-center gap-2 text-sm font-medium">
+                  <Crop className="h-4 w-4" />
+                  {t("crop_area")}
+                </div>
+                <div
+                  className={cn(
+                    "overflow-hidden rounded-lg border",
+                    previewTheme === "dark" ? "bg-zinc-950" : "bg-background",
+                  )}
+                >
+                  <canvas
+                    ref={canvasRef}
+                    className="h-auto w-full object-contain"
+                    style={{ aspectRatio: `${previewWidth} / ${previewHeight}` }}
+                  />
                 </div>
               </div>
-              <div className="space-y-2">
-                <div className="text-sm font-medium">{t("controls.horizontal")}</div>
-                <Slider
-                  value={panX}
-                  onValueChange={setPanX}
-                  min={-100}
-                  max={100}
-                  step={1}
-                />
-              </div>
-              <div className="space-y-2">
-                <div className="text-sm font-medium">{t("controls.vertical")}</div>
-                <Slider
-                  value={panY}
-                  onValueChange={setPanY}
-                  min={-100}
-                  max={100}
-                  step={1}
-                />
-              </div>
-            </div>
-          </div>
 
-          <div className="space-y-4">
-            <div className="rounded-xl border bg-muted/10 p-4">
-              <div className="flex items-center justify-between gap-2">
-                <div>
-                  <div className="text-sm font-medium">{t("preview.title")}</div>
+              <div className="grid gap-4 rounded-lg border bg-muted/30 p-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <div className="text-sm font-medium">{t("controls.zoom")}</div>
+                  <Slider
+                    value={zoom}
+                    onValueChange={setZoom}
+                    min={-80}
+                    max={220}
+                    step={1}
+                  />
                   <div className="text-xs text-muted-foreground">
-                    {t("preview.description")}
+                    {zoom[0] > 0 ? "+" : ""}
+                    {zoom[0]}%
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={previewTheme === "light" ? "default" : "outline"}
-                    onClick={() => setPreviewTheme("light")}
-                    className="cursor-pointer"
-                  >
-                    <Sun className="mr-2 h-4 w-4" />
-                    {t("preview.light")}
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={previewTheme === "dark" ? "default" : "outline"}
-                    onClick={() => setPreviewTheme("dark")}
-                    className="cursor-pointer"
-                  >
-                    <Moon className="mr-2 h-4 w-4" />
-                    {t("preview.dark")}
-                  </Button>
+                <div className="space-y-2">
+                  <div className="text-sm font-medium">{t("controls.horizontal")}</div>
+                  <Slider
+                    value={panX}
+                    onValueChange={setPanX}
+                    min={-100}
+                    max={100}
+                    step={1}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <div className="text-sm font-medium">{t("controls.vertical")}</div>
+                  <Slider
+                    value={panY}
+                    onValueChange={setPanY}
+                    min={-100}
+                    max={100}
+                    step={1}
+                  />
                 </div>
               </div>
             </div>
 
-            {preset?.variant === "wide" ? (
-              <CompanySelectorButtonPreview
-                companyName={companyName}
-                logoUrl={previewSrc}
-                darkMode={previewTheme === "dark"}
-              />
-            ) : null}
+            <div className="space-y-4">
+              <div className="rounded-lg border bg-muted/30 p-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <div className="text-sm font-medium">{t("preview.title")}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t("preview.description")}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant={previewTheme === "light" ? "default" : "outline"}
+                      onClick={() => setPreviewTheme("light")}
+                      className="cursor-pointer"
+                    >
+                      <Sun className="mr-2 h-4 w-4" />
+                      {t("preview.light")}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant={previewTheme === "dark" ? "default" : "outline"}
+                      onClick={() => setPreviewTheme("dark")}
+                      className="cursor-pointer"
+                    >
+                      <Moon className="mr-2 h-4 w-4" />
+                      {t("preview.dark")}
+                    </Button>
+                  </div>
+                </div>
+              </div>
 
-            {preset?.variant === "square" ? (
-              <CompanyDropdownPreview
-                companyName={companyName}
-                logoUrl={previewSrc}
-                darkMode={previewTheme === "dark"}
-              />
-            ) : null}
+              {preset?.variant === "wide" ? (
+                <CompanySelectorButtonPreview
+                  companyName={companyName}
+                  logoUrl={previewSrc}
+                  darkMode={previewTheme === "dark"}
+                />
+              ) : null}
 
-            {preset?.variant === "pin" ? (
-              <CompanyMapPinPreview
-                companyName={companyName}
-                logoUrl={previewSrc}
-                darkMode={previewTheme === "dark"}
-                totem={assetType === "totem_pin"}
-              />
-            ) : null}
+              {preset?.variant === "square" ? (
+                <CompanyDropdownPreview
+                  companyName={companyName}
+                  logoUrl={previewSrc}
+                  darkMode={previewTheme === "dark"}
+                />
+              ) : null}
 
-            <div className="rounded-xl border bg-muted/10 p-4 text-sm text-muted-foreground">
-              {t("output_size", {
-                width: preset?.outputWidth ?? 0,
-                height: preset?.outputHeight ?? 0,
-              })}
+              {preset?.variant === "pin" ? (
+                <CompanyMapPinPreview
+                  companyName={companyName}
+                  logoUrl={previewSrc}
+                  darkMode={previewTheme === "dark"}
+                  totem={assetType === "totem_pin"}
+                />
+              ) : null}
+
+              <div className="rounded-lg border bg-muted/30 p-4 text-sm text-muted-foreground">
+                {t("output_size", {
+                  width: preset?.outputWidth ?? 0,
+                  height: preset?.outputHeight ?? 0,
+                })}
+              </div>
             </div>
           </div>
         </div>

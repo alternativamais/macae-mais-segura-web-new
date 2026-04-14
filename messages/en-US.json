@@ -2886,11 +2886,11 @@
     },
     "assets": {
       "title": "Image manager",
-      "description_create": "Prepare company images. Full history will be available after the company is created.",
-      "description_edit": "Manage the company logo and pin history, choosing the active image for each type.",
+      "description_create": "Prepare company images. History appears after creation.",
+      "description_edit": "Manage logos and pins, choosing the active image for each type.",
       "workspace_title": "Company visual workspace",
-      "helper_live": "Actions performed here are applied immediately to the company and already become part of the history.",
-      "helper_draft": "Images added here stay as local drafts and will be published after the company is created.",
+      "helper_live": "Actions here are applied and added to history.",
+      "helper_draft": "Images stay as drafts until the company is created.",
       "configured_count": "{count} of {total} types configured",
       "selectors": {
         "category_label": "Visual category",
@@ -2913,12 +2913,12 @@
       "active_ready": "The active image is already ready to be used in the system.",
       "empty_current": "No active image or draft has been defined for this variant yet.",
       "history": "History",
-      "history_description": "Previous versions of this type, with quick activation and safe deletion.",
+      "history_description": "Previous versions with quick activation and deletion.",
       "history_item": "History image",
       "empty_history_title": "No saved version yet",
-      "empty_history": "There are no saved images for this type yet.",
+      "empty_history": "There are no saved images yet.",
       "draft_mode_title": "Draft mode",
-      "history_after_create": "History becomes available as soon as the company is created. For now, you can prepare the image as a local draft.",
+      "history_after_create": "History appears after the company is created.",
       "no_image": "No active image",
       "unknown_file": "Unnamed file",
       "active_badge": "Active",
@@ -2942,39 +2942,39 @@
       "types": {
         "logo_light": {
           "title": "Main logo light theme",
-          "description": "Wide logo shown in the main switcher when the system is in light theme.",
+          "description": "Wide switcher logo for light theme.",
           "format": "Wide"
         },
         "logo_dark": {
           "title": "Main logo dark theme",
-          "description": "Wide logo shown in the main switcher when the system is in dark theme.",
+          "description": "Wide switcher logo for dark theme.",
           "format": "Wide"
         },
         "logo_square_light": {
           "title": "Square logo light theme",
-          "description": "Square logo used only in the company menu when the system is in light theme.",
+          "description": "Square menu logo for light theme.",
           "format": "Square"
         },
         "logo_square_dark": {
           "title": "Square logo dark theme",
-          "description": "Square logo used only in the company menu when the system is in dark theme.",
+          "description": "Square menu logo for dark theme.",
           "format": "Square"
         },
         "point_pin": {
           "title": "Point pin",
-          "description": "Final pin image used on the map for points without a totem.",
+          "description": "Map pin for points without a totem.",
           "format": "Map"
         },
         "totem_pin": {
           "title": "Totem pin",
-          "description": "Final pin image used on the map for points that have a totem.",
+          "description": "Map pin for points with a totem.",
           "format": "Map"
         }
       }
     },
     "asset_editor": {
       "title": "Image editor",
-      "description": "Adjust position, zoom and preview before saving the transparent image in the system standard.",
+      "description": "Adjust position and zoom before saving.",
       "crop_area": "Editing area",
       "controls": {
         "zoom": "Zoom",
@@ -2983,7 +2983,7 @@
       },
       "preview": {
         "title": "Preview",
-        "description": "See how the image will appear in the system.",
+        "description": "See how the image appears.",
         "light": "Light",
         "dark": "Dark"
       },
