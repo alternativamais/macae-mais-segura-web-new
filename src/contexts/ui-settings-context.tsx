@@ -43,6 +43,7 @@ export function UiSettingsProvider({ children }: { children: React.ReactNode }) 
   )
   const activeCompanyId = useAuthStore((state) => state.activeCompanyId)
   const hasHydrated = useAuthStore((state) => state.hasHydrated)
+  const token = useAuthStore((state) => state.token)
   const {
     setTheme,
     resetTheme,
@@ -177,12 +178,12 @@ export function UiSettingsProvider({ children }: { children: React.ReactNode }) 
   }, [activeScopedCompanyId, applySettings])
 
   React.useEffect(() => {
-    if (!hasHydrated) {
+    if (!hasHydrated || !token) {
       return
     }
 
     void reloadSettings()
-  }, [activeCompanyId, hasHydrated, reloadSettings])
+  }, [activeCompanyId, hasHydrated, token, reloadSettings])
 
   React.useEffect(() => {
     if (!settings) {

@@ -209,7 +209,7 @@ export function LandingFooter() {
               <Heart className="h-4 w-4 text-red-500 fill-current" />
               <span>by</span>
               <a href="https://shadcnstore.com" target='_blank' className="font-semibold text-foreground hover:text-primary transition-colors cursor-pointer">
-                ShadcnStore
+                Hórus Core
               </a>
             </div>
             <span className="hidden sm:inline">•</span>

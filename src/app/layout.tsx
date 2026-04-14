@@ -10,8 +10,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
-  title: "Shadcn Dashboard",
-  description: "A dashboard built with Next.js and shadcn/ui",
+  title: "Hórus Core",
+  description: "Hórus Core UI",
 };
 
 export default async function RootLayout({

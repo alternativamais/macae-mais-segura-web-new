@@ -77,7 +77,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Proteger tudo exceto API, estáticos e favicon
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    // Proteger tudo exceto API, estáticos, marca e ícones do navegador
+    '/((?!api|_next/static|_next/image|brand|favicon.ico|icon.svg|icon).*)',
   ],
 }

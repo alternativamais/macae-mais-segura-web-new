@@ -1,4 +1,3 @@
-import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 const iconFull = "/brand/icon.svg"
@@ -24,12 +23,11 @@ export function Logo({
   priority = false,
 }: LogoProps) {
   return (
-    <Image
+    <img
       src={iconMini}
-      alt="Alternativa Base"
+      alt="Hórus Core"
       width={size}
       height={size}
-      priority={priority}
       className={cn("h-auto w-auto object-contain", className)}
     />
   )
@@ -42,12 +40,11 @@ export function BrandLogo({
   priority = false,
 }: BrandLogoProps) {
   return (
-    <Image
+    <img
       src={iconFull}
-      alt="Alternativa Base"
+      alt="Hórus Core"
       width={width}
       height={height}
-      priority={priority}
       className={cn("h-auto w-auto object-contain", className)}
     />
   )

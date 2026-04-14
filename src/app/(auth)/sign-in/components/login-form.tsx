@@ -170,13 +170,14 @@ export function LoginForm({
               </Button>
             </div>
           </form>
-          <div className="bg-muted relative hidden md:block">
-            <Image
-              src="https://ui.shadcn.com/placeholder.svg"
-              alt="Image"
-              fill
-              className="object-cover dark:brightness-[0.95] dark:invert"
-            />
+          <div className="bg-primary/5 relative hidden md:flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent mix-blend-multiply dark:mix-blend-color-burn" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 aspect-square bg-primary/20 rounded-full blur-3xl opacity-50" />
+            <div className="relative z-10 flex flex-col items-center justify-center text-center p-8">
+              <div className="rounded-full bg-primary/10 p-6 mb-8 ring-1 ring-primary/20 hidden">
+                 {/* Decorative element shape */}
+              </div>
+            </div>
           </div>
         </CardContent>
       </Card>
