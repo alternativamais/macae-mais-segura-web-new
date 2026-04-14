@@ -1,10 +1,12 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { ChevronDown, Globe, LayoutGrid } from "lucide-react"
+import { ChevronDown, Globe, LayoutGrid, Loader2, MapPinned } from "lucide-react"
+import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api"
 import { BrandLogo, Logo } from "@/components/logo"
 import { resolveCompanyLogoUrl } from "@/lib/company-logo"
 import { cn } from "@/lib/utils"
+import { GOOGLE_MAPS_LOADER_ID } from "@/lib/google-maps-loader"
 
 function LogoImage({
   src,
@@ -26,6 +28,86 @@ function LogoImage({
   return <img src={resolvedSrc} alt={alt} className={className} />
 }
 
+const PIN_PREVIEW_CENTER = {
+  lat: -22.33259,
+  lng: -41.752212,
+}
+
+const pinMapOptions: google.maps.MapOptions = {
+  disableDefaultUI: true,
+  zoomControl: false,
+  fullscreenControl: false,
+  streetViewControl: false,
+  mapTypeControl: false,
+  clickableIcons: false,
+  gestureHandling: "none",
+  draggable: false,
+  scrollwheel: false,
+  disableDoubleClickZoom: true,
+}
+
+function CompanyMapPinCanvas({
+  companyName,
+  logoUrl,
+  compact = false,
+}: {
+  companyName: string
+  logoUrl?: string | null
+  compact?: boolean
+}) {
+  const resolvedSrc = resolveCompanyLogoUrl(logoUrl)
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: GOOGLE_MAPS_LOADER_ID,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+  })
+
+  if (!resolvedSrc) {
+    return (
+      <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
+        Sem imagem
+      </div>
+    )
+  }
+
+  if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || loadError) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
+        <MapPinned className={cn(compact ? "h-5 w-5" : "h-6 w-6")} />
+        {!compact ? <span className="text-xs">Mapa indisponível</span> : null}
+      </div>
+    )
+  }
+
+  if (!isLoaded || !window.google?.maps) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        <Loader2 className={cn("animate-spin", compact ? "h-4 w-4" : "h-5 w-5")} />
+      </div>
+    )
+  }
+
+  const size = compact ? 34 : 48
+
+  return (
+    <GoogleMap
+      mapContainerStyle={{ width: "100%", height: "100%" }}
+      center={PIN_PREVIEW_CENTER}
+      zoom={16}
+      options={pinMapOptions}
+    >
+      <MarkerF
+        position={PIN_PREVIEW_CENTER}
+        title={companyName}
+        icon={{
+          url: resolvedSrc,
+          scaledSize: new window.google.maps.Size(size, size),
+          anchor: new window.google.maps.Point(size / 2, size),
+        }}
+      />
+    </GoogleMap>
+  )
+}
+
 export function CompanySelectorButtonPreview({
   companyName,
   logoUrl,
@@ -45,7 +127,9 @@ export function CompanySelectorButtonPreview({
       <div
         className={cn(
           "flex h-14 items-center justify-between rounded-lg border px-4",
-          darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-200 bg-white",
+          darkMode
+            ? "border-zinc-800 bg-[#171717]"
+            : "border-zinc-200 bg-white shadow-sm",
         )}
       >
         <div className="flex min-w-0 flex-1 items-center justify-center overflow-hidden">
@@ -56,7 +140,12 @@ export function CompanySelectorButtonPreview({
             fallback={<BrandLogo width={164} height={40} className="h-8 w-auto max-w-full" />}
           />
         </div>
-        <ChevronDown className={cn("ml-3 h-4 w-4 shrink-0", darkMode ? "text-zinc-400" : "text-zinc-500")} />
+        <ChevronDown
+          className={cn(
+            "ml-3 h-4 w-4 shrink-0",
+            darkMode ? "text-zinc-500" : "text-zinc-400",
+          )}
+        />
       </div>
     </div>
   )
@@ -81,10 +170,19 @@ export function CompanyDropdownPreview({
       <div
         className={cn(
           "min-w-0 rounded-lg border",
-          darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-200 bg-white",
+          darkMode
+            ? "border-zinc-700 bg-[#1b1b1d]"
+            : "border-zinc-200 bg-white shadow-sm",
         )}
       >
-        <div className="border-b px-3 py-2 text-xs text-muted-foreground">
+        <div
+          className={cn(
+            "border-b px-3 py-2 text-xs",
+            darkMode
+              ? "border-zinc-700 text-zinc-400"
+              : "border-zinc-200 text-zinc-500",
+          )}
+        >
           Alternar Visualização
         </div>
         <div className="space-y-1 p-2">
@@ -100,13 +198,21 @@ export function CompanyDropdownPreview({
               key={label}
               className={cn(
                 "flex items-center gap-2 rounded-md px-2 py-2 text-sm",
-                index === 0 ? "text-foreground" : "text-muted-foreground",
+                index === 0
+                  ? darkMode
+                    ? "text-zinc-200"
+                    : "text-zinc-900"
+                  : darkMode
+                    ? "text-zinc-500"
+                    : "text-zinc-500",
               )}
             >
               <div
                 className={cn(
                   "flex h-7 w-7 items-center justify-center rounded-md border",
-                  darkMode ? "border-zinc-800 bg-zinc-950" : "border-zinc-200 bg-zinc-50",
+                  darkMode
+                    ? "border-zinc-700 bg-zinc-950"
+                    : "border-zinc-200 bg-zinc-50",
                 )}
               >
                 {index === 0 ? (
@@ -134,45 +240,46 @@ export function CompanyMapPinPreview({
   logoUrl,
   totem,
   darkMode,
+  compact = false,
 }: {
   companyName: string
   logoUrl?: string | null
   totem?: boolean
   darkMode: boolean
+  compact?: boolean
 }) {
   return (
     <div
       className={cn(
-        "rounded-xl border p-3 shadow-sm",
+        compact ? "h-full w-full overflow-hidden rounded-lg" : "h-full w-full overflow-hidden rounded-xl",
         darkMode ? "border-zinc-800 bg-zinc-950" : "border-zinc-200 bg-zinc-50",
       )}
     >
       <div
         className={cn(
-          "relative overflow-hidden rounded-lg border p-4",
-          darkMode ? "border-zinc-800 bg-zinc-900" : "border-zinc-200 bg-white",
+          compact
+            ? "relative h-full overflow-hidden"
+            : "relative h-full overflow-hidden",
+          darkMode
+            ? "bg-[#171717]"
+            : "bg-white",
         )}
       >
-        <div className="grid grid-cols-6 gap-px bg-border/30 p-px">
-          {Array.from({ length: 24 }).map((_, index) => (
-            <div
-              key={index}
-              className={cn(
-                "h-8 rounded-[2px]",
-                darkMode ? "bg-zinc-900" : "bg-zinc-50",
-              )}
-            />
-          ))}
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <LogoImage
-            src={logoUrl}
-            alt={companyName}
-            className="max-h-24 max-w-24 object-contain"
-            fallback={<Logo size={64} className="h-14 w-14 opacity-70" />}
+        <div className={cn(compact ? "h-full min-h-24" : "h-64")}>
+          <CompanyMapPinCanvas
+            companyName={companyName}
+            logoUrl={logoUrl}
+            compact={compact}
           />
         </div>
-        <div className="absolute right-3 bottom-3 rounded-md bg-black/70 px-2 py-1 text-[11px] text-white">
+        <div
+          className={cn(
+            "absolute rounded-md bg-black/70 text-white",
+            compact
+              ? "right-2 bottom-2 px-1.5 py-0.5 text-[10px]"
+              : "right-3 bottom-3 px-2 py-1 text-[11px]",
+          )}
+        >
           {totem ? "Totem" : "Ponto"}
         </div>
       </div>

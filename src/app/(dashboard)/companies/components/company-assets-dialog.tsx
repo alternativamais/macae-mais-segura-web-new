@@ -49,6 +49,7 @@ import { COMPANY_ASSET_PRESETS, COMPANY_ASSET_TYPE_ORDER } from "@/lib/company-a
 import { useTranslator } from "@/lib/i18n"
 import { formatLocalizedDate } from "@/lib/i18n/date"
 import { resolveCompanyLogoUrl } from "@/lib/company-logo"
+import { cn } from "@/lib/utils"
 import { CompanyAssetEditorDialog } from "./company-asset-editor-dialog"
 import {
   CompanyDropdownPreview,
@@ -102,16 +103,37 @@ function AssetThumb({
   src,
   assetType,
   alt,
+  darkMode,
 }: {
   src?: string | null
   assetType: CompanyAssetType
   alt: string
+  darkMode: boolean
 }) {
   const variant = COMPANY_ASSET_PRESETS[assetType].variant
   const resolvedSrc = resolveCompanyLogoUrl(src)
 
+  if (variant === "pin") {
+    return (
+      <div className="h-28 overflow-hidden rounded-xl border">
+        <CompanyMapPinPreview
+          companyName={alt}
+          logoUrl={resolvedSrc}
+          darkMode={darkMode}
+          totem={assetType === "totem_pin"}
+          compact
+        />
+      </div>
+    )
+  }
+
   return (
-    <div className="flex h-28 items-center justify-center rounded-xl border bg-muted/20 p-4">
+    <div
+      className={cn(
+        "flex h-28 items-center justify-center rounded-xl border p-4",
+        darkMode ? "border-zinc-800 bg-[#171717]" : "border-zinc-200 bg-white",
+      )}
+    >
       {resolvedSrc ? (
         <img
           src={resolvedSrc}
@@ -337,6 +359,10 @@ export function CompanyAssetsDialog({
   const activeAsset = history.find((asset) => asset.isActive)
   const draftAsset = draftAssets[selectedAssetType]
   const activePreviewUrl = draftAsset?.previewUrl || activeAsset?.fileUrl || null
+  const selectedVariantDarkMode = !(
+    selectedAssetType === "logo_light" ||
+    selectedAssetType === "logo_square_light"
+  )
   const totalConfigured = COMPANY_ASSET_TYPE_ORDER.filter(
     (assetType) =>
       draftAssets[assetType] ||
@@ -486,6 +512,7 @@ export function CompanyAssetsDialog({
                               src={activePreviewUrl}
                               assetType={selectedAssetType}
                               alt={t("no_image")}
+                              darkMode={selectedVariantDarkMode}
                             />
                           </div>
                           <div className="space-y-3 rounded-xl border bg-muted/10 p-4">
@@ -549,6 +576,7 @@ export function CompanyAssetsDialog({
                                       src={asset.fileUrl}
                                       assetType={selectedAssetType}
                                       alt={t("history_item")}
+                                      darkMode={selectedVariantDarkMode}
                                     />
 
                                     <div className="space-y-2">

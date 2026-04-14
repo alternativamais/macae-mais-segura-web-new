@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { ImagePlus, Loader2 } from "lucide-react"
+import { ImagePlus, Loader2, Moon, Sun } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -87,6 +87,7 @@ export function CompanyFormDialog({
   >({})
   const draftAssetsRef = useRef(draftAssets)
   const [managedCompany, setManagedCompany] = useState<Empresa | undefined>(company)
+  const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("dark")
   const isEdit = !!company
 
   const t = useTranslator("companies.form")
@@ -122,6 +123,7 @@ export function CompanyFormDialog({
     })
 
     setManagedCompany(company)
+    setPreviewTheme("dark")
     setDraftAssets((current) => {
       revokeDraftPreviews(current)
       return {}
@@ -178,9 +180,15 @@ export function CompanyFormDialog({
   }
 
   const previewUrls = {
+    wideLight:
+      draftAssets.logo_light?.previewUrl ||
+      resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "logo_light")),
     wideDark:
       draftAssets.logo_dark?.previewUrl ||
       resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "logo_dark")),
+    squareLight:
+      draftAssets.logo_square_light?.previewUrl ||
+      resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "logo_square_light")),
     squareDark:
       draftAssets.logo_square_dark?.previewUrl ||
       resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, "logo_square_dark")),
@@ -198,7 +206,19 @@ export function CompanyFormDialog({
       resolveCompanyLogoUrl(getCompanyAssetUrl(managedCompany, assetType))
     )
   }).length
-  const hasSwitcherPreview = Boolean(previewUrls.wideDark || previewUrls.squareDark)
+  const switcherPreviewUrls =
+    previewTheme === "dark"
+      ? {
+          wide: previewUrls.wideDark,
+          square: previewUrls.squareDark,
+        }
+      : {
+          wide: previewUrls.wideLight,
+          square: previewUrls.squareLight,
+        }
+  const hasSwitcherPreview = Boolean(
+    switcherPreviewUrls.wide || switcherPreviewUrls.square,
+  )
   const hasMapPreview = Boolean(previewUrls.pointPin || previewUrls.totemPin)
 
   return (
@@ -285,15 +305,39 @@ export function CompanyFormDialog({
                     {isEdit ? t("assets.description_edit") : t("assets.description_create")}
                   </CardDescription>
                   <CardAction>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="cursor-pointer"
-                      onClick={() => setIsAssetsDialogOpen(true)}
-                    >
-                      <ImagePlus className="mr-2 h-4 w-4" />
-                      {t("buttons.manage_assets")}
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center rounded-md border bg-background p-1">
+                        <Button
+                          type="button"
+                          variant={previewTheme === "light" ? "default" : "ghost"}
+                          size="icon"
+                          className="h-8 w-8 cursor-pointer"
+                          onClick={() => setPreviewTheme("light")}
+                        >
+                          <Sun className="h-4 w-4" />
+                          <span className="sr-only">Claro</span>
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={previewTheme === "dark" ? "default" : "ghost"}
+                          size="icon"
+                          className="h-8 w-8 cursor-pointer"
+                          onClick={() => setPreviewTheme("dark")}
+                        >
+                          <Moon className="h-4 w-4" />
+                          <span className="sr-only">Escuro</span>
+                        </Button>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="cursor-pointer"
+                        onClick={() => setIsAssetsDialogOpen(true)}
+                      >
+                        <ImagePlus className="mr-2 h-4 w-4" />
+                        {t("buttons.manage_assets")}
+                      </Button>
+                    </div>
                   </CardAction>
                 </CardHeader>
 
@@ -310,27 +354,31 @@ export function CompanyFormDialog({
                       </AccordionTrigger>
                       <AccordionContent className="pb-4">
                         <div className="grid gap-4 lg:grid-cols-2">
-                          {previewUrls.wideDark ? (
+                          {switcherPreviewUrls.wide ? (
                             <div className="space-y-2">
                               <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                                {tAssets("types.logo_dark.title")}
+                                {previewTheme === "dark"
+                                  ? tAssets("types.logo_dark.title")
+                                  : tAssets("types.logo_light.title")}
                               </div>
                               <CompanySelectorButtonPreview
                                 companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
-                                logoUrl={previewUrls.wideDark}
-                                darkMode
+                                logoUrl={switcherPreviewUrls.wide}
+                                darkMode={previewTheme === "dark"}
                               />
                             </div>
                           ) : null}
-                          {previewUrls.squareDark ? (
+                          {switcherPreviewUrls.square ? (
                             <div className="space-y-2">
                               <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                                {tAssets("types.logo_square_dark.title")}
+                                {previewTheme === "dark"
+                                  ? tAssets("types.logo_square_dark.title")
+                                  : tAssets("types.logo_square_light.title")}
                               </div>
                               <CompanyDropdownPreview
                                 companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
-                                logoUrl={previewUrls.squareDark}
-                                darkMode
+                                logoUrl={switcherPreviewUrls.square}
+                                darkMode={previewTheme === "dark"}
                               />
                             </div>
                           ) : null}
@@ -359,7 +407,7 @@ export function CompanyFormDialog({
                               <CompanyMapPinPreview
                                 companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
                                 logoUrl={previewUrls.pointPin}
-                                darkMode
+                                darkMode={previewTheme === "dark"}
                               />
                             </div>
                           ) : null}
@@ -371,7 +419,7 @@ export function CompanyFormDialog({
                               <CompanyMapPinPreview
                                 companyName={managedCompany?.nome || form.watch("nome") || "Empresa"}
                                 logoUrl={previewUrls.totemPin}
-                                darkMode
+                                darkMode={previewTheme === "dark"}
                                 totem
                               />
                             </div>
