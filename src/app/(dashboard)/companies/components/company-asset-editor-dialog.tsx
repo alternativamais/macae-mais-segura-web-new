@@ -15,19 +15,19 @@ import { Slider } from "@/components/ui/slider"
 import { useTranslator } from "@/lib/i18n"
 import { COMPANY_ASSET_PRESETS } from "@/lib/company-assets"
 import { CompanyAssetType } from "@/types/empresa"
+import { cn } from "@/lib/utils"
 import {
   CompanyDropdownPreview,
   CompanyMapPinPreview,
   CompanySelectorButtonPreview,
 } from "./company-branding-preview"
 
-function getCanvasMetrics(image: HTMLImageElement, width: number, height: number) {
-  const baseScale = Math.max(width / image.naturalWidth, height / image.naturalHeight)
-  return {
-    baseScale,
-    overflowX: image.naturalWidth * baseScale - width,
-    overflowY: image.naturalHeight * baseScale - height,
-  }
+function getBaseScale(image: HTMLImageElement, width: number, height: number) {
+  return Math.min(width / image.naturalWidth, height / image.naturalHeight)
+}
+
+function getZoomFactor(zoomValue: number) {
+  return Math.max(0.1, 1 + zoomValue / 100)
 }
 
 function drawImageWithTransform({
@@ -47,15 +47,17 @@ function drawImageWithTransform({
   panX: number
   panY: number
 }) {
-  const { baseScale, overflowX, overflowY } = getCanvasMetrics(image, width, height)
+  const baseScale = getBaseScale(image, width, height)
   const scale = baseScale * zoom
   const scaledWidth = image.naturalWidth * scale
   const scaledHeight = image.naturalHeight * scale
-  const extraOverflowX = Math.max(0, scaledWidth - width)
-  const extraOverflowY = Math.max(0, scaledHeight - height)
+  const offsetBaseX = (width - scaledWidth) / 2
+  const offsetBaseY = (height - scaledHeight) / 2
+  const travelX = Math.abs(width - scaledWidth) / 2
+  const travelY = Math.abs(height - scaledHeight) / 2
 
-  const offsetX = -(extraOverflowX / 2) + (extraOverflowX / 2) * panX
-  const offsetY = -(extraOverflowY / 2) + (extraOverflowY / 2) * panY
+  const offsetX = offsetBaseX + travelX * panX
+  const offsetY = offsetBaseY + travelY * panY
 
   context.clearRect(0, 0, width, height)
   context.drawImage(image, offsetX, offsetY, scaledWidth, scaledHeight)
@@ -87,6 +89,7 @@ export function CompanyAssetEditorDialog({
   const [panY, setPanY] = useState([0])
   const [previewTheme, setPreviewTheme] = useState<"light" | "dark">("dark")
   const [isSaving, setIsSaving] = useState(false)
+  const [renderedPreviewUrl, setRenderedPreviewUrl] = useState<string | null>(null)
 
   const preset = assetType ? COMPANY_ASSET_PRESETS[assetType] : null
   const previewWidth = preset?.variant === "wide" ? 640 : 420
@@ -124,7 +127,7 @@ export function CompanyAssetEditorDialog({
 
     nextImage.src = nextUrl
     setSourceUrl(nextUrl)
-    setZoom([100])
+    setZoom([0])
     setPanX([0])
     setPanY([0])
 
@@ -152,11 +155,64 @@ export function CompanyAssetEditorDialog({
       image,
       width: previewWidth,
       height: previewHeight,
-      zoom: zoom[0] / 100,
+      zoom: getZoomFactor(zoom[0]),
       panX: panX[0] / 100,
       panY: panY[0] / 100,
     })
   }, [image, panX, panY, preset, previewHeight, previewWidth, zoom])
+
+  useEffect(() => {
+    if (!image || !preset) {
+      setRenderedPreviewUrl((current) => {
+        if (current?.startsWith("blob:")) {
+          URL.revokeObjectURL(current)
+        }
+        return null
+      })
+      return
+    }
+
+    const exportCanvas = document.createElement("canvas")
+    exportCanvas.width = preset.outputWidth
+    exportCanvas.height = preset.outputHeight
+
+    const context = exportCanvas.getContext("2d")
+    if (!context) {
+      return
+    }
+
+    drawImageWithTransform({
+      context,
+      image,
+      width: preset.outputWidth,
+      height: preset.outputHeight,
+      zoom: getZoomFactor(zoom[0]),
+      panX: panX[0] / 100,
+      panY: panY[0] / 100,
+    })
+
+    exportCanvas.toBlob((blob) => {
+      if (!blob) {
+        return
+      }
+
+      const nextUrl = URL.createObjectURL(blob)
+      setRenderedPreviewUrl((current) => {
+        if (current?.startsWith("blob:")) {
+          URL.revokeObjectURL(current)
+        }
+        return nextUrl
+      })
+    }, "image/png")
+  }, [image, panX, panY, preset, zoom])
+
+  useEffect(() => {
+    return () => {
+      if (renderedPreviewUrl?.startsWith("blob:")) {
+        URL.revokeObjectURL(renderedPreviewUrl)
+      }
+    }
+  }, [renderedPreviewUrl])
 
   const handleSave = async () => {
     if (!assetType || !file || !image || !preset) {
@@ -177,7 +233,7 @@ export function CompanyAssetEditorDialog({
       image,
       width: preset.outputWidth,
       height: preset.outputHeight,
-      zoom: zoom[0] / 100,
+      zoom: getZoomFactor(zoom[0]),
       panX: panX[0] / 100,
       panY: panY[0] / 100,
     })
@@ -208,7 +264,7 @@ export function CompanyAssetEditorDialog({
     }
   }
 
-  const previewSrc = sourceUrl
+  const previewSrc = renderedPreviewUrl || sourceUrl
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -227,7 +283,12 @@ export function CompanyAssetEditorDialog({
                 <Crop className="h-4 w-4" />
                 {t("crop_area")}
               </div>
-              <div className="overflow-hidden rounded-xl border bg-background">
+              <div
+                className={cn(
+                  "overflow-hidden rounded-xl border",
+                  previewTheme === "dark" ? "bg-zinc-950" : "bg-white",
+                )}
+              >
                 <canvas
                   ref={canvasRef}
                   className="h-auto w-full object-contain"
@@ -242,11 +303,14 @@ export function CompanyAssetEditorDialog({
                 <Slider
                   value={zoom}
                   onValueChange={setZoom}
-                  min={100}
-                  max={300}
+                  min={-80}
+                  max={220}
                   step={1}
                 />
-                <div className="text-xs text-muted-foreground">{zoom[0]}%</div>
+                <div className="text-xs text-muted-foreground">
+                  {zoom[0] > 0 ? "+" : ""}
+                  {zoom[0]}%
+                </div>
               </div>
               <div className="space-y-2">
                 <div className="text-sm font-medium">{t("controls.horizontal")}</div>
