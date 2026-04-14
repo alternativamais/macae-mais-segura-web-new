@@ -93,6 +93,22 @@ export function CompanyAssetEditorDialog({
   const previewHeight = preset ? Math.round(previewWidth / preset.aspectRatio) : 240
 
   useEffect(() => {
+    if (!assetType) {
+      return
+    }
+
+    if (
+      assetType === "logo_light" ||
+      assetType === "logo_square_light"
+    ) {
+      setPreviewTheme("light")
+      return
+    }
+
+    setPreviewTheme("dark")
+  }, [assetType])
+
+  useEffect(() => {
     if (!file || !open) {
       setSourceUrl(null)
       setImage(null)
