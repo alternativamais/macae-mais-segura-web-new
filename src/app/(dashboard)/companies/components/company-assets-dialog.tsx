@@ -82,6 +82,8 @@ const EMPTY_INPUT_REFS = {
   totem_pin: null,
 } as Record<CompanyAssetType, HTMLInputElement | null>
 
+const MODAL_EXIT_DURATION_MS = 200
+
 interface CompanyAssetsDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -258,6 +260,19 @@ export function CompanyAssetsDialog({
       setSelectedAssetType(types[0])
     }
   }, [selectedAssetType, selectedCategory])
+
+  useEffect(() => {
+    if (isEditorOpen) {
+      return
+    }
+
+    const timeout = window.setTimeout(() => {
+      setSelectedFile(null)
+      setEditorAssetType(null)
+    }, MODAL_EXIT_DURATION_MS)
+
+    return () => window.clearTimeout(timeout)
+  }, [isEditorOpen])
 
   const openFilePicker = (assetType: CompanyAssetType) => {
     inputRefs.current[assetType]?.click()
@@ -686,13 +701,7 @@ export function CompanyAssetsDialog({
 
       <CompanyAssetEditorDialog
         open={isEditorOpen}
-        onOpenChange={(nextOpen) => {
-          setIsEditorOpen(nextOpen)
-          if (!nextOpen) {
-            setSelectedFile(null)
-            setEditorAssetType(null)
-          }
-        }}
+        onOpenChange={setIsEditorOpen}
         assetType={editorAssetType}
         file={selectedFile}
         companyName={company?.nome || "Empresa Exemplo"}

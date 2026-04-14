@@ -2840,8 +2840,6 @@
       },
       "assets": {
         "title": "Imagens da empresa",
-        "description_create": "Gerencie logos e pins antes de concluir o cadastro da empresa.",
-        "description_edit": "Gerencie logos e pins da empresa em um fluxo separado, com histórico por tipo.",
         "empty": "Sem imagem",
         "empty_state": "Nenhuma imagem foi configurada ainda. Use o gerenciador para subir a primeira logo ou pin.",
         "configured_count": "{count} de {total} configuradas",

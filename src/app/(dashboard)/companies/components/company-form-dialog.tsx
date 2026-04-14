@@ -301,9 +301,6 @@ export function CompanyFormDialog({
                       })}
                     </Badge>
                   </div>
-                  <CardDescription>
-                    {isEdit ? t("assets.description_edit") : t("assets.description_create")}
-                  </CardDescription>
                   <CardAction>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center rounded-md border bg-background p-1">

@@ -94,6 +94,9 @@ export function CompanyAssetEditorDialog({
   const preset = assetType ? COMPANY_ASSET_PRESETS[assetType] : null
   const previewWidth = preset?.variant === "wide" ? 640 : 420
   const previewHeight = preset ? Math.round(previewWidth / preset.aspectRatio) : 240
+  const editorDarkMode =
+    assetType === "logo_dark" ||
+    assetType === "logo_square_dark"
 
   useEffect(() => {
     if (!assetType) {
@@ -287,7 +290,9 @@ export function CompanyAssetEditorDialog({
                 <div
                   className={cn(
                     "overflow-hidden rounded-lg border",
-                    previewTheme === "dark" ? "bg-zinc-950" : "bg-background",
+                    editorDarkMode
+                      ? "border-zinc-800 bg-zinc-950"
+                      : "border-zinc-200 bg-white",
                   )}
                 >
                   <canvas
