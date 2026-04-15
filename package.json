@@ -4,10 +4,14 @@
   "private": true,
   "scripts": {
     "start:dev": "next dev --port 3001",
-    "build": "next build",
+    "build": "next build && find .next -type f -name '*.map' -delete",
     "start": "next start",
     "lint": "next lint",
     "i18n:check": "node ./scripts/check-i18n.mjs"
+  },
+  "overrides": {
+    "follow-redirects": "^1.16.0",
+    "picomatch": "^4.0.4"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -41,7 +45,7 @@
     "@react-google-maps/api": "^2.20.8",
     "@tailwindcss/postcss": "^4.1.18",
     "@tanstack/react-table": "^8.21.3",
-    "axios": "^1.13.6",
+    "axios": "^1.15.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -50,8 +54,8 @@
     "framer-motion": "^12.35.2",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.562.0",
-    "next": "^16.1.6",
-    "next-intl": "^4.8.3",
+    "next": "^16.2.3",
+    "next-intl": "^4.9.1",
     "next-themes": "^0.4.6",
     "postcss": "^8.5.6",
     "react": "19.2.3",
