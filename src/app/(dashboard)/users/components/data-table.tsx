@@ -33,6 +33,7 @@ import { UserDetailsDialog } from "./user-details-dialog"
 import { UserFormDialog } from "./user-form-dialog"
 import {
   getUserCompanyNames,
+  getUserCompanyRoleSummary,
   getUserCompanySummary,
   getUserRoleName,
 } from "./utils"
@@ -136,6 +137,9 @@ export function DataTable({
         user.email,
         user.username,
         getUserRoleName(user, rolesById, t("no_role")),
+        getUserCompanyRoleSummary(user, companiesById, rolesById, t("no_role"), {
+          defaultSuffix: t("default_suffix"),
+        }),
         ...getUserCompanyNames(user, companiesById),
       ]
         .filter(Boolean)
@@ -220,7 +224,11 @@ export function DataTable({
                   <TableCell>
                     <div className="inline-flex items-center gap-2">
                       <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                      <span>{getUserRoleName(user, rolesById, t("no_role"))}</span>
+                      <span className="line-clamp-2">
+                        {getUserCompanyRoleSummary(user, companiesById, rolesById, t("no_role"), {
+                          defaultSuffix: t("default_suffix"),
+                        })}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>

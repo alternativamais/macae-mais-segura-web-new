@@ -49,11 +49,22 @@ export default function UsersPage() {
     setIsLoading(true)
 
     try {
-      const [usersData, rolesData, companiesData] = await Promise.all([
+      const [usersData, companiesData] = await Promise.all([
         loadAllUsers(),
-        roleService.findAllNoPagination(),
         empresaService.findAllNoPagination(),
       ])
+
+      const rolesByCompany = await Promise.all(
+        companiesData.map((company) => roleService.findAllNoPagination(company.id)),
+      )
+
+      const rolesData = Array.from(
+        new Map(
+          rolesByCompany
+            .flat()
+            .map((role) => [role.id, role]),
+        ).values(),
+      )
 
       setUsers(usersData)
       setRoles(rolesData)

@@ -13,7 +13,7 @@ import { Empresa } from "@/types/empresa"
 import { Role } from "@/types/role"
 import { User } from "@/types/user"
 import { parseISO } from "date-fns"
-import { getUserCompanySummary, getUserRoleName } from "./utils"
+import { getUserCompanyRoleSummary, getUserCompanySummary, getUserRoleName } from "./utils"
 
 interface UserDetailsDialogProps {
   user: User | null
@@ -46,6 +46,12 @@ export function UserDetailsDialog({
     {
       label: tTable("columns.empresa"),
       value: getUserCompanySummary(user, companiesById, t("not_informed")),
+    },
+    {
+      label: t("labels.company_roles"),
+      value: getUserCompanyRoleSummary(user, companiesById, rolesById, tTable("no_role"), {
+        defaultSuffix: t("default_suffix"),
+      }),
     },
     {
       label: t("labels.status"),

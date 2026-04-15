@@ -102,16 +102,23 @@
       "no_results": "No users found.",
       "loading": "Loading...",
       "no_role": "No role",
-      "open_actions": "Open actions"
+      "open_actions": "Open actions",
+      "default_suffix": " • default"
     },
     "form": {
       "title_create": "New user",
       "title_edit": "Edit user",
-      "description_create": "Register a new access account for the system.",
-      "description_edit": "Update registration data and user access role.",
-      "labels": {
-        "name": "Name",
-        "username": "Username",
+    "description_create": "Register a new access account for the system.",
+    "description_edit": "Update registration data and company-specific user roles.",
+    "sections": {
+      "account": "Account data",
+      "account_desc": "Main registration details and user status.",
+      "access": "Companies and access",
+      "access_desc": "{count} companies selected for this user."
+    },
+    "labels": {
+      "name": "Name",
+      "username": "Username",
         "email": "Email",
         "password": "Password",
         "password_edit_hint": "(optional in editing)",
@@ -135,6 +142,18 @@
       "empty_companies": "No companies found.",
       "selected_companies": "{count} selected companies",
       "clear_companies": "Clear selection",
+    "company_roles": {
+      "title": "Company access",
+      "description": "Adjust the role for each linked company and mark the default company.",
+      "empty": "Select at least one company to configure roles.",
+      "default_company": "Default access company",
+      "default_label": "Default company",
+      "secondary_company": "Additional linked company",
+      "default_selected": "Default company",
+      "make_default": "Set as default",
+      "company_fallback": "Company #{id}",
+      "no_roles": "No roles available"
+      },
       "buttons": {
         "cancel": "Cancel",
         "save": "Save changes",
@@ -154,7 +173,9 @@
         "username_min": "Username must be at least 3 characters.",
         "email_invalid": "Invalid email.",
         "role_required": "Select a role.",
-        "empresa_required": "Select at least one company."
+        "empresa_required": "Select at least one company.",
+        "company_unique": "A company cannot be repeated.",
+        "default_company_required": "Set exactly one default company."
       }
     },
     "details": {
@@ -165,6 +186,7 @@
         "username": "Username",
         "email": "Email",
         "role": "Role",
+        "company_roles": "Roles by company",
         "status": "Status",
         "birthday": "Birthday",
         "location_required": "Location required",
@@ -173,7 +195,8 @@
       "not_informed": "Not informed",
       "yes": "Yes",
       "no": "No",
-      "location_required": "Location required"
+      "location_required": "Location required",
+      "default_suffix": " • default"
     }
   },
   "cameras": {

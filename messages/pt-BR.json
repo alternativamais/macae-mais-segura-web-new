@@ -102,16 +102,23 @@
       "no_results": "Nenhum usuário encontrado.",
       "loading": "Carregando...",
       "no_role": "Sem cargo",
-      "open_actions": "Abrir ações"
+      "open_actions": "Abrir ações",
+      "default_suffix": " • padrão"
     },
     "form": {
       "title_create": "Novo usuário",
       "title_edit": "Editar usuário",
-      "description_create": "Cadastre uma nova conta de acesso para o sistema.",
-      "description_edit": "Atualize os dados cadastrais e o cargo de acesso do usuário.",
-      "labels": {
-        "name": "Nome",
-        "username": "Username",
+    "description_create": "Cadastre uma nova conta de acesso para o sistema.",
+    "description_edit": "Atualize os dados cadastrais e os cargos do usuário por empresa.",
+    "sections": {
+      "account": "Dados da conta",
+      "account_desc": "Informações principais de cadastro e status do usuário.",
+      "access": "Empresas e acessos",
+      "access_desc": "{count} empresas selecionadas para este usuário."
+    },
+    "labels": {
+      "name": "Nome",
+      "username": "Username",
         "email": "Email",
         "password": "Senha",
         "password_edit_hint": "(opcional na edição)",
@@ -135,6 +142,18 @@
       "empty_companies": "Nenhuma empresa encontrada.",
       "selected_companies": "{count} empresas selecionadas",
       "clear_companies": "Limpar seleção",
+    "company_roles": {
+      "title": "Acessos por empresa",
+      "description": "Ajuste o cargo de cada empresa vinculada e marque a empresa padrão.",
+      "empty": "Selecione ao menos uma empresa para configurar os cargos.",
+      "default_company": "Empresa padrão de acesso",
+      "default_label": "Empresa padrão",
+      "secondary_company": "Empresa adicional vinculada",
+      "default_selected": "Empresa padrão",
+      "make_default": "Definir como padrão",
+      "company_fallback": "Empresa #{id}",
+      "no_roles": "Sem cargos disponíveis"
+      },
       "buttons": {
         "cancel": "Cancelar",
         "save": "Salvar alterações",
@@ -154,7 +173,9 @@
         "username_min": "Username deve ter pelo menos 3 caracteres.",
         "email_invalid": "Email inválido.",
         "role_required": "Selecione um cargo.",
-        "empresa_required": "Selecione ao menos uma empresa."
+        "empresa_required": "Selecione ao menos uma empresa.",
+        "company_unique": "A empresa não pode ser repetida.",
+        "default_company_required": "Defina exatamente uma empresa padrão."
       }
     },
     "details": {
@@ -165,6 +186,7 @@
         "username": "Username",
         "email": "Email",
         "role": "Cargo",
+        "company_roles": "Cargos por empresa",
         "status": "Status",
         "birthday": "Aniversário",
         "location_required": "Requer localização",
@@ -173,7 +195,8 @@
       "not_informed": "Não informado",
       "yes": "Sim",
       "no": "Não",
-      "location_required": "Requer localização"
+      "location_required": "Requer localização",
+      "default_suffix": " • padrão"
     }
   },
   "cameras": {
