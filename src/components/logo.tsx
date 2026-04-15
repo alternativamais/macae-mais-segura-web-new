@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils"
 
-const iconFull = "/brand/icon.svg"
-const iconMini = "/brand/icon_mini.svg"
+const brandLogoLight = "/brand/logo-retangulo-fundo-branco.png"
+const brandLogoDark = "/brand/logo-retangulo-fundo-preto.png"
+const squareLogoLight = "/brand/logo-quadrado-fundo-branco.png"
+const squareLogoDark = "/brand/logo-quadrado-fundo-preto.png"
 
 interface BaseLogoProps {
   className?: string
@@ -23,13 +25,22 @@ export function Logo({
   priority = false,
 }: LogoProps) {
   return (
-    <img
-      src={iconMini}
-      alt="Hórus Core"
-      width={size}
-      height={size}
-      className={cn("h-auto w-auto object-contain", className)}
-    />
+    <>
+      <img
+        src={squareLogoLight}
+        alt="Hórus Core"
+        width={size}
+        height={size}
+        className={cn("h-auto w-auto object-contain dark:hidden", className)}
+      />
+      <img
+        src={squareLogoDark}
+        alt="Hórus Core"
+        width={size}
+        height={size}
+        className={cn("hidden h-auto w-auto object-contain dark:block", className)}
+      />
+    </>
   )
 }
 
@@ -40,12 +51,21 @@ export function BrandLogo({
   priority = false,
 }: BrandLogoProps) {
   return (
-    <img
-      src={iconFull}
-      alt="Hórus Core"
-      width={width}
-      height={height}
-      className={cn("h-auto w-auto object-contain", className)}
-    />
+    <>
+      <img
+        src={brandLogoLight}
+        alt="Hórus Core"
+        width={width}
+        height={height}
+        className={cn("h-auto w-auto object-contain dark:hidden", className)}
+      />
+      <img
+        src={brandLogoDark}
+        alt="Hórus Core"
+        width={width}
+        height={height}
+        className={cn("hidden h-auto w-auto object-contain dark:block", className)}
+      />
+    </>
   )
 }
