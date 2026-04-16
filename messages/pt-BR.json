@@ -46,6 +46,7 @@
     "climate_equipment": "Equipamentos Climáticos",
     "notification_center": "Central de Notificações",
     "plate_sending": "Envio de placas",
+    "email_integrations": "Integrações de email",
     "extensions": "Ramais"
   },
   "user": {
@@ -3943,6 +3944,442 @@
         "cleanup_validation_error": "Preencha pelo menos um critério para a limpeza em massa.",
         "cleanup_success": "{count} registro(s) removido(s) com sucesso.",
         "cleanup_error": "Erro ao executar a limpeza em massa."
+      }
+    }
+  },
+  "email_integrations": {
+    "title": "Integrações de email",
+    "description": "Configure contas SMTP, destinatários e regras para enviar alertas quando placas específicas forem lidas em câmeras LPR.",
+    "fetch_error": "Erro ao carregar a configuração de integrações de email.",
+    "tabs": {
+      "rules": "Regras de alerta",
+      "smtp_accounts": "Contas SMTP",
+      "recipients": "Destinatários"
+    },
+    "stats": {
+      "smtp_accounts": "Contas SMTP",
+      "smtp_accounts_desc": "Servidores e remetentes configurados.",
+      "recipients": "Destinatários",
+      "recipients_desc": "Emails aptos a receber alertas.",
+      "rules": "Regras ativas",
+      "rules_desc": "Combinações de placa, câmera e envio."
+    },
+    "smtp": {
+      "search_placeholder": "Buscar por nome, host, remetente ou empresa...",
+      "empty": "Nenhuma conta SMTP encontrada.",
+      "environment": {
+        "prod": "Produção",
+        "dev": "Homologação"
+      },
+      "table": {
+        "name": "Conta",
+        "company": "Empresa",
+        "host": "Servidor",
+        "sender": "Remetente",
+        "environment": "Ambiente",
+        "status": "Status",
+        "updated_at": "Atualizada em",
+        "actions": "Ações"
+      },
+      "status": {
+        "enabled": "Ativa",
+        "disabled": "Inativa"
+      },
+      "actions": {
+        "create": "Nova conta SMTP",
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "test": "Testar conexão",
+        "open_actions": "Abrir ações"
+      },
+      "delete_dialog": {
+        "title": "Excluir conta SMTP",
+        "description": "Deseja realmente excluir esta conta SMTP?",
+        "confirm": "Excluir"
+      },
+      "notifications": {
+        "create_success": "Conta SMTP criada com sucesso.",
+        "edit_success": "Conta SMTP atualizada com sucesso.",
+        "delete_success": "Conta SMTP excluída com sucesso.",
+        "create_error": "Erro ao criar a conta SMTP.",
+        "edit_error": "Erro ao atualizar a conta SMTP.",
+        "delete_error": "Erro ao excluir a conta SMTP.",
+        "test_success": "Conexão SMTP validada com sucesso.",
+        "test_error": "Erro ao testar a conexão SMTP."
+      },
+      "form": {
+        "title_create": "Nova conta SMTP",
+        "title_edit": "Editar conta SMTP",
+        "description_create": "Cadastre o servidor e o remetente usados para disparar alertas por email.",
+        "description_edit": "Atualize as credenciais e o remetente desta conta SMTP.",
+        "sections": {
+          "identity": "Identificação",
+          "identity_desc": "Defina o nome interno, empresa, ambiente e status da conta.",
+          "server": "Servidor SMTP",
+          "server_desc": "Configure host, porta, segurança e credenciais de autenticação.",
+          "sender": "Remetente",
+          "sender_desc": "Defina o email de envio, nome exibido e observações operacionais."
+        },
+        "labels": {
+          "name": "Nome interno",
+          "username": "Usuário SMTP",
+          "host": "Servidor SMTP",
+          "port": "Porta",
+          "security": "Modo de segurança",
+          "security_help": "Use STARTTLS na porta 587 ou SSL/TLS direto na 465.",
+          "password": "Senha SMTP",
+          "password_edit_help": "Deixe em branco para manter a senha atual.",
+          "from_email": "Email de envio",
+          "from_name": "Nome do remetente",
+          "reply_to": "Reply-to",
+          "environment": "Ambiente",
+          "status": "Status",
+          "notes": "Observações"
+        },
+        "environment": {
+          "prod": "Produção",
+          "dev": "Homologação"
+        },
+        "security": {
+          "starttls": "STARTTLS / Submission",
+          "secure": "SSL/TLS"
+        },
+        "placeholders": {
+          "name": "Ex.: SMTP Prefeitura",
+          "username": "Usuário autenticado no servidor",
+          "host": "Servidor SMTP",
+          "port": "Porta",
+          "password": "Senha SMTP",
+          "from_email": "email@empresa.com.br",
+          "from_name": "Nome exibido no remetente",
+          "reply_to": "Email de resposta",
+          "notes": "Observações internas sobre uso, autenticação ou ambiente"
+        },
+        "options": {
+          "enabled": "Ativa",
+          "disabled": "Inativa"
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "save": "Salvar alterações",
+          "create": "Criar conta"
+        },
+        "validations": {
+          "name": "Informe um nome para a conta.",
+          "host": "Informe o servidor SMTP.",
+          "username": "Informe o usuário SMTP.",
+          "password": "Informe a senha SMTP.",
+          "email": "Informe um email válido."
+        },
+        "notifications": {
+          "create_success": "Conta SMTP criada com sucesso.",
+          "edit_success": "Conta SMTP atualizada com sucesso.",
+          "create_error": "Erro ao criar a conta SMTP.",
+          "edit_error": "Erro ao atualizar a conta SMTP."
+        }
+      },
+      "details": {
+        "title": "Detalhes da conta SMTP",
+        "description": "Confira a configuração completa da conta {name}.",
+        "not_informed": "Não informado",
+        "security": {
+          "starttls": "STARTTLS / Submission",
+          "secure": "SSL/TLS"
+        },
+        "labels": {
+          "name": "Conta",
+          "company": "Empresa",
+          "status": "Status",
+          "environment": "Ambiente",
+          "host": "Servidor",
+          "port": "Porta",
+          "security": "Segurança",
+          "username": "Usuário SMTP",
+          "from_email": "Email de envio",
+          "from_name": "Nome do remetente",
+          "reply_to": "Reply-to",
+          "notes": "Observações",
+          "created_at": "Criada em",
+          "updated_at": "Atualizada em"
+        }
+      }
+    },
+    "recipients": {
+      "search_placeholder": "Buscar por nome, email ou empresa...",
+      "empty": "Nenhum destinatário encontrado.",
+      "table": {
+        "name": "Nome",
+        "company": "Empresa",
+        "email": "Email",
+        "status": "Status",
+        "updated_at": "Atualizado em",
+        "no_description": "Sem descrição",
+        "actions": "Ações"
+      },
+      "status": {
+        "enabled": "Ativo",
+        "disabled": "Inativo"
+      },
+      "actions": {
+        "create": "Novo destinatário",
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "open_actions": "Abrir ações"
+      },
+      "delete_dialog": {
+        "title": "Excluir destinatário",
+        "description": "Deseja realmente excluir este destinatário?",
+        "confirm": "Excluir"
+      },
+      "notifications": {
+        "create_success": "Destinatário criado com sucesso.",
+        "edit_success": "Destinatário atualizado com sucesso.",
+        "delete_success": "Destinatário excluído com sucesso.",
+        "create_error": "Erro ao criar o destinatário.",
+        "edit_error": "Erro ao atualizar o destinatário.",
+        "delete_error": "Erro ao excluir o destinatário."
+      },
+      "form": {
+        "title_create": "Novo destinatário",
+        "title_edit": "Editar destinatário",
+        "description_create": "Cadastre um email apto a receber alertas.",
+        "description_edit": "Atualize os dados deste destinatário.",
+        "sections": {
+          "identity": "Identificação",
+          "identity_desc": "Defina quem recebe o alerta e em qual empresa ele fica disponível.",
+          "settings": "Configurações",
+          "settings_desc": "Controle o status do destinatário e registre uma descrição operacional."
+        },
+        "labels": {
+          "name": "Nome",
+          "email": "Email",
+          "description": "Descrição",
+          "status": "Status"
+        },
+        "placeholders": {
+          "name": "Ex.: Operações Prefeitura",
+          "email": "destinatario@empresa.com.br",
+          "description": "Contexto de uso, plantão ou finalidade do destinatário"
+        },
+        "options": {
+          "enabled": "Ativo",
+          "disabled": "Inativo"
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "save": "Salvar alterações",
+          "create": "Criar destinatário"
+        },
+        "validations": {
+          "name": "Informe um nome para o destinatário.",
+          "email": "Informe um email válido."
+        },
+        "notifications": {
+          "create_success": "Destinatário criado com sucesso.",
+          "edit_success": "Destinatário atualizado com sucesso.",
+          "create_error": "Erro ao criar o destinatário.",
+          "edit_error": "Erro ao atualizar o destinatário."
+        }
+      },
+      "details": {
+        "title": "Detalhes do destinatário",
+        "description": "Confira as informações do destinatário {name}.",
+        "not_informed": "Não informado",
+        "labels": {
+          "name": "Nome",
+          "company": "Empresa",
+          "email": "Email",
+          "status": "Status",
+          "description": "Descrição",
+          "created_at": "Criado em",
+          "updated_at": "Atualizado em"
+        }
+      }
+    },
+    "rules": {
+      "title": "Regras de alerta",
+      "description": "Cada regra observa placas específicas em uma câmera LPR e dispara um email usando uma conta SMTP configurada.",
+      "search_placeholder": "Buscar por regra, câmera, placa, empresa ou conta SMTP...",
+      "empty": "Nenhuma regra de alerta encontrada.",
+      "table": {
+        "name": "Regra",
+        "company": "Empresa",
+        "camera": "Câmera",
+        "delivery": "Entrega",
+        "smtp": "Conta SMTP",
+        "plates": "Placas",
+        "recipients": "Destinatários",
+        "status": "Status",
+        "updated_at": "Atualizada em",
+        "recipient_count": "{count} destinatários",
+        "no_description": "Sem descrição",
+        "no_ip": "IP não informado",
+        "no_sender": "Remetente não informado",
+        "actions": "Ações"
+      },
+      "status": {
+        "enabled": "Ativa",
+        "disabled": "Inativa"
+      },
+      "actions": {
+        "create": "Nova regra",
+        "view": "Ver detalhes",
+        "test": "Testar envio",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "open_actions": "Abrir ações"
+      },
+      "delete_dialog": {
+        "title": "Excluir regra",
+        "description": "Deseja realmente excluir esta regra de alerta?",
+        "confirm": "Excluir"
+      },
+      "notifications": {
+        "create_success": "Regra criada com sucesso.",
+        "edit_success": "Regra atualizada com sucesso.",
+        "delete_success": "Regra excluída com sucesso.",
+        "test_success": "Email de teste enviado com sucesso para {count} destinatários.",
+        "create_error": "Erro ao criar a regra.",
+        "edit_error": "Erro ao atualizar a regra.",
+        "delete_error": "Erro ao excluir a regra.",
+        "test_error": "Erro ao enviar o email de teste."
+      },
+      "form": {
+        "title_create": "Nova regra de alerta",
+        "title_edit": "Editar regra de alerta",
+        "description_create": "Defina quais placas disparam emails em uma câmera LPR específica.",
+        "description_edit": "Atualize placas, câmera, destinatários e templates desta regra.",
+        "sections": {
+          "scope": "Escopo da regra",
+          "scope_desc": "Escolha empresa, câmera, conta SMTP, placas observadas e cooldown.",
+          "recipients": "Destinatários e status",
+          "recipients_desc": "Selecione quem recebe os alertas e controle a ativação da regra.",
+          "templates": "Templates do email",
+          "templates_desc": "Defina assunto, corpo e placeholders usados no disparo."
+        },
+        "labels": {
+          "name": "Nome da regra",
+          "description": "Descrição",
+          "camera": "Câmera LPR",
+          "smtp_account": "Conta SMTP",
+          "recipients": "Destinatários",
+          "plates": "Placas monitoradas",
+          "plates_help": "Informe uma placa por linha ou separe por vírgula.",
+          "subject": "Assunto do email",
+          "body": "Corpo do email",
+          "template_editor": "Editor do email",
+          "template_help": "Abra o editor para montar assunto e mensagem com markdown e tags clicáveis.",
+          "cooldown": "Cooldown (segundos)",
+          "cooldown_help": "Evita disparos repetidos da mesma placa nesta regra.",
+          "status": "Status"
+        },
+        "placeholders": {
+          "name": "Ex.: Alerta carro restrito",
+          "description": "Resumo operacional da regra",
+          "camera": "Selecione uma câmera",
+          "smtp_account": "Selecione uma conta SMTP",
+          "plates": "ABC1234\nBRA2E19",
+          "subject": "Assunto do email",
+          "body": "Corpo do email",
+          "cooldown": "300"
+        },
+        "empty_recipients": "Nenhum destinatário disponível para a empresa selecionada.",
+        "options": {
+          "enabled": "Ativa",
+          "disabled": "Inativa"
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "save": "Salvar alterações",
+          "create": "Criar regra",
+          "open_editor": "Abrir editor do email"
+        },
+        "editor": {
+          "title": "Editor de email",
+          "description": "Monte o assunto e o corpo do alerta com markdown e tags visuais.",
+          "toolbar_title": "Controles de edição",
+          "empty_tokens": "Todas as tags disponíveis já foram usadas neste email.",
+          "cancel": "Cancelar",
+          "save": "Salvar conteúdo",
+          "toolbar": {
+            "bold": "Negrito",
+            "italic": "Itálico",
+            "heading1": "Título 1",
+            "heading2": "Título 2",
+            "list": "Lista",
+            "quote": "Citação",
+            "code": "Código",
+            "link": "Link"
+          },
+          "tokens": {
+            "plate": {
+              "label": "Placa detectada",
+              "description": "Insere a placa lida pela câmera."
+            },
+            "detected_at": {
+              "label": "Data e hora da detecção",
+              "description": "Insere quando a placa foi registrada."
+            },
+            "camera_name": {
+              "label": "Nome da câmera",
+              "description": "Insere o nome configurado da câmera LPR."
+            },
+            "camera_ip": {
+              "label": "IP da câmera",
+              "description": "Insere o IP da câmera que registrou a leitura."
+            },
+            "company_name": {
+              "label": "Nome da empresa",
+              "description": "Insere a empresa vinculada à regra."
+            },
+            "smtp_name": {
+              "label": "Nome da conta SMTP",
+              "description": "Insere o nome da conta usada no envio."
+            },
+            "rule_name": {
+              "label": "Nome da regra",
+              "description": "Insere o nome interno desta regra."
+            }
+          }
+        },
+        "validations": {
+          "name": "Informe um nome para a regra.",
+          "camera": "Selecione a câmera LPR.",
+          "smtp_account": "Selecione uma conta SMTP.",
+          "recipients": "Selecione ao menos um destinatário.",
+          "plates": "Informe ao menos uma placa.",
+          "subject": "Informe o assunto do email.",
+          "body": "Informe o corpo do email."
+        },
+        "notifications": {
+          "create_success": "Regra criada com sucesso.",
+          "edit_success": "Regra atualizada com sucesso.",
+          "create_error": "Erro ao criar a regra.",
+          "edit_error": "Erro ao atualizar a regra."
+        }
+      },
+      "details": {
+        "title": "Detalhes da regra",
+        "description": "Confira o escopo da regra {name}, vinculada à câmera {camera} e com {recipients} destinatários.",
+        "not_informed": "Não informado",
+        "cooldown_value": "{seconds} segundos",
+        "labels": {
+          "name": "Regra",
+          "company": "Empresa",
+          "status": "Status",
+          "description": "Descrição",
+          "camera": "Câmera",
+          "smtp_account": "Conta SMTP",
+          "cooldown": "Cooldown",
+          "plates": "Placas",
+          "recipients": "Destinatários",
+          "subject": "Assunto",
+          "body": "Corpo do email",
+          "created_at": "Criada em",
+          "updated_at": "Atualizada em"
+        }
       }
     }
   }

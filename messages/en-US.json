@@ -46,6 +46,7 @@
     "climate_equipment": "Climate Equipment",
     "notification_center": "Notification Center",
     "plate_sending": "Plate Sending",
+    "email_integrations": "Email Integrations",
     "extensions": "Extensions"
   },
   "user": {
@@ -3945,6 +3946,442 @@
         "cleanup_validation_error": "Fill in at least one criterion for the bulk cleanup.",
         "cleanup_success": "{count} record(s) removed successfully.",
         "cleanup_error": "Error running the bulk cleanup."
+      }
+    }
+  },
+  "email_integrations": {
+    "title": "Email integrations",
+    "description": "Configure SMTP accounts, recipients, and rules to send alerts when specific plates are detected by LPR cameras.",
+    "fetch_error": "Error loading email integration settings.",
+    "tabs": {
+      "rules": "Alert rules",
+      "smtp_accounts": "SMTP accounts",
+      "recipients": "Recipients"
+    },
+    "stats": {
+      "smtp_accounts": "SMTP accounts",
+      "smtp_accounts_desc": "Configured servers and senders.",
+      "recipients": "Recipients",
+      "recipients_desc": "Emails allowed to receive alerts.",
+      "rules": "Active rules",
+      "rules_desc": "Plate, camera, and delivery combinations."
+    },
+    "smtp": {
+      "search_placeholder": "Search by name, host, sender, or company...",
+      "empty": "No SMTP account found.",
+      "environment": {
+        "prod": "Production",
+        "dev": "Staging"
+      },
+      "table": {
+        "name": "Account",
+        "company": "Company",
+        "host": "Server",
+        "sender": "Sender",
+        "environment": "Environment",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "actions": "Actions"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "actions": {
+        "create": "New SMTP account",
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete",
+        "test": "Test connection",
+        "open_actions": "Open actions"
+      },
+      "delete_dialog": {
+        "title": "Delete SMTP account",
+        "description": "Do you really want to delete this SMTP account?",
+        "confirm": "Delete"
+      },
+      "notifications": {
+        "create_success": "SMTP account created successfully.",
+        "edit_success": "SMTP account updated successfully.",
+        "delete_success": "SMTP account deleted successfully.",
+        "create_error": "Error creating the SMTP account.",
+        "edit_error": "Error updating the SMTP account.",
+        "delete_error": "Error deleting the SMTP account.",
+        "test_success": "SMTP connection validated successfully.",
+        "test_error": "Error testing the SMTP connection."
+      },
+      "form": {
+        "title_create": "New SMTP account",
+        "title_edit": "Edit SMTP account",
+        "description_create": "Register the server and sender used to deliver email alerts.",
+        "description_edit": "Update credentials and sender data for this SMTP account.",
+        "sections": {
+          "identity": "Identity",
+          "identity_desc": "Define the internal name, company, environment, and status of this account.",
+          "server": "SMTP server",
+          "server_desc": "Configure host, port, security, and authentication credentials.",
+          "sender": "Sender",
+          "sender_desc": "Set the delivery email, display name, and operational notes."
+        },
+        "labels": {
+          "name": "Internal name",
+          "username": "SMTP username",
+          "host": "SMTP server",
+          "port": "Port",
+          "security": "Security mode",
+          "security_help": "Use STARTTLS on port 587 or direct SSL/TLS on 465.",
+          "password": "SMTP password",
+          "password_edit_help": "Leave blank to keep the current password.",
+          "from_email": "Sender email",
+          "from_name": "Sender name",
+          "reply_to": "Reply-to",
+          "environment": "Environment",
+          "status": "Status",
+          "notes": "Notes"
+        },
+        "environment": {
+          "prod": "Production",
+          "dev": "Staging"
+        },
+        "security": {
+          "starttls": "STARTTLS / Submission",
+          "secure": "SSL/TLS"
+        },
+        "placeholders": {
+          "name": "Ex.: City SMTP",
+          "username": "Authenticated server username",
+          "host": "SMTP server",
+          "port": "Port",
+          "password": "SMTP password",
+          "from_email": "email@company.com",
+          "from_name": "Sender display name",
+          "reply_to": "Reply-to email",
+          "notes": "Internal notes about usage, auth, or environment"
+        },
+        "options": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Save changes",
+          "create": "Create account"
+        },
+        "validations": {
+          "name": "Enter an account name.",
+          "host": "Enter the SMTP server.",
+          "username": "Enter the SMTP username.",
+          "password": "Enter the SMTP password.",
+          "email": "Enter a valid email."
+        },
+        "notifications": {
+          "create_success": "SMTP account created successfully.",
+          "edit_success": "SMTP account updated successfully.",
+          "create_error": "Error creating the SMTP account.",
+          "edit_error": "Error updating the SMTP account."
+        }
+      },
+      "details": {
+        "title": "SMTP account details",
+        "description": "Review the full configuration for {name}.",
+        "not_informed": "Not informed",
+        "security": {
+          "starttls": "STARTTLS / Submission",
+          "secure": "SSL/TLS"
+        },
+        "labels": {
+          "name": "Account",
+          "company": "Company",
+          "status": "Status",
+          "environment": "Environment",
+          "host": "Server",
+          "port": "Port",
+          "security": "Security",
+          "username": "SMTP username",
+          "from_email": "Sender email",
+          "from_name": "Sender name",
+          "reply_to": "Reply-to",
+          "notes": "Notes",
+          "created_at": "Created at",
+          "updated_at": "Updated at"
+        }
+      }
+    },
+    "recipients": {
+      "search_placeholder": "Search by name, email, or company...",
+      "empty": "No recipient found.",
+      "table": {
+        "name": "Name",
+        "company": "Company",
+        "email": "Email",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "no_description": "No description",
+        "actions": "Actions"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "actions": {
+        "create": "New recipient",
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete",
+        "open_actions": "Open actions"
+      },
+      "delete_dialog": {
+        "title": "Delete recipient",
+        "description": "Do you really want to delete this recipient?",
+        "confirm": "Delete"
+      },
+      "notifications": {
+        "create_success": "Recipient created successfully.",
+        "edit_success": "Recipient updated successfully.",
+        "delete_success": "Recipient deleted successfully.",
+        "create_error": "Error creating the recipient.",
+        "edit_error": "Error updating the recipient.",
+        "delete_error": "Error deleting the recipient."
+      },
+      "form": {
+        "title_create": "New recipient",
+        "title_edit": "Edit recipient",
+        "description_create": "Register an email address allowed to receive alerts.",
+        "description_edit": "Update this recipient.",
+        "sections": {
+          "identity": "Identity",
+          "identity_desc": "Define who receives the alert and which company can use it.",
+          "settings": "Settings",
+          "settings_desc": "Control recipient status and keep an operational description."
+        },
+        "labels": {
+          "name": "Name",
+          "email": "Email",
+          "description": "Description",
+          "status": "Status"
+        },
+        "placeholders": {
+          "name": "Ex.: City operations",
+          "email": "recipient@company.com",
+          "description": "Use case, shift, or recipient purpose"
+        },
+        "options": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Save changes",
+          "create": "Create recipient"
+        },
+        "validations": {
+          "name": "Enter a recipient name.",
+          "email": "Enter a valid email."
+        },
+        "notifications": {
+          "create_success": "Recipient created successfully.",
+          "edit_success": "Recipient updated successfully.",
+          "create_error": "Error creating the recipient.",
+          "edit_error": "Error updating the recipient."
+        }
+      },
+      "details": {
+        "title": "Recipient details",
+        "description": "Review the data for recipient {name}.",
+        "not_informed": "Not informed",
+        "labels": {
+          "name": "Name",
+          "company": "Company",
+          "email": "Email",
+          "status": "Status",
+          "description": "Description",
+          "created_at": "Created at",
+          "updated_at": "Updated at"
+        }
+      }
+    },
+    "rules": {
+      "title": "Alert rules",
+      "description": "Each rule watches specific plates on one LPR camera and sends an email using a configured SMTP account.",
+      "search_placeholder": "Search by rule, camera, plate, company, or SMTP account...",
+      "empty": "No alert rule found.",
+      "table": {
+        "name": "Rule",
+        "company": "Company",
+        "camera": "Camera",
+        "delivery": "Delivery",
+        "smtp": "SMTP account",
+        "plates": "Plates",
+        "recipients": "Recipients",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "recipient_count": "{count} recipients",
+        "no_description": "No description",
+        "no_ip": "IP not informed",
+        "no_sender": "Sender not informed",
+        "actions": "Actions"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "actions": {
+        "create": "New rule",
+        "view": "View details",
+        "test": "Send test email",
+        "edit": "Edit",
+        "delete": "Delete",
+        "open_actions": "Open actions"
+      },
+      "delete_dialog": {
+        "title": "Delete rule",
+        "description": "Do you really want to delete this alert rule?",
+        "confirm": "Delete"
+      },
+      "notifications": {
+        "create_success": "Rule created successfully.",
+        "edit_success": "Rule updated successfully.",
+        "delete_success": "Rule deleted successfully.",
+        "test_success": "Test email sent successfully to {count} recipients.",
+        "create_error": "Error creating the rule.",
+        "edit_error": "Error updating the rule.",
+        "delete_error": "Error deleting the rule.",
+        "test_error": "Error sending the test email."
+      },
+      "form": {
+        "title_create": "New alert rule",
+        "title_edit": "Edit alert rule",
+        "description_create": "Define which plates trigger emails on a specific LPR camera.",
+        "description_edit": "Update plates, camera, recipients, and templates for this rule.",
+        "sections": {
+          "scope": "Rule scope",
+          "scope_desc": "Choose company, camera, SMTP account, watched plates, and cooldown.",
+          "recipients": "Recipients and status",
+          "recipients_desc": "Select who receives alerts and control rule activation.",
+          "templates": "Email templates",
+          "templates_desc": "Define the subject, body, and placeholders used in delivery."
+        },
+        "labels": {
+          "name": "Rule name",
+          "description": "Description",
+          "camera": "LPR camera",
+          "smtp_account": "SMTP account",
+          "recipients": "Recipients",
+          "plates": "Watched plates",
+          "plates_help": "Enter one plate per line or separate them with commas.",
+          "subject": "Email subject",
+          "body": "Email body",
+          "template_editor": "Email editor",
+          "template_help": "Open the editor to build the subject and message with markdown and clickable tags.",
+          "cooldown": "Cooldown (seconds)",
+          "cooldown_help": "Prevents repeated triggers for the same plate on this rule.",
+          "status": "Status"
+        },
+        "placeholders": {
+          "name": "Ex.: Restricted vehicle alert",
+          "description": "Operational summary of this rule",
+          "camera": "Select a camera",
+          "smtp_account": "Select an SMTP account",
+          "plates": "ABC1234\nBRA2E19",
+          "subject": "Email subject",
+          "body": "Email body",
+          "cooldown": "300"
+        },
+        "empty_recipients": "No recipients are available for the selected company.",
+        "options": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "buttons": {
+          "cancel": "Cancel",
+          "save": "Save changes",
+          "create": "Create rule",
+          "open_editor": "Open email editor"
+        },
+        "editor": {
+          "title": "Email editor",
+          "description": "Build the alert subject and body with markdown and visual tags.",
+          "toolbar_title": "Editing controls",
+          "empty_tokens": "All available tags are already in use in this email.",
+          "cancel": "Cancel",
+          "save": "Save content",
+          "toolbar": {
+            "bold": "Bold",
+            "italic": "Italic",
+            "heading1": "Heading 1",
+            "heading2": "Heading 2",
+            "list": "List",
+            "quote": "Quote",
+            "code": "Code",
+            "link": "Link"
+          },
+          "tokens": {
+            "plate": {
+              "label": "Detected plate",
+              "description": "Inserts the plate read by the camera."
+            },
+            "detected_at": {
+              "label": "Detection date and time",
+              "description": "Inserts when the plate was recorded."
+            },
+            "camera_name": {
+              "label": "Camera name",
+              "description": "Inserts the configured LPR camera name."
+            },
+            "camera_ip": {
+              "label": "Camera IP",
+              "description": "Inserts the IP of the camera that captured the event."
+            },
+            "company_name": {
+              "label": "Company name",
+              "description": "Inserts the company linked to the rule."
+            },
+            "smtp_name": {
+              "label": "SMTP account name",
+              "description": "Inserts the name of the account used for delivery."
+            },
+            "rule_name": {
+              "label": "Rule name",
+              "description": "Inserts this rule's internal name."
+            }
+          }
+        },
+        "validations": {
+          "name": "Enter a rule name.",
+          "camera": "Select the LPR camera.",
+          "smtp_account": "Select an SMTP account.",
+          "recipients": "Select at least one recipient.",
+          "plates": "Enter at least one plate.",
+          "subject": "Enter the email subject.",
+          "body": "Enter the email body."
+        },
+        "notifications": {
+          "create_success": "Rule created successfully.",
+          "edit_success": "Rule updated successfully.",
+          "create_error": "Error creating the rule.",
+          "edit_error": "Error updating the rule."
+        }
+      },
+      "details": {
+        "title": "Rule details",
+        "description": "Review the scope of rule {name}, linked to camera {camera} with {recipients} recipients.",
+        "not_informed": "Not informed",
+        "cooldown_value": "{seconds} seconds",
+        "labels": {
+          "name": "Rule",
+          "company": "Company",
+          "status": "Status",
+          "description": "Description",
+          "camera": "Camera",
+          "smtp_account": "SMTP account",
+          "cooldown": "Cooldown",
+          "plates": "Plates",
+          "recipients": "Recipients",
+          "subject": "Subject",
+          "body": "Email body",
+          "created_at": "Created at",
+          "updated_at": "Updated at"
+        }
       }
     }
   }

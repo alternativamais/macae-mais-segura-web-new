@@ -157,6 +157,12 @@ export const appNavigation: AppNavigationGroup[] = [
             screenKey: "admin.integracoes",
             icon: Send,
           },
+          {
+            titleKey: "email_integrations",
+            url: "/administration/integrations/email",
+            screenKey: "admin.email_integrations",
+            icon: Send,
+          },
         ],
       },
     ],
