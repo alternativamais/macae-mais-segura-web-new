@@ -35,7 +35,7 @@
     "my_account": "My Account",
     "manual_administration": "Manual administration",
     "equipment": "Equipment",
-    "integrations": "Integrations",
+    "integrations": "LPR Integrations",
     "telephony": "Telephony",
     "call_center": "Call Center",
     "map": "Map",
@@ -45,8 +45,8 @@
     "network_equipment": "Network Equipment",
     "climate_equipment": "Climate Equipment",
     "notification_center": "Notification Center",
-    "plate_sending": "Plate Sending",
-    "email_integrations": "Email Integrations",
+    "plate_sending": "Security Forces",
+    "email_integrations": "Notifications",
     "extensions": "Extensions"
   },
   "user": {
@@ -3368,15 +3368,15 @@
     }
   },
   "plate_sending": {
-    "title": "Plate Sending",
-    "description": "Manage integrations that receive LPR reads and review the operational status of linked cameras.",
-    "fetch_error": "Error loading plate sending integrations.",
+    "title": "Security Forces",
+    "description": "Manage LPR integrations that receive plate reads and review the operational status of linked cameras.",
+    "fetch_error": "Error loading security force LPR integrations.",
     "loading": "Loading integrations...",
     "search_placeholder": "Search by name, code, or description...",
     "empty": "No plate sending integrations found.",
     "description_fallback": "No operational description has been configured for this integration.",
     "tabs": {
-      "overview": "Plate sending",
+      "overview": "Security forces",
       "studio": "Configurable studio",
       "lpr_management": "Manage plates (LPR)"
     },
@@ -3950,9 +3950,9 @@
     }
   },
   "email_integrations": {
-    "title": "Email integrations",
-    "description": "Configure SMTP accounts, recipients, and rules to send alerts when specific plates are detected by LPR cameras.",
-    "fetch_error": "Error loading email integration settings.",
+    "title": "Notifications",
+    "description": "Configure SMTP accounts, recipients, and rules to send email notifications when specific plates are detected by LPR cameras.",
+    "fetch_error": "Error loading email notification settings.",
     "tabs": {
       "rules": "Alert rules",
       "smtp_accounts": "SMTP accounts",

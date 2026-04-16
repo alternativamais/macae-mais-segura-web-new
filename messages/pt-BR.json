@@ -35,7 +35,7 @@
     "my_account": "Minha Conta",
     "manual_administration": "Administração manual",
     "equipment": "Equipamentos",
-    "integrations": "Integrações",
+    "integrations": "Integrações LPR",
     "telephony": "Telefonia",
     "call_center": "Central de Atendimento",
     "map": "Mapa",
@@ -45,8 +45,8 @@
     "network_equipment": "Equipamentos de Rede",
     "climate_equipment": "Equipamentos Climáticos",
     "notification_center": "Central de Notificações",
-    "plate_sending": "Envio de placas",
-    "email_integrations": "Integrações de email",
+    "plate_sending": "Forças de segurança",
+    "email_integrations": "Notificações",
     "extensions": "Ramais"
   },
   "user": {
@@ -3366,15 +3366,15 @@
     }
   },
   "plate_sending": {
-    "title": "Envio de Placas",
-    "description": "Gerencie as integrações que recebem leituras LPR e consulte o estado operacional das câmeras vinculadas.",
-    "fetch_error": "Erro ao carregar integrações de envio de placas.",
+    "title": "Forças de Segurança",
+    "description": "Gerencie as integrações LPR que recebem leituras de placas e acompanhe o estado operacional das câmeras vinculadas.",
+    "fetch_error": "Erro ao carregar integrações LPR das forças de segurança.",
     "loading": "Carregando integrações...",
     "search_placeholder": "Buscar por nome, código ou descrição...",
     "empty": "Nenhuma integração de envio de placas encontrada.",
     "description_fallback": "Sem descrição operacional cadastrada para esta integração.",
     "tabs": {
-      "overview": "Envio de placas",
+      "overview": "Forças de segurança",
       "studio": "Studio configurável",
       "lpr_management": "Gerenciar placas (LPR)"
     },
@@ -3948,9 +3948,9 @@
     }
   },
   "email_integrations": {
-    "title": "Integrações de email",
-    "description": "Configure contas SMTP, destinatários e regras para enviar alertas quando placas específicas forem lidas em câmeras LPR.",
-    "fetch_error": "Erro ao carregar a configuração de integrações de email.",
+    "title": "Notificações",
+    "description": "Configure contas SMTP, destinatários e regras para enviar notificações por email quando placas específicas forem lidas em câmeras LPR.",
+    "fetch_error": "Erro ao carregar a configuração de notificações por email.",
     "tabs": {
       "rules": "Regras de alerta",
       "smtp_accounts": "Contas SMTP",

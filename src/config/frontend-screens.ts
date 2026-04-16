@@ -51,9 +51,14 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     group: "Administração Manual",
   },
   "admin.integracoes": {
-    title: "Envio de Placas",
-    description: "Hub das integrações responsáveis pelo envio de leituras de placas.",
-    group: "Integrações",
+    title: "Forças de Segurança",
+    description: "Hub das integrações LPR responsáveis pelo envio de leituras de placas para forças de segurança.",
+    group: "Integrações LPR",
+  },
+  "admin.email_integrations": {
+    title: "Notificações",
+    description: "Configuração de contas SMTP, destinatários e regras de notificação por email.",
+    group: "Integrações LPR",
   },
 
   "admin.call_center": {
