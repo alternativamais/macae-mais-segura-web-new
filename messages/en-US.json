@@ -4335,8 +4335,8 @@
       }
     },
     "whatsapp_recipients": {
-      "search_placeholder": "Search by name, phone, chat, or company...",
-      "empty": "No WhatsApp recipient found.",
+      "search_placeholder": "Search by name, phone, account, or company...",
+      "empty": "No configured WhatsApp recipient found.",
       "table": {
         "name": "Name",
         "company": "Company",
@@ -4350,13 +4350,9 @@
         "no_chat_id": "No imported chat"
       },
       "types": {
-        "manual_phone": "Manual phone",
+        "manual_phone": "Manual contact",
         "contact": "Contact",
         "group": "Group"
-      },
-      "source": {
-        "manual": "Manual",
-        "imported": "Imported"
       },
       "status": {
         "enabled": "Enabled",
@@ -4365,6 +4361,7 @@
       "actions": {
         "create": "New WhatsApp recipient",
         "view": "View details",
+        "test": "Send test",
         "edit": "Edit",
         "delete": "Delete",
         "open_actions": "Open actions"
@@ -4385,16 +4382,50 @@
       "form": {
         "title_create": "New WhatsApp recipient",
         "title_edit": "Edit WhatsApp recipient",
-        "description_create": "Register a manual phone number to receive WhatsApp notifications.",
-        "description_edit": "Update the operational data for this recipient.",
+        "description_create": "Configure a manual recipient or link an already synced contact/group from the WhatsApp account.",
+        "description_edit": "Update the operational data for this configured recipient.",
+        "sections": {
+          "source": {
+            "title": "Recipient source",
+            "description": "Choose whether delivery goes to a manual contact or to a synced WhatsApp contact/group."
+          },
+          "details": {
+            "title": "Recipient details",
+            "description": "Define the display name, status, and operational notes."
+          }
+        },
         "fields": {
+          "mode": {
+            "label": "How to configure",
+            "manual_phone": "New manual contact",
+            "imported": "Contact or group from WhatsApp account",
+            "help": "For groups and existing WhatsApp contacts, use the connected account and select the synced target."
+          },
+          "account": {
+            "label": "WhatsApp account",
+            "placeholder": "Select a connected account",
+            "help": "The list below uses the synced groups and contacts from this account."
+          },
+          "catalog": {
+            "label": "Synced contact or group",
+            "placeholder": "Select a synced target",
+            "loading": "Loading synced options...",
+            "help": "If the target is not listed, sync contacts and groups in the WhatsApp accounts tab.",
+            "account_required": "Select a WhatsApp account first.",
+            "empty": "No synced contact or group is available for this account.",
+            "current_label": "Linked target",
+            "no_phone": "Phone not informed",
+            "no_chat": "Chat ID not informed"
+          },
           "name": {
             "label": "Name",
             "placeholder": "Ex.: On-duty supervisor"
           },
           "phone": {
             "label": "Phone",
-            "placeholder": "5511999999999"
+            "placeholder": "5511999999999",
+            "help": "Enter the phone with country code and area code for manually created contacts.",
+            "linked_help": "This phone is inherited from the synced contact or group on the WhatsApp account."
           },
           "enabled": {
             "label": "Status",
@@ -4413,13 +4444,16 @@
         },
         "validations": {
           "name": "Enter a recipient name.",
-          "phone": "Enter a valid phone."
+          "phone": "Enter a valid phone.",
+          "account": "Select a WhatsApp account.",
+          "catalog": "Select a synced contact or group."
         },
         "notifications": {
           "create_success": "WhatsApp recipient created successfully.",
           "edit_success": "WhatsApp recipient updated successfully.",
           "create_error": "Error creating the WhatsApp recipient.",
-          "edit_error": "Error updating the WhatsApp recipient."
+          "edit_error": "Error updating the WhatsApp recipient.",
+          "catalog_error": "Error loading synced contacts and groups."
         }
       },
       "details": {
@@ -4427,7 +4461,7 @@
         "description": "Review the data for recipient {name}.",
         "not_informed": "Not informed",
         "types": {
-          "manual_phone": "Manual phone",
+          "manual_phone": "Manual contact",
           "contact": "Contact",
           "group": "Group"
         },
@@ -4438,10 +4472,33 @@
           "type": "Type",
           "phone": "Phone",
           "chat_id": "Chat ID",
-          "source": "Source",
           "enabled": "Status",
           "description": "Description",
           "updated_at": "Updated at"
+        }
+      },
+      "test_dialog": {
+        "title": "Test WhatsApp recipient",
+        "description": "Send a test message to recipient {name}.",
+        "default_name": "selected",
+        "no_phone": "Phone not informed",
+        "no_account": "No account available",
+        "fields": {
+          "account": {
+            "label": "Sending account",
+            "placeholder": "Select a WhatsApp account"
+          }
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "submit": "Send test"
+        },
+        "validations": {
+          "account": "Select a WhatsApp account."
+        },
+        "notifications": {
+          "success": "Test message sent successfully.",
+          "error": "Error sending the test message."
         }
       }
     },

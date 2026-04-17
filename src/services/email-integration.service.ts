@@ -10,6 +10,7 @@ import {
   WhatsappAccountMutationPayload,
   WhatsappRecipient,
   WhatsappRecipientMutationPayload,
+  WhatsappRecipientTestPayload,
 } from "@/types/email-integration"
 
 export const emailIntegrationService = {
@@ -112,6 +113,13 @@ export const emailIntegrationService = {
     return Array.isArray(data) ? data : []
   },
 
+  listWhatsappRecipientCatalog: async (accountId?: number) => {
+    const { data } = await api.get<WhatsappRecipient[]>("/email-integrations/whatsapp-recipients/catalog", {
+      params: accountId ? { accountId } : undefined,
+    })
+    return Array.isArray(data) ? data : []
+  },
+
   createWhatsappRecipient: async (payload: WhatsappRecipientMutationPayload) => {
     const { data } = await api.post<WhatsappRecipient>("/email-integrations/whatsapp-recipients", payload)
     return data
@@ -128,6 +136,16 @@ export const emailIntegrationService = {
   deleteWhatsappRecipient: async (id: number) => {
     const { data } = await api.delete(`/email-integrations/whatsapp-recipients/${id}`)
     return data
+  },
+
+  testWhatsappRecipient: async (id: number, payload: WhatsappRecipientTestPayload) => {
+    const { data } = await api.post(`/email-integrations/whatsapp-recipients/${id}/test`, payload)
+    return data as {
+      success: boolean
+      account: { id: number; name: string }
+      recipient: { id: number; name: string }
+      recipients: string[]
+    }
   },
 
   listRules: async () => {

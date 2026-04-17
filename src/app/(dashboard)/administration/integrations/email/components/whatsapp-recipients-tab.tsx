@@ -1,9 +1,8 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { EllipsisVertical, Eye, Pencil, Plus, Search, Trash2 } from "lucide-react"
+import { EllipsisVertical, Eye, Pencil, Plus, Search, Send, Trash2 } from "lucide-react"
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
-import { DataTag } from "@/components/shared/data-tag"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -24,6 +23,7 @@ import { emailIntegrationService } from "@/services/email-integration.service"
 import { WhatsappAccount, WhatsappRecipient } from "@/types/email-integration"
 import { WhatsappRecipientDetailsDialog } from "./whatsapp-recipient-details-dialog"
 import { WhatsappRecipientFormDialog } from "./whatsapp-recipient-form-dialog"
+import { WhatsappRecipientTestDialog } from "./whatsapp-recipient-test-dialog"
 import {
   formatEmailIntegrationDateTime,
   getCompanyName,
@@ -71,6 +71,8 @@ export function WhatsappRecipientsTab({
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<WhatsappRecipient | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [testingItem, setTestingItem] = useState<WhatsappRecipient | null>(null)
+  const [isTestDialogOpen, setIsTestDialogOpen] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<WhatsappRecipient | null>(null)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -90,6 +92,12 @@ export function WhatsappRecipientsTab({
     const timeout = window.setTimeout(() => setEditingItem(null), MODAL_EXIT_DURATION_MS)
     return () => window.clearTimeout(timeout)
   }, [isFormOpen])
+
+  useEffect(() => {
+    if (isTestDialogOpen) return
+    const timeout = window.setTimeout(() => setTestingItem(null), MODAL_EXIT_DURATION_MS)
+    return () => window.clearTimeout(timeout)
+  }, [isTestDialogOpen])
 
   useEffect(() => {
     if (isDeleteDialogOpen) return
@@ -184,7 +192,9 @@ export function WhatsappRecipientsTab({
                   <TableCell>
                     <div className="space-y-1">
                       <div className="font-medium">{item.name}</div>
-                      <div className="text-xs text-muted-foreground">{accountNameById.get(item.accountId || 0) || t("table.manual_account")}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {accountNameById.get(item.accountId || 0) || t("table.manual_account")}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>{getCompanyName(companyNameById, item.empresaId)}</TableCell>
@@ -195,14 +205,7 @@ export function WhatsappRecipientsTab({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap gap-2">
-                      <DataTag tone={item.type === "group" ? "accent" : item.type === "contact" ? "info" : "neutral"}>
-                        {getWhatsappRecipientTypeLabel(item.type, typeLabels)}
-                      </DataTag>
-                      <DataTag tone={item.source === "imported" ? "success" : "warning"}>
-                        {item.source === "imported" ? t("source.imported") : t("source.manual")}
-                      </DataTag>
-                    </div>
+                    {getWhatsappRecipientTypeLabel(item.type, typeLabels)}
                   </TableCell>
                   <TableCell>
                     {getEnabledTag(item.enabled, {
@@ -225,6 +228,10 @@ export function WhatsappRecipientsTab({
                         <DropdownMenuItem onClick={() => { setDetailsItem(item); setIsDetailsOpen(true) }}>
                           <Eye className="mr-2 h-4 w-4" />
                           {t("actions.view")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => { setTestingItem(item); setIsTestDialogOpen(true) }}>
+                          <Send className="mr-2 h-4 w-4" />
+                          {t("actions.test")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => { setEditingItem(item); setIsFormOpen(true) }}>
@@ -257,7 +264,19 @@ export function WhatsappRecipientsTab({
       />
 
       <WhatsappRecipientDetailsDialog recipient={detailsItem} open={isDetailsOpen} onOpenChange={setIsDetailsOpen} />
-      <WhatsappRecipientFormDialog recipient={editingItem} open={isFormOpen} onOpenChange={setIsFormOpen} onSuccess={onReload} />
+      <WhatsappRecipientFormDialog
+        recipient={editingItem}
+        accounts={accounts}
+        open={isFormOpen}
+        onOpenChange={setIsFormOpen}
+        onSuccess={onReload}
+      />
+      <WhatsappRecipientTestDialog
+        recipient={testingItem}
+        accounts={accounts}
+        open={isTestDialogOpen}
+        onOpenChange={setIsTestDialogOpen}
+      />
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}

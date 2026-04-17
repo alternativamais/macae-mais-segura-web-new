@@ -54,7 +54,6 @@ export function WhatsappRecipientDetailsDialog({
     },
     { label: t("labels.phone"), value: recipient.phoneNumber || notInformed },
     { label: t("labels.chat_id"), value: recipient.chatId || notInformed },
-    { label: t("labels.source"), value: recipient.source || notInformed },
     {
       label: t("labels.enabled"),
       value: getEnabledTag(recipient.enabled, {

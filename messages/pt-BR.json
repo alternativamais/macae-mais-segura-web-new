@@ -4333,8 +4333,8 @@
       }
     },
     "whatsapp_recipients": {
-      "search_placeholder": "Buscar por nome, telefone, chat ou empresa...",
-      "empty": "Nenhum destinatário WhatsApp encontrado.",
+      "search_placeholder": "Buscar por nome, telefone, conta ou empresa...",
+      "empty": "Nenhum destinatário WhatsApp configurado.",
       "table": {
         "name": "Nome",
         "company": "Empresa",
@@ -4348,13 +4348,9 @@
         "no_chat_id": "Sem chat importado"
       },
       "types": {
-        "manual_phone": "Telefone manual",
+        "manual_phone": "Contato manual",
         "contact": "Contato",
         "group": "Grupo"
-      },
-      "source": {
-        "manual": "Manual",
-        "imported": "Importado"
       },
       "status": {
         "enabled": "Ativo",
@@ -4363,6 +4359,7 @@
       "actions": {
         "create": "Novo destinatário WhatsApp",
         "view": "Ver detalhes",
+        "test": "Testar envio",
         "edit": "Editar",
         "delete": "Excluir",
         "open_actions": "Abrir ações"
@@ -4383,16 +4380,50 @@
       "form": {
         "title_create": "Novo destinatário WhatsApp",
         "title_edit": "Editar destinatário WhatsApp",
-        "description_create": "Cadastre um telefone manual para receber notificações via WhatsApp.",
-        "description_edit": "Atualize os dados operacionais deste destinatário.",
+        "description_create": "Configure um destinatário manual ou vincule um contato/grupo já sincronizado da conta WhatsApp.",
+        "description_edit": "Atualize os dados operacionais deste destinatário configurado.",
+        "sections": {
+          "source": {
+            "title": "Origem do destinatário",
+            "description": "Escolha se o envio vai para um contato manual ou para um contato/grupo sincronizado do WhatsApp."
+          },
+          "details": {
+            "title": "Dados do destinatário",
+            "description": "Defina o nome exibido, status e observações operacionais."
+          }
+        },
         "fields": {
+          "mode": {
+            "label": "Como configurar",
+            "manual_phone": "Novo contato manual",
+            "imported": "Contato ou grupo da conta WhatsApp",
+            "help": "Para grupos e contatos já existentes no WhatsApp, use a conta conectada e selecione o destino sincronizado."
+          },
+          "account": {
+            "label": "Conta WhatsApp",
+            "placeholder": "Selecione uma conta conectada",
+            "help": "A lista abaixo usa os grupos e contatos sincronizados desta conta."
+          },
+          "catalog": {
+            "label": "Contato ou grupo sincronizado",
+            "placeholder": "Selecione um destino sincronizado",
+            "loading": "Carregando opções sincronizadas...",
+            "help": "Se o destino não aparecer, sincronize contatos e grupos na aba de contas WhatsApp.",
+            "account_required": "Selecione primeiro uma conta WhatsApp.",
+            "empty": "Nenhum contato ou grupo sincronizado disponível para esta conta.",
+            "current_label": "Destino vinculado",
+            "no_phone": "Telefone não informado",
+            "no_chat": "Chat ID não informado"
+          },
           "name": {
             "label": "Nome",
             "placeholder": "Ex.: Supervisor de plantão"
           },
           "phone": {
             "label": "Telefone",
-            "placeholder": "5511999999999"
+            "placeholder": "5511999999999",
+            "help": "Informe o telefone com DDI e DDD para contatos criados manualmente.",
+            "linked_help": "Esse telefone é herdado do contato ou grupo sincronizado da conta WhatsApp."
           },
           "enabled": {
             "label": "Status",
@@ -4411,13 +4442,16 @@
         },
         "validations": {
           "name": "Informe um nome para o destinatário.",
-          "phone": "Informe um telefone válido."
+          "phone": "Informe um telefone válido.",
+          "account": "Selecione uma conta WhatsApp.",
+          "catalog": "Selecione um contato ou grupo sincronizado."
         },
         "notifications": {
           "create_success": "Destinatário WhatsApp criado com sucesso.",
           "edit_success": "Destinatário WhatsApp atualizado com sucesso.",
           "create_error": "Erro ao criar o destinatário WhatsApp.",
-          "edit_error": "Erro ao atualizar o destinatário WhatsApp."
+          "edit_error": "Erro ao atualizar o destinatário WhatsApp.",
+          "catalog_error": "Erro ao carregar os contatos e grupos sincronizados."
         }
       },
       "details": {
@@ -4425,7 +4459,7 @@
         "description": "Confira as informações do destinatário {name}.",
         "not_informed": "Não informado",
         "types": {
-          "manual_phone": "Telefone manual",
+          "manual_phone": "Contato manual",
           "contact": "Contato",
           "group": "Grupo"
         },
@@ -4436,10 +4470,33 @@
           "type": "Tipo",
           "phone": "Telefone",
           "chat_id": "Chat ID",
-          "source": "Origem",
           "enabled": "Status",
           "description": "Descrição",
           "updated_at": "Atualizado em"
+        }
+      },
+      "test_dialog": {
+        "title": "Testar destinatário WhatsApp",
+        "description": "Envie uma mensagem de teste para o destinatário {name}.",
+        "default_name": "selecionado",
+        "no_phone": "Telefone não informado",
+        "no_account": "Nenhuma conta disponível",
+        "fields": {
+          "account": {
+            "label": "Conta de envio",
+            "placeholder": "Selecione uma conta WhatsApp"
+          }
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "submit": "Enviar teste"
+        },
+        "validations": {
+          "account": "Selecione uma conta WhatsApp."
+        },
+        "notifications": {
+          "success": "Mensagem de teste enviada com sucesso.",
+          "error": "Erro ao enviar a mensagem de teste."
         }
       }
     },

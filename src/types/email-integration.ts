@@ -96,9 +96,15 @@ export interface WhatsappRecipient {
 export interface WhatsappRecipientMutationPayload {
   empresaId?: number
   name: string
+  type?: "manual_phone" | "imported"
+  sourceRecipientId?: number
   phoneNumber?: string
   description?: string
   enabled?: boolean
+}
+
+export interface WhatsappRecipientTestPayload {
+  accountId?: number
 }
 
 export interface EmailRuleSummaryCamera {
