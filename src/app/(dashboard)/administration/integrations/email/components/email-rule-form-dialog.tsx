@@ -46,7 +46,13 @@ import { useTranslator } from "@/lib/i18n"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { emailIntegrationService } from "@/services/email-integration.service"
 import { Camera } from "@/types/camera"
-import { EmailPlateAlertRule, EmailRecipient, EmailSmtpAccount } from "@/types/email-integration"
+import {
+  EmailPlateAlertRule,
+  EmailRecipient,
+  EmailSmtpAccount,
+  WhatsappAccount,
+  WhatsappRecipient,
+} from "@/types/email-integration"
 import { EmailTemplateEditorDialog, EmailTemplateTokenDefinition } from "./email-template-editor-dialog"
 
 interface EmailRuleFormDialogProps {
@@ -55,6 +61,8 @@ interface EmailRuleFormDialogProps {
   rule: EmailPlateAlertRule | null
   smtpAccounts: EmailSmtpAccount[]
   recipients: EmailRecipient[]
+  whatsappAccounts: WhatsappAccount[]
+  whatsappRecipients: WhatsappRecipient[]
   cameras: Camera[]
   onSuccess: () => Promise<void> | void
 }
@@ -65,6 +73,8 @@ export function EmailRuleFormDialog({
   rule,
   smtpAccounts,
   recipients,
+  whatsappAccounts,
+  whatsappRecipients,
   cameras,
   onSuccess,
 }: EmailRuleFormDialogProps) {
@@ -81,13 +91,17 @@ export function EmailRuleFormDialog({
         name: z.string().trim().min(2, t("validations.name")),
         description: z.string().optional(),
         cameraId: z.string().min(1, t("validations.camera")),
-        smtpAccountId: z.string().min(1, t("validations.smtp_account")),
-        recipientIds: z.array(z.string()).min(1, t("validations.recipients")),
+        smtpAccountId: z.string().optional(),
+        recipientIds: z.array(z.string()),
+        whatsappAccountId: z.string().optional(),
+        whatsappRecipientIds: z.array(z.string()),
         platesText: z.string().trim().min(1, t("validations.plates")),
         subjectTemplate: z.string().trim().min(1, t("validations.subject")),
         bodyTemplate: z.string().trim().min(1, t("validations.body")),
         cooldownSeconds: z.coerce.number().min(0),
-        enabled: z.enum(["true", "false"]),
+        enabled: z.boolean(),
+        emailEnabled: z.boolean(),
+        whatsappEnabled: z.boolean(),
       }).superRefine((values, ctx) => {
         if (showCompanySelector && !values.empresaId) {
           ctx.addIssue({
@@ -95,6 +109,45 @@ export function EmailRuleFormDialog({
             path: ["empresaId"],
             message: tCompany("required"),
           })
+        }
+        if (!values.emailEnabled && !values.whatsappEnabled) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["emailEnabled"],
+            message: t("validations.channels"),
+          })
+        }
+        if (values.emailEnabled) {
+          if (!values.smtpAccountId) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["smtpAccountId"],
+              message: t("validations.smtp_account"),
+            })
+          }
+          if (!values.recipientIds.length) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["recipientIds"],
+              message: t("validations.recipients"),
+            })
+          }
+        }
+        if (values.whatsappEnabled) {
+          if (!values.whatsappAccountId) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["whatsappAccountId"],
+              message: t("validations.whatsapp_account"),
+            })
+          }
+          if (!values.whatsappRecipientIds.length) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              path: ["whatsappRecipientIds"],
+              message: t("validations.whatsapp_recipients"),
+            })
+          }
         }
       }),
     [showCompanySelector, t, tCompany],
@@ -111,12 +164,16 @@ export function EmailRuleFormDialog({
       cameraId: "",
       smtpAccountId: "",
       recipientIds: [],
+      whatsappAccountId: "",
+      whatsappRecipientIds: [],
       platesText: "",
       subjectTemplate: "Alerta LPR: {{detection.plateText}} em {{camera.nome}}",
       bodyTemplate:
         "Placa: {{detection.plateText}}\nCâmera: {{camera.nome}}\nEmpresa: {{empresa.nome}}\nData/Hora: {{detection.detectedAt}}",
       cooldownSeconds: 300,
-      enabled: "true",
+      enabled: true,
+      emailEnabled: true,
+      whatsappEnabled: false,
     },
   })
 
@@ -136,6 +193,8 @@ export function EmailRuleFormDialog({
       cameraId: rule?.cameraId ? String(rule.cameraId) : "",
       smtpAccountId: rule?.smtpAccountId ? String(rule.smtpAccountId) : "",
       recipientIds: rule?.recipients.map((item) => String(item.id)) || [],
+      whatsappAccountId: rule?.whatsappAccountId ? String(rule.whatsappAccountId) : "",
+      whatsappRecipientIds: rule?.whatsappRecipients.map((item) => String(item.id)) || [],
       platesText: rule?.plates.map((item) => item.plateText).join("\n") || "",
       subjectTemplate:
         rule?.subjectTemplate || "Alerta LPR: {{detection.plateText}} em {{camera.nome}}",
@@ -143,7 +202,9 @@ export function EmailRuleFormDialog({
         rule?.bodyTemplate ||
         "Placa: {{detection.plateText}}\nCâmera: {{camera.nome}}\nEmpresa: {{empresa.nome}}\nData/Hora: {{detection.detectedAt}}",
       cooldownSeconds: rule?.cooldownSeconds || 300,
-      enabled: rule?.enabled === false ? "false" : "true",
+      enabled: rule?.enabled !== false,
+      emailEnabled: rule?.emailEnabled !== false,
+      whatsappEnabled: rule?.whatsappEnabled === true,
     })
   }, [defaultCompanyId, form, open, rule])
 
@@ -165,6 +226,22 @@ export function EmailRuleFormDialog({
   const filteredRecipients = useMemo(
     () => recipients.filter((recipient) => (filteredCompanyId ? recipient.empresaId === filteredCompanyId : true)),
     [filteredCompanyId, recipients],
+  )
+
+  const filteredWhatsappAccounts = useMemo(
+    () => whatsappAccounts.filter((account) => (filteredCompanyId ? account.empresaId === filteredCompanyId : true)),
+    [filteredCompanyId, whatsappAccounts],
+  )
+
+  const selectedWhatsappAccountId = form.watch("whatsappAccountId")
+  const filteredWhatsappRecipients = useMemo(
+    () =>
+      whatsappRecipients.filter((recipient) => {
+        if (filteredCompanyId && recipient.empresaId !== filteredCompanyId) return false
+        if (!selectedWhatsappAccountId) return !recipient.accountId
+        return !recipient.accountId || recipient.accountId === Number(selectedWhatsappAccountId)
+      }),
+    [filteredCompanyId, selectedWhatsappAccountId, whatsappRecipients],
   )
 
   const templateTokens = useMemo<EmailTemplateTokenDefinition[]>(
@@ -206,6 +283,12 @@ export function EmailRuleFormDialog({
         tone: "danger",
       },
       {
+        label: t("editor.tokens.whatsapp_name.label"),
+        description: t("editor.tokens.whatsapp_name.description"),
+        token: "{{whatsappAccount.name}}",
+        tone: "success",
+      },
+      {
         label: t("editor.tokens.rule_name.label"),
         description: t("editor.tokens.rule_name.description"),
         token: "{{rule.name}}",
@@ -222,8 +305,11 @@ export function EmailRuleFormDialog({
         name: values.name.trim(),
         description: values.description?.trim() || undefined,
         cameraId: Number(values.cameraId),
-        smtpAccountId: Number(values.smtpAccountId),
-        recipientIds: values.recipientIds.map(Number),
+        smtpAccountId: values.emailEnabled && values.smtpAccountId ? Number(values.smtpAccountId) : null,
+        recipientIds: values.emailEnabled ? values.recipientIds.map(Number) : [],
+        whatsappAccountId:
+          values.whatsappEnabled && values.whatsappAccountId ? Number(values.whatsappAccountId) : null,
+        whatsappRecipientIds: values.whatsappEnabled ? values.whatsappRecipientIds.map(Number) : [],
         plates: values.platesText
           .split(/[\n,;]/)
           .map((item: string) => item.trim())
@@ -231,7 +317,9 @@ export function EmailRuleFormDialog({
         subjectTemplate: values.subjectTemplate.trim(),
         bodyTemplate: values.bodyTemplate.trim(),
         cooldownSeconds: values.cooldownSeconds,
-        enabled: values.enabled === "true",
+        emailEnabled: values.emailEnabled,
+        whatsappEnabled: values.whatsappEnabled,
+        enabled: values.enabled,
       }
 
       if (rule) {
@@ -325,7 +413,60 @@ export function EmailRuleFormDialog({
                       )}
                     />
 
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <FormField
+                        control={form.control}
+                        name="emailEnabled"
+                        render={({ field }) => (
+                          <FormItem className="rounded-md border bg-muted/20 p-4">
+                            <div className="flex items-center gap-3">
+                              <Checkbox checked={field.value} onCheckedChange={(value) => field.onChange(Boolean(value))} />
+                              <div className="space-y-1">
+                                <FormLabel>{t("labels.enable_email")}</FormLabel>
+                                <FormDescription>{t("labels.enable_email_help")}</FormDescription>
+                              </div>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="whatsappEnabled"
+                        render={({ field }) => (
+                          <FormItem className="rounded-md border bg-muted/20 p-4">
+                            <div className="flex items-center gap-3">
+                              <Checkbox checked={field.value} onCheckedChange={(value) => field.onChange(Boolean(value))} />
+                              <div className="space-y-1">
+                                <FormLabel>{t("labels.enable_whatsapp")}</FormLabel>
+                                <FormDescription>{t("labels.enable_whatsapp_help")}</FormDescription>
+                              </div>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="enabled"
+                        render={({ field }) => (
+                          <FormItem className="rounded-md border bg-muted/20 p-4">
+                            <div className="flex items-center gap-3">
+                              <Checkbox checked={field.value} onCheckedChange={(value) => field.onChange(Boolean(value))} />
+                              <div className="space-y-1">
+                                <FormLabel>{t("labels.status")}</FormLabel>
+                                <FormDescription>{t("labels.status_help")}</FormDescription>
+                              </div>
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-1">
                       <FormField
                         control={form.control}
                         name="cameraId"
@@ -342,31 +483,6 @@ export function EmailRuleFormDialog({
                                 {filteredCameras.map((camera) => (
                                   <SelectItem key={camera.id} value={String(camera.id)}>
                                     {camera.nome || `#${camera.id}`} {camera.ip ? `• ${camera.ip}` : ""}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="smtpAccountId"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{t("labels.smtp_account")}</FormLabel>
-                            <Select value={field.value} onValueChange={field.onChange}>
-                              <FormControl>
-                                <SelectTrigger className="w-full cursor-pointer">
-                                  <SelectValue placeholder={t("placeholders.smtp_account")} />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {filteredSmtpAccounts.map((account) => (
-                                  <SelectItem key={account.id} value={String(account.id)}>
-                                    {account.name} • {account.fromEmail}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
@@ -410,75 +526,162 @@ export function EmailRuleFormDialog({
                 </AccordionTrigger>
                 <AccordionContent className="pb-0">
                   <div className="space-y-4 pb-4">
-                    <FormField
-                      control={form.control}
-                      name="recipientIds"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("labels.recipients")}</FormLabel>
-                          <div className="rounded-md border bg-card">
-                            <ScrollArea className="h-56">
-                              <div className="space-y-3 p-4">
-                                {filteredRecipients.length === 0 ? (
-                                  <p className="text-sm text-muted-foreground">{t("empty_recipients")}</p>
-                                ) : (
-                                  filteredRecipients.map((recipient) => {
-                                    const checked = field.value.includes(String(recipient.id))
-                                    return (
-                                      <label
-                                        key={recipient.id}
-                                        className="flex items-start gap-3 rounded-md border bg-muted/20 p-3"
-                                      >
-                                        <Checkbox
-                                          checked={checked}
-                                          onCheckedChange={(next) => {
-                                            if (next) {
-                                              field.onChange([...field.value, String(recipient.id)])
-                                              return
-                                            }
+                    {form.watch("emailEnabled") ? (
+                      <>
+                        <FormField
+                          control={form.control}
+                          name="smtpAccountId"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("labels.smtp_account")}</FormLabel>
+                              <Select value={field.value} onValueChange={field.onChange}>
+                                <FormControl>
+                                  <SelectTrigger className="w-full cursor-pointer">
+                                    <SelectValue placeholder={t("placeholders.smtp_account")} />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {filteredSmtpAccounts.map((account) => (
+                                    <SelectItem key={account.id} value={String(account.id)}>
+                                      {account.name} • {account.fromEmail}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                                            field.onChange(
-                                              field.value.filter((id: string) => id !== String(recipient.id)),
-                                            )
-                                          }}
-                                        />
-                                        <div className="min-w-0">
-                                          <p className="font-medium">{recipient.name}</p>
-                                          <p className="text-sm text-muted-foreground">{recipient.email}</p>
-                                        </div>
-                                      </label>
-                                    )
-                                  })
-                                )}
+                        <FormField
+                          control={form.control}
+                          name="recipientIds"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("labels.recipients")}</FormLabel>
+                              <div className="rounded-md border bg-card">
+                                <ScrollArea className="h-56">
+                                  <div className="space-y-3 p-4">
+                                    {filteredRecipients.length === 0 ? (
+                                      <p className="text-sm text-muted-foreground">{t("empty_recipients")}</p>
+                                    ) : (
+                                      filteredRecipients.map((recipient) => {
+                                        const checked = field.value.includes(String(recipient.id))
+                                        return (
+                                          <label
+                                            key={recipient.id}
+                                            className="flex items-start gap-3 rounded-md border bg-muted/20 p-3"
+                                          >
+                                            <Checkbox
+                                              checked={checked}
+                                              onCheckedChange={(next) => {
+                                                if (next) {
+                                                  field.onChange([...field.value, String(recipient.id)])
+                                                  return
+                                                }
+                                                field.onChange(
+                                                  field.value.filter((id: string) => id !== String(recipient.id)),
+                                                )
+                                              }}
+                                            />
+                                            <div className="min-w-0">
+                                              <p className="font-medium">{recipient.name}</p>
+                                              <p className="text-sm text-muted-foreground">{recipient.email}</p>
+                                            </div>
+                                          </label>
+                                        )
+                                      })
+                                    )}
+                                  </div>
+                                </ScrollArea>
                               </div>
-                            </ScrollArea>
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </>
+                    ) : null}
 
-                    <FormField
-                      control={form.control}
-                      name="enabled"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{t("labels.status")}</FormLabel>
-                          <Select value={field.value} onValueChange={field.onChange}>
-                            <FormControl>
-                              <SelectTrigger className="w-full cursor-pointer">
-                                <SelectValue />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="true">{t("options.enabled")}</SelectItem>
-                              <SelectItem value="false">{t("options.disabled")}</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {form.watch("whatsappEnabled") ? (
+                      <>
+                        <FormField
+                          control={form.control}
+                          name="whatsappAccountId"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("labels.whatsapp_account")}</FormLabel>
+                              <Select value={field.value} onValueChange={(value) => {
+                                field.onChange(value)
+                                form.setValue("whatsappRecipientIds", [], { shouldDirty: true })
+                              }}>
+                                <FormControl>
+                                  <SelectTrigger className="w-full cursor-pointer">
+                                    <SelectValue placeholder={t("placeholders.whatsapp_account")} />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  {filteredWhatsappAccounts.map((account) => (
+                                    <SelectItem key={account.id} value={String(account.id)}>
+                                      {account.name} {account.phoneNumber ? `• ${account.phoneNumber}` : ""}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="whatsappRecipientIds"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{t("labels.whatsapp_recipients")}</FormLabel>
+                              <div className="rounded-md border bg-card">
+                                <ScrollArea className="h-56">
+                                  <div className="space-y-3 p-4">
+                                    {filteredWhatsappRecipients.length === 0 ? (
+                                      <p className="text-sm text-muted-foreground">{t("empty_whatsapp_recipients")}</p>
+                                    ) : (
+                                      filteredWhatsappRecipients.map((recipient) => {
+                                        const checked = field.value.includes(String(recipient.id))
+                                        return (
+                                          <label
+                                            key={recipient.id}
+                                            className="flex items-start gap-3 rounded-md border bg-muted/20 p-3"
+                                          >
+                                            <Checkbox
+                                              checked={checked}
+                                              onCheckedChange={(next) => {
+                                                if (next) {
+                                                  field.onChange([...field.value, String(recipient.id)])
+                                                  return
+                                                }
+                                                field.onChange(
+                                                  field.value.filter((id: string) => id !== String(recipient.id)),
+                                                )
+                                              }}
+                                            />
+                                            <div className="min-w-0">
+                                              <p className="font-medium">{recipient.name}</p>
+                                              <p className="text-sm text-muted-foreground">
+                                                {recipient.phoneNumber || recipient.chatId || t("labels.not_informed")}
+                                              </p>
+                                            </div>
+                                          </label>
+                                        )
+                                      })
+                                    )}
+                                  </div>
+                                </ScrollArea>
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </>
+                    ) : null}
                   </div>
                 </AccordionContent>
               </AccordionItem>

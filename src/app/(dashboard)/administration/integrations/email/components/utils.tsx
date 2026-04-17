@@ -43,6 +43,32 @@ export function getSecurityLabel(
   return secure ? labels.secure : labels.starttls
 }
 
+export function getWhatsappRecipientTypeLabel(
+  type: string | null | undefined,
+  labels: { manual: string; contact: string; group: string },
+) {
+  if (type === "group") return labels.group
+  if (type === "contact") return labels.contact
+  return labels.manual
+}
+
+export function getWhatsappSessionTag(
+  sessionStatus: string | null | undefined,
+  labels: Record<string, string>,
+) {
+  const status = sessionStatus || "disconnected"
+  const tone =
+    status === "ready"
+      ? "success"
+      : status === "qr_required" || status === "authenticated"
+        ? "accent"
+        : status === "auth_failure"
+          ? "danger"
+          : "neutral"
+
+  return <DataTag tone={tone as any}>{labels[status] || status}</DataTag>
+}
+
 export function getEnabledTag(
   enabled: boolean,
   labels: { enabled: string; disabled: string },

@@ -56,7 +56,18 @@ export function EmailRuleDetailsDialog({
     },
     { label: t("labels.description"), value: rule.description || notInformed },
     { label: t("labels.camera"), value: rule.camera?.nome || `#${rule.cameraId}` },
-    { label: t("labels.smtp_account"), value: rule.smtpAccount?.name || `#${rule.smtpAccountId}` },
+    {
+      label: t("labels.channels"),
+      value: (
+        <div className="flex flex-wrap justify-end gap-2">
+          {rule.emailEnabled ? <DataTag tone="info">{t("channels.email")}</DataTag> : null}
+          {rule.whatsappEnabled ? <DataTag tone="accent">{t("channels.whatsapp")}</DataTag> : null}
+          {!rule.emailEnabled && !rule.whatsappEnabled ? <span>{notInformed}</span> : null}
+        </div>
+      ),
+    },
+    { label: t("labels.smtp_account"), value: rule.smtpAccount?.name || notInformed },
+    { label: t("labels.whatsapp_account"), value: rule.whatsappAccount?.name || notInformed },
     { label: t("labels.cooldown"), value: t("cooldown_value", { seconds: String(rule.cooldownSeconds) }) },
     {
       label: t("labels.plates"),
@@ -70,6 +81,22 @@ export function EmailRuleDetailsDialog({
             rule.recipients.map((recipient) => (
               <DataTag key={recipient.id} tone="neutral">
                 {recipient.name || recipient.email || `#${recipient.id}`}
+              </DataTag>
+            ))
+          ) : (
+            <span>{notInformed}</span>
+          )}
+        </div>
+      ),
+    },
+    {
+      label: t("labels.whatsapp_recipients"),
+      value: (
+        <div className="flex flex-wrap justify-end gap-2">
+          {rule.whatsappRecipients.length > 0 ? (
+            rule.whatsappRecipients.map((recipient) => (
+              <DataTag key={recipient.id} tone="accent">
+                {recipient.name || recipient.phoneNumber || `#${recipient.id}`}
               </DataTag>
             ))
           ) : (

@@ -3949,18 +3949,24 @@
   },
   "email_integrations": {
     "title": "Notificações",
-    "description": "Configure contas SMTP, destinatários e regras para enviar notificações por email quando placas específicas forem lidas em câmeras LPR.",
-    "fetch_error": "Erro ao carregar a configuração de notificações por email.",
+    "description": "Configure canais de email e WhatsApp para enviar notificações quando placas específicas forem lidas em câmeras LPR.",
+    "fetch_error": "Erro ao carregar a configuração de notificações.",
     "tabs": {
       "rules": "Regras de alerta",
       "smtp_accounts": "Contas SMTP",
-      "recipients": "Destinatários"
+      "recipients": "Destinatários de email",
+      "whatsapp_accounts": "Contas WhatsApp",
+      "whatsapp_recipients": "Destinatários WhatsApp"
     },
     "stats": {
       "smtp_accounts": "Contas SMTP",
       "smtp_accounts_desc": "Servidores e remetentes configurados.",
-      "recipients": "Destinatários",
-      "recipients_desc": "Emails aptos a receber alertas.",
+      "email_recipients": "Destinatários de email",
+      "email_recipients_desc": "Emails aptos a receber alertas.",
+      "whatsapp_accounts": "Contas WhatsApp",
+      "whatsapp_accounts_desc": "Sessões de WhatsApp disponíveis para envio.",
+      "whatsapp_recipients": "Destinatários WhatsApp",
+      "whatsapp_recipients_desc": "Contatos, grupos e números manuais disponíveis.",
       "rules": "Regras ativas",
       "rules_desc": "Combinações de placa, câmera e envio."
     },
@@ -4198,10 +4204,249 @@
         }
       }
     },
+    "whatsapp_accounts": {
+      "search_placeholder": "Buscar por conta, número, sessão ou empresa...",
+      "empty": "Nenhuma conta WhatsApp encontrada.",
+      "table": {
+        "account": "Conta",
+        "company": "Empresa",
+        "connection": "Conexão",
+        "phone": "Telefone",
+        "updated_at": "Atualizada em",
+        "actions": "Ações",
+        "no_display_name": "Sem nome no WhatsApp",
+        "qr_available": "QR disponível",
+        "qr_not_available": "Sem QR pendente",
+        "no_phone": "Ainda não conectado"
+      },
+      "status": {
+        "enabled": "Ativa",
+        "disabled": "Inativa"
+      },
+      "session": {
+        "disconnected": "Desconectada",
+        "initializing": "Inicializando",
+        "qr_required": "Aguardando QR",
+        "authenticated": "Autenticada",
+        "ready": "Conectada",
+        "auth_failure": "Falha de autenticação"
+      },
+      "actions": {
+        "create": "Nova conta WhatsApp",
+        "view": "Ver detalhes",
+        "connect": "Conectar / ver QR",
+        "reset": "Gerar novo QR",
+        "sync_recipients": "Sincronizar contatos e grupos",
+        "disconnect": "Desconectar",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "open_actions": "Abrir ações"
+      },
+      "delete_dialog": {
+        "title": "Excluir conta WhatsApp",
+        "description": "Deseja realmente excluir esta conta WhatsApp?",
+        "confirm": "Excluir"
+      },
+      "notifications": {
+        "action_error": "Erro ao executar a ação na conta WhatsApp.",
+        "create_success": "Conta WhatsApp criada com sucesso.",
+        "edit_success": "Conta WhatsApp atualizada com sucesso.",
+        "delete_success": "Conta WhatsApp excluída com sucesso.",
+        "create_error": "Erro ao criar a conta WhatsApp.",
+        "edit_error": "Erro ao atualizar a conta WhatsApp.",
+        "delete_error": "Erro ao excluir a conta WhatsApp.",
+        "connect_success": "A conexão da conta WhatsApp foi iniciada.",
+        "connect_error": "Erro ao iniciar a conexão da conta WhatsApp.",
+        "reset_success": "Sessão resetada. Escaneie o novo QR code.",
+        "sync_success": "Contatos e grupos sincronizados com sucesso.",
+        "disconnect_success": "Conta WhatsApp desconectada com sucesso."
+      },
+      "session_dialog": {
+        "title": "Conectar conta WhatsApp",
+        "description": "Acompanhe a sessão e escaneie o QR code da conta {name}.",
+        "default_name": "selecionada",
+        "loading_title": "Inicializando sessão",
+        "loading_description": "Estamos preparando a conexão da conta e aguardando o QR code.",
+        "qr_title": "QR code disponível",
+        "qr_description": "Escaneie com o WhatsApp desta conta para concluir a conexão.",
+        "qr_alt": "QR code para conectar conta WhatsApp",
+        "ready_title": "Conta conectada",
+        "ready_description": "A sessão já está pronta para envio. Número detectado: {phone}.",
+        "error_title": "Falha ao preparar a sessão",
+        "error_description": "A conta retornou um erro durante a inicialização do WhatsApp.",
+        "waiting_title": "Aguardando QR code",
+        "waiting_description": "A sessão ainda está sendo preparada. Esse status deve atualizar automaticamente.",
+        "not_informed": "Não informado",
+        "close": "Fechar"
+      },
+      "form": {
+        "title_create": "Nova conta WhatsApp",
+        "title_edit": "Editar conta WhatsApp",
+        "description_create": "Cadastre uma nova sessão de WhatsApp para envio de notificações.",
+        "description_edit": "Atualize o nome interno, status e observações desta conta.",
+        "fields": {
+          "name": {
+            "label": "Nome interno",
+            "placeholder": "Ex.: WhatsApp Operações"
+          },
+          "enabled": {
+            "label": "Status",
+            "enabled": "Ativa",
+            "disabled": "Inativa"
+          },
+          "notes": {
+            "label": "Observações",
+            "placeholder": "Contexto operacional, equipe ou finalidade desta conta"
+          }
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "save": "Salvar alterações",
+          "create": "Criar conta"
+        },
+        "validations": {
+          "name": "Informe um nome para a conta WhatsApp."
+        },
+        "notifications": {
+          "create_success": "Conta WhatsApp criada com sucesso.",
+          "edit_success": "Conta WhatsApp atualizada com sucesso.",
+          "create_error": "Erro ao criar a conta WhatsApp.",
+          "edit_error": "Erro ao atualizar a conta WhatsApp."
+        }
+      },
+      "details": {
+        "title": "Detalhes da conta WhatsApp",
+        "description": "Confira o estado da conta {name}.",
+        "not_informed": "Não informado",
+        "qr_alt": "QR code da conta WhatsApp",
+        "labels": {
+          "name": "Conta",
+          "company": "Empresa",
+          "enabled": "Status",
+          "phone": "Telefone",
+          "display_name": "Nome no WhatsApp",
+          "session": "Sessão",
+          "last_error": "Último erro",
+          "notes": "Observações",
+          "updated_at": "Atualizada em"
+        }
+      }
+    },
+    "whatsapp_recipients": {
+      "search_placeholder": "Buscar por nome, telefone, chat ou empresa...",
+      "empty": "Nenhum destinatário WhatsApp encontrado.",
+      "table": {
+        "name": "Nome",
+        "company": "Empresa",
+        "target": "Destino",
+        "type": "Tipo",
+        "status": "Status",
+        "updated_at": "Atualizado em",
+        "actions": "Ações",
+        "manual_account": "Manual / sem conta vinculada",
+        "no_phone": "Telefone não informado",
+        "no_chat_id": "Sem chat importado"
+      },
+      "types": {
+        "manual_phone": "Telefone manual",
+        "contact": "Contato",
+        "group": "Grupo"
+      },
+      "source": {
+        "manual": "Manual",
+        "imported": "Importado"
+      },
+      "status": {
+        "enabled": "Ativo",
+        "disabled": "Inativo"
+      },
+      "actions": {
+        "create": "Novo destinatário WhatsApp",
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "open_actions": "Abrir ações"
+      },
+      "delete_dialog": {
+        "title": "Excluir destinatário WhatsApp",
+        "description": "Deseja realmente excluir este destinatário WhatsApp?",
+        "confirm": "Excluir"
+      },
+      "notifications": {
+        "create_success": "Destinatário WhatsApp criado com sucesso.",
+        "edit_success": "Destinatário WhatsApp atualizado com sucesso.",
+        "delete_success": "Destinatário WhatsApp excluído com sucesso.",
+        "create_error": "Erro ao criar o destinatário WhatsApp.",
+        "edit_error": "Erro ao atualizar o destinatário WhatsApp.",
+        "delete_error": "Erro ao excluir o destinatário WhatsApp."
+      },
+      "form": {
+        "title_create": "Novo destinatário WhatsApp",
+        "title_edit": "Editar destinatário WhatsApp",
+        "description_create": "Cadastre um telefone manual para receber notificações via WhatsApp.",
+        "description_edit": "Atualize os dados operacionais deste destinatário.",
+        "fields": {
+          "name": {
+            "label": "Nome",
+            "placeholder": "Ex.: Supervisor de plantão"
+          },
+          "phone": {
+            "label": "Telefone",
+            "placeholder": "5511999999999"
+          },
+          "enabled": {
+            "label": "Status",
+            "enabled": "Ativo",
+            "disabled": "Inativo"
+          },
+          "description": {
+            "label": "Descrição",
+            "placeholder": "Contexto de uso, plantão ou responsável"
+          }
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "save": "Salvar alterações",
+          "create": "Criar destinatário"
+        },
+        "validations": {
+          "name": "Informe um nome para o destinatário.",
+          "phone": "Informe um telefone válido."
+        },
+        "notifications": {
+          "create_success": "Destinatário WhatsApp criado com sucesso.",
+          "edit_success": "Destinatário WhatsApp atualizado com sucesso.",
+          "create_error": "Erro ao criar o destinatário WhatsApp.",
+          "edit_error": "Erro ao atualizar o destinatário WhatsApp."
+        }
+      },
+      "details": {
+        "title": "Detalhes do destinatário WhatsApp",
+        "description": "Confira as informações do destinatário {name}.",
+        "not_informed": "Não informado",
+        "types": {
+          "manual_phone": "Telefone manual",
+          "contact": "Contato",
+          "group": "Grupo"
+        },
+        "labels": {
+          "name": "Nome",
+          "company": "Empresa",
+          "account": "Conta WhatsApp",
+          "type": "Tipo",
+          "phone": "Telefone",
+          "chat_id": "Chat ID",
+          "source": "Origem",
+          "enabled": "Status",
+          "description": "Descrição",
+          "updated_at": "Atualizado em"
+        }
+      }
+    },
     "rules": {
       "title": "Regras de alerta",
-      "description": "Cada regra observa placas específicas em uma câmera LPR e dispara um email usando uma conta SMTP configurada.",
-      "search_placeholder": "Buscar por regra, câmera, placa, empresa ou conta SMTP...",
+      "description": "Cada regra observa placas específicas em uma câmera LPR e dispara notificações por email, WhatsApp ou ambos.",
+      "search_placeholder": "Buscar por regra, câmera, placa, empresa, SMTP ou WhatsApp...",
       "empty": "Nenhuma regra de alerta encontrada.",
       "table": {
         "name": "Regra",
@@ -4214,10 +4459,17 @@
         "status": "Status",
         "updated_at": "Atualizada em",
         "recipient_count": "{count} destinatários",
+        "email_count": "{count} emails",
+        "whatsapp_count": "{count} destinos WhatsApp",
         "no_description": "Sem descrição",
         "no_ip": "IP não informado",
         "no_sender": "Remetente não informado",
+        "no_whatsapp": "Conta WhatsApp não informada",
         "actions": "Ações"
+      },
+      "channels": {
+        "email": "Email",
+        "whatsapp": "WhatsApp"
       },
       "status": {
         "enabled": "Ativa",
@@ -4240,7 +4492,7 @@
         "create_success": "Regra criada com sucesso.",
         "edit_success": "Regra atualizada com sucesso.",
         "delete_success": "Regra excluída com sucesso.",
-        "test_success": "Email de teste enviado com sucesso para {count} destinatários.",
+        "test_success": "Teste enviado com sucesso para {count} destinatários.",
         "create_error": "Erro ao criar a regra.",
         "edit_error": "Erro ao atualizar a regra.",
         "delete_error": "Erro ao excluir a regra.",
@@ -4253,9 +4505,9 @@
         "description_edit": "Atualize placas, câmera, destinatários e templates desta regra.",
         "sections": {
           "scope": "Escopo da regra",
-          "scope_desc": "Escolha empresa, câmera, conta SMTP, placas observadas e cooldown.",
-          "recipients": "Destinatários e status",
-          "recipients_desc": "Selecione quem recebe os alertas e controle a ativação da regra.",
+          "scope_desc": "Escolha empresa, câmera, canais de envio, placas observadas e cooldown.",
+          "recipients": "Entregas e destinatários",
+          "recipients_desc": "Selecione os destinos de email e WhatsApp e ajuste a ativação da regra.",
           "templates": "Templates do email",
           "templates_desc": "Defina assunto, corpo e placeholders usados no disparo."
         },
@@ -4263,8 +4515,14 @@
           "name": "Nome da regra",
           "description": "Descrição",
           "camera": "Câmera LPR",
+          "enable_email": "Enviar por email",
+          "enable_email_help": "Habilita disparo por SMTP usando assunto e corpo do editor.",
+          "enable_whatsapp": "Enviar por WhatsApp",
+          "enable_whatsapp_help": "Habilita disparo pela conta WhatsApp selecionada.",
           "smtp_account": "Conta SMTP",
+          "whatsapp_account": "Conta WhatsApp",
           "recipients": "Destinatários",
+          "whatsapp_recipients": "Destinatários WhatsApp",
           "plates": "Placas monitoradas",
           "plates_help": "Informe uma placa por linha ou separe por vírgula.",
           "subject": "Assunto do email",
@@ -4273,23 +4531,23 @@
           "template_help": "Abra o editor para montar assunto e mensagem com markdown e tags clicáveis.",
           "cooldown": "Cooldown (segundos)",
           "cooldown_help": "Evita disparos repetidos da mesma placa nesta regra.",
-          "status": "Status"
+          "status": "Regra ativa",
+          "status_help": "Controla se a regra fica disponível para operação.",
+          "not_informed": "Não informado"
         },
         "placeholders": {
           "name": "Ex.: Alerta carro restrito",
           "description": "Resumo operacional da regra",
           "camera": "Selecione uma câmera",
           "smtp_account": "Selecione uma conta SMTP",
+          "whatsapp_account": "Selecione uma conta WhatsApp",
           "plates": "ABC1234\nBRA2E19",
           "subject": "Assunto do email",
           "body": "Corpo do email",
           "cooldown": "300"
         },
         "empty_recipients": "Nenhum destinatário disponível para a empresa selecionada.",
-        "options": {
-          "enabled": "Ativa",
-          "disabled": "Inativa"
-        },
+        "empty_whatsapp_recipients": "Nenhum destinatário WhatsApp disponível para a empresa e conta selecionadas.",
         "buttons": {
           "cancel": "Cancelar",
           "save": "Salvar alterações",
@@ -4338,6 +4596,10 @@
               "label": "Nome da conta SMTP",
               "description": "Insere o nome da conta usada no envio."
             },
+            "whatsapp_name": {
+              "label": "Nome da conta WhatsApp",
+              "description": "Insere o nome da conta usada no disparo por WhatsApp."
+            },
             "rule_name": {
               "label": "Nome da regra",
               "description": "Insere o nome interno desta regra."
@@ -4349,6 +4611,9 @@
           "camera": "Selecione a câmera LPR.",
           "smtp_account": "Selecione uma conta SMTP.",
           "recipients": "Selecione ao menos um destinatário.",
+          "channels": "Selecione ao menos um canal de envio.",
+          "whatsapp_account": "Selecione uma conta WhatsApp.",
+          "whatsapp_recipients": "Selecione ao menos um destinatário WhatsApp.",
           "plates": "Informe ao menos uma placa.",
           "subject": "Informe o assunto do email.",
           "body": "Informe o corpo do email."
@@ -4365,16 +4630,23 @@
         "description": "Confira o escopo da regra {name}, vinculada à câmera {camera} e com {recipients} destinatários.",
         "not_informed": "Não informado",
         "cooldown_value": "{seconds} segundos",
+        "channels": {
+          "email": "Email",
+          "whatsapp": "WhatsApp"
+        },
         "labels": {
           "name": "Regra",
           "company": "Empresa",
           "status": "Status",
           "description": "Descrição",
           "camera": "Câmera",
+          "channels": "Canais",
           "smtp_account": "Conta SMTP",
+          "whatsapp_account": "Conta WhatsApp",
           "cooldown": "Cooldown",
           "plates": "Placas",
           "recipients": "Destinatários",
+          "whatsapp_recipients": "Destinatários WhatsApp",
           "subject": "Assunto",
           "body": "Corpo do email",
           "created_at": "Criada em",

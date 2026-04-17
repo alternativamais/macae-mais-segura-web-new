@@ -6,6 +6,10 @@ import {
   EmailRecipientMutationPayload,
   EmailSmtpAccount,
   EmailSmtpAccountMutationPayload,
+  WhatsappAccount,
+  WhatsappAccountMutationPayload,
+  WhatsappRecipient,
+  WhatsappRecipientMutationPayload,
 } from "@/types/email-integration"
 
 export const emailIntegrationService = {
@@ -60,6 +64,72 @@ export const emailIntegrationService = {
     return data
   },
 
+  listWhatsappAccounts: async () => {
+    const { data } = await api.get<WhatsappAccount[]>("/email-integrations/whatsapp-accounts")
+    return Array.isArray(data) ? data : []
+  },
+
+  createWhatsappAccount: async (payload: WhatsappAccountMutationPayload) => {
+    const { data } = await api.post<WhatsappAccount>("/email-integrations/whatsapp-accounts", payload)
+    return data
+  },
+
+  updateWhatsappAccount: async (
+    id: number,
+    payload: Partial<WhatsappAccountMutationPayload>,
+  ) => {
+    const { data } = await api.patch<WhatsappAccount>(`/email-integrations/whatsapp-accounts/${id}`, payload)
+    return data
+  },
+
+  connectWhatsappAccount: async (id: number) => {
+    const { data } = await api.post<WhatsappAccount>(`/email-integrations/whatsapp-accounts/${id}/connect`)
+    return data
+  },
+
+  disconnectWhatsappAccount: async (id: number) => {
+    const { data } = await api.post(`/email-integrations/whatsapp-accounts/${id}/disconnect`)
+    return data
+  },
+
+  resetWhatsappAccount: async (id: number) => {
+    const { data } = await api.post<WhatsappAccount>(`/email-integrations/whatsapp-accounts/${id}/reset`)
+    return data
+  },
+
+  syncWhatsappRecipients: async (id: number) => {
+    const { data } = await api.post(`/email-integrations/whatsapp-accounts/${id}/sync-recipients`)
+    return data as { success: boolean; imported: number }
+  },
+
+  deleteWhatsappAccount: async (id: number) => {
+    const { data } = await api.delete(`/email-integrations/whatsapp-accounts/${id}`)
+    return data
+  },
+
+  listWhatsappRecipients: async () => {
+    const { data } = await api.get<WhatsappRecipient[]>("/email-integrations/whatsapp-recipients")
+    return Array.isArray(data) ? data : []
+  },
+
+  createWhatsappRecipient: async (payload: WhatsappRecipientMutationPayload) => {
+    const { data } = await api.post<WhatsappRecipient>("/email-integrations/whatsapp-recipients", payload)
+    return data
+  },
+
+  updateWhatsappRecipient: async (
+    id: number,
+    payload: Partial<WhatsappRecipientMutationPayload>,
+  ) => {
+    const { data } = await api.patch<WhatsappRecipient>(`/email-integrations/whatsapp-recipients/${id}`, payload)
+    return data
+  },
+
+  deleteWhatsappRecipient: async (id: number) => {
+    const { data } = await api.delete(`/email-integrations/whatsapp-recipients/${id}`)
+    return data
+  },
+
   listRules: async () => {
     const { data } = await api.get<EmailPlateAlertRule[]>("/email-integrations/rules")
     return Array.isArray(data) ? data : []
@@ -85,6 +155,10 @@ export const emailIntegrationService = {
 
   testRule: async (id: number) => {
     const { data } = await api.post(`/email-integrations/rules/${id}/test`)
-    return data as { success: boolean; recipients: string[]; recipientCount: number; subject: string }
+    return data as {
+      success: boolean
+      subject: string
+      channels: Record<string, { recipients: string[]; recipientCount: number; subject?: string }>
+    }
   },
 }

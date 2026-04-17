@@ -3951,18 +3951,24 @@
   },
   "email_integrations": {
     "title": "Notifications",
-    "description": "Configure SMTP accounts, recipients, and rules to send email notifications when specific plates are detected by LPR cameras.",
-    "fetch_error": "Error loading email notification settings.",
+    "description": "Configure email and WhatsApp channels to send notifications when specific plates are detected by LPR cameras.",
+    "fetch_error": "Error loading notification settings.",
     "tabs": {
       "rules": "Alert rules",
       "smtp_accounts": "SMTP accounts",
-      "recipients": "Recipients"
+      "recipients": "Email recipients",
+      "whatsapp_accounts": "WhatsApp accounts",
+      "whatsapp_recipients": "WhatsApp recipients"
     },
     "stats": {
       "smtp_accounts": "SMTP accounts",
       "smtp_accounts_desc": "Configured servers and senders.",
-      "recipients": "Recipients",
-      "recipients_desc": "Emails allowed to receive alerts.",
+      "email_recipients": "Email recipients",
+      "email_recipients_desc": "Emails available to receive alerts.",
+      "whatsapp_accounts": "WhatsApp accounts",
+      "whatsapp_accounts_desc": "WhatsApp sessions available for delivery.",
+      "whatsapp_recipients": "WhatsApp recipients",
+      "whatsapp_recipients_desc": "Contacts, groups, and manual numbers available.",
       "rules": "Active rules",
       "rules_desc": "Plate, camera, and delivery combinations."
     },
@@ -4200,10 +4206,249 @@
         }
       }
     },
+    "whatsapp_accounts": {
+      "search_placeholder": "Search by account, number, session, or company...",
+      "empty": "No WhatsApp account found.",
+      "table": {
+        "account": "Account",
+        "company": "Company",
+        "connection": "Connection",
+        "phone": "Phone",
+        "updated_at": "Updated at",
+        "actions": "Actions",
+        "no_display_name": "No WhatsApp name",
+        "qr_available": "QR available",
+        "qr_not_available": "No pending QR",
+        "no_phone": "Not connected yet"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "session": {
+        "disconnected": "Disconnected",
+        "initializing": "Initializing",
+        "qr_required": "Waiting for QR",
+        "authenticated": "Authenticated",
+        "ready": "Connected",
+        "auth_failure": "Authentication failed"
+      },
+      "actions": {
+        "create": "New WhatsApp account",
+        "view": "View details",
+        "connect": "Connect / view QR",
+        "reset": "Generate new QR",
+        "sync_recipients": "Sync contacts and groups",
+        "disconnect": "Disconnect",
+        "edit": "Edit",
+        "delete": "Delete",
+        "open_actions": "Open actions"
+      },
+      "delete_dialog": {
+        "title": "Delete WhatsApp account",
+        "description": "Do you really want to delete this WhatsApp account?",
+        "confirm": "Delete"
+      },
+      "notifications": {
+        "action_error": "Error running the action for the WhatsApp account.",
+        "create_success": "WhatsApp account created successfully.",
+        "edit_success": "WhatsApp account updated successfully.",
+        "delete_success": "WhatsApp account deleted successfully.",
+        "create_error": "Error creating the WhatsApp account.",
+        "edit_error": "Error updating the WhatsApp account.",
+        "delete_error": "Error deleting the WhatsApp account.",
+        "connect_success": "WhatsApp account connection started.",
+        "connect_error": "Error starting the WhatsApp account connection.",
+        "reset_success": "Session reset. Scan the new QR code.",
+        "sync_success": "Contacts and groups synced successfully.",
+        "disconnect_success": "WhatsApp account disconnected successfully."
+      },
+      "session_dialog": {
+        "title": "Connect WhatsApp account",
+        "description": "Track the session and scan the QR code for account {name}.",
+        "default_name": "selected",
+        "loading_title": "Initializing session",
+        "loading_description": "We are preparing the account connection and waiting for the QR code.",
+        "qr_title": "QR code available",
+        "qr_description": "Scan it with this account's WhatsApp to finish connecting.",
+        "qr_alt": "QR code to connect WhatsApp account",
+        "ready_title": "Account connected",
+        "ready_description": "The session is ready for delivery. Detected number: {phone}.",
+        "error_title": "Failed to prepare session",
+        "error_description": "The account returned an error while initializing WhatsApp.",
+        "waiting_title": "Waiting for QR code",
+        "waiting_description": "The session is still being prepared. This status should update automatically.",
+        "not_informed": "Not informed",
+        "close": "Close"
+      },
+      "form": {
+        "title_create": "New WhatsApp account",
+        "title_edit": "Edit WhatsApp account",
+        "description_create": "Register a new WhatsApp session to send notifications.",
+        "description_edit": "Update the internal name, status, and notes for this account.",
+        "fields": {
+          "name": {
+            "label": "Internal name",
+            "placeholder": "Ex.: Operations WhatsApp"
+          },
+          "enabled": {
+            "label": "Status",
+            "enabled": "Enabled",
+            "disabled": "Disabled"
+          },
+          "notes": {
+            "label": "Notes",
+            "placeholder": "Operational context, team, or purpose of this account"
+          }
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "save": "Save changes",
+          "create": "Create account"
+        },
+        "validations": {
+          "name": "Enter a name for the WhatsApp account."
+        },
+        "notifications": {
+          "create_success": "WhatsApp account created successfully.",
+          "edit_success": "WhatsApp account updated successfully.",
+          "create_error": "Error creating the WhatsApp account.",
+          "edit_error": "Error updating the WhatsApp account."
+        }
+      },
+      "details": {
+        "title": "WhatsApp account details",
+        "description": "Review the current state of account {name}.",
+        "not_informed": "Not informed",
+        "qr_alt": "WhatsApp account QR code",
+        "labels": {
+          "name": "Account",
+          "company": "Company",
+          "enabled": "Status",
+          "phone": "Phone",
+          "display_name": "WhatsApp name",
+          "session": "Session",
+          "last_error": "Last error",
+          "notes": "Notes",
+          "updated_at": "Updated at"
+        }
+      }
+    },
+    "whatsapp_recipients": {
+      "search_placeholder": "Search by name, phone, chat, or company...",
+      "empty": "No WhatsApp recipient found.",
+      "table": {
+        "name": "Name",
+        "company": "Company",
+        "target": "Target",
+        "type": "Type",
+        "status": "Status",
+        "updated_at": "Updated at",
+        "actions": "Actions",
+        "manual_account": "Manual / no linked account",
+        "no_phone": "Phone not informed",
+        "no_chat_id": "No imported chat"
+      },
+      "types": {
+        "manual_phone": "Manual phone",
+        "contact": "Contact",
+        "group": "Group"
+      },
+      "source": {
+        "manual": "Manual",
+        "imported": "Imported"
+      },
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      },
+      "actions": {
+        "create": "New WhatsApp recipient",
+        "view": "View details",
+        "edit": "Edit",
+        "delete": "Delete",
+        "open_actions": "Open actions"
+      },
+      "delete_dialog": {
+        "title": "Delete WhatsApp recipient",
+        "description": "Do you really want to delete this WhatsApp recipient?",
+        "confirm": "Delete"
+      },
+      "notifications": {
+        "create_success": "WhatsApp recipient created successfully.",
+        "edit_success": "WhatsApp recipient updated successfully.",
+        "delete_success": "WhatsApp recipient deleted successfully.",
+        "create_error": "Error creating the WhatsApp recipient.",
+        "edit_error": "Error updating the WhatsApp recipient.",
+        "delete_error": "Error deleting the WhatsApp recipient."
+      },
+      "form": {
+        "title_create": "New WhatsApp recipient",
+        "title_edit": "Edit WhatsApp recipient",
+        "description_create": "Register a manual phone number to receive WhatsApp notifications.",
+        "description_edit": "Update the operational data for this recipient.",
+        "fields": {
+          "name": {
+            "label": "Name",
+            "placeholder": "Ex.: On-duty supervisor"
+          },
+          "phone": {
+            "label": "Phone",
+            "placeholder": "5511999999999"
+          },
+          "enabled": {
+            "label": "Status",
+            "enabled": "Enabled",
+            "disabled": "Disabled"
+          },
+          "description": {
+            "label": "Description",
+            "placeholder": "Use case, shift, or owner"
+          }
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "save": "Save changes",
+          "create": "Create recipient"
+        },
+        "validations": {
+          "name": "Enter a recipient name.",
+          "phone": "Enter a valid phone."
+        },
+        "notifications": {
+          "create_success": "WhatsApp recipient created successfully.",
+          "edit_success": "WhatsApp recipient updated successfully.",
+          "create_error": "Error creating the WhatsApp recipient.",
+          "edit_error": "Error updating the WhatsApp recipient."
+        }
+      },
+      "details": {
+        "title": "WhatsApp recipient details",
+        "description": "Review the data for recipient {name}.",
+        "not_informed": "Not informed",
+        "types": {
+          "manual_phone": "Manual phone",
+          "contact": "Contact",
+          "group": "Group"
+        },
+        "labels": {
+          "name": "Name",
+          "company": "Company",
+          "account": "WhatsApp account",
+          "type": "Type",
+          "phone": "Phone",
+          "chat_id": "Chat ID",
+          "source": "Source",
+          "enabled": "Status",
+          "description": "Description",
+          "updated_at": "Updated at"
+        }
+      }
+    },
     "rules": {
       "title": "Alert rules",
-      "description": "Each rule watches specific plates on one LPR camera and sends an email using a configured SMTP account.",
-      "search_placeholder": "Search by rule, camera, plate, company, or SMTP account...",
+      "description": "Each rule watches specific plates on one LPR camera and triggers notifications by email, WhatsApp, or both.",
+      "search_placeholder": "Search by rule, camera, plate, company, SMTP, or WhatsApp...",
       "empty": "No alert rule found.",
       "table": {
         "name": "Rule",
@@ -4216,10 +4461,17 @@
         "status": "Status",
         "updated_at": "Updated at",
         "recipient_count": "{count} recipients",
+        "email_count": "{count} emails",
+        "whatsapp_count": "{count} WhatsApp targets",
         "no_description": "No description",
         "no_ip": "IP not informed",
         "no_sender": "Sender not informed",
+        "no_whatsapp": "WhatsApp account not informed",
         "actions": "Actions"
+      },
+      "channels": {
+        "email": "Email",
+        "whatsapp": "WhatsApp"
       },
       "status": {
         "enabled": "Enabled",
@@ -4228,7 +4480,7 @@
       "actions": {
         "create": "New rule",
         "view": "View details",
-        "test": "Send test email",
+        "test": "Test delivery",
         "edit": "Edit",
         "delete": "Delete",
         "open_actions": "Open actions"
@@ -4242,31 +4494,37 @@
         "create_success": "Rule created successfully.",
         "edit_success": "Rule updated successfully.",
         "delete_success": "Rule deleted successfully.",
-        "test_success": "Test email sent successfully to {count} recipients.",
+        "test_success": "Test sent successfully to {count} recipients.",
         "create_error": "Error creating the rule.",
         "edit_error": "Error updating the rule.",
         "delete_error": "Error deleting the rule.",
-        "test_error": "Error sending the test email."
+        "test_error": "Error sending the test notification."
       },
       "form": {
         "title_create": "New alert rule",
         "title_edit": "Edit alert rule",
-        "description_create": "Define which plates trigger emails on a specific LPR camera.",
-        "description_edit": "Update plates, camera, recipients, and templates for this rule.",
+        "description_create": "Define which plates trigger notifications on a specific LPR camera.",
+        "description_edit": "Update plates, camera, recipients, channels, and templates for this rule.",
         "sections": {
           "scope": "Rule scope",
-          "scope_desc": "Choose company, camera, SMTP account, watched plates, and cooldown.",
-          "recipients": "Recipients and status",
-          "recipients_desc": "Select who receives alerts and control rule activation.",
+          "scope_desc": "Choose company, camera, delivery channels, watched plates, and cooldown.",
+          "recipients": "Delivery and recipients",
+          "recipients_desc": "Select email and WhatsApp targets and control rule activation.",
           "templates": "Email templates",
-          "templates_desc": "Define the subject, body, and placeholders used in delivery."
+          "templates_desc": "Define the subject, body, and placeholders used during delivery."
         },
         "labels": {
           "name": "Rule name",
           "description": "Description",
           "camera": "LPR camera",
+          "enable_email": "Send by email",
+          "enable_email_help": "Enables SMTP delivery using the editor subject and body.",
+          "enable_whatsapp": "Send by WhatsApp",
+          "enable_whatsapp_help": "Enables delivery using the selected WhatsApp account.",
           "smtp_account": "SMTP account",
+          "whatsapp_account": "WhatsApp account",
           "recipients": "Recipients",
+          "whatsapp_recipients": "WhatsApp recipients",
           "plates": "Watched plates",
           "plates_help": "Enter one plate per line or separate them with commas.",
           "subject": "Email subject",
@@ -4275,23 +4533,23 @@
           "template_help": "Open the editor to build the subject and message with markdown and clickable tags.",
           "cooldown": "Cooldown (seconds)",
           "cooldown_help": "Prevents repeated triggers for the same plate on this rule.",
-          "status": "Status"
+          "status": "Rule enabled",
+          "status_help": "Controls whether the rule is available for operation.",
+          "not_informed": "Not informed"
         },
         "placeholders": {
           "name": "Ex.: Restricted vehicle alert",
           "description": "Operational summary of this rule",
           "camera": "Select a camera",
           "smtp_account": "Select an SMTP account",
+          "whatsapp_account": "Select a WhatsApp account",
           "plates": "ABC1234\nBRA2E19",
           "subject": "Email subject",
           "body": "Email body",
           "cooldown": "300"
         },
         "empty_recipients": "No recipients are available for the selected company.",
-        "options": {
-          "enabled": "Enabled",
-          "disabled": "Disabled"
-        },
+        "empty_whatsapp_recipients": "No WhatsApp recipients are available for the selected company and account.",
         "buttons": {
           "cancel": "Cancel",
           "save": "Save changes",
@@ -4302,7 +4560,7 @@
           "title": "Email editor",
           "description": "Build the alert subject and body with markdown and visual tags.",
           "toolbar_title": "Editing controls",
-          "empty_tokens": "All available tags are already in use in this email.",
+          "empty_tokens": "All available tags are already used in this email.",
           "cancel": "Cancel",
           "save": "Save content",
           "toolbar": {
@@ -4330,7 +4588,7 @@
             },
             "camera_ip": {
               "label": "Camera IP",
-              "description": "Inserts the IP of the camera that captured the event."
+              "description": "Inserts the IP of the camera that registered the event."
             },
             "company_name": {
               "label": "Company name",
@@ -4338,7 +4596,11 @@
             },
             "smtp_name": {
               "label": "SMTP account name",
-              "description": "Inserts the name of the account used for delivery."
+              "description": "Inserts the name of the account used for email delivery."
+            },
+            "whatsapp_name": {
+              "label": "WhatsApp account name",
+              "description": "Inserts the name of the account used for WhatsApp delivery."
             },
             "rule_name": {
               "label": "Rule name",
@@ -4351,6 +4613,9 @@
           "camera": "Select the LPR camera.",
           "smtp_account": "Select an SMTP account.",
           "recipients": "Select at least one recipient.",
+          "channels": "Select at least one delivery channel.",
+          "whatsapp_account": "Select a WhatsApp account.",
+          "whatsapp_recipients": "Select at least one WhatsApp recipient.",
           "plates": "Enter at least one plate.",
           "subject": "Enter the email subject.",
           "body": "Enter the email body."
@@ -4364,19 +4629,26 @@
       },
       "details": {
         "title": "Rule details",
-        "description": "Review the scope of rule {name}, linked to camera {camera} with {recipients} recipients.",
+        "description": "Review the scope of rule {name}, linked to camera {camera} and with {recipients} recipients.",
         "not_informed": "Not informed",
         "cooldown_value": "{seconds} seconds",
+        "channels": {
+          "email": "Email",
+          "whatsapp": "WhatsApp"
+        },
         "labels": {
           "name": "Rule",
           "company": "Company",
           "status": "Status",
           "description": "Description",
           "camera": "Camera",
+          "channels": "Channels",
           "smtp_account": "SMTP account",
+          "whatsapp_account": "WhatsApp account",
           "cooldown": "Cooldown",
           "plates": "Plates",
           "recipients": "Recipients",
+          "whatsapp_recipients": "WhatsApp recipients",
           "subject": "Subject",
           "body": "Email body",
           "created_at": "Created at",

@@ -22,7 +22,13 @@ import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { emailIntegrationService } from "@/services/email-integration.service"
 import { Camera } from "@/types/camera"
-import { EmailPlateAlertRule, EmailRecipient, EmailSmtpAccount } from "@/types/email-integration"
+import {
+  EmailPlateAlertRule,
+  EmailRecipient,
+  EmailSmtpAccount,
+  WhatsappAccount,
+  WhatsappRecipient,
+} from "@/types/email-integration"
 import { EmailRuleDetailsDialog } from "./email-rule-details-dialog"
 import { EmailRuleFormDialog } from "./email-rule-form-dialog"
 import { formatEmailIntegrationDateTime, getCompanyName } from "./utils"
@@ -31,6 +37,8 @@ interface EmailRulesTabProps {
   rules: EmailPlateAlertRule[]
   smtpAccounts: EmailSmtpAccount[]
   recipients: EmailRecipient[]
+  whatsappAccounts: WhatsappAccount[]
+  whatsappRecipients: WhatsappRecipient[]
   cameras: Camera[]
   isLoading?: boolean
   onReloadRules: () => Promise<void> | void
@@ -40,6 +48,8 @@ export function EmailRulesTab({
   rules,
   smtpAccounts,
   recipients,
+  whatsappAccounts,
+  whatsappRecipients,
   cameras,
   isLoading = false,
   onReloadRules,
@@ -108,9 +118,11 @@ export function EmailRulesTab({
         item.description,
         item.camera?.nome,
         item.smtpAccount?.name,
+        item.whatsappAccount?.name,
         getCompanyName(companyNameById, item.empresaId),
         item.plates.map((plate) => plate.plateText).join(" "),
         item.recipients.map((recipient) => recipient.name || recipient.email).join(" "),
+        item.whatsappRecipients.map((recipient) => recipient.name || recipient.phoneNumber).join(" "),
       ]
         .filter(Boolean)
         .join(" ")
@@ -146,9 +158,13 @@ export function EmailRulesTab({
 
     try {
       const result = await emailIntegrationService.testRule(item.id)
+      const total = Object.values(result.channels || {}).reduce(
+        (sum, channel) => sum + (channel?.recipientCount || 0),
+        0,
+      )
       toast.success(
         t("notifications.test_success", {
-          count: String(result.recipientCount),
+          count: String(total),
         }),
       )
     } catch (error) {
@@ -227,15 +243,35 @@ export function EmailRulesTab({
                   </TableCell>
                   <TableCell>
                     <div className="space-y-1">
-                      <div>{item.smtpAccount?.name || `#${item.smtpAccountId}`}</div>
+                      <div>
+                        {[
+                          item.emailEnabled
+                            ? item.smtpAccount?.name || (item.smtpAccountId ? `#${item.smtpAccountId}` : t("table.no_sender"))
+                            : null,
+                          item.whatsappEnabled
+                            ? item.whatsappAccount?.name ||
+                              (item.whatsappAccountId ? `#${item.whatsappAccountId}` : t("table.no_whatsapp"))
+                            : null,
+                        ]
+                          .filter(Boolean)
+                          .join(" • ")}
+                      </div>
                       <div className="text-xs text-muted-foreground">
-                        {item.smtpAccount?.fromEmail || t("table.no_sender")} • {t("table.recipient_count", { count: String(item.recipients.length) })}
+                        {item.emailEnabled ? t("table.email_count", { count: String(item.recipients.length) }) : null}
+                        {item.emailEnabled && item.whatsappEnabled ? " • " : null}
+                        {item.whatsappEnabled
+                          ? t("table.whatsapp_count", { count: String(item.whatsappRecipients.length) })
+                          : null}
                       </div>
                       <div className="line-clamp-2 text-xs text-muted-foreground">
-                        {item.recipients
+                        {[...item.recipients.map((recipient) => recipient.name || recipient.email || `#${recipient.id}`),
+                          ...item.whatsappRecipients.map((recipient) => recipient.name || recipient.phoneNumber || `#${recipient.id}`)]
                           .slice(0, 2)
-                          .map((recipient) => recipient.name || recipient.email || `#${recipient.id}`)
                           .join(", ")}
+                      </div>
+                      <div className="flex flex-wrap gap-2 pt-1">
+                        {item.emailEnabled ? <DataTag tone="info">{t("channels.email")}</DataTag> : null}
+                        {item.whatsappEnabled ? <DataTag tone="accent">{t("channels.whatsapp")}</DataTag> : null}
                       </div>
                     </div>
                   </TableCell>
@@ -340,6 +376,8 @@ export function EmailRulesTab({
         rule={editingItem}
         smtpAccounts={smtpAccounts}
         recipients={recipients}
+        whatsappAccounts={whatsappAccounts}
+        whatsappRecipients={whatsappRecipients}
         cameras={cameras}
         onSuccess={onReloadRules}
       />

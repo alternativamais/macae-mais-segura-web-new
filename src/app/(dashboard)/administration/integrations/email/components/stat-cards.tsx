@@ -1,20 +1,30 @@
 "use client"
 
-import { Mail, Send, Siren } from "lucide-react"
+import { Mail, MessageCircle, Send, Siren, Users } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useTranslator } from "@/lib/i18n"
-import { EmailPlateAlertRule, EmailRecipient, EmailSmtpAccount } from "@/types/email-integration"
+import {
+  EmailPlateAlertRule,
+  EmailRecipient,
+  EmailSmtpAccount,
+  WhatsappAccount,
+  WhatsappRecipient,
+} from "@/types/email-integration"
 
 interface StatCardsProps {
   smtpAccounts: EmailSmtpAccount[]
-  recipients: EmailRecipient[]
+  emailRecipients: EmailRecipient[]
+  whatsappAccounts: WhatsappAccount[]
+  whatsappRecipients: WhatsappRecipient[]
   rules: EmailPlateAlertRule[]
   isLoading?: boolean
 }
 
 export function StatCards({
   smtpAccounts,
-  recipients,
+  emailRecipients,
+  whatsappAccounts,
+  whatsappRecipients,
   rules,
   isLoading = false,
 }: StatCardsProps) {
@@ -28,10 +38,22 @@ export function StatCards({
       description: t("smtp_accounts_desc"),
     },
     {
-      title: t("recipients"),
-      value: recipients.length,
+      title: t("email_recipients"),
+      value: emailRecipients.length,
       icon: Mail,
-      description: t("recipients_desc"),
+      description: t("email_recipients_desc"),
+    },
+    {
+      title: t("whatsapp_accounts"),
+      value: whatsappAccounts.length,
+      icon: MessageCircle,
+      description: t("whatsapp_accounts_desc"),
+    },
+    {
+      title: t("whatsapp_recipients"),
+      value: whatsappRecipients.length,
+      icon: Users,
+      description: t("whatsapp_recipients_desc"),
     },
     {
       title: t("rules"),
@@ -42,7 +64,7 @@ export function StatCards({
   ]
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
       {cards.map((card) => {
         const Icon = card.icon
         return (
