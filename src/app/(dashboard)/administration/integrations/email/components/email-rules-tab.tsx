@@ -314,22 +314,17 @@ export function EmailRulesTab({
                           .filter(Boolean)
                           .join(" • ")}
                       </div>
-                      <div className="text-xs text-muted-foreground">
-                        {item.emailEnabled ? t("table.email_count", { count: String(item.recipients.length) }) : null}
-                        {item.emailEnabled && item.whatsappEnabled ? " • " : null}
-                        {item.whatsappEnabled
-                          ? t("table.whatsapp_count", { count: String(item.whatsappRecipients.length) })
-                          : null}
-                      </div>
-                      <div className="line-clamp-2 text-xs text-muted-foreground">
-                        {[...item.recipients.map((recipient) => recipient.name || recipient.email || `#${recipient.id}`),
-                          ...item.whatsappRecipients.map((recipient) => recipient.name || recipient.phoneNumber || `#${recipient.id}`)]
-                          .slice(0, 2)
-                          .join(", ")}
-                      </div>
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {item.emailEnabled ? <DataTag tone="info">{t("channels.email")}</DataTag> : null}
-                        {item.whatsappEnabled ? <DataTag tone="accent">{t("channels.whatsapp")}</DataTag> : null}
+                        {item.emailEnabled ? (
+                          <DataTag tone="info">
+                            {t("channels.email")} ({item.recipients.length})
+                          </DataTag>
+                        ) : null}
+                        {item.whatsappEnabled ? (
+                          <DataTag tone="accent">
+                            {t("channels.whatsapp")} ({item.whatsappRecipients.length})
+                          </DataTag>
+                        ) : null}
                       </div>
                     </div>
                   </TableCell>
