@@ -31,7 +31,7 @@ import {
 } from "@/types/email-integration"
 import { EmailRuleDetailsDialog } from "./email-rule-details-dialog"
 import { EmailRuleFormDialog } from "./email-rule-form-dialog"
-import { formatEmailIntegrationDateTime, getCompanyName } from "./utils"
+import { formatEmailIntegrationDateTime, getCompanyName, getEmailRuleCriteriaSummary } from "./utils"
 
 interface EmailRulesTabProps {
   rules: EmailPlateAlertRule[]
@@ -55,11 +55,68 @@ export function EmailRulesTab({
   onReloadRules,
 }: EmailRulesTabProps) {
   const t = useTranslator("email_integrations.rules")
+  const tOptionLabels = useTranslator("email_integrations.rules.form.option_labels")
   const { companies } = useTenantCompanySelection()
   const locale = t.getLocale()
   const companyNameById = useMemo(
     () => new Map(companies.map((company) => [company.id, company.nome])),
     [companies],
+  )
+  const criteriaLabels = useMemo(
+    () => ({
+      plates: t("criteria.plates"),
+      speed: t("criteria.speed"),
+      vehicleColors: t("criteria.vehicle_colors"),
+      vehicleTypes: t("criteria.vehicle_types"),
+      vehicleBrands: t("criteria.vehicle_brands"),
+      directions: t("criteria.directions"),
+      noCriteria: t("criteria.no_criteria"),
+      directionValues: {
+        obverse: tOptionLabels("directions.obverse"),
+        reverse: tOptionLabels("directions.reverse"),
+      },
+      vehicleColorValues: {
+        black: tOptionLabels("vehicle_colors.black"),
+        white: tOptionLabels("vehicle_colors.white"),
+        gray: tOptionLabels("vehicle_colors.gray"),
+        silver: tOptionLabels("vehicle_colors.silver"),
+        blue: tOptionLabels("vehicle_colors.blue"),
+        red: tOptionLabels("vehicle_colors.red"),
+        green: tOptionLabels("vehicle_colors.green"),
+        yellow: tOptionLabels("vehicle_colors.yellow"),
+        brown: tOptionLabels("vehicle_colors.brown"),
+        orange: tOptionLabels("vehicle_colors.orange"),
+        purple: tOptionLabels("vehicle_colors.purple"),
+      },
+      vehicleTypeValues: {
+        car: tOptionLabels("vehicle_types.car"),
+        truck: tOptionLabels("vehicle_types.truck"),
+        motorcycle: tOptionLabels("vehicle_types.motorcycle"),
+        bus: tOptionLabels("vehicle_types.bus"),
+        van: tOptionLabels("vehicle_types.van"),
+        pickup: tOptionLabels("vehicle_types.pickup"),
+        suv: tOptionLabels("vehicle_types.suv"),
+      },
+      vehicleBrandValues: {
+        chevrolet: tOptionLabels("vehicle_brands.chevrolet"),
+        fiat: tOptionLabels("vehicle_brands.fiat"),
+        ford: tOptionLabels("vehicle_brands.ford"),
+        volkswagen: tOptionLabels("vehicle_brands.volkswagen"),
+        toyota: tOptionLabels("vehicle_brands.toyota"),
+        honda: tOptionLabels("vehicle_brands.honda"),
+        hyundai: tOptionLabels("vehicle_brands.hyundai"),
+        renault: tOptionLabels("vehicle_brands.renault"),
+        jeep: tOptionLabels("vehicle_brands.jeep"),
+        nissan: tOptionLabels("vehicle_brands.nissan"),
+        peugeot: tOptionLabels("vehicle_brands.peugeot"),
+        citroen: tOptionLabels("vehicle_brands.citroen"),
+        kia: tOptionLabels("vehicle_brands.kia"),
+        bmw: tOptionLabels("vehicle_brands.bmw"),
+        "mercedes-benz": tOptionLabels("vehicle_brands.mercedes_benz"),
+        audi: tOptionLabels("vehicle_brands.audi"),
+      },
+    }),
+    [t, tOptionLabels],
   )
 
   const [search, setSearch] = useState("")
@@ -121,6 +178,7 @@ export function EmailRulesTab({
         item.whatsappAccount?.name,
         getCompanyName(companyNameById, item.empresaId),
         item.plates.map((plate) => plate.plateText).join(" "),
+        getEmailRuleCriteriaSummary(item, criteriaLabels).join(" "),
         item.recipients.map((recipient) => recipient.name || recipient.email).join(" "),
         item.whatsappRecipients.map((recipient) => recipient.name || recipient.phoneNumber).join(" "),
       ]
@@ -208,7 +266,7 @@ export function EmailRulesTab({
               <TableHead>{t("table.name")}</TableHead>
               <TableHead>{t("table.camera")}</TableHead>
               <TableHead>{t("table.delivery")}</TableHead>
-              <TableHead>{t("table.plates")}</TableHead>
+              <TableHead>{t("table.criteria")}</TableHead>
               <TableHead>{t("table.status")}</TableHead>
               <TableHead className="hidden xl:table-cell">{t("table.updated_at")}</TableHead>
               <TableHead className="w-[80px] text-right">{t("table.actions")}</TableHead>
@@ -276,16 +334,24 @@ export function EmailRulesTab({
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap gap-2">
-                      {item.plates.slice(0, 2).map((plate) => (
-                        <DataTag key={plate.id} tone="info" monospace>
-                          {plate.plateText}
-                        </DataTag>
-                      ))}
-                      {item.plates.length > 2 ? (
-                        <DataTag tone="neutral">+{item.plates.length - 2}</DataTag>
-                      ) : null}
-                    </div>
+                    {(() => {
+                      const criteriaSummary = getEmailRuleCriteriaSummary(item, criteriaLabels)
+
+                      return (
+                        <div className="flex flex-wrap gap-2">
+                          {criteriaSummary.slice(0, 2).map((criteria) => (
+                            <DataTag key={criteria} tone="neutral">
+                              {criteria}
+                            </DataTag>
+                          ))}
+                          {criteriaSummary.length > 2 ? (
+                        <DataTag tone="neutral">
+                              +{criteriaSummary.length - 2}
+                            </DataTag>
+                          ) : null}
+                        </div>
+                      )
+                    })()}
                   </TableCell>
                   <TableCell>
                     {item.enabled ? (

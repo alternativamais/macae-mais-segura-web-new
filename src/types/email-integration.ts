@@ -153,6 +153,25 @@ export interface EmailRulePlate {
   normalizedPlate: string
 }
 
+export interface EmailPlateAlertRuleFilters {
+  minConfidence?: number | null
+  maxConfidence?: number | null
+  speedThresholdKmh?: number | null
+  minPeopleCount?: number | null
+  maxPeopleCount?: number | null
+  directions?: string[]
+  plateColors?: string[]
+  vehicleColors?: string[]
+  vehicleTypes?: string[]
+  vehicleBrands?: string[]
+  vehicleSeries?: string[]
+  plateTypes?: string[]
+  regions?: string[]
+  channels?: number[]
+  deviceIds?: string[]
+  requiresExistingPlate?: boolean | null
+}
+
 export interface EmailPlateAlertRule {
   id: number
   empresaId: number
@@ -173,6 +192,7 @@ export interface EmailPlateAlertRule {
   smtpAccount?: EmailRuleSummarySmtpAccount | null
   whatsappAccount?: EmailRuleSummaryWhatsappAccount | null
   plates: EmailRulePlate[]
+  filters?: EmailPlateAlertRuleFilters | null
   recipients: EmailRuleSummaryRecipient[]
   whatsappRecipients: WhatsappRuleSummaryRecipient[]
 }
@@ -187,6 +207,7 @@ export interface EmailPlateAlertRuleMutationPayload {
   whatsappAccountId?: number | null
   whatsappRecipientIds?: number[]
   plates: string[]
+  filters?: EmailPlateAlertRuleFilters | null
   subjectTemplate?: string
   bodyTemplate?: string
   cooldownSeconds?: number

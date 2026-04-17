@@ -15,6 +15,7 @@ import { EmailPlateAlertRule } from "@/types/email-integration"
 import {
   formatEmailIntegrationDateTime,
   getCompanyName,
+  getEmailRuleCriteriaSummary,
   getEnabledTag,
   renderTagList,
 } from "./utils"
@@ -32,6 +33,7 @@ export function EmailRuleDetailsDialog({
 }: EmailRuleDetailsDialogProps) {
   const t = useTranslator("email_integrations.rules.details")
   const tStatus = useTranslator("email_integrations.rules.status")
+  const tOptionLabels = useTranslator("email_integrations.rules.form.option_labels")
   const { companies } = useTenantCompanySelection()
   const locale = t.getLocale()
   const statusLabels = {
@@ -43,6 +45,59 @@ export function EmailRuleDetailsDialog({
 
   const companyNameById = new Map(companies.map((company) => [company.id, company.nome]))
   const notInformed = t("not_informed")
+  const criteriaSummary = getEmailRuleCriteriaSummary(rule, {
+    plates: t("criteria.plates"),
+    speed: t("criteria.speed"),
+    vehicleColors: t("criteria.vehicle_colors"),
+    vehicleTypes: t("criteria.vehicle_types"),
+    vehicleBrands: t("criteria.vehicle_brands"),
+    directions: t("criteria.directions"),
+    noCriteria: t("criteria.no_criteria"),
+    directionValues: {
+      obverse: tOptionLabels("directions.obverse"),
+      reverse: tOptionLabels("directions.reverse"),
+    },
+    vehicleColorValues: {
+      black: tOptionLabels("vehicle_colors.black"),
+      white: tOptionLabels("vehicle_colors.white"),
+      gray: tOptionLabels("vehicle_colors.gray"),
+      silver: tOptionLabels("vehicle_colors.silver"),
+      blue: tOptionLabels("vehicle_colors.blue"),
+      red: tOptionLabels("vehicle_colors.red"),
+      green: tOptionLabels("vehicle_colors.green"),
+      yellow: tOptionLabels("vehicle_colors.yellow"),
+      brown: tOptionLabels("vehicle_colors.brown"),
+      orange: tOptionLabels("vehicle_colors.orange"),
+      purple: tOptionLabels("vehicle_colors.purple"),
+    },
+    vehicleTypeValues: {
+      car: tOptionLabels("vehicle_types.car"),
+      truck: tOptionLabels("vehicle_types.truck"),
+      motorcycle: tOptionLabels("vehicle_types.motorcycle"),
+      bus: tOptionLabels("vehicle_types.bus"),
+      van: tOptionLabels("vehicle_types.van"),
+      pickup: tOptionLabels("vehicle_types.pickup"),
+      suv: tOptionLabels("vehicle_types.suv"),
+    },
+    vehicleBrandValues: {
+      chevrolet: tOptionLabels("vehicle_brands.chevrolet"),
+      fiat: tOptionLabels("vehicle_brands.fiat"),
+      ford: tOptionLabels("vehicle_brands.ford"),
+      volkswagen: tOptionLabels("vehicle_brands.volkswagen"),
+      toyota: tOptionLabels("vehicle_brands.toyota"),
+      honda: tOptionLabels("vehicle_brands.honda"),
+      hyundai: tOptionLabels("vehicle_brands.hyundai"),
+      renault: tOptionLabels("vehicle_brands.renault"),
+      jeep: tOptionLabels("vehicle_brands.jeep"),
+      nissan: tOptionLabels("vehicle_brands.nissan"),
+      peugeot: tOptionLabels("vehicle_brands.peugeot"),
+      citroen: tOptionLabels("vehicle_brands.citroen"),
+      kia: tOptionLabels("vehicle_brands.kia"),
+      bmw: tOptionLabels("vehicle_brands.bmw"),
+      "mercedes-benz": tOptionLabels("vehicle_brands.mercedes_benz"),
+      audi: tOptionLabels("vehicle_brands.audi"),
+    },
+  })
 
   const items = [
     { label: t("labels.name"), value: rule.name },
@@ -69,6 +124,10 @@ export function EmailRuleDetailsDialog({
     { label: t("labels.smtp_account"), value: rule.smtpAccount?.name || notInformed },
     { label: t("labels.whatsapp_account"), value: rule.whatsappAccount?.name || notInformed },
     { label: t("labels.cooldown"), value: t("cooldown_value", { seconds: String(rule.cooldownSeconds) }) },
+    {
+      label: t("labels.criteria"),
+      value: renderTagList(criteriaSummary, "neutral", notInformed),
+    },
     {
       label: t("labels.plates"),
       value: renderTagList(rule.plates.map((item) => item.plateText), "info", notInformed),
@@ -102,15 +161,6 @@ export function EmailRuleDetailsDialog({
           ) : (
             <span>{notInformed}</span>
           )}
-        </div>
-      ),
-    },
-    { label: t("labels.subject"), value: rule.subjectTemplate || notInformed },
-    {
-      label: t("labels.body"),
-      value: (
-        <div className="max-w-full rounded-md border bg-muted/20 p-3 text-left text-xs whitespace-pre-wrap sm:max-w-[22rem]">
-          {rule.bodyTemplate || notInformed}
         </div>
       ),
     },

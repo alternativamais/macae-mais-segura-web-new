@@ -109,17 +109,17 @@
     "form": {
       "title_create": "Novo usuário",
       "title_edit": "Editar usuário",
-    "description_create": "Cadastre uma nova conta de acesso para o sistema.",
-    "description_edit": "Atualize os dados cadastrais e os cargos do usuário por empresa.",
-    "sections": {
-      "account": "Dados da conta",
-      "account_desc": "Informações principais de cadastro e status do usuário.",
-      "access": "Empresas e acessos",
-      "access_desc": "{count} empresas selecionadas para este usuário."
-    },
-    "labels": {
-      "name": "Nome",
-      "username": "Username",
+      "description_create": "Cadastre uma nova conta de acesso para o sistema.",
+      "description_edit": "Atualize os dados cadastrais e os cargos do usuário por empresa.",
+      "sections": {
+        "account": "Dados da conta",
+        "account_desc": "Informações principais de cadastro e status do usuário.",
+        "access": "Empresas e acessos",
+        "access_desc": "{count} empresas selecionadas para este usuário."
+      },
+      "labels": {
+        "name": "Nome",
+        "username": "Username",
         "email": "Email",
         "password": "Senha",
         "password_edit_hint": "(opcional na edição)",
@@ -143,17 +143,17 @@
       "empty_companies": "Nenhuma empresa encontrada.",
       "selected_companies": "{count} empresas selecionadas",
       "clear_companies": "Limpar seleção",
-    "company_roles": {
-      "title": "Acessos por empresa",
-      "description": "Ajuste o cargo de cada empresa vinculada e marque a empresa padrão.",
-      "empty": "Selecione ao menos uma empresa para configurar os cargos.",
-      "default_company": "Empresa padrão de acesso",
-      "default_label": "Empresa padrão",
-      "secondary_company": "Empresa adicional vinculada",
-      "default_selected": "Empresa padrão",
-      "make_default": "Definir como padrão",
-      "company_fallback": "Empresa #{id}",
-      "no_roles": "Sem cargos disponíveis"
+      "company_roles": {
+        "title": "Acessos por empresa",
+        "description": "Ajuste o cargo de cada empresa vinculada e marque a empresa padrão.",
+        "empty": "Selecione ao menos uma empresa para configurar os cargos.",
+        "default_company": "Empresa padrão de acesso",
+        "default_label": "Empresa padrão",
+        "secondary_company": "Empresa adicional vinculada",
+        "default_selected": "Empresa padrão",
+        "make_default": "Definir como padrão",
+        "company_fallback": "Empresa #{id}",
+        "no_roles": "Sem cargos disponíveis"
       },
       "buttons": {
         "cancel": "Cancelar",
@@ -4502,8 +4502,8 @@
     },
     "rules": {
       "title": "Regras de alerta",
-      "description": "Cada regra observa placas específicas em uma câmera LPR e dispara notificações por email, WhatsApp ou ambos.",
-      "search_placeholder": "Buscar por regra, câmera, placa, empresa, SMTP ou WhatsApp...",
+      "description": "Cada regra observa critérios configuráveis em uma câmera LPR e dispara notificações por email, WhatsApp ou ambos.",
+      "search_placeholder": "Buscar por regra, câmera, critério, empresa, SMTP ou WhatsApp...",
       "empty": "Nenhuma regra de alerta encontrada.",
       "table": {
         "name": "Regra",
@@ -4522,7 +4522,8 @@
         "no_ip": "IP não informado",
         "no_sender": "Remetente não informado",
         "no_whatsapp": "Conta WhatsApp não informada",
-        "actions": "Ações"
+        "actions": "Ações",
+        "criteria": "Critérios"
       },
       "channels": {
         "email": "Email",
@@ -4558,15 +4559,17 @@
       "form": {
         "title_create": "Nova regra de alerta",
         "title_edit": "Editar regra de alerta",
-        "description_create": "Defina quais placas disparam emails em uma câmera LPR específica.",
-        "description_edit": "Atualize placas, câmera, destinatários e templates desta regra.",
+        "description_create": "Defina quais critérios disparam notificações em uma câmera LPR específica.",
+        "description_edit": "Atualize critérios, câmera, destinatários e templates desta regra.",
         "sections": {
           "scope": "Escopo da regra",
-          "scope_desc": "Escolha empresa, câmera, canais de envio, placas observadas e cooldown.",
+          "scope_desc": "Escolha empresa, câmera, canais de envio e cooldown.",
           "recipients": "Entregas e destinatários",
           "recipients_desc": "Selecione os destinos de email e WhatsApp e ajuste a ativação da regra.",
           "templates": "Templates do email",
-          "templates_desc": "Defina assunto, corpo e placeholders usados no disparo."
+          "templates_desc": "Defina assunto, corpo e placeholders usados no disparo.",
+          "criteria": "Critérios de disparo",
+          "criteria_desc": "Combine placas, velocidade, cor, direção e outros filtros do reconhecimento."
         },
         "labels": {
           "name": "Nome da regra",
@@ -4590,7 +4593,40 @@
           "cooldown_help": "Evita disparos repetidos da mesma placa nesta regra.",
           "status": "Regra ativa",
           "status_help": "Controla se a regra fica disponível para operação.",
-          "not_informed": "Não informado"
+          "not_informed": "Não informado",
+          "criteria_group_identity": "Identificação principal",
+          "criteria_group_identity_help": "Use as placas monitoradas como identificação principal da regra.",
+          "criteria_group_vehicle": "Características do veículo",
+          "criteria_group_vehicle_help": "Escolha em listas os atributos do veículo que devem disparar a notificação.",
+          "criteria_group_detection": "Condições da detecção",
+          "criteria_group_detection_help": "Defina condições complementares da leitura reconhecida pela câmera.",
+          "device_ids": "Device IDs",
+          "device_ids_help": "Informe um identificador por linha ou separado por vírgula.",
+          "vehicle_colors": "Cor do veículo",
+          "vehicle_colors_help": "Ex.: black, white, prata.",
+          "plate_colors": "Cores da placa",
+          "plate_colors_help": "Ex.: blue, white, cinza.",
+          "vehicle_types": "Tipo de veículo",
+          "vehicle_types_help": "Ex.: car, truck, motorcycle.",
+          "vehicle_brands": "Marca do veículo",
+          "vehicle_brands_help": "Ex.: toyota, volkswagen, honda.",
+          "vehicle_series": "Séries/modelos",
+          "vehicle_series_help": "Ex.: corolla, civic, gol.",
+          "plate_types": "Tipos de placa",
+          "plate_types_help": "Ex.: civil, oficial, unknown.",
+          "regions": "Regiões da placa",
+          "regions_help": "Ex.: BR, RJ, Macaé.",
+          "min_confidence": "Confiança mínima",
+          "max_confidence": "Confiança máxima",
+          "min_people_count": "Ocupantes mínimos",
+          "max_people_count": "Ocupantes máximos",
+          "channels_filter": "Canais da leitura",
+          "channels_filter_help": "Informe os canais numéricos separados por vírgula.",
+          "directions": "Direções",
+          "directions_help": "Selecione uma ou mais direções detectadas.",
+          "requires_existing_plate": "Placa existente na base da câmera",
+          "requires_existing_plate_help": "Filtra pela marcação interna de existência enviada pela LPR.",
+          "speed_threshold": "Notificar se a velocidade ultrapassar (km/h)"
         },
         "placeholders": {
           "name": "Ex.: Alerta carro restrito",
@@ -4598,10 +4634,28 @@
           "camera": "Selecione uma câmera",
           "smtp_account": "Selecione uma conta SMTP",
           "whatsapp_account": "Selecione uma conta WhatsApp",
-          "plates": "ABC1234\nBRA2E19",
+          "plates": "Ex.: ABC1234; BRA2E19",
           "subject": "Assunto do email",
           "body": "Corpo do email",
-          "cooldown": "300"
+          "cooldown": "300",
+          "device_ids": "device-a\ndevice-b",
+          "vehicle_colors": "Selecionar cores",
+          "plate_colors": "blue\nwhite",
+          "vehicle_types": "Selecionar tipos",
+          "vehicle_brands": "Selecionar marcas",
+          "vehicle_series": "corolla\ngol",
+          "plate_types": "civil\nunknown",
+          "regions": "BR\nRJ",
+          "min_confidence": "80",
+          "max_confidence": "100",
+          "min_people_count": "1",
+          "max_people_count": "5",
+          "channels_filter": "1,2",
+          "requires_existing_plate": "Selecione uma opção",
+          "directions": "Selecionar direções",
+          "speed_threshold": "60",
+          "search_recipient": "Buscar destinatário",
+          "search_whatsapp_recipient": "Buscar destinatário WhatsApp"
         },
         "empty_recipients": "Nenhum destinatário disponível para a empresa selecionada.",
         "empty_whatsapp_recipients": "Nenhum destinatário WhatsApp disponível para a empresa e conta selecionadas.",
@@ -4609,7 +4663,8 @@
           "cancel": "Cancelar",
           "save": "Salvar alterações",
           "create": "Criar regra",
-          "open_editor": "Abrir editor do email"
+          "open_editor": "Abrir editor do email",
+          "clear_selection": "Limpar seleção"
         },
         "editor": {
           "title": "Editor de email",
@@ -4660,6 +4715,26 @@
             "rule_name": {
               "label": "Nome da regra",
               "description": "Insere o nome interno desta regra."
+            },
+            "speed_kmh": {
+              "label": "Velocidade detectada",
+              "description": "Insere a velocidade recebida na leitura da câmera."
+            },
+            "direction": {
+              "label": "Direção detectada",
+              "description": "Insere a direção identificada na passagem do veículo."
+            },
+            "vehicle_color": {
+              "label": "Cor do veículo",
+              "description": "Insere a cor do veículo reconhecida pela câmera."
+            },
+            "vehicle_type": {
+              "label": "Tipo de veículo",
+              "description": "Insere o tipo do veículo reconhecido pela câmera."
+            },
+            "vehicle_brand": {
+              "label": "Marca do veículo",
+              "description": "Insere a marca do veículo reconhecida pela câmera."
             }
           }
         },
@@ -4673,13 +4748,72 @@
           "whatsapp_recipients": "Selecione ao menos um destinatário WhatsApp.",
           "plates": "Informe ao menos uma placa.",
           "subject": "Informe o assunto do email.",
-          "body": "Informe o corpo do email."
+          "body": "Informe o corpo do email.",
+          "criteria": "Configure ao menos um critério de disparo."
         },
         "notifications": {
           "create_success": "Regra criada com sucesso.",
           "edit_success": "Regra atualizada com sucesso.",
           "create_error": "Erro ao criar a regra.",
-          "edit_error": "Erro ao atualizar a regra."
+          "edit_error": "Erro ao atualizar a regra.",
+          "invalid_plates": "Ignoradas por formato inválido: {value}. Use somente placas brasileiras como ABC1234 ou BRA2E19."
+        },
+        "options": {
+          "any": "Qualquer valor",
+          "yes": "Sim",
+          "no": "Não",
+          "enabled": "Ativado",
+          "disabled": "Desativado"
+        },
+        "directions": {
+          "obverse": "Obverse",
+          "reverse": "Reverse"
+        },
+        "option_labels": {
+          "directions": {
+            "obverse": "Frontal",
+            "reverse": "Traseira"
+          },
+          "vehicle_colors": {
+            "black": "Preto",
+            "white": "Branco",
+            "gray": "Cinza",
+            "silver": "Prata",
+            "blue": "Azul",
+            "red": "Vermelho",
+            "green": "Verde",
+            "yellow": "Amarelo",
+            "brown": "Marrom",
+            "orange": "Laranja",
+            "purple": "Roxo"
+          },
+          "vehicle_types": {
+            "car": "Carro",
+            "truck": "Caminhão",
+            "motorcycle": "Moto",
+            "bus": "Ônibus",
+            "van": "Van",
+            "pickup": "Picape",
+            "suv": "SUV"
+          },
+          "vehicle_brands": {
+            "chevrolet": "Chevrolet",
+            "fiat": "Fiat",
+            "ford": "Ford",
+            "volkswagen": "Volkswagen",
+            "toyota": "Toyota",
+            "honda": "Honda",
+            "hyundai": "Hyundai",
+            "renault": "Renault",
+            "jeep": "Jeep",
+            "nissan": "Nissan",
+            "peugeot": "Peugeot",
+            "citroen": "Citroën",
+            "kia": "Kia",
+            "bmw": "BMW",
+            "mercedes_benz": "Mercedes-Benz",
+            "audi": "Audi"
+          }
         }
       },
       "details": {
@@ -4707,8 +4841,49 @@
           "subject": "Assunto",
           "body": "Corpo do email",
           "created_at": "Criada em",
-          "updated_at": "Atualizada em"
+          "updated_at": "Atualizada em",
+          "criteria": "Critérios"
+        },
+        "criteria": {
+          "plates": "Placas",
+          "speed": "Velocidade",
+          "vehicle_colors": "Cor do veículo",
+          "plate_colors": "Cor da placa",
+          "vehicle_types": "Tipo",
+          "vehicle_brands": "Marca",
+          "vehicle_series": "Série",
+          "plate_types": "Tipo de placa",
+          "regions": "Região",
+          "directions": "Direção",
+          "confidence": "Confiança",
+          "channels": "Canal",
+          "people_count": "Ocupantes",
+          "device_ids": "Device ID",
+          "existing_plate": "Placa existente",
+          "no_criteria": "Sem critérios adicionais",
+          "yes": "Sim",
+          "no": "Não"
         }
+      },
+      "criteria": {
+        "plates": "Placas",
+        "speed": "Velocidade",
+        "vehicle_colors": "Cor do veículo",
+        "plate_colors": "Cor da placa",
+        "vehicle_types": "Tipo",
+        "vehicle_brands": "Marca",
+        "vehicle_series": "Série",
+        "plate_types": "Tipo de placa",
+        "regions": "Região",
+        "directions": "Direção",
+        "confidence": "Confiança",
+        "channels": "Canal",
+        "people_count": "Ocupantes",
+        "device_ids": "Device ID",
+        "existing_plate": "Placa existente",
+        "no_criteria": "Sem critérios adicionais",
+        "yes": "Sim",
+        "no": "Não"
       }
     }
   }

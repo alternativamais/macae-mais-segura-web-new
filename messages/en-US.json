@@ -109,17 +109,17 @@
     "form": {
       "title_create": "New user",
       "title_edit": "Edit user",
-    "description_create": "Register a new access account for the system.",
-    "description_edit": "Update registration data and company-specific user roles.",
-    "sections": {
-      "account": "Account data",
-      "account_desc": "Main registration details and user status.",
-      "access": "Companies and access",
-      "access_desc": "{count} companies selected for this user."
-    },
-    "labels": {
-      "name": "Name",
-      "username": "Username",
+      "description_create": "Register a new access account for the system.",
+      "description_edit": "Update registration data and company-specific user roles.",
+      "sections": {
+        "account": "Account data",
+        "account_desc": "Main registration details and user status.",
+        "access": "Companies and access",
+        "access_desc": "{count} companies selected for this user."
+      },
+      "labels": {
+        "name": "Name",
+        "username": "Username",
         "email": "Email",
         "password": "Password",
         "password_edit_hint": "(optional in editing)",
@@ -143,17 +143,17 @@
       "empty_companies": "No companies found.",
       "selected_companies": "{count} selected companies",
       "clear_companies": "Clear selection",
-    "company_roles": {
-      "title": "Company access",
-      "description": "Adjust the role for each linked company and mark the default company.",
-      "empty": "Select at least one company to configure roles.",
-      "default_company": "Default access company",
-      "default_label": "Default company",
-      "secondary_company": "Additional linked company",
-      "default_selected": "Default company",
-      "make_default": "Set as default",
-      "company_fallback": "Company #{id}",
-      "no_roles": "No roles available"
+      "company_roles": {
+        "title": "Company access",
+        "description": "Adjust the role for each linked company and mark the default company.",
+        "empty": "Select at least one company to configure roles.",
+        "default_company": "Default access company",
+        "default_label": "Default company",
+        "secondary_company": "Additional linked company",
+        "default_selected": "Default company",
+        "make_default": "Set as default",
+        "company_fallback": "Company #{id}",
+        "no_roles": "No roles available"
       },
       "buttons": {
         "cancel": "Cancel",
@@ -4504,8 +4504,8 @@
     },
     "rules": {
       "title": "Alert rules",
-      "description": "Each rule watches specific plates on one LPR camera and triggers notifications by email, WhatsApp, or both.",
-      "search_placeholder": "Search by rule, camera, plate, company, SMTP, or WhatsApp...",
+      "description": "Each rule watches configurable criteria on one LPR camera and triggers notifications by email, WhatsApp, or both.",
+      "search_placeholder": "Search by rule, camera, criteria, company, SMTP, or WhatsApp...",
       "empty": "No alert rule found.",
       "table": {
         "name": "Rule",
@@ -4524,7 +4524,8 @@
         "no_ip": "IP not informed",
         "no_sender": "Sender not informed",
         "no_whatsapp": "WhatsApp account not informed",
-        "actions": "Actions"
+        "actions": "Actions",
+        "criteria": "Criteria"
       },
       "channels": {
         "email": "Email",
@@ -4560,15 +4561,17 @@
       "form": {
         "title_create": "New alert rule",
         "title_edit": "Edit alert rule",
-        "description_create": "Define which plates trigger notifications on a specific LPR camera.",
-        "description_edit": "Update plates, camera, recipients, channels, and templates for this rule.",
+        "description_create": "Define which criteria trigger notifications on a specific LPR camera.",
+        "description_edit": "Update criteria, camera, recipients, and templates for this rule.",
         "sections": {
           "scope": "Rule scope",
-          "scope_desc": "Choose company, camera, delivery channels, watched plates, and cooldown.",
+          "scope_desc": "Choose company, camera, delivery channels, and cooldown.",
           "recipients": "Delivery and recipients",
           "recipients_desc": "Select email and WhatsApp targets and control rule activation.",
           "templates": "Email templates",
-          "templates_desc": "Define the subject, body, and placeholders used during delivery."
+          "templates_desc": "Define the subject, body, and placeholders used during delivery.",
+          "criteria": "Trigger criteria",
+          "criteria_desc": "Combine plates, speed, color, direction, and other recognition filters."
         },
         "labels": {
           "name": "Rule name",
@@ -4592,7 +4595,40 @@
           "cooldown_help": "Prevents repeated triggers for the same plate on this rule.",
           "status": "Rule enabled",
           "status_help": "Controls whether the rule is available for operation.",
-          "not_informed": "Not informed"
+          "not_informed": "Not informed",
+          "criteria_group_identity": "Primary identification",
+          "criteria_group_identity_help": "Use watched plates as the primary identifier for the rule.",
+          "criteria_group_vehicle": "Vehicle characteristics",
+          "criteria_group_vehicle_help": "Pick vehicle attributes from dropdown lists to trigger notifications.",
+          "criteria_group_detection": "Detection conditions",
+          "criteria_group_detection_help": "Define complementary conditions for the camera read.",
+          "device_ids": "Device IDs",
+          "device_ids_help": "Enter one identifier per line or separated by commas.",
+          "vehicle_colors": "Vehicle color",
+          "vehicle_colors_help": "Example: black, white, silver.",
+          "plate_colors": "Plate colors",
+          "plate_colors_help": "Example: blue, white, gray.",
+          "vehicle_types": "Vehicle type",
+          "vehicle_types_help": "Example: car, truck, motorcycle.",
+          "vehicle_brands": "Vehicle brand",
+          "vehicle_brands_help": "Example: toyota, volkswagen, honda.",
+          "vehicle_series": "Vehicle series/models",
+          "vehicle_series_help": "Example: corolla, civic, gol.",
+          "plate_types": "Plate types",
+          "plate_types_help": "Example: civil, official, unknown.",
+          "regions": "Plate regions",
+          "regions_help": "Example: BR, RJ, Macaé.",
+          "min_confidence": "Minimum confidence",
+          "max_confidence": "Maximum confidence",
+          "min_people_count": "Minimum occupants",
+          "max_people_count": "Maximum occupants",
+          "channels_filter": "Read channels",
+          "channels_filter_help": "Enter numeric channels separated by commas.",
+          "directions": "Directions",
+          "directions_help": "Select one or more detected directions.",
+          "requires_existing_plate": "Existing plate in camera base",
+          "requires_existing_plate_help": "Filters by the internal existence flag sent by the LPR.",
+          "speed_threshold": "Notify when speed exceeds (km/h)"
         },
         "placeholders": {
           "name": "Ex.: Restricted vehicle alert",
@@ -4600,10 +4636,28 @@
           "camera": "Select a camera",
           "smtp_account": "Select an SMTP account",
           "whatsapp_account": "Select a WhatsApp account",
-          "plates": "ABC1234\nBRA2E19",
+          "plates": "Ex.: ABC1234; BRA2E19",
           "subject": "Email subject",
           "body": "Email body",
-          "cooldown": "300"
+          "cooldown": "300",
+          "device_ids": "device-a\ndevice-b",
+          "vehicle_colors": "Select colors",
+          "plate_colors": "blue\nwhite",
+          "vehicle_types": "Select types",
+          "vehicle_brands": "Select brands",
+          "vehicle_series": "corolla\ngol",
+          "plate_types": "civil\nunknown",
+          "regions": "BR\nRJ",
+          "min_confidence": "80",
+          "max_confidence": "100",
+          "min_people_count": "1",
+          "max_people_count": "5",
+          "channels_filter": "1,2",
+          "requires_existing_plate": "Select an option",
+          "directions": "Select directions",
+          "speed_threshold": "60",
+          "search_recipient": "Search recipient",
+          "search_whatsapp_recipient": "Search WhatsApp recipient"
         },
         "empty_recipients": "No recipients are available for the selected company.",
         "empty_whatsapp_recipients": "No WhatsApp recipients are available for the selected company and account.",
@@ -4611,7 +4665,8 @@
           "cancel": "Cancel",
           "save": "Save changes",
           "create": "Create rule",
-          "open_editor": "Open email editor"
+          "open_editor": "Open email editor",
+          "clear_selection": "Clear selection"
         },
         "editor": {
           "title": "Email editor",
@@ -4662,6 +4717,26 @@
             "rule_name": {
               "label": "Rule name",
               "description": "Inserts this rule's internal name."
+            },
+            "speed_kmh": {
+              "label": "Detected speed",
+              "description": "Inserts the speed received from the camera read."
+            },
+            "direction": {
+              "label": "Detected direction",
+              "description": "Inserts the direction identified for the passing vehicle."
+            },
+            "vehicle_color": {
+              "label": "Vehicle color",
+              "description": "Inserts the vehicle color recognized by the camera."
+            },
+            "vehicle_type": {
+              "label": "Vehicle type",
+              "description": "Inserts the vehicle type recognized by the camera."
+            },
+            "vehicle_brand": {
+              "label": "Vehicle brand",
+              "description": "Inserts the vehicle brand recognized by the camera."
             }
           }
         },
@@ -4675,13 +4750,72 @@
           "whatsapp_recipients": "Select at least one WhatsApp recipient.",
           "plates": "Enter at least one plate.",
           "subject": "Enter the email subject.",
-          "body": "Enter the email body."
+          "body": "Enter the email body.",
+          "criteria": "Configure at least one trigger criteria."
         },
         "notifications": {
           "create_success": "Rule created successfully.",
           "edit_success": "Rule updated successfully.",
           "create_error": "Error creating the rule.",
-          "edit_error": "Error updating the rule."
+          "edit_error": "Error updating the rule.",
+          "invalid_plates": "Ignored due to invalid format: {value}. Use only Brazilian plates like ABC1234 or BRA2E19."
+        },
+        "options": {
+          "any": "Any value",
+          "yes": "Yes",
+          "no": "No",
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "directions": {
+          "obverse": "Obverse",
+          "reverse": "Reverse"
+        },
+        "option_labels": {
+          "directions": {
+            "obverse": "Front",
+            "reverse": "Rear"
+          },
+          "vehicle_colors": {
+            "black": "Black",
+            "white": "White",
+            "gray": "Gray",
+            "silver": "Silver",
+            "blue": "Blue",
+            "red": "Red",
+            "green": "Green",
+            "yellow": "Yellow",
+            "brown": "Brown",
+            "orange": "Orange",
+            "purple": "Purple"
+          },
+          "vehicle_types": {
+            "car": "Car",
+            "truck": "Truck",
+            "motorcycle": "Motorcycle",
+            "bus": "Bus",
+            "van": "Van",
+            "pickup": "Pickup",
+            "suv": "SUV"
+          },
+          "vehicle_brands": {
+            "chevrolet": "Chevrolet",
+            "fiat": "Fiat",
+            "ford": "Ford",
+            "volkswagen": "Volkswagen",
+            "toyota": "Toyota",
+            "honda": "Honda",
+            "hyundai": "Hyundai",
+            "renault": "Renault",
+            "jeep": "Jeep",
+            "nissan": "Nissan",
+            "peugeot": "Peugeot",
+            "citroen": "Citroën",
+            "kia": "Kia",
+            "bmw": "BMW",
+            "mercedes_benz": "Mercedes-Benz",
+            "audi": "Audi"
+          }
         }
       },
       "details": {
@@ -4709,8 +4843,49 @@
           "subject": "Subject",
           "body": "Email body",
           "created_at": "Created at",
-          "updated_at": "Updated at"
+          "updated_at": "Updated at",
+          "criteria": "Criteria"
+        },
+        "criteria": {
+          "plates": "Plates",
+          "speed": "Speed",
+          "vehicle_colors": "Vehicle color",
+          "plate_colors": "Plate color",
+          "vehicle_types": "Type",
+          "vehicle_brands": "Brand",
+          "vehicle_series": "Series",
+          "plate_types": "Plate type",
+          "regions": "Region",
+          "directions": "Direction",
+          "confidence": "Confidence",
+          "channels": "Channel",
+          "people_count": "Occupants",
+          "device_ids": "Device ID",
+          "existing_plate": "Existing plate",
+          "no_criteria": "No extra criteria",
+          "yes": "Yes",
+          "no": "No"
         }
+      },
+      "criteria": {
+        "plates": "Plates",
+        "speed": "Speed",
+        "vehicle_colors": "Vehicle color",
+        "plate_colors": "Plate color",
+        "vehicle_types": "Type",
+        "vehicle_brands": "Brand",
+        "vehicle_series": "Series",
+        "plate_types": "Plate type",
+        "regions": "Region",
+        "directions": "Direction",
+        "confidence": "Confidence",
+        "channels": "Channel",
+        "people_count": "Occupants",
+        "device_ids": "Device ID",
+        "existing_plate": "Existing plate",
+        "no_criteria": "No extra criteria",
+        "yes": "Yes",
+        "no": "No"
       }
     }
   }
