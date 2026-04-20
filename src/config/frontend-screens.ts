@@ -45,6 +45,11 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Gerenciamento dos pontos de monitoramento.",
     group: "Administração Manual",
   },
+  "admin.company_dashboards": {
+    title: "Dashboards",
+    description: "Montagem e configuração de dashboards específicos por empresa.",
+    group: "Administração Manual",
+  },
   "admin.companies": {
     title: "Empresas",
     description: "Gestão de empresas vinculadas ao sistema.",

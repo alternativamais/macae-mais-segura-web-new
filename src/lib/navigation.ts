@@ -102,6 +102,12 @@ export const appNavigation: AppNavigationGroup[] = [
             icon: MapPin,
           },
           {
+            titleKey: "dashboards",
+            url: "/administration/dashboard",
+            screenKey: "admin.company_dashboards",
+            icon: LayoutDashboard,
+          },
+          {
             titleKey: "companies",
             url: "/companies",
             screenKey: "admin.companies",

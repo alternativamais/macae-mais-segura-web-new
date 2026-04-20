@@ -16,7 +16,69 @@
   },
   "dashboard": {
     "title": "Dashboard",
-    "description": "Uma visão geral do sistema"
+    "description": "Uma visão geral do sistema",
+    "fetch_error": "Erro ao carregar o dashboard da empresa.",
+    "manage_action": "Gerenciar dashboards",
+    "company_scope": "Exibindo dados da empresa {company}.",
+    "filters": {
+      "title": "Filtros do dashboard",
+      "auto": "Auto",
+      "empty_state": "Usando a configuração padrão dos widgets.",
+      "camera_count": "{count} câmeras",
+      "modal_description": "Ajuste o que será exibido no dashboard sem alterar a configuração salva dos widgets.",
+      "description": "Ajuste os dados em tempo real sem alterar a configuração original dos widgets.",
+      "labels": {
+        "period": "Período",
+        "granularity": "Agrupamento",
+        "cameras": "Câmeras"
+      },
+      "defaults": {
+        "period": "Usar período do widget",
+        "granularity": "Usar agrupamento do widget"
+      },
+      "granularities": {
+        "hour": "Por hora",
+        "day": "Por dia"
+      },
+      "placeholders": {
+        "cameras": "Usar câmeras do widget",
+        "search_cameras": "Buscar câmera..."
+      },
+      "empty": {
+        "cameras": "Nenhuma câmera disponível para esta empresa."
+      },
+      "actions": {
+        "clear_cameras": "Limpar seleção",
+        "clear_all": "Limpar filtros",
+        "refresh": "Atualizar dashboard",
+        "open": "Configurar filtros",
+        "done": "Concluir"
+      },
+      "live_hint": "Os widgets são atualizados automaticamente conforme você altera os filtros."
+    },
+    "loading_title": "Carregando dashboard",
+    "loading_description": "Buscando os widgets configurados para a empresa ativa.",
+    "all_companies": {
+      "title": "Selecione uma empresa para visualizar o dashboard",
+      "description": "O dashboard principal agora é específico por empresa. Escolha uma empresa ativa para carregar os widgets configurados."
+    },
+    "empty": {
+      "title": "Nenhum widget configurado",
+      "description": "Esta empresa ainda não possui widgets publicados no dashboard.",
+      "action": "Criar widgets"
+    },
+    "widgets": {
+      "vehicle_count": {
+        "total": "Passagens registradas",
+        "all_cameras": "Todas as câmeras da empresa",
+        "cameras_selected": "{count} câmeras selecionadas",
+        "periods": {
+          "today": "Hoje",
+          "7d": "Últimos 7 dias",
+          "30d": "Últimos 30 dias"
+        }
+      }
+    }
   },
   "navigation": {
     "main": "Principal",
@@ -28,6 +90,7 @@
     "access_control": "Controle de Acesso",
     "companies": "Empresas",
     "points": "Pontos",
+    "dashboards": "Dashboards",
     "system": "Sistema",
     "backups": "Backups",
     "ui_settings": "Layout e Tema",
@@ -48,6 +111,193 @@
     "plate_sending": "Forças de segurança",
     "email_integrations": "Notificações",
     "extensions": "Ramais"
+  },
+  "dashboard_management": {
+    "title": "Dashboards",
+    "description": "Monte widgets por empresa e publique dashboards específicos para cada operação.",
+    "fetch_error": "Erro ao carregar os widgets do dashboard.",
+    "stats": {
+      "total": "Widgets configurados",
+      "total_desc": "Total de blocos cadastrados para dashboards por empresa.",
+      "active": "Widgets ativos",
+      "active_desc": "Widgets habilitados para aparecer no dashboard operacional.",
+      "cameras": "Câmeras disponíveis",
+      "cameras_desc": "Câmeras LPR disponíveis para alimentar os gráficos.",
+      "companies": "Empresas com widgets",
+      "companies_desc": "Empresas que já possuem ao menos um widget configurado."
+    },
+    "table": {
+      "columns": {
+        "widget": "Widget",
+        "company": "Empresa",
+        "scope": "Escopo",
+        "layout": "Layout",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "actions": {
+        "create": "Novo widget",
+        "view": "Ver detalhes",
+        "edit": "Editar",
+        "delete": "Excluir",
+        "search_placeholder": "Buscar por título, empresa ou câmera..."
+      },
+      "sizes": {
+        "half": "Meia largura",
+        "full": "Largura total"
+      },
+      "status": {
+        "enabled": "Ativo",
+        "disabled": "Inativo"
+      },
+      "periods": {
+        "today": "Hoje",
+        "7d": "Últimos 7 dias",
+        "30d": "Últimos 30 dias"
+      },
+      "granularities": {
+        "hour": "Por hora",
+        "day": "Por dia"
+      },
+      "type_lpr_vehicle_count": "Passagens em câmera LPR",
+      "scope_all_cameras": "Todas as câmeras da empresa",
+      "scope_selected_cameras": "{count} câmeras selecionadas",
+      "open_actions": "Abrir ações",
+      "loading": "Carregando widgets...",
+      "empty": "Nenhum widget encontrado.",
+      "delete_dialog": {
+        "title": "Excluir widget",
+        "description": "Deseja realmente excluir este widget do dashboard? Esta ação não pode ser desfeita.",
+        "success": "Widget excluído com sucesso.",
+        "error": "Erro ao excluir widget."
+      }
+    },
+    "details": {
+      "title": "Detalhes do widget {name}",
+      "description": "Resumo da configuração atual do widget.",
+      "type_lpr_vehicle_count": "Passagens em câmera LPR",
+      "all_company_cameras": "Todas as câmeras da empresa",
+      "labels": {
+        "company": "Empresa",
+        "type": "Tipo",
+        "layout": "Layout",
+        "position": "Posição",
+        "period": "Período",
+        "granularity": "Agrupamento",
+        "status": "Status",
+        "cameras": "Câmeras",
+        "chart_type": "Tipo de gráfico",
+        "show_total": "Total destacado"
+      },
+      "sizes": {
+        "half": "Meia largura",
+        "full": "Largura total"
+      },
+      "status": {
+        "enabled": "Ativo",
+        "disabled": "Inativo"
+      },
+      "periods": {
+        "today": "Hoje",
+        "7d": "Últimos 7 dias",
+        "30d": "Últimos 30 dias"
+      },
+      "granularities": {
+        "hour": "Por hora",
+        "day": "Por dia"
+      },
+      "chart_types": {
+        "bar": "Barras",
+        "line": "Linha",
+        "area": "Área"
+      }
+    },
+    "form": {
+      "title_create": "Novo widget",
+      "title_edit": "Editar widget",
+      "description_create": "Configure um widget de dashboard para uma empresa específica.",
+      "description_edit": "Atualize o widget e publique a nova configuração no dashboard.",
+      "sections": {
+        "setup": "Configuração geral",
+        "setup_desc": "Defina o título, o layout e o status do widget.",
+        "data": "Fonte dos dados",
+        "data_desc": "Escolha as câmeras e a janela temporal do gráfico.",
+        "appearance": "Visualização",
+        "appearance_desc": "Ajuste como o gráfico aparece no dashboard."
+      },
+      "labels": {
+        "title": "Título do widget",
+        "size": "Layout",
+        "position": "Posição",
+        "enabled": "Widget ativo",
+        "camera_filter": "Filtrar câmeras específicas",
+        "cameras": "Câmeras LPR",
+        "period": "Período",
+        "granularity": "Agrupamento",
+        "chart_type": "Tipo de gráfico",
+        "show_total": "Exibir total destacado"
+      },
+      "descriptions": {
+        "enabled": "Controla se o widget aparece no dashboard da empresa.",
+        "position": "Widgets com menor posição aparecem primeiro.",
+        "cameras": "Se nenhuma câmera for selecionada, o widget considera todas as câmeras da empresa."
+      },
+      "placeholders": {
+        "title": "Ex.: Passagens LPR - Entrada principal",
+        "cameras": "Todas as câmeras da empresa",
+        "search_cameras": "Buscar câmera..."
+      },
+      "empty": {
+        "cameras": "Nenhuma câmera encontrada para esta empresa."
+      },
+      "sizes": {
+        "half": "Meia largura",
+        "full": "Largura total"
+      },
+      "periods": {
+        "today": "Hoje",
+        "7d": "Últimos 7 dias",
+        "30d": "Últimos 30 dias"
+      },
+      "granularities": {
+        "hour": "Por hora",
+        "day": "Por dia"
+      },
+      "chart_types": {
+        "bar": "Barras",
+        "line": "Linha",
+        "area": "Área"
+      },
+      "status": {
+        "enabled": "Ativo",
+        "disabled": "Inativo"
+      },
+      "preview": {
+        "title": "Prévia em tempo real",
+        "description": "Veja o widget como ele ficará no dashboard.",
+        "default_title": "Prévia de passagens LPR",
+        "loading": "Atualizando",
+        "live": "Tempo real",
+        "select_company": "Selecione uma empresa para gerar a prévia do widget.",
+        "waiting": "Ajuste os campos para visualizar a prévia.",
+        "error": "Não foi possível carregar a prévia agora."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "create": "Criar widget",
+        "save": "Salvar alterações",
+        "clear_cameras": "Limpar seleção"
+      },
+      "validations": {
+        "title_required": "Informe um título para o widget."
+      },
+      "notifications": {
+        "create_success": "Widget criado com sucesso.",
+        "update_success": "Widget atualizado com sucesso.",
+        "create_error": "Erro ao criar widget.",
+        "update_error": "Erro ao atualizar widget."
+      }
+    }
   },
   "user": {
     "account": "Conta",
