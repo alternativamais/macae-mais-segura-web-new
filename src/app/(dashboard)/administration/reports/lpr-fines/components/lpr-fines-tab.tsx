@@ -157,7 +157,7 @@ export function LprFinesTab() {
                 <TableCell>{item.empresa?.nome || "—"}</TableCell>
                 <TableCell>
                   <div className="space-y-1">
-                    <p className="font-medium">{item.rule?.name || "—"}</p>
+                    <p className="font-medium">{item.rule?.name || item.ruleName || "—"}</p>
                     {item.rule?.description ? (
                       <p className="line-clamp-1 text-xs text-muted-foreground">{item.rule.description}</p>
                     ) : null}

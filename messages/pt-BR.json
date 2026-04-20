@@ -145,7 +145,13 @@
         "image": "Imagem capturada",
         "deliveries": "Entregas registradas",
         "detection_data": "Dados capturados",
-        "payload_data": "Payload bruto"
+        "payload_data": "Payload bruto",
+        "raw_summary": "Dados técnicos"
+      },
+      "tabs": {
+        "overview": "Visão geral",
+        "deliveries": "Entregas",
+        "raw_data": "Dados"
       },
       "labels": {
         "plate": "Placa",

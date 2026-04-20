@@ -31,7 +31,8 @@ export interface LprFineDispatchLog {
 export interface LprFineReport {
   id: number
   empresaId: number
-  ruleId: number
+  ruleId?: number | null
+  ruleName: string
   detectionId?: number | null
   cameraId: number
   plateText: string

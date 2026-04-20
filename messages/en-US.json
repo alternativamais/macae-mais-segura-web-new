@@ -145,7 +145,13 @@
         "image": "Captured image",
         "deliveries": "Recorded deliveries",
         "detection_data": "Captured data",
-        "payload_data": "Raw payload"
+        "payload_data": "Raw payload",
+        "raw_summary": "Technical data"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "deliveries": "Deliveries",
+        "raw_data": "Data"
       },
       "labels": {
         "plate": "Plate",
