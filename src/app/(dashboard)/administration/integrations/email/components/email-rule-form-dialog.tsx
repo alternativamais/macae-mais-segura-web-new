@@ -748,6 +748,12 @@ export function EmailRuleFormDialog({
         tone: "accent",
       },
       {
+        label: t("editor.tokens.image_markdown.label"),
+        description: t("editor.tokens.image_markdown.description"),
+        token: "{{detection.imageMarkdown}}",
+        tone: "danger",
+      },
+      {
         label: t("editor.tokens.camera_name.label"),
         description: t("editor.tokens.camera_name.description"),
         token: "{{camera.nome}}",

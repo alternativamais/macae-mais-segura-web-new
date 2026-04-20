@@ -3,6 +3,7 @@
 import {
   Archive,
   Building2,
+  FileText,
   HardDrive,
   LayoutDashboard,
   Logs,
@@ -168,6 +169,19 @@ export const appNavigation: AppNavigationGroup[] = [
             url: "/administration/integrations/email",
             screenKey: "admin.email_integrations",
             icon: Send,
+          },
+        ],
+      },
+      {
+        titleKey: "reports",
+        url: "#",
+        icon: FileText,
+        items: [
+          {
+            titleKey: "lpr_fines",
+            url: "/administration/reports/lpr-fines",
+            screenKey: "admin.lpr_fines_reports",
+            icon: FileText,
           },
         ],
       },

@@ -99,6 +99,7 @@
     "manual_administration": "Administração manual",
     "equipment": "Equipamentos",
     "integrations": "Integrações LPR",
+    "reports": "Relatórios",
     "telephony": "Telefonia",
     "call_center": "Central de Atendimento",
     "map": "Mapa",
@@ -110,7 +111,58 @@
     "notification_center": "Central de Notificações",
     "plate_sending": "Forças de segurança",
     "email_integrations": "Notificações",
+    "lpr_fines": "LPR multas",
     "extensions": "Ramais"
+  },
+  "lpr_fines_reports": {
+    "title": "LPR multas",
+    "description": "Consulte as placas capturadas pelas regras de notificações, com imagem da LPR e histórico das entregas realizadas.",
+    "fetch_error": "Erro ao carregar os relatórios de LPR multas.",
+    "table": {
+      "search_placeholder": "Buscar por placa, empresa, regra ou câmera...",
+      "empty": "Nenhum relatório encontrado.",
+      "columns": {
+        "plate": "Placa",
+        "company": "Empresa",
+        "rule": "Regra",
+        "camera": "Câmera",
+        "delivery": "Entrega",
+        "detected_at": "Detecção",
+        "actions": "Ações"
+      },
+      "actions": {
+        "view": "Ver detalhes"
+      }
+    },
+    "details": {
+      "title": "Detalhes da placa {plate}",
+      "description": "Imagem, dados capturados e histórico de entregas geradas pela regra.",
+      "fetch_error": "Erro ao carregar os detalhes do relatório.",
+      "actions": {
+        "open_image": "Abrir imagem"
+      },
+      "sections": {
+        "image": "Imagem capturada",
+        "deliveries": "Entregas registradas",
+        "detection_data": "Dados capturados",
+        "payload_data": "Payload bruto"
+      },
+      "labels": {
+        "plate": "Placa",
+        "company": "Empresa",
+        "rule": "Regra",
+        "camera": "Câmera",
+        "detected_at": "Detectado em",
+        "triggered_at": "Disparado em",
+        "channels": "Canais",
+        "no_image": "Sem imagem salva para esta ocorrência.",
+        "no_deliveries": "Nenhum envio foi registrado para esta ocorrência."
+      },
+      "status": {
+        "success": "Sucesso",
+        "error": "Falha"
+      }
+    }
   },
   "dashboard_management": {
     "title": "Dashboards",
@@ -4985,6 +5037,10 @@
             "vehicle_brand": {
               "label": "Marca do veículo",
               "description": "Insere a marca do veículo reconhecida pela câmera."
+            },
+            "image_markdown": {
+              "label": "Imagem capturada",
+              "description": "Insere a imagem registrada pela LPR no corpo do email."
             }
           }
         },
