@@ -1,9 +1,8 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { ScreenGuard } from "@/components/shared/screen-guard"
-import { empresaService } from "@/services/empresa.service"
 import { roleService } from "@/services/role.service"
 import { userService } from "@/services/user.service"
 import { Empresa } from "@/types/empresa"
@@ -11,6 +10,7 @@ import { Role } from "@/types/role"
 import { User } from "@/types/user"
 import { DataTable } from "./components/data-table"
 import { StatCards } from "./components/stat-cards"
+import { useAuthStore } from "@/store/auth-store"
 
 const USERS_FETCH_PAGE_SIZE = 100
 
@@ -19,11 +19,36 @@ import { useTranslator } from "@/lib/i18n"
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
   const [roles, setRoles] = useState<Role[]>([])
-  const [companies, setCompanies] = useState<Empresa[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const t = useTranslator("users")
+  const activeCompanyId = useAuthStore((state) => state.activeCompanyId)
+  const availableCompanies = useAuthStore((state) => state.availableCompanies)
   const fetchErrorMessageRef = useRef(t("fetch_error"))
   fetchErrorMessageRef.current = t("fetch_error")
+
+  const companies = useMemo<Empresa[]>(() => {
+    if (activeCompanyId === "ALL") {
+      return availableCompanies.map((company) => ({
+        id: company.id,
+        nome: company.nome,
+        status: "active",
+      }))
+    }
+
+    const activeCompany = availableCompanies.find(
+      (company) => String(company.id) === String(activeCompanyId),
+    )
+
+    return activeCompany
+      ? [
+          {
+            id: activeCompany.id,
+            nome: activeCompany.nome,
+            status: "active",
+          },
+        ]
+      : []
+  }, [activeCompanyId, availableCompanies])
 
   const loadAllUsers = useCallback(async () => {
     const firstPage = await userService.findAll(1, USERS_FETCH_PAGE_SIZE)
@@ -49,13 +74,9 @@ export default function UsersPage() {
     setIsLoading(true)
 
     try {
-      const [usersData, companiesData] = await Promise.all([
-        loadAllUsers(),
-        empresaService.findAllNoPagination(),
-      ])
-
+      const usersData = await loadAllUsers()
       const rolesByCompany = await Promise.all(
-        companiesData.map((company) => roleService.findAllNoPagination(company.id)),
+        companies.map((company) => roleService.findAllNoPagination(company.id)),
       )
 
       const rolesData = Array.from(
@@ -68,16 +89,14 @@ export default function UsersPage() {
 
       setUsers(usersData)
       setRoles(rolesData)
-      setCompanies(companiesData)
     } catch (error) {
       toast.apiError(error, fetchErrorMessageRef.current)
       setUsers([])
       setRoles([])
-      setCompanies([])
     } finally {
       setIsLoading(false)
     }
-  }, [loadAllUsers])
+  }, [companies, loadAllUsers])
 
   useEffect(() => {
     loadUsers()
