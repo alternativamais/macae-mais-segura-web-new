@@ -1855,6 +1855,7 @@
         "errors": {
           "no_stream": "URL de stream WebRTC não disponível.",
           "connection_lost": "Conexão P2P perdida com o stream de vídeo.",
+          "stream_stalled": "O vídeo travou e a reconexão foi iniciada.",
           "upstream_failure": "Erro de comunicação de vídeo (status: {status}).",
           "hls_failed": "Falha ao reproduzir o stream HLS.",
           "hls_unsupported": "Este navegador não suporta a reprodução HLS configurada.",

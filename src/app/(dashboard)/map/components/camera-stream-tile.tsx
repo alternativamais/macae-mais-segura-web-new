@@ -13,8 +13,11 @@ interface CameraStreamTileProps {
 }
 
 const MAX_SILENT_RETRIES = 3
-const SILENT_RETRY_DELAY_MS = 2500
+const SILENT_RETRY_DELAY_MS = 1200
 const MAX_PARALLEL_CAMERA_BOOTSTRAPS = 2
+const DISCONNECT_GRACE_MS = 2000
+const STALL_CHECK_INTERVAL_MS = 2000
+const MAX_STALL_TICKS = 3
 
 let activeCameraBootstraps = 0
 const waitingCameraBootstraps: Array<() => void> = []
@@ -46,10 +49,20 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const pcRef = useRef<RTCPeerConnection | null>(null)
   const disconnectTimerRef = useRef<number | null>(null)
+  const retryTimerRef = useRef<number | null>(null)
+  const stallTimerRef = useRef<number | null>(null)
+  const sessionUrlRef = useRef<string | null>(null)
+  const silentRetriesRef = useRef(0)
+  const forceRefreshNextRef = useRef(false)
+  const recoveryInFlightRef = useRef(false)
+  const suppressPeerEventsRef = useRef(false)
+  const lastVideoTimeRef = useRef(0)
+  const lastDecodedFramesRef = useRef<number | null>(null)
+  const stagnantTicksRef = useRef(0)
 
   const [status, setStatus] = useState<"idle" | "connecting" | "connected" | "error">("idle")
   const [errorMessage, setErrorMessage] = useState("")
-  const [retryCount, setRetryCount] = useState(0)
+  const [retryToken, setRetryToken] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -99,17 +112,186 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
     }
   }, [])
 
+  const clearRetryTimer = useCallback(() => {
+    if (retryTimerRef.current) {
+      window.clearTimeout(retryTimerRef.current)
+      retryTimerRef.current = null
+    }
+  }, [])
+
+  const clearStallTimer = useCallback(() => {
+    if (stallTimerRef.current) {
+      window.clearInterval(stallTimerRef.current)
+      stallTimerRef.current = null
+    }
+  }, [])
+
+  const resetHealthCounters = useCallback(() => {
+    lastVideoTimeRef.current = 0
+    lastDecodedFramesRef.current = null
+    stagnantTicksRef.current = 0
+  }, [])
+
+  const teardownRemoteSession = useCallback(async () => {
+    const sessionUrl = sessionUrlRef.current
+    sessionUrlRef.current = null
+    if (!sessionUrl) {
+      return
+    }
+    await streamService.deleteWebRtcSession(sessionUrl)
+  }, [])
+
+  const cleanupConnection = useCallback(
+    async (terminateRemoteSession = true) => {
+      clearDisconnectTimer()
+      clearRetryTimer()
+      clearStallTimer()
+      resetHealthCounters()
+
+      const pc = pcRef.current
+      pcRef.current = null
+      suppressPeerEventsRef.current = true
+
+      if (pc) {
+        try {
+          pc.close()
+        } catch {
+          // noop
+        }
+      }
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = null
+      }
+
+      if (terminateRemoteSession) {
+        await teardownRemoteSession()
+      }
+
+      suppressPeerEventsRef.current = false
+    },
+    [clearDisconnectTimer, clearRetryTimer, clearStallTimer, resetHealthCounters, teardownRemoteSession],
+  )
+
+  const scheduleReconnect = useCallback(
+    async ({
+      forceRefresh = false,
+      silent = true,
+      message,
+    }: {
+      forceRefresh?: boolean
+      silent?: boolean
+      message?: string
+    }) => {
+      if (recoveryInFlightRef.current) {
+        return
+      }
+
+      recoveryInFlightRef.current = true
+      forceRefreshNextRef.current = forceRefreshNextRef.current || forceRefresh
+      await cleanupConnection(true)
+
+      if (silent && silentRetriesRef.current < MAX_SILENT_RETRIES) {
+        silentRetriesRef.current += 1
+        setStatus("connecting")
+        setErrorMessage("")
+        retryTimerRef.current = window.setTimeout(() => {
+          recoveryInFlightRef.current = false
+          setRetryToken((value) => value + 1)
+        }, SILENT_RETRY_DELAY_MS)
+        return
+      }
+
+      setErrorMessage(message || t("errors.generic"))
+      setStatus("error")
+    },
+    [cleanupConnection, t],
+  )
+
+  const startStallMonitor = useCallback(
+    (pc: RTCPeerConnection) => {
+      clearStallTimer()
+      resetHealthCounters()
+
+      stallTimerRef.current = window.setInterval(async () => {
+        if (pcRef.current !== pc || suppressPeerEventsRef.current) {
+          return
+        }
+
+        const video = videoRef.current
+        if (!video) {
+          return
+        }
+
+        const connected =
+          pc.connectionState === "connected" ||
+          pc.iceConnectionState === "connected" ||
+          pc.iceConnectionState === "completed"
+
+        if (!connected || video.readyState < 2) {
+          return
+        }
+
+        let decodedFrames: number | null = null
+
+        try {
+          const stats = await pc.getStats()
+          stats.forEach((report) => {
+            if (report.type === "inbound-rtp" && (report as RTCInboundRtpStreamStats).kind === "video") {
+              const candidate = Number(
+                (report as RTCInboundRtpStreamStats).framesDecoded ??
+                  (report as RTCInboundRtpStreamStats).framesReceived ??
+                  0,
+              )
+              if (Number.isFinite(candidate)) {
+                decodedFrames = candidate
+              }
+            }
+          })
+        } catch {
+          return
+        }
+
+        const currentTime = video.currentTime
+        const timeProgressed = currentTime > lastVideoTimeRef.current + 0.01
+        const framesProgressed =
+          decodedFrames !== null &&
+          (lastDecodedFramesRef.current === null || decodedFrames > lastDecodedFramesRef.current)
+
+        lastVideoTimeRef.current = currentTime
+        if (decodedFrames !== null) {
+          lastDecodedFramesRef.current = decodedFrames
+        }
+
+        if (timeProgressed || framesProgressed) {
+          stagnantTicksRef.current = 0
+          return
+        }
+
+        stagnantTicksRef.current += 1
+        if (stagnantTicksRef.current >= MAX_STALL_TICKS) {
+          void scheduleReconnect({
+            forceRefresh: true,
+            silent: true,
+            message: t("errors.stream_stalled"),
+          })
+        }
+      }, STALL_CHECK_INTERVAL_MS)
+    },
+    [clearStallTimer, resetHealthCounters, scheduleReconnect, t],
+  )
+
   // ---------- WebRTC WHEP ----------
   useEffect(() => {
     if (!camera?.id) return
     if (!isVisible) {
+      void cleanupConnection(true)
       setStatus("idle")
       setErrorMessage("")
       return
     }
 
     let mounted = true
-    let silentRetries = 0
 
     setStatus("connecting")
     setErrorMessage("")
@@ -118,10 +300,16 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
       let bootstrapSlotAcquired = false
 
       try {
+        recoveryInFlightRef.current = false
         await acquireCameraBootstrapSlot()
         bootstrapSlotAcquired = true
 
-        const info = await streamService.getStreamInfo(camera.id)
+        const forceRefresh = forceRefreshNextRef.current
+        forceRefreshNextRef.current = false
+
+        const info = await streamService.getStreamInfo(camera.id, {
+          forceRefresh,
+        })
 
         if (!mounted) return
         if (!info || !info.webRtcUrl) {
@@ -130,12 +318,9 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
 
         const webRtcUrl = info.webRtcUrl
         const video = videoRef.current
+        await cleanupConnection(true)
 
         // Limpa a conexão anterior se houver
-        if (pcRef.current) {
-          pcRef.current.close()
-        }
-
         const pc = new RTCPeerConnection({
           iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
         })
@@ -149,13 +334,48 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
           if (mounted && video) {
             video.srcObject = event.streams[0]
             clearDisconnectTimer()
+            resetHealthCounters()
+            silentRetriesRef.current = 0
             setErrorMessage("")
             setStatus("connected")
+            startStallMonitor(pc)
+          }
+        }
+
+        pc.onconnectionstatechange = () => {
+          if (!mounted || suppressPeerEventsRef.current) return
+
+          if (pc.connectionState === "connected") {
+            clearDisconnectTimer()
+            silentRetriesRef.current = 0
+            return
+          }
+
+          if (pc.connectionState === "disconnected") {
+            clearDisconnectTimer()
+            disconnectTimerRef.current = window.setTimeout(() => {
+              if (!mounted) return
+              void scheduleReconnect({
+                forceRefresh: true,
+                silent: true,
+                message: t("errors.connection_lost"),
+              })
+            }, DISCONNECT_GRACE_MS)
+            return
+          }
+
+          if (pc.connectionState === "failed" || pc.connectionState === "closed") {
+            clearDisconnectTimer()
+            void scheduleReconnect({
+              forceRefresh: true,
+              silent: true,
+              message: t("errors.connection_lost"),
+            })
           }
         }
 
         pc.oniceconnectionstatechange = () => {
-          if (!mounted) return
+          if (!mounted || suppressPeerEventsRef.current) return
 
           if (pc.iceConnectionState === "connected" || pc.iceConnectionState === "completed") {
             clearDisconnectTimer()
@@ -167,16 +387,22 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
             clearDisconnectTimer()
             disconnectTimerRef.current = window.setTimeout(() => {
               if (!mounted) return
-              setErrorMessage(t("errors.connection_lost"))
-              setStatus("error")
-            }, 4000)
+              void scheduleReconnect({
+                forceRefresh: true,
+                silent: true,
+                message: t("errors.connection_lost"),
+              })
+            }, DISCONNECT_GRACE_MS)
             return
           }
 
           if (pc.iceConnectionState === "failed") {
             clearDisconnectTimer()
-            setErrorMessage(t("errors.connection_lost"))
-            setStatus("error")
+            void scheduleReconnect({
+              forceRefresh: true,
+              silent: true,
+              message: t("errors.connection_lost"),
+            })
           }
         }
 
@@ -220,15 +446,13 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
         if (!mounted) return
 
         if (!response.ok) {
-          if (response.status === 400 && silentRetries < MAX_SILENT_RETRIES) {
-            silentRetries++
-            if (pcRef.current) pcRef.current.close()
-            setTimeout(() => {
-              if (mounted) startWebRTC()
-            }, SILENT_RETRY_DELAY_MS)
-            return
-          }
           throw new Error(t("errors.upstream_failure", { status: String(response.status) }))
+        }
+
+        const whepSessionUrl =
+          response.headers.get("x-whep-session") || response.headers.get("location")
+        if (whepSessionUrl) {
+          sessionUrlRef.current = whepSessionUrl
         }
 
         const answerSdp = await response.text()
@@ -245,10 +469,19 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
         video?.play().catch(() => {})
       } catch (err) {
         if (mounted) {
-          setErrorMessage(
-            err instanceof Error ? err.message : t("errors.generic"),
-          )
-          setStatus("error")
+          const message =
+            err instanceof Error ? err.message : t("errors.generic")
+
+          if (message === t("errors.no_stream")) {
+            setErrorMessage(message)
+            setStatus("error")
+          } else {
+            void scheduleReconnect({
+              forceRefresh: true,
+              silent: true,
+              message,
+            })
+          }
         }
       } finally {
         if (bootstrapSlotAcquired) {
@@ -261,25 +494,20 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
 
     return () => {
       mounted = false
-      clearDisconnectTimer()
-      if (pcRef.current) {
-        pcRef.current.close()
-        pcRef.current = null
-      }
-      if (videoRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        videoRef.current.srcObject = null
-      }
+      void cleanupConnection(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [camera?.id, clearDisconnectTimer, isVisible, retryCount])
+  }, [camera?.id, cleanupConnection, clearDisconnectTimer, isVisible, retryToken, scheduleReconnect, startStallMonitor, t])
 
   const handleRetry = () => {
-    if (pcRef.current) {
-      pcRef.current.close()
-      pcRef.current = null
-    }
-    setRetryCount((c) => c + 1)
+    silentRetriesRef.current = 0
+    recoveryInFlightRef.current = false
+    forceRefreshNextRef.current = true
+    void cleanupConnection(true).finally(() => {
+      setStatus("connecting")
+      setErrorMessage("")
+      setRetryToken((c) => c + 1)
+    })
   }
 
   const cameraName = camera.nome || t("untitled", { id: String(camera.id) })
@@ -320,7 +548,17 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
 
       {/* Fullscreen button */}
       {status === "connected" && (
-        <div className="pointer-events-auto absolute right-2 bottom-2 z-20 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="pointer-events-auto absolute right-2 bottom-2 z-20 flex items-center gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              handleRetry()
+            }}
+            className="cursor-pointer rounded-md bg-black/50 p-1.5 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </button>
           <button
             type="button"
             onClick={(e) => {
