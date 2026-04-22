@@ -91,6 +91,7 @@
     "companies": "Empresas",
     "points": "Pontos",
     "dashboards": "Dashboards",
+    "infrastructure": "Infraestrutura",
     "system": "Sistema",
     "backups": "Backups",
     "ui_settings": "Layout e Tema",
@@ -113,6 +114,98 @@
     "email_integrations": "Notificações",
     "lpr_fines": "LPR multas",
     "extensions": "Ramais"
+  },
+  "shared_infrastructure": {
+    "title": "Infraestrutura",
+    "description": "Gerencie compartilhamento de pontos, totens e equipamentos entre empresas.",
+    "fetch_error": "Erro ao carregar a infraestrutura compartilhada.",
+    "search_placeholder": "Buscar por nome, IP ou empresa...",
+    "not_informed": "Não informado",
+    "empty": "Nenhum ativo encontrado para o contexto selecionado.",
+    "shared_count": "{count} empresas compartilhadas",
+    "shared_count_short": "{count} compartilhadas",
+    "more_companies": "+{count} empresas",
+    "totens_count": "{count} totens",
+    "devices_count": "{count} equipamentos",
+    "status": {
+      "active": "Ativo",
+      "inactive": "Inativo"
+    },
+    "types": {
+      "point": "Ponto",
+      "totem": "Totem",
+      "camera": "Câmera",
+      "network_equipment": "Equip. de rede",
+      "smart_switch": "Smart switch",
+      "climate_equipment": "Equip. climático"
+    },
+    "hierarchy": {
+      "root_point": "Ponto principal",
+      "orphan_totem": "Totem sem ponto",
+      "orphan_asset": "Sem vínculo estrutural"
+    },
+    "actions": {
+      "manage_access": "Gerenciar acesso"
+    },
+    "filters": {
+      "company_placeholder": "Filtrar por empresa",
+      "all_companies": "Todas as empresas"
+    },
+    "table": {
+      "columns": {
+        "asset": "Ativo",
+        "type": "Tipo",
+        "hierarchy": "Estrutura",
+        "owner_company": "Empresa proprietária",
+        "sharing": "Compartilhamento",
+        "status": "Status",
+        "actions": "Ações"
+      },
+      "open_actions": "Abrir ações"
+    },
+    "sections": {
+      "totems": "Totens",
+      "cameras": "Câmeras",
+      "network_equipment": "Equipamentos de rede",
+      "smart_switches": "Smart switches",
+      "climate_equipment": "Equipamentos climáticos",
+      "direct_cameras": "Câmeras diretas do ponto",
+      "direct_network_equipment": "Equipamentos de rede diretos",
+      "direct_smart_switches": "Smart switches diretos",
+      "direct_climate_equipment": "Equipamentos climáticos diretos",
+      "orphan_totems": "Totens sem ponto",
+      "orphan_assets": "Equipamentos sem vínculo estrutural"
+    },
+    "panel": {
+      "title": "Gerenciar compartilhamento",
+      "description": "Defina quais empresas podem acessar {asset}.",
+      "description_empty": "Selecione um ativo para configurar o compartilhamento.",
+      "labels": {
+        "owner_company": "Empresa proprietária",
+        "shared_companies": "Empresas compartilhadas",
+        "reference": "Referência"
+      },
+      "companies_label": "Empresas com acesso",
+      "companies_description": "Escolha quais empresas poderão visualizar este item.",
+      "owner_locked": "A empresa proprietária sempre mantém acesso.",
+      "empty_companies": "Nenhuma outra empresa disponível para compartilhamento.",
+      "apply_descendants": {
+        "title": "Aplicar aos descendentes",
+        "description": "Replica o compartilhamento para os ativos filhos vinculados a este item."
+      },
+      "actions": {
+        "cancel": "Cancelar",
+        "save": "Salvar acesso"
+      },
+      "success": "Compartilhamento atualizado com sucesso.",
+      "error": "Não foi possível atualizar o compartilhamento.",
+      "status": {
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "enabled": "Ativado",
+        "disabled": "Desativado"
+      }
+    }
   },
   "lpr_fines_reports": {
     "title": "LPR multas",

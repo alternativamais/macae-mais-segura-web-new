@@ -50,6 +50,11 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     description: "Montagem e configuração de dashboards específicos por empresa.",
     group: "Administração Manual",
   },
+  "admin.shared_infrastructure": {
+    title: "Infraestrutura",
+    description: "Gerenciamento centralizado de pontos, totens e equipamentos compartilhados entre empresas.",
+    group: "Administração Manual",
+  },
   "admin.lpr_fines_reports": {
     title: "LPR multas",
     description: "Consulta das placas capturadas pelas regras de notificações, com imagem da LPR e histórico de entregas.",

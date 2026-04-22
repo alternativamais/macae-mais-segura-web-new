@@ -91,6 +91,7 @@
     "companies": "Companies",
     "points": "Points",
     "dashboards": "Dashboards",
+    "infrastructure": "Infrastructure",
     "system": "System",
     "backups": "Backups",
     "ui_settings": "UI Settings",
@@ -113,6 +114,98 @@
     "email_integrations": "Notifications",
     "lpr_fines": "LPR fines",
     "extensions": "Extensions"
+  },
+  "shared_infrastructure": {
+    "title": "Infrastructure",
+    "description": "Manage company sharing for points, totens, and attached equipment.",
+    "fetch_error": "Error loading shared infrastructure.",
+    "search_placeholder": "Search by name, IP, or company...",
+    "not_informed": "Not informed",
+    "empty": "No assets were found for the selected scope.",
+    "shared_count": "{count} shared companies",
+    "shared_count_short": "{count} shared",
+    "more_companies": "+{count} companies",
+    "totens_count": "{count} totens",
+    "devices_count": "{count} devices",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "types": {
+      "point": "Point",
+      "totem": "Totem",
+      "camera": "Camera",
+      "network_equipment": "Network equip.",
+      "smart_switch": "Smart switch",
+      "climate_equipment": "Climate equip."
+    },
+    "hierarchy": {
+      "root_point": "Main point",
+      "orphan_totem": "Totem without point",
+      "orphan_asset": "No structural link"
+    },
+    "actions": {
+      "manage_access": "Manage access"
+    },
+    "filters": {
+      "company_placeholder": "Filter by company",
+      "all_companies": "All companies"
+    },
+    "table": {
+      "columns": {
+        "asset": "Asset",
+        "type": "Type",
+        "hierarchy": "Structure",
+        "owner_company": "Owner company",
+        "sharing": "Sharing",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "open_actions": "Open actions"
+    },
+    "sections": {
+      "totems": "Totens",
+      "cameras": "Cameras",
+      "network_equipment": "Network equipment",
+      "smart_switches": "Smart switches",
+      "climate_equipment": "Climate equipment",
+      "direct_cameras": "Point direct cameras",
+      "direct_network_equipment": "Direct network equipment",
+      "direct_smart_switches": "Direct smart switches",
+      "direct_climate_equipment": "Direct climate equipment",
+      "orphan_totems": "Totens without point",
+      "orphan_assets": "Unlinked equipment"
+    },
+    "panel": {
+      "title": "Manage sharing",
+      "description": "Define which companies can access {asset}.",
+      "description_empty": "Select an asset to configure sharing.",
+      "labels": {
+        "owner_company": "Owner company",
+        "shared_companies": "Shared companies",
+        "reference": "Reference"
+      },
+      "companies_label": "Companies with access",
+      "companies_description": "Choose which companies can view this item.",
+      "owner_locked": "The owner company always keeps access.",
+      "empty_companies": "No other companies are available for sharing.",
+      "apply_descendants": {
+        "title": "Apply to descendants",
+        "description": "Replicate the same sharing configuration to child assets linked to this item."
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save access"
+      },
+      "success": "Sharing updated successfully.",
+      "error": "Could not update sharing.",
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      }
+    }
   },
   "lpr_fines_reports": {
     "title": "LPR fines",
