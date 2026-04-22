@@ -80,4 +80,9 @@ export const backupService = {
     });
     return data;
   },
+
+  deleteBackup: async (id: number): Promise<{ status: string; id: number }> => {
+    const { data } = await api.delete<{ status: string; id: number }>(`/backups/${id}`);
+    return data;
+  },
 };

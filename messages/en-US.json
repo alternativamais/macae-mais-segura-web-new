@@ -2325,10 +2325,12 @@
       "failure": "Failure",
       "no_name": "No name"
     },
-    "history_tab": {
-      "error_load": "Error loading backup history.",
-      "error_download": "Error downloading backup.",
-      "success_download": "Download started.",
+  "history_tab": {
+    "error_load": "Error loading backup history.",
+    "error_download": "Error downloading backup.",
+    "error_delete": "Error deleting backup.",
+    "success_download": "Download started.",
+    "success_delete": "Backup deleted successfully.",
       "no_permission_title": "No access to backups module",
       "no_permission_desc": "Your profile lacks permissions to view or operate backups.",
       "search": "Search by file, origin, status or note...",
@@ -2342,11 +2344,16 @@
       "format_unknown": "Unknown format",
       "records_count": "{count} records",
       "no_notes": "No notes",
-      "actions": {
-        "view": "View details",
-        "download": "Download file",
-        "restore": "Restore"
-      },
+    "actions": {
+      "view": "View details",
+      "download": "Download file",
+      "restore": "Restore",
+      "delete": "Delete"
+    },
+    "delete_dialog": {
+      "title": "Delete backup",
+      "description": "Are you sure you want to delete backup {file}? This removes the record and the physical file when available."
+    },
       "open_actions": "Open actions",
       "loading": "Loading...",
       "empty": "No backup found.",

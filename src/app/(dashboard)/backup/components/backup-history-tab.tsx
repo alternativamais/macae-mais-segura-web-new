@@ -9,16 +9,19 @@ import {
   Plus,
   RotateCcw,
   Search,
+  Trash2,
 } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { TabStateCard } from "@/app/(dashboard)/access-control/components/tab-state-card"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TablePaginationFooter } from "@/app/(dashboard)/access-control/components/table-pagination-footer"
+import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -61,6 +64,7 @@ export function BackupHistoryTab({
   const canCreate = hasPermission("criar_backup")
   const canDownload = hasPermission("download_backup")
   const canRestore = hasPermission("restaurar_backup")
+  const canDelete = hasPermission("deletar_backup")
 
   const [items, setItems] = useState<BackupRecord[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -73,6 +77,9 @@ export function BackupHistoryTab({
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [restoreItem, setRestoreItem] = useState<BackupRecord | null>(null)
   const [isRestoreOpen, setIsRestoreOpen] = useState(false)
+  const [deleteItem, setDeleteItem] = useState<BackupRecord | null>(null)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const t = useTranslator("backup.history_tab")
   const currentLocale = t.getLocale()
 
@@ -137,6 +144,16 @@ export function BackupHistoryTab({
     return () => window.clearTimeout(timeout)
   }, [isRestoreOpen])
 
+  useEffect(() => {
+    if (isDeleteOpen) return
+
+    const timeout = window.setTimeout(() => {
+      setDeleteItem(null)
+    }, MODAL_EXIT_DURATION_MS)
+
+    return () => window.clearTimeout(timeout)
+  }, [isDeleteOpen])
+
   const filteredItems = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase()
 
@@ -179,6 +196,22 @@ export function BackupHistoryTab({
       toast.success(t("success_download"))
     } catch (error) {
       toast.apiError(error, t("error_download"))
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!deleteItem) return
+
+    setIsDeleting(true)
+    try {
+      await backupService.deleteBackup(deleteItem.id)
+      toast.success(t("success_delete"))
+      setIsDeleteOpen(false)
+      await loadItems()
+    } catch (error) {
+      toast.apiError(error, t("error_delete"))
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -316,6 +349,21 @@ export function BackupHistoryTab({
                                   {t("actions.restore")}
                                 </DropdownMenuItem>
                               ) : null}
+                              {canDelete ? (
+                                <>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem
+                                    className="cursor-pointer text-destructive focus:text-destructive"
+                                    onClick={() => {
+                                      setDeleteItem(item)
+                                      setIsDeleteOpen(true)
+                                    }}
+                                  >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    {t("actions.delete")}
+                                  </DropdownMenuItem>
+                                </>
+                              ) : null}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -365,6 +413,18 @@ export function BackupHistoryTab({
         onOpenChange={setIsRestoreOpen}
         backup={restoreItem}
         onSuccess={loadItems}
+      />
+      <ConfirmDialog
+        isOpen={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        title={t("delete_dialog.title")}
+        description={t("delete_dialog.description", {
+          file: deleteItem?.fileName || `backup-${deleteItem?.id ?? ""}`,
+        })}
+        confirmText={t("actions.delete")}
+        variant="destructive"
+        onConfirm={handleDelete}
+        isLoading={isDeleting}
       />
     </div>
   )

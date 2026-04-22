@@ -2325,10 +2325,12 @@
       "failure": "Falha",
       "no_name": "Sem nome"
     },
-    "history_tab": {
-      "error_load": "Erro ao carregar histórico de backups.",
-      "error_download": "Erro ao baixar backup.",
-      "success_download": "Download iniciado.",
+  "history_tab": {
+    "error_load": "Erro ao carregar histórico de backups.",
+    "error_download": "Erro ao baixar backup.",
+    "error_delete": "Erro ao excluir backup.",
+    "success_download": "Download iniciado.",
+    "success_delete": "Backup excluído com sucesso.",
       "no_permission_title": "Sem acesso ao módulo de backups",
       "no_permission_desc": "Seu perfil não possui permissões para visualizar ou operar backups.",
       "search": "Buscar por arquivo, origem, status ou observação...",
@@ -2342,11 +2344,16 @@
       "format_unknown": "Formato não identificado",
       "records_count": "{count} registros",
       "no_notes": "Sem observações",
-      "actions": {
-        "view": "Ver detalhes",
-        "download": "Baixar arquivo",
-        "restore": "Restaurar"
-      },
+    "actions": {
+      "view": "Ver detalhes",
+      "download": "Baixar arquivo",
+      "restore": "Restaurar",
+      "delete": "Excluir"
+    },
+    "delete_dialog": {
+      "title": "Excluir backup",
+      "description": "Tem certeza que deseja excluir o backup {file}? Esta ação remove o registro e o arquivo físico quando disponível."
+    },
       "open_actions": "Abrir ações",
       "loading": "Carregando...",
       "empty": "Nenhum backup encontrado.",
