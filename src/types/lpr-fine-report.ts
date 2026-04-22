@@ -28,6 +28,13 @@ export interface LprFineDispatchLog {
   createdAt?: string
 }
 
+export interface LprFineDispatchLogListResponse {
+  data: LprFineDispatchLog[]
+  total: number
+  page: number
+  limit: number
+}
+
 export interface LprFineReport {
   id: number
   empresaId: number
@@ -67,4 +74,9 @@ export interface LprFineReportListParams {
   empresaId?: number
   cameraId?: number
   ruleId?: number
+}
+
+export interface LprFineDispatchLogListParams {
+  page?: number
+  limit?: number
 }

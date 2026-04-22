@@ -250,13 +250,19 @@
         "plate": "Plate",
         "company": "Company",
         "rule": "Rule",
-        "camera": "Camera",
-        "detected_at": "Detected at",
-        "triggered_at": "Triggered at",
-        "channels": "Channels",
-        "no_image": "No image was saved for this occurrence.",
-        "no_deliveries": "No delivery was recorded for this occurrence."
-      },
+      "camera": "Camera",
+      "detected_at": "Detected at",
+      "triggered_at": "Triggered at",
+      "channels": "Channels",
+      "delivery_channel": "Channel",
+      "status": "Status",
+      "subject": "Subject",
+      "recipients": "Recipients",
+      "sent_at": "Date/time",
+      "attempt": "Attempt",
+      "no_image": "No image was saved for this occurrence.",
+      "no_deliveries": "No delivery was recorded for this occurrence."
+    },
       "status": {
         "success": "Success",
         "error": "Error"

@@ -250,13 +250,19 @@
         "plate": "Placa",
         "company": "Empresa",
         "rule": "Regra",
-        "camera": "Câmera",
-        "detected_at": "Detectado em",
-        "triggered_at": "Disparado em",
-        "channels": "Canais",
-        "no_image": "Sem imagem salva para esta ocorrência.",
-        "no_deliveries": "Nenhum envio foi registrado para esta ocorrência."
-      },
+      "camera": "Câmera",
+      "detected_at": "Detectado em",
+      "triggered_at": "Disparado em",
+      "channels": "Canais",
+      "delivery_channel": "Canal",
+      "status": "Status",
+      "subject": "Assunto",
+      "recipients": "Destinatários",
+      "sent_at": "Data/hora",
+      "attempt": "Tentativa",
+      "no_image": "Sem imagem salva para esta ocorrência.",
+      "no_deliveries": "Nenhum envio foi registrado para esta ocorrência."
+    },
       "status": {
         "success": "Sucesso",
         "error": "Falha"

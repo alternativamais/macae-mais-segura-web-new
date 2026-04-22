@@ -1,7 +1,9 @@
 "use client"
 
-import { type ReactNode } from "react"
+import { type ReactNode, useEffect, useState } from "react"
 import { ExternalLink, ImageIcon, Radio, ReceiptText } from "lucide-react"
+import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
+import { TablePaginationFooter } from "@/app/(dashboard)/access-control/components/table-pagination-footer"
 import { DataTag } from "@/components/shared/data-tag"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,10 +14,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { resolveCompanyLogoUrl } from "@/lib/company-logo"
 import { useTranslator } from "@/lib/i18n"
+import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { LprFineReport } from "@/types/lpr-fine-report"
+import { lprFineReportService } from "@/services/lpr-fine-report.service"
+import { LprFineDispatchLog } from "@/types/lpr-fine-report"
 
 interface LprFineReportDetailsDialogProps {
   item: LprFineReport | null
@@ -71,6 +77,53 @@ export function LprFineReportDetailsDialog({
   const t = useTranslator("lpr_fines_reports.details")
   const locale = t.getLocale()
   const resolvedImageUrl = resolveCompanyLogoUrl(item?.imageUrl)
+  const [deliveryPage, setDeliveryPage] = useState(1)
+  const [deliveryPageSize, setDeliveryPageSize] = useState(10)
+  const [deliveryTotal, setDeliveryTotal] = useState(0)
+  const [deliveries, setDeliveries] = useState<LprFineDispatchLog[]>([])
+  const [isLoadingDeliveries, setIsLoadingDeliveries] = useState(false)
+  const itemId = item?.id ?? null
+
+  useEffect(() => {
+    setDeliveryPage(1)
+  }, [itemId])
+
+  useEffect(() => {
+    if (!open || !itemId) return
+
+    let active = true
+
+    const loadDeliveries = async () => {
+      setIsLoadingDeliveries(true)
+      try {
+        const response = await lprFineReportService.findDeliveries(itemId, {
+          page: deliveryPage,
+          limit: deliveryPageSize,
+        })
+
+        if (!active) return
+
+        setDeliveries(response.data || [])
+        setDeliveryTotal(response.total || 0)
+      } catch (error) {
+        if (!active) return
+
+        toast.apiError(error, t("fetch_error"))
+        setDeliveries([])
+        setDeliveryTotal(0)
+      } finally {
+        if (active) {
+          setIsLoadingDeliveries(false)
+        }
+      }
+    }
+
+    void loadDeliveries()
+
+    return () => {
+      active = false
+    }
+  }, [deliveryPage, deliveryPageSize, itemId, open, t])
 
   if (!item) return null
 
@@ -173,45 +226,78 @@ export function LprFineReportDetailsDialog({
                   <h4 className="text-sm font-medium">{t("sections.deliveries")}</h4>
                 </div>
 
-                {item.dispatchLogs?.length ? (
-                  <div className="space-y-3">
-                    {item.dispatchLogs.map((log) => (
-                      <div key={log.id} className="rounded-xl border bg-card p-4">
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                          <div className="space-y-3">
-                            <div className="flex flex-wrap gap-2">
-                              <DataTag tone={log.channel === "whatsapp" ? "accent" : "info"}>
-                                {log.channel === "whatsapp" ? "WhatsApp" : "Email"}
-                              </DataTag>
+                <div className="space-y-4">
+                  <div className="relative overflow-hidden rounded-xl border bg-card">
+                    {isLoadingDeliveries ? <TableLoadingOverlay /> : null}
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>{t("labels.delivery_channel")}</TableHead>
+                          <TableHead>{t("labels.status")}</TableHead>
+                          <TableHead>{t("labels.subject")}</TableHead>
+                          <TableHead>{t("labels.recipients")}</TableHead>
+                          <TableHead>{t("labels.sent_at")}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {!isLoadingDeliveries && deliveries.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                              {t("labels.no_deliveries")}
+                            </TableCell>
+                          </TableRow>
+                        ) : null}
+
+                        {deliveries.map((log, index) => (
+                          <TableRow key={log.id}>
+                            <TableCell>
+                              <div className="space-y-2">
+                                <DataTag tone={log.channel === "whatsapp" ? "accent" : "info"}>
+                                  {log.channel === "whatsapp" ? "WhatsApp" : "Email"}
+                                </DataTag>
+                                <p className="text-xs text-muted-foreground">
+                                  {t("labels.attempt")} #{deliveryTotal - ((deliveryPage - 1) * deliveryPageSize + index)}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
                               <DataTag tone={log.success ? "success" : "danger"}>
                                 {log.success ? t("status.success") : t("status.error")}
                               </DataTag>
-                            </div>
-
-                            <div className="space-y-1">
-                              <p className="text-sm font-medium">{log.subject || "—"}</p>
-                              <p className="text-sm text-muted-foreground">
+                            </TableCell>
+                            <TableCell className="max-w-[240px]">
+                              <div className="space-y-1">
+                                <p className="truncate text-sm font-medium">{log.subject || "—"}</p>
+                                {log.errorMessage ? (
+                                  <p className="line-clamp-2 text-xs text-red-400">{log.errorMessage}</p>
+                                ) : null}
+                              </div>
+                            </TableCell>
+                            <TableCell className="max-w-[260px]">
+                              <p className="line-clamp-3 text-sm text-muted-foreground">
                                 {log.toRecipients?.length ? log.toRecipients.join(", ") : "—"}
                               </p>
-                              {log.errorMessage ? (
-                                <p className="text-sm text-red-400">{log.errorMessage}</p>
+                              {log.providerMessageId ? (
+                                <p className="mt-1 line-clamp-2 break-all text-xs text-muted-foreground">
+                                  {log.providerMessageId}
+                                </p>
                               ) : null}
-                            </div>
-                          </div>
+                            </TableCell>
+                            <TableCell>{formatDateTime(log.sentAt || log.createdAt, locale)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
 
-                          <div className="space-y-1 text-sm text-muted-foreground sm:text-right">
-                            <p>{formatDateTime(log.sentAt || log.createdAt, locale)}</p>
-                            {log.providerMessageId ? <p className="break-all">{log.providerMessageId}</p> : null}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-dashed px-4 py-10 text-sm text-muted-foreground">
-                    {t("labels.no_deliveries")}
-                  </div>
-                )}
+                  <TablePaginationFooter
+                    page={deliveryPage}
+                    pageSize={deliveryPageSize}
+                    total={deliveryTotal}
+                    onPageChange={setDeliveryPage}
+                    onPageSizeChange={setDeliveryPageSize}
+                  />
+                </div>
               </div>
             </ScrollArea>
           </TabsContent>
