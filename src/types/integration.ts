@@ -98,11 +98,14 @@ export interface IntegrationLog {
   responseStatus?: number | null
   success: boolean
   errorMessage?: string | null
-  requestPayload?: string | null
-  responsePayload?: string | null
   direction?: string | null
   sentAt?: string | null
   createdAt?: string
+}
+
+export interface IntegrationLogDetail extends IntegrationLog {
+  requestPayload?: string | null
+  responsePayload?: string | null
 }
 
 export interface IntegrationLogsResponse {

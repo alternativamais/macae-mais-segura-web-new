@@ -4,6 +4,7 @@ import {
   IntegrationCameraDetails,
   IntegrationCameraMutationPayload,
   IntegrationGeneratedToken,
+  IntegrationLogDetail,
   IntegrationLogsResponse,
   IntegrationMutationPayload,
   PlateCameraConfig,
@@ -109,6 +110,18 @@ export const integrationService = {
   ) => {
     const { data } = await api.get<IntegrationLogsResponse>(
       `/integrations/${code}/cameras/${integrationCameraId}/logs?page=${page}&limit=${limit}`,
+    )
+
+    return data
+  },
+
+  getLogDetails: async (
+    code: string,
+    integrationCameraId: number,
+    logId: number,
+  ) => {
+    const { data } = await api.get<IntegrationLogDetail>(
+      `/integrations/${code}/cameras/${integrationCameraId}/logs/${logId}`,
     )
 
     return data

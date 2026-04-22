@@ -25,7 +25,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { integrationService } from "@/services/integration.service"
-import { Integration, IntegrationCameraBinding, IntegrationLog } from "@/types/integration"
+import {
+  Integration,
+  IntegrationCameraBinding,
+  IntegrationLog,
+  IntegrationLogDetail,
+} from "@/types/integration"
 import { formatJsonPayload, formatLogDirection, getLogStatusVariant } from "./utils"
 
 interface IntegrationLogsDialogProps {
@@ -48,7 +53,9 @@ export function IntegrationLogsDialog({
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [total, setTotal] = useState(0)
-  const [selectedLog, setSelectedLog] = useState<IntegrationLog | null>(null)
+  const [selectedLogId, setSelectedLogId] = useState<number | null>(null)
+  const [selectedLog, setSelectedLog] = useState<IntegrationLogDetail | null>(null)
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false)
 
   const loadLogs = useCallback(async () => {
     if (!binding) return
@@ -82,11 +89,40 @@ export function IntegrationLogsDialog({
     if (!open) {
       setLogs([])
       setSelectedLog(null)
+      setSelectedLogId(null)
       setPage(1)
       setPageSize(10)
       setTotal(0)
     }
   }, [open])
+
+  useEffect(() => {
+    if (!open || !binding || !selectedLogId) return
+
+    let isMounted = true
+    setIsLoadingDetails(true)
+
+    void integrationService
+      .getLogDetails(integration.code, binding.id, selectedLogId)
+      .then((data) => {
+        if (!isMounted) return
+        setSelectedLog(data)
+      })
+      .catch((error) => {
+        if (!isMounted) return
+        setSelectedLog(null)
+        setSelectedLogId(null)
+        toast.apiError(error, t("logs.notifications.load_error"))
+      })
+      .finally(() => {
+        if (!isMounted) return
+        setIsLoadingDetails(false)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [binding, integration.code, open, selectedLogId, t])
 
   const title = useMemo(
     () =>
@@ -97,6 +133,17 @@ export function IntegrationLogsDialog({
       }),
     [binding?.camera?.nome, binding?.cameraId, t],
   )
+
+  const handleOpenLogDetails = useCallback((log: IntegrationLog) => {
+    setSelectedLog(null)
+    setSelectedLogId(log.id)
+  }, [])
+
+  const handleCloseLogDetails = useCallback(() => {
+    setSelectedLog(null)
+    setSelectedLogId(null)
+    setIsLoadingDetails(false)
+  }, [])
 
   return (
     <>
@@ -154,7 +201,7 @@ export function IntegrationLogsDialog({
                           variant="ghost"
                           size="icon"
                           className="cursor-pointer"
-                          onClick={() => setSelectedLog(log)}
+                          onClick={() => handleOpenLogDetails(log)}
                         >
                           <FileJson className="h-4 w-4" />
                           <span className="sr-only">{t("logs.actions.view_payload")}</span>
@@ -194,7 +241,10 @@ export function IntegrationLogsDialog({
         </DialogContent>
       </Dialog>
 
-      <Dialog open={Boolean(selectedLog)} onOpenChange={(nextOpen) => !nextOpen && setSelectedLog(null)}>
+      <Dialog
+        open={Boolean(selectedLogId)}
+        onOpenChange={(nextOpen) => !nextOpen && handleCloseLogDetails()}
+      >
         <DialogContent className="flex max-h-[88vh] flex-col overflow-hidden sm:max-w-4xl">
           <DialogHeader>
             <DialogTitle>{t("logs.details_title")}</DialogTitle>
@@ -205,14 +255,18 @@ export function IntegrationLogsDialog({
             <div className="min-h-0 space-y-2 overflow-hidden">
               <p className="text-sm font-medium">{t("logs.request_payload")}</p>
               <pre className="min-h-[280px] overflow-auto rounded-lg border bg-muted/20 p-4 text-xs">
-                {formatJsonPayload(selectedLog?.requestPayload)}
+                {isLoadingDetails
+                  ? t("loading")
+                  : formatJsonPayload(selectedLog?.requestPayload)}
               </pre>
             </div>
 
             <div className="min-h-0 space-y-2 overflow-hidden">
               <p className="text-sm font-medium">{t("logs.response_payload")}</p>
               <pre className="min-h-[280px] overflow-auto rounded-lg border bg-muted/20 p-4 text-xs">
-                {formatJsonPayload(selectedLog?.responsePayload)}
+                {isLoadingDetails
+                  ? t("loading")
+                  : formatJsonPayload(selectedLog?.responsePayload)}
               </pre>
             </div>
           </div>
@@ -222,7 +276,7 @@ export function IntegrationLogsDialog({
               type="button"
               variant="outline"
               className="cursor-pointer"
-              onClick={() => setSelectedLog(null)}
+              onClick={handleCloseLogDetails}
             >
               {t("logs.close")}
             </Button>
