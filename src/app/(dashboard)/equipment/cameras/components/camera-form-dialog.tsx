@@ -238,25 +238,38 @@ export function CameraFormDialog({
       setIsLoadingDependencies(true)
 
       try {
-        const params = selectedCompanyId ? { empresaId: selectedCompanyId } : undefined
-        const [pointsData, totemsData] = await Promise.all([
-          pontoService.findAllNoPagination(params),
-          totemService.findAllNoPagination(params),
-        ])
+        const params =
+          showCompanySelector && selectedCompanyId
+            ? { empresaId: selectedCompanyId }
+            : undefined
+        if (destination === "totem") {
+          const totemsData = await totemService.findAllNoPagination(params)
+          setTotens(Array.isArray(totemsData) ? totemsData : [])
+          return
+        }
 
+        const pointsData = await pontoService.findAllNoPagination(params)
         setPontos(Array.isArray(pointsData) ? pointsData : [])
-        setTotens(Array.isArray(totemsData) ? totemsData : [])
       } catch (error) {
         toast.apiError(error, loadDependenciesErrorMessage)
-        setPontos([])
-        setTotens([])
+        if (destination === "totem") {
+          setTotens([])
+        } else {
+          setPontos([])
+        }
       } finally {
         setIsLoadingDependencies(false)
       }
     }
 
     void loadDependencies()
-  }, [loadDependenciesErrorMessage, open, selectedCompanyId, showCompanySelector])
+  }, [
+    destination,
+    loadDependenciesErrorMessage,
+    open,
+    selectedCompanyId,
+    showCompanySelector,
+  ])
 
   const handleTestConnection = async () => {
     const ip = form.getValues("ip")?.trim()
@@ -310,7 +323,10 @@ export function CameraFormDialog({
     setIsSubmitting(true)
 
     try {
-      const empresaId = selectedCompanyId ?? undefined
+      const empresaId =
+        showCompanySelector && selectedCompanyId
+          ? selectedCompanyId
+          : undefined
       const payload = {
         nome: values.nome.trim(),
         marca: values.marca?.trim() || undefined,
