@@ -13,6 +13,7 @@ const publicRoutes = ['/sign-in', '/unauthorized', '/forbidden']
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const requestedNextPath = request.nextUrl.searchParams.get('next')
 
   let locale = request.cookies.get(localeCookieName)?.value
   if (!locale || !locales.includes(locale as any)) {
@@ -49,7 +50,9 @@ export function proxy(request: NextRequest) {
   }
 
   if (pathname === '/sign-in' && token && !tokenExpired) {
-    const response = NextResponse.redirect(new URL('/dashboard', request.url))
+    const response = NextResponse.redirect(
+      new URL(buildSafeNextPath(requestedNextPath || '') || '/dashboard', request.url),
+    )
     response.cookies.set(localeCookieName, locale)
     return response
   }

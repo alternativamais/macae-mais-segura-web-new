@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -15,11 +15,12 @@ import { notificationService as toast } from "@/lib/notifications/notification-s
 import { authService } from "@/services/auth.service"
 import { useAuthStore } from "@/store/auth-store"
 import Link from "next/link"
-import Image from "next/image"
 import { captureBrowserLocation } from "@/lib/browser-location"
 import { getAuthSessionCompanyState } from "@/lib/auth-session-payload"
 import {
   AUTH_REDIRECT_REASON,
+  buildSafeNextPath,
+  isTokenExpired,
   persistClientAuthToken,
 } from "@/lib/auth-session"
 
@@ -35,10 +36,21 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
   const searchParams = useSearchParams()
   const login = useAuthStore((state) => state.login)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const token = useAuthStore((state) => state.token)
+  const hasHydrated = useAuthStore((state) => state.hasHydrated)
   const reason = searchParams.get("reason")
+  const nextPath = useMemo(() => {
+    const next = searchParams.get("next")
+
+    if (!next) {
+      return "/dashboard"
+    }
+
+    return buildSafeNextPath(next) || "/dashboard"
+  }, [searchParams])
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -47,6 +59,14 @@ export function LoginForm({
       password: "",
     },
   })
+
+  useEffect(() => {
+    if (!hasHydrated || !isAuthenticated || !token || isTokenExpired(token)) {
+      return
+    }
+
+    window.location.replace(new URL(nextPath, window.location.origin).toString())
+  }, [hasHydrated, isAuthenticated, nextPath, token])
 
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true)
@@ -79,12 +99,7 @@ export function LoginForm({
 
         login(accessToken, user, activeCompanyId, availableCompanies, finalAllowedScreens, permissions)
         toast.success("Login realizado com sucesso!")
-        const next = searchParams.get("next")
-        if (next && next.startsWith("/") && !next.startsWith("//")) {
-          router.push(next)
-        } else {
-          router.push("/dashboard")
-        }
+        window.location.replace(new URL(nextPath, window.location.origin).toString())
       }
     } catch (error: any) {
       toast.apiError(error, "Erro ao realizar login")
