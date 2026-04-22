@@ -16,7 +16,6 @@ import { authService } from "@/services/auth.service"
 import { useAuthStore } from "@/store/auth-store"
 import Link from "next/link"
 import Image from "next/image"
-import { collectFrontendScreens } from "@/lib/frontend-screens"
 import { captureBrowserLocation } from "@/lib/browser-location"
 import { getAuthSessionCompanyState } from "@/lib/auth-session-payload"
 import {
@@ -74,28 +73,6 @@ export function LoginForm({
               ),
             )
           : []
-
-        const roleName =
-          typeof user?.role?.name === "string" ? user.role.name.toLowerCase() : ""
-
-        if (roleName === "admin") {
-          const frontendScreens = collectFrontendScreens()
-          const screenKeys = frontendScreens.map((screen) => screen.screenKey)
-
-          if (frontendScreens.length) {
-            try {
-              await authService.syncClientScreens(frontendScreens)
-            } catch (error) {
-              console.warn("Falha ao sincronizar telas do frontend", error)
-            }
-          }
-
-          if (screenKeys.length) {
-            finalAllowedScreens = Array.from(
-              new Set([...finalAllowedScreens, ...screenKeys]),
-            )
-          }
-        }
 
         const { activeCompanyId, availableCompanies } =
           getAuthSessionCompanyState(response)
