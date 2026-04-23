@@ -1,4 +1,5 @@
 import { AUTH_TOKEN_KEY } from "@/lib/auth-session"
+import { useAuthStore } from "@/store/auth-store"
 import {
   Integration,
   IntegrationCameraBinding,
@@ -158,6 +159,18 @@ export function getAuthTokenForRealtime() {
     localStorage.getItem(AUTH_TOKEN_KEY) ||
     localStorage.getItem(LEGACY_AUTH_TOKEN_KEY)
   )
+}
+
+export function getRealtimeSocketAuth() {
+  const token = getAuthTokenForRealtime()
+  if (!token) return null
+
+  const { activeCompanyId } = useAuthStore.getState()
+
+  return {
+    token,
+    ...(activeCompanyId ? { empresaId: String(activeCompanyId) } : {}),
+  }
 }
 
 export function getRealtimeEventName(integrationCode: string) {

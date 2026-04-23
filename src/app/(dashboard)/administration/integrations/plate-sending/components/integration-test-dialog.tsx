@@ -18,9 +18,9 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Integration, IntegrationCameraBinding, IntegrationRealtimeLogLine, IntegrationRealtimeRawPayload } from "@/types/integration"
 import {
-  getAuthTokenForRealtime,
   getRealtimeEventName,
   getRealtimeLogColor,
+  getRealtimeSocketAuth,
   getSocketBaseUrl,
 } from "./utils"
 
@@ -201,9 +201,9 @@ export function IntegrationTestDialog({
   const connect = useCallback(() => {
     if (socketRef.current?.connected) return
 
-    const token = getAuthTokenForRealtime()
+    const socketAuth = getRealtimeSocketAuth()
 
-    if (!token) {
+    if (!socketAuth?.token) {
       addLog(t("test.notifications.token_missing"), "error")
       return
     }
@@ -214,7 +214,7 @@ export function IntegrationTestDialog({
     const socket = io(getSocketBaseUrl(), {
       path: "/api/ws/integrations",
       transports: ["websocket", "polling"],
-      auth: { token },
+      auth: socketAuth,
     })
 
     socket.on("connect", () => {
@@ -236,6 +236,15 @@ export function IntegrationTestDialog({
       addLog(t("test.notifications.waiting_description"), "info")
       addLog("═══════════════════════════════════════════════════════════", "separator")
       addLog("", "info")
+    })
+
+    socket.on("integration:subscription-error", (data: { message?: string }) => {
+      addLog(
+        data?.message || t("test.notifications.connection_error", {
+          message: t("shared.not_informed"),
+        }),
+        "error",
+      )
     })
 
     socket.on("integration:webhook-event", handleWebhookEvent)

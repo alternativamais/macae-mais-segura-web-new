@@ -1,4 +1,5 @@
 import { AUTH_TOKEN_KEY } from "@/lib/auth-session"
+import { useAuthStore } from "@/store/auth-store"
 import { CallCenterCall, CallCenterHistoryEntry, CallCenterLogEntry } from "@/types/call-center"
 import { differenceInSeconds } from "date-fns"
 
@@ -73,6 +74,18 @@ export function getSocketBaseUrl() {
 export function getRealtimeToken() {
   if (typeof window === "undefined") return null
   return localStorage.getItem(AUTH_TOKEN_KEY) || localStorage.getItem("@macaemaissegura:token")
+}
+
+export function getRealtimeSocketAuth() {
+  const token = getRealtimeToken()
+  if (!token) return null
+
+  const { activeCompanyId } = useAuthStore.getState()
+
+  return {
+    token,
+    ...(activeCompanyId ? { empresaId: String(activeCompanyId) } : {}),
+  }
 }
 
 export function getHistoryEntryLabel(entry: CallCenterHistoryEntry) {

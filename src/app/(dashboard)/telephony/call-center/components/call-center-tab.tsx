@@ -31,7 +31,7 @@ import { CallCenterStatusBadge } from "./status-badges"
 import {
   CALL_CENTER_STATUS_META,
   getLogTone,
-  getRealtimeToken,
+  getRealtimeSocketAuth,
   getSocketBaseUrl,
   resolveCallDuration,
   sortCalls,
@@ -131,13 +131,13 @@ export function CallCenterTab() {
 
   useEffect(() => {
     if (!canView) return
-    const token = getRealtimeToken()
-    if (!token) return
+    const socketAuth = getRealtimeSocketAuth()
+    if (!socketAuth?.token) return
 
     const socket = io(getSocketBaseUrl(), {
       path: "/api/ws/call-center",
       transports: ["websocket"],
-      auth: { token },
+      auth: socketAuth,
     })
 
     socket.on("call-center:calls-snapshot", (payload: CallCenterCall[]) => {
