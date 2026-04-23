@@ -14,12 +14,34 @@ import { UserScheduleRulesTab } from "./components/user-schedule-rules-tab"
 import { LocationRequirementsTab } from "./components/location-requirements-tab"
 import { TrapRoutesTab } from "./components/trap-routes-tab"
 import { useTranslator } from "@/lib/i18n"
+import { useHasPermission } from "@/hooks/use-has-permission"
+
+const USER_DATA_PERMISSIONS = [
+  "listar_usuarios",
+  "listar_restricoes_usuario_ip",
+  "criar_restricao_usuario_ip",
+  "atualizar_restricao_usuario_ip",
+  "deletar_restricao_usuario_ip",
+  "listar_restricoes_usuario_horario",
+  "criar_restricao_usuario_horario",
+  "atualizar_restricao_usuario_horario",
+  "deletar_restricao_usuario_horario",
+  "gerenciar_requisito_localizacao",
+  "ver_relatorio_localizacao",
+]
 
 export default function AccessControlPage() {
   const [users, setUsers] = useState<User[]>([])
   const t = useTranslator("access_control")
+  const { hasAnyPermission } = useHasPermission()
+  const canLoadUsers = hasAnyPermission(USER_DATA_PERMISSIONS)
 
   const loadUsers = useCallback(async () => {
+    if (!canLoadUsers) {
+      setUsers([])
+      return
+    }
+
     try {
       const response = await accessControlService.findUsers()
       setUsers(response || [])
@@ -27,7 +49,7 @@ export default function AccessControlPage() {
       toast.apiError(error, t("error_load_users"))
       setUsers([])
     }
-  }, [])
+  }, [canLoadUsers, t])
 
   useEffect(() => {
     loadUsers()
