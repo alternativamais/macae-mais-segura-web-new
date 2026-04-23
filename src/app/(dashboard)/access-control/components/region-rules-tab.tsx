@@ -78,7 +78,7 @@ export function RegionRulesTab() {
     } finally {
       setIsLoading(false)
     }
-  }, [canRead])
+  }, [canRead, t])
 
   useEffect(() => {
     loadItems()

@@ -82,7 +82,7 @@ export function IpBlocksTab() {
     } finally {
       setIsLoading(false)
     }
-  }, [canRead])
+  }, [canRead, t])
 
   useEffect(() => {
     loadItems()

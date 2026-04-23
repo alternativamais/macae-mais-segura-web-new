@@ -1,8 +1,6 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
-import { BrandLogo } from "@/components/logo"
 import { useAuthStore } from "@/store/auth-store"
 import {
   appNavigation,
@@ -17,9 +15,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
 import { useTranslator } from "@/lib/i18n"

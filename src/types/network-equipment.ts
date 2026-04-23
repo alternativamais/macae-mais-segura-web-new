@@ -73,5 +73,5 @@ export interface CreateNetworkEquipmentPayload {
   online?: boolean
 }
 
-export interface UpdateNetworkEquipmentPayload
-  extends Partial<CreateNetworkEquipmentPayload> {}
+export type UpdateNetworkEquipmentPayload =
+  Partial<CreateNetworkEquipmentPayload>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Camera, Loader2, Power, RadioTower, Thermometer, Video } from "lucide-react"
+import { Loader2, Power, RadioTower, Thermometer, Video } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {

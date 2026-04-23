@@ -76,5 +76,5 @@ export interface CreateDashboardWidgetPayload {
   config?: DashboardWidgetConfig
 }
 
-export interface UpdateDashboardWidgetPayload
-  extends Partial<CreateDashboardWidgetPayload> {}
+export type UpdateDashboardWidgetPayload =
+  Partial<CreateDashboardWidgetPayload>

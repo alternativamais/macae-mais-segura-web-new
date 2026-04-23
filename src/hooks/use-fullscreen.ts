@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react"
 
 export function useFullscreen() {
-  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(
+    () => typeof document !== "undefined" && !!document.fullscreenElement,
+  )
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -11,9 +13,6 @@ export function useFullscreen() {
     }
 
     document.addEventListener("fullscreenchange", handleFullscreenChange)
-    
-    // Initial check
-    setIsFullscreen(!!document.fullscreenElement)
 
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange)

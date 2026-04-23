@@ -60,7 +60,6 @@ export function WhatsappRecipientFormDialog({
   const [isCatalogLoading, setIsCatalogLoading] = useState(false)
   const [openSection, setOpenSection] = useState("source")
 
-  const isEdit = Boolean(recipient)
   const isImportedRecipient = Boolean(recipient && recipient.type !== "manual_phone")
 
   const schema = useMemo(

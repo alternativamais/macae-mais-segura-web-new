@@ -85,7 +85,7 @@ export function EmailRecipientFormDialog({
   type FormValues = z.infer<typeof schema>
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(schema) as any,
+    resolver: zodResolver(schema),
     defaultValues: {
       empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
       name: "",
@@ -98,7 +98,6 @@ export function EmailRecipientFormDialog({
   useEffect(() => {
     if (!open) return
 
-    setOpenSection("identity")
     form.reset({
       empresaId:
         typeof recipient?.empresaId === "number"
@@ -112,6 +111,13 @@ export function EmailRecipientFormDialog({
       enabled: recipient?.enabled === false ? "false" : "true",
     })
   }, [defaultCompanyId, form, open, recipient])
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setOpenSection("identity")
+    }
+    onOpenChange(nextOpen)
+  }
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
@@ -139,7 +145,7 @@ export function EmailRecipientFormDialog({
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{recipient ? t("title_edit") : t("title_create")}</DialogTitle>
@@ -149,7 +155,7 @@ export function EmailRecipientFormDialog({
         <Form {...form}>
           <form className="space-y-6" onSubmit={onSubmit}>
             {showCompanySelector ? (
-              <TenantCompanyFormField control={form.control as any} companies={companies} />
+              <TenantCompanyFormField control={form.control} companies={companies} />
             ) : null}
 
             <Accordion

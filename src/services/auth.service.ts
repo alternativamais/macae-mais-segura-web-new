@@ -1,6 +1,7 @@
 import api from '@/lib/api-client';
 import { LoginCredentials, LoginResponse, SessionSnapshot } from '@/types/auth';
 import { FrontendScreen } from '@/types/frontend-screen';
+import { User } from '@/types/user';
 
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<LoginResponse> => {
@@ -8,8 +9,8 @@ export const authService = {
     return data;
   },
 
-  getProfile: async (): Promise<any> => {
-    const { data } = await api.get('/me');
+  getProfile: async (): Promise<User> => {
+    const { data } = await api.get<User>('/me');
     return data;
   },
 

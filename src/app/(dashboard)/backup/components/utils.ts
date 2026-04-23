@@ -1,5 +1,6 @@
 import { BackupMetadata, BackupRecord } from "@/types/backup"
 import type { Locale } from "@/lib/i18n"
+import type { ITranslator } from "@/lib/i18n/domain/ports/translator"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 
 export function formatDateTime(value?: string | null, locale: Locale = "pt-BR") {
@@ -39,11 +40,11 @@ export function getBackupSummary(record?: BackupRecord | null) {
   }
 }
 
-export function getInitiatedByLabel(t: any, value?: string | null) {
+export function getInitiatedByLabel(t: ITranslator, value?: string | null) {
   return value === "scheduled" ? t("origin_scheduled") : t("origin_manual")
 }
 
-export function getFrequencyLabel(t: any, value: number) {
+export function getFrequencyLabel(t: ITranslator, value: number) {
   if (value % (24 * 60) === 0) {
     const days = value / (24 * 60)
     return days === 1 ? t("freq_daily") : t("freq_days", { days })
@@ -57,7 +58,7 @@ export function getFrequencyLabel(t: any, value: number) {
   return t("freq_minutes", { minutes: value })
 }
 
-export function getStatusDescription(t: any, status: BackupRecord["status"]) {
+export function getStatusDescription(t: ITranslator, status: BackupRecord["status"]) {
   if (status === "completed") return t("status_completed")
   if (status === "failed") return t("status_failed")
   return t("status_running")

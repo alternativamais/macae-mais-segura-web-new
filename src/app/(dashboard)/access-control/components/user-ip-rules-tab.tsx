@@ -99,7 +99,7 @@ export function UserIpRulesTab({ users }: UserIpRulesTabProps) {
     } finally {
       setIsLoading(false)
     }
-  }, [canRead, selectedUserId])
+  }, [canRead, selectedUserId, t])
 
   useEffect(() => {
     loadItems()

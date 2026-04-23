@@ -273,6 +273,6 @@ export function getClimateSensorTypeLabel(
   }
 }
 
-export function getClimateSensorColor(type?: string | null) {
+export function getClimateSensorColor() {
   return "var(--primary)"
 }

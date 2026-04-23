@@ -166,10 +166,6 @@ export default function OperationalMapPage() {
     return () => mediaQuery.removeEventListener("change", syncManagerState)
   }, [])
 
-  const handleFocusMarker = (markerId: number) => {
-    setSelectedMarkerId(markerId)
-  }
-
   const handleOpenPreview = (markerId: number) => {
     setSelectedMarkerId(markerId)
     setPreviewOpen(true)

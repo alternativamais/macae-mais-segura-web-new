@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -28,15 +28,29 @@ export function LprCleanupDialog({
   onSubmit,
   isSubmitting = false,
 }: LprCleanupDialogProps) {
+  if (!open) {
+    return null
+  }
+
+  return (
+    <OpenLprCleanupDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      onSubmit={onSubmit}
+      isSubmitting={isSubmitting}
+    />
+  )
+}
+
+function OpenLprCleanupDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  isSubmitting = false,
+}: LprCleanupDialogProps) {
   const t = useTranslator("plate_sending")
   const [olderThan, setOlderThan] = useState("")
   const [quantity, setQuantity] = useState("")
-
-  useEffect(() => {
-    if (!open) return
-    setOlderThan("")
-    setQuantity("")
-  }, [open])
 
   const handleSubmit = async () => {
     await onSubmit({

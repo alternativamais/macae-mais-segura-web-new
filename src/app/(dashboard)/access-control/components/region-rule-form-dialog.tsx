@@ -96,7 +96,7 @@ export function RegionRuleFormDialog({
   )
 
   const form = useForm<RegionRuleFormValues>({
-    resolver: zodResolver(regionRuleFormSchema) as any,
+    resolver: zodResolver(regionRuleFormSchema),
     defaultValues: {
       action: "block",
       code: "",

@@ -42,7 +42,7 @@ export interface CreateSmartSwitchPayload {
   empresaId?: number
 }
 
-export interface UpdateSmartSwitchPayload extends Partial<CreateSmartSwitchPayload> {}
+export type UpdateSmartSwitchPayload = Partial<CreateSmartSwitchPayload>
 
 export interface HomeAssistantSwitchEntity {
   entityId: string

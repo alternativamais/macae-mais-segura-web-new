@@ -82,7 +82,7 @@ export function RoleFormDialog({
   )
 
   const form = useForm<RoleFormValues>({
-    resolver: zodResolver(roleFormSchema) as any,
+    resolver: zodResolver(roleFormSchema),
     defaultValues: {
       name: "",
       description: "",

@@ -37,11 +37,6 @@ export default function AccessControlPage() {
   const canLoadUsers = hasAnyPermission(USER_DATA_PERMISSIONS)
 
   const loadUsers = useCallback(async () => {
-    if (!canLoadUsers) {
-      setUsers([])
-      return
-    }
-
     try {
       const response = await accessControlService.findUsers()
       setUsers(response || [])
@@ -49,11 +44,35 @@ export default function AccessControlPage() {
       toast.apiError(error, t("error_load_users"))
       setUsers([])
     }
-  }, [canLoadUsers, t])
+  }, [t])
 
   useEffect(() => {
-    loadUsers()
-  }, [loadUsers])
+    if (!canLoadUsers) {
+      return
+    }
+
+    let isMounted = true
+
+    void (async () => {
+      try {
+        const response = await accessControlService.findUsers()
+        if (isMounted) {
+          setUsers(response || [])
+        }
+      } catch (error) {
+        if (isMounted) {
+          toast.apiError(error, t("error_load_users"))
+          setUsers([])
+        }
+      }
+    })()
+
+    return () => {
+      isMounted = false
+    }
+  }, [canLoadUsers, t])
+
+  const visibleUsers = canLoadUsers ? users : []
 
   return (
     <ScreenGuard screenKey="admin.access_control">
@@ -85,15 +104,15 @@ export default function AccessControlPage() {
             </TabsContent>
 
             <TabsContent value="user-ip-rules" className="mt-4">
-              <UserIpRulesTab users={users} />
+              <UserIpRulesTab users={visibleUsers} />
             </TabsContent>
 
             <TabsContent value="user-schedule-rules" className="mt-4">
-              <UserScheduleRulesTab users={users} />
+              <UserScheduleRulesTab users={visibleUsers} />
             </TabsContent>
 
             <TabsContent value="location" className="mt-4">
-              <LocationRequirementsTab users={users} onRefreshUsers={loadUsers} />
+              <LocationRequirementsTab users={visibleUsers} onRefreshUsers={loadUsers} />
             </TabsContent>
 
             <TabsContent value="trap-routes" className="mt-4">

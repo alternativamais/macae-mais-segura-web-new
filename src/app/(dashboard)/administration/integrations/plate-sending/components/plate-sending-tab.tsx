@@ -49,10 +49,6 @@ export function PlateSendingOverviewTab({
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
 
   useEffect(() => {
-    setPage(1)
-  }, [pageSize, searchTerm])
-
-  useEffect(() => {
     if (isDetailsOpen) return
 
     const timeout = window.setTimeout(() => {
@@ -76,6 +72,16 @@ export function PlateSendingOverviewTab({
     return filteredIntegrations.slice(startIndex, startIndex + pageSize)
   }, [filteredIntegrations, page, pageSize])
 
+  const handleSearchTermChange = (value: string) => {
+    setSearchTerm(value)
+    setPage(1)
+  }
+
+  const handlePageSizeChange = (nextPageSize: number) => {
+    setPageSize(nextPageSize)
+    setPage(1)
+  }
+
   return (
     <div className="space-y-4">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -84,7 +90,7 @@ export function PlateSendingOverviewTab({
             <Input
               placeholder={t("search_placeholder")}
               value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
+              onChange={(event) => handleSearchTermChange(event.target.value)}
               className="pl-9"
             />
           </div>
@@ -187,7 +193,7 @@ export function PlateSendingOverviewTab({
         page={page}
         pageSize={pageSize}
         onPageChange={setPage}
-        onPageSizeChange={setPageSize}
+        onPageSizeChange={handlePageSizeChange}
       />
 
       <IntegrationDetailsDialog

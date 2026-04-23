@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { z } from "zod"
 import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import { Button } from "@/components/ui/button"
@@ -70,7 +70,7 @@ export function SmtpAccountFormDialog({
         empresaId: z.string().optional(),
         name: z.string().trim().min(2, t("validations.name")),
         host: z.string().trim().min(2, t("validations.host")),
-        port: z.coerce.number().min(1),
+        port: z.number().min(1),
         secure: z.enum(["true", "false"]),
         username: z.string().trim().min(1, t("validations.username")),
         password: z.string().optional(),
@@ -103,7 +103,7 @@ export function SmtpAccountFormDialog({
   type FormValues = z.infer<typeof schema>
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(schema) as any,
+    resolver: zodResolver(schema),
     defaultValues: {
       empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
       name: "",
@@ -124,7 +124,6 @@ export function SmtpAccountFormDialog({
   useEffect(() => {
     if (!open) return
 
-    setOpenSection("identity")
     form.reset({
       empresaId:
         typeof account?.empresaId === "number"
@@ -147,7 +146,15 @@ export function SmtpAccountFormDialog({
     })
   }, [account, defaultCompanyId, form, open])
 
-  const selectedSecurity = form.watch("secure")
+  const selectedSecurity = useWatch({ control: form.control, name: "secure" })
+
+  const handleDialogOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      setOpenSection("identity")
+    }
+
+    onOpenChange(nextOpen)
+  }
 
   useEffect(() => {
     if (!open) return
@@ -201,7 +208,7 @@ export function SmtpAccountFormDialog({
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{account ? t("title_edit") : t("title_create")}</DialogTitle>
@@ -211,7 +218,7 @@ export function SmtpAccountFormDialog({
         <Form {...form}>
           <form className="space-y-6" onSubmit={onSubmit}>
             {showCompanySelector ? (
-              <TenantCompanyFormField control={form.control as any} companies={companies} />
+              <TenantCompanyFormField control={form.control} companies={companies} />
             ) : null}
 
             <Accordion
@@ -343,7 +350,14 @@ export function SmtpAccountFormDialog({
                           <FormItem>
                             <FormLabel>{t("labels.port")}</FormLabel>
                             <FormControl>
-                              <Input type="number" placeholder={t("placeholders.port")} {...field} />
+                              <Input
+                                type="number"
+                                placeholder={t("placeholders.port")}
+                                value={field.value}
+                                onChange={(event) =>
+                                  field.onChange(Number(event.target.value) || 0)
+                                }
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

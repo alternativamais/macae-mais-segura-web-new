@@ -35,7 +35,6 @@ import {
 } from "@/components/ui/select"
 import {
   CardAction,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -103,7 +102,7 @@ export function CompanyFormDialog({
   type CompanyFormValues = z.infer<typeof companyFormSchema>
 
   const form = useForm<CompanyFormValues>({
-    resolver: zodResolver(companyFormSchema) as any,
+    resolver: zodResolver(companyFormSchema),
     defaultValues: {
       nome: "",
       cnpj: "",

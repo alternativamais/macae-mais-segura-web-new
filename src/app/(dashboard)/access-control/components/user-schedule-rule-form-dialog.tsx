@@ -55,17 +55,6 @@ const dayOfWeekSchema = z.enum([
   "sunday",
 ])
 
-type UserScheduleRuleFormValues = {
-  userId: number
-  mode: "allow" | "block"
-  startTime: string
-  endTime: string
-  daysOfWeek?: DayOfWeek[]
-  timezone: string
-  description?: string
-  active: boolean
-}
-
 interface UserScheduleRuleFormDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -95,7 +84,7 @@ export function UserScheduleRuleFormDialog({
   const userScheduleRuleFormSchema = useMemo(
     () =>
       z.object({
-        userId: z.coerce.number().min(1, validationUser),
+        userId: z.number().min(1, validationUser),
         mode: z.enum(["allow", "block"]),
         startTime: z
           .string()
@@ -111,8 +100,10 @@ export function UserScheduleRuleFormDialog({
     [validationEndTimeFormat, validationStartTimeFormat, validationTimezone, validationUser],
   )
 
+  type UserScheduleRuleFormValues = z.infer<typeof userScheduleRuleFormSchema>
+
   const form = useForm<UserScheduleRuleFormValues>({
-    resolver: zodResolver(userScheduleRuleFormSchema) as any,
+    resolver: zodResolver(userScheduleRuleFormSchema),
     defaultValues: {
       userId: 0,
       mode: "allow",

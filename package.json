@@ -7,7 +7,7 @@
     "build": "next build && find .next -type f -name '*.map' -delete",
     "start": "next start --hostname 0.0.0.0 --port 3001",
     "start:prod": "next start --hostname 0.0.0.0 --port 3001",
-    "lint": "next lint",
+    "lint": "eslint .",
     "i18n:check": "node ./scripts/check-i18n.mjs",
     "log:web": "docker logs -f alternativa-macaemaissegura-frontend",
     "docker:up": "sudo docker rm -f alternativa-macaemaissegura-frontend >/dev/null 2>&1 || true && sudo docker run -d --name alternativa-macaemaissegura-frontend --restart unless-stopped --network macae_rede --env-file ./.env -p 127.0.0.1:3001:3001 alternativa-macaemaissegura-frontend",

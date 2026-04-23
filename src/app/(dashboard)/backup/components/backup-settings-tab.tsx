@@ -36,14 +36,6 @@ import { formatDateTime, getFrequencyLabel } from "./utils"
 import { useTranslator } from "@/lib/i18n"
 import { useMemo } from "react"
 
-type SettingsFormValues = {
-  enabled: boolean
-  frequencyMinutes: number
-  scheduledTime?: string
-  password?: string
-  notes?: string
-}
-
 const frequencyOptions = [5, 15, 30, 60, 120, 360, 720, 1440, 2880, 10080]
 
 interface BackupSettingsTabProps {
@@ -69,7 +61,7 @@ export function BackupSettingsTab({
     () => z
       .object({
         enabled: z.boolean(),
-        frequencyMinutes: z.coerce.number().min(5).max(7 * 24 * 60),
+        frequencyMinutes: z.number().min(5).max(7 * 24 * 60),
         scheduledTime: z.string().optional(),
         password: z.string().optional(),
         notes: z.string().max(256, validationNotesMax).optional(),
@@ -94,8 +86,10 @@ export function BackupSettingsTab({
     [validationNotesMax, validationPassword, validationSchedule]
   )
 
+  type SettingsFormValues = z.infer<typeof settingsSchema>
+
   const form = useForm<SettingsFormValues>({
-    resolver: zodResolver(settingsSchema) as any,
+    resolver: zodResolver(settingsSchema),
     defaultValues: {
       enabled: false,
       frequencyMinutes: 1440,
@@ -199,7 +193,7 @@ export function BackupSettingsTab({
               {t("card_freq")}
             </div>
             <div className="mt-2 text-sm font-medium">
-              {settings ? getFrequencyLabel(tUtils.t, settings.frequencyMinutes) : "--"}
+              {settings ? getFrequencyLabel(tUtils, settings.frequencyMinutes) : "--"}
             </div>
           </CardContent>
         </Card>
@@ -263,7 +257,7 @@ export function BackupSettingsTab({
                         <SelectContent>
                           {frequencyOptions.map((option) => (
                             <SelectItem key={option} value={String(option)}>
-                              {getFrequencyLabel(tUtils.t, option)}
+                              {getFrequencyLabel(tUtils, option)}
                             </SelectItem>
                           ))}
                         </SelectContent>

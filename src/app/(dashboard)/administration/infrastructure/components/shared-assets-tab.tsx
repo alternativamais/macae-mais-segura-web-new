@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import {
   Building2,
   EllipsisVertical,
@@ -311,10 +311,6 @@ export function SharedAssetsTab({
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
-  useEffect(() => {
-    setPage(1)
-  }, [searchTerm, pageSize, selectedCompanyId])
-
   const allItems = useMemo(() => flattenTree(t, data), [data, t])
 
   const filteredItems = useMemo(() => {
@@ -348,6 +344,22 @@ export function SharedAssetsTab({
     setIsPanelOpen(true)
   }
 
+  const handleSearchTermChange = (value: string) => {
+    setSearchTerm(value)
+    setPage(1)
+  }
+
+  const handleCompanyChange = (value: string) => {
+    setSelectedCompanyId(value)
+    setPage(1)
+    void onReload(value !== "all" ? Number(value) : undefined)
+  }
+
+  const handlePageSizeChange = (nextPageSize: number) => {
+    setPageSize(nextPageSize)
+    setPage(1)
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -356,20 +368,14 @@ export function SharedAssetsTab({
           <Input
             placeholder={t("search_placeholder")}
             value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
+            onChange={(event) => handleSearchTermChange(event.target.value)}
             className="pl-9"
           />
         </div>
 
         {isAllCompanies && data?.companies?.length ? (
           <div className="w-full max-w-xs">
-            <Select
-              value={selectedCompanyId}
-              onValueChange={(value) => {
-                setSelectedCompanyId(value)
-                void onReload(value !== "all" ? Number(value) : undefined)
-              }}
-            >
+            <Select value={selectedCompanyId} onValueChange={handleCompanyChange}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder={t("filters.company_placeholder")} />
               </SelectTrigger>
@@ -503,7 +509,7 @@ export function SharedAssetsTab({
         pageSize={pageSize}
         total={filteredItems.length}
         onPageChange={setPage}
-        onPageSizeChange={setPageSize}
+        onPageSizeChange={handlePageSizeChange}
       />
 
       <AssetAccessDialog

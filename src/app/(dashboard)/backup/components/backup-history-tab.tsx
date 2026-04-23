@@ -114,7 +114,7 @@ export function BackupHistoryTab({
     } finally {
       setIsLoading(false)
     }
-  }, [canRead, onRefreshComplete])
+  }, [canRead, onRefreshComplete, t])
 
   useEffect(() => {
     loadItems()

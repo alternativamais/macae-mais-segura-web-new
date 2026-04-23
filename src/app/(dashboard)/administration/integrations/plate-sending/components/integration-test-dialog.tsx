@@ -64,6 +64,26 @@ export function IntegrationTestDialog({
   integration,
   binding,
 }: IntegrationTestDialogProps) {
+  if (!open) {
+    return null
+  }
+
+  return (
+    <OpenIntegrationTestDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      integration={integration}
+      binding={binding}
+    />
+  )
+}
+
+function OpenIntegrationTestDialog({
+  open,
+  onOpenChange,
+  integration,
+  binding,
+}: IntegrationTestDialogProps) {
   const t = useTranslator("plate_sending")
   const terminalRef = useRef<HTMLDivElement | null>(null)
   const socketRef = useRef<Socket | null>(null)
@@ -87,18 +107,11 @@ export function IntegrationTestDialog({
   }, [logs])
 
   useEffect(() => {
-    if (open) return
-
-    socketRef.current?.disconnect()
-    socketRef.current = null
-    setConnected(false)
-    setConnecting(false)
-    setListening(false)
-    setFilterCameraId("")
-    setLogs([])
-    setRawPayloads([])
-    setConsoleTab("events")
-  }, [open])
+    return () => {
+      socketRef.current?.disconnect()
+      socketRef.current = null
+    }
+  }, [])
 
   const addLog = useCallback((message: string, type: IntegrationRealtimeLogLine["type"] = "info") => {
     setLogs((previous) => [
@@ -270,7 +283,7 @@ export function IntegrationTestDialog({
     socketRef.current = socket
   }, [addLog, handleIntegrationEvent, handleWebhookEvent, integration.code, t])
 
-  const startListening = useCallback(() => {
+  const startListening = () => {
     if (!socketRef.current?.connected || !binding?.cameraId) {
       addLog(t("test.notifications.start_error"), "error")
       return
@@ -280,7 +293,7 @@ export function IntegrationTestDialog({
     socketRef.current.emit("integration:subscribe", {
       cameraId: binding.cameraId,
     })
-  }, [addLog, binding?.cameraId, t])
+  }
 
   const stopListening = useCallback(() => {
     if (!socketRef.current?.connected) return

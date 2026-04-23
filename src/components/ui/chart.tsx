@@ -1,5 +1,10 @@
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
+import type {
+  NameType,
+  Payload,
+  ValueType,
+} from "recharts/types/component/DefaultTooltipContent"
 
 import { cn } from "@/lib/utils"
 
@@ -123,8 +128,8 @@ function ChartTooltipContent({
     indicator?: "line" | "dot" | "dashed"
     nameKey?: string
     labelKey?: string
-    payload?: any[]
-    label?: any
+    payload?: Payload<ValueType, NameType>[]
+    label?: string | number
   }) {
   const { config } = useChart()
 
@@ -186,7 +191,11 @@ function ChartTooltipContent({
 
           return (
             <div
-              key={item.dataKey}
+              key={
+                typeof item.dataKey === "string" || typeof item.dataKey === "number"
+                  ? item.dataKey
+                  : key
+              }
               className={cn(
                 "[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
                 indicator === "dot" && "items-center"
@@ -260,7 +269,7 @@ function ChartLegendContent({
   Omit<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
     hideIcon?: boolean
     nameKey?: string
-    payload?: any[]
+    payload?: Payload<ValueType, NameType>[]
     verticalAlign?: "top" | "bottom" | "middle" | string
   }) {
   const { config } = useChart()
@@ -283,7 +292,7 @@ function ChartLegendContent({
 
         return (
           <div
-            key={item.value}
+            key={String(item.value ?? item.dataKey ?? "value")}
             className={cn(
               "[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3"
             )}

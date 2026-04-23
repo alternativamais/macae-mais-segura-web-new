@@ -66,7 +66,7 @@ export function PermissionFormDialog({
   )
 
   const form = useForm<PermissionFormValues>({
-    resolver: zodResolver(permissionFormSchema) as any,
+    resolver: zodResolver(permissionFormSchema),
     defaultValues: {
       name: "",
       group: "",

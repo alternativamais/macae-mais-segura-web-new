@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FilePenLine, Loader2, X } from "lucide-react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { z } from "zod"
 import { TenantCompanyFormField } from "@/components/shared/tenant-company-form-field"
 import { DataTag } from "@/components/shared/data-tag"
@@ -41,7 +41,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -441,8 +440,34 @@ interface EmailRuleFormDialogProps {
   onSuccess: () => Promise<void> | void
 }
 
-export function EmailRuleFormDialog({
-  open,
+function createInitialCriteriaEnabled(rule: EmailPlateAlertRule | null) {
+  return {
+    plates: Boolean(rule?.plates.length),
+    vehicle: Boolean(
+      rule?.filters?.vehicleColors?.length ||
+        rule?.filters?.vehicleTypes?.length ||
+        rule?.filters?.vehicleBrands?.length,
+    ),
+    detection: Boolean(
+      typeof rule?.filters?.speedThresholdKmh === "number" || rule?.filters?.directions?.length,
+    ),
+  }
+}
+
+export function EmailRuleFormDialog(props: EmailRuleFormDialogProps) {
+  if (!props.open) {
+    return null
+  }
+
+  return (
+    <OpenEmailRuleFormDialog
+      key={props.rule?.id ?? "new"}
+      {...props}
+    />
+  )
+}
+
+function OpenEmailRuleFormDialog({
   onOpenChange,
   rule,
   smtpAccounts,
@@ -457,23 +482,12 @@ export function EmailRuleFormDialog({
   const { companies, defaultCompanyId, showCompanySelector } = useTenantCompanySelection()
   const [openSection, setOpenSection] = useState("scope")
   const [isTemplateEditorOpen, setIsTemplateEditorOpen] = useState(false)
-  const [criteriaEnabled, setCriteriaEnabled] = useState({
-    plates: false,
-    vehicle: false,
-    detection: false,
-  })
+  const [criteriaEnabled, setCriteriaEnabled] = useState(() =>
+    createInitialCriteriaEnabled(rule),
+  )
 
   const schema = useMemo(
     () => {
-      const optionalNumberField = z.preprocess((value) => {
-        if (value === "" || value === null || value === undefined) {
-          return undefined
-        }
-
-        const numeric = Number(value)
-        return Number.isFinite(numeric) ? numeric : value
-      }, z.number().optional())
-
       return z.object({
         empresaId: z.string().optional(),
         name: z.string().trim().min(2, t("validations.name")),
@@ -484,14 +498,14 @@ export function EmailRuleFormDialog({
         whatsappAccountId: z.string().optional(),
         whatsappRecipientIds: z.array(z.string()),
         platesText: z.string().optional(),
-        speedThresholdKmh: optionalNumberField,
+        speedThresholdKmh: z.string().optional(),
         directions: z.array(z.string()),
         vehicleColors: z.array(z.string()),
         vehicleTypes: z.array(z.string()),
         vehicleBrands: z.array(z.string()),
         subjectTemplate: z.string().trim().min(1, t("validations.subject")),
         bodyTemplate: z.string().trim().min(1, t("validations.body")),
-        cooldownSeconds: z.coerce.number().min(0),
+        cooldownSeconds: z.number().min(0),
         enabled: z.boolean(),
         emailEnabled: z.boolean(),
         whatsappEnabled: z.boolean(),
@@ -554,10 +568,10 @@ export function EmailRuleFormDialog({
     [showCompanySelector, t, tCompany],
   )
 
-  type FormValues = z.input<typeof schema>
+  type FormValues = z.infer<typeof schema>
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(schema) as any,
+    resolver: zodResolver(schema),
     defaultValues: {
       empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
       name: "",
@@ -584,20 +598,6 @@ export function EmailRuleFormDialog({
   })
 
   useEffect(() => {
-    if (!open) return
-
-    setOpenSection("scope")
-    setCriteriaEnabled({
-      plates: Boolean(rule?.plates.length),
-      vehicle: Boolean(
-        rule?.filters?.vehicleColors?.length ||
-          rule?.filters?.vehicleTypes?.length ||
-          rule?.filters?.vehicleBrands?.length,
-      ),
-      detection: Boolean(
-        typeof rule?.filters?.speedThresholdKmh === "number" || rule?.filters?.directions?.length,
-      ),
-    })
     form.reset({
       empresaId:
         typeof rule?.empresaId === "number"
@@ -613,7 +613,10 @@ export function EmailRuleFormDialog({
       whatsappAccountId: rule?.whatsappAccountId ? String(rule.whatsappAccountId) : "",
       whatsappRecipientIds: rule?.whatsappRecipients.map((item) => String(item.id)) || [],
       platesText: rule?.plates.map((item) => item.plateText).join("\n") || "",
-      speedThresholdKmh: rule?.filters?.speedThresholdKmh ?? "",
+      speedThresholdKmh:
+        typeof rule?.filters?.speedThresholdKmh === "number"
+          ? String(rule.filters.speedThresholdKmh)
+          : "",
       directions: rule?.filters?.directions || [],
       vehicleColors: rule?.filters?.vehicleColors || [],
       vehicleTypes: rule?.filters?.vehicleTypes || [],
@@ -628,9 +631,9 @@ export function EmailRuleFormDialog({
       emailEnabled: rule?.emailEnabled !== false,
       whatsappEnabled: rule?.whatsappEnabled === true,
     })
-  }, [defaultCompanyId, form, open, rule])
+  }, [defaultCompanyId, form, rule])
 
-  const selectedCompanyId = form.watch("empresaId")
+  const selectedCompanyId = useWatch({ control: form.control, name: "empresaId" })
   const filteredCompanyId = selectedCompanyId?.trim()
     ? Number(selectedCompanyId)
     : defaultCompanyId ?? null
@@ -655,7 +658,21 @@ export function EmailRuleFormDialog({
     [filteredCompanyId, whatsappAccounts],
   )
 
-  const selectedWhatsappAccountId = form.watch("whatsappAccountId")
+  const selectedWhatsappAccountId = useWatch({
+    control: form.control,
+    name: "whatsappAccountId",
+  })
+  const emailEnabled = useWatch({ control: form.control, name: "emailEnabled" })
+  const smtpAccountId = useWatch({ control: form.control, name: "smtpAccountId" })
+  const whatsappEnabled = useWatch({
+    control: form.control,
+    name: "whatsappEnabled",
+  })
+  const subjectTemplate = useWatch({
+    control: form.control,
+    name: "subjectTemplate",
+  })
+  const bodyTemplate = useWatch({ control: form.control, name: "bodyTemplate" })
   const filteredWhatsappRecipients = useMemo(
     () =>
       whatsappRecipients.filter((recipient) => {
@@ -831,7 +848,7 @@ export function EmailRuleFormDialog({
   })
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>{rule ? t("title_edit") : t("title_create")}</DialogTitle>
@@ -841,7 +858,7 @@ export function EmailRuleFormDialog({
         <Form {...form}>
           <form className="space-y-6" onSubmit={onSubmit}>
             {showCompanySelector ? (
-              <TenantCompanyFormField control={form.control as any} companies={companies} />
+              <TenantCompanyFormField control={form.control} companies={companies} />
             ) : null}
 
             <Accordion
@@ -886,8 +903,10 @@ export function EmailRuleFormDialog({
                               <Input
                                 type="number"
                                 placeholder={t("placeholders.cooldown")}
-                                {...field}
-                                value={(field.value as string | number | undefined) ?? ""}
+                                value={field.value ?? 0}
+                                onChange={(event) =>
+                                  field.onChange(Number(event.target.value) || 0)
+                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -1242,7 +1261,7 @@ export function EmailRuleFormDialog({
                 </AccordionTrigger>
                 <AccordionContent className="pb-0">
                   <div className="space-y-4 pb-4">
-                    {form.watch("emailEnabled") ? (
+                    {emailEnabled ? (
                       <>
                         <FormField
                           control={form.control}
@@ -1275,7 +1294,7 @@ export function EmailRuleFormDialog({
                         )}
                       />
 
-                        {form.watch("smtpAccountId") ? (
+                        {smtpAccountId ? (
                           <FormField
                             control={form.control}
                             name="recipientIds"
@@ -1301,7 +1320,7 @@ export function EmailRuleFormDialog({
                       </>
                     ) : null}
 
-                    {form.watch("whatsappEnabled") ? (
+                    {whatsappEnabled ? (
                       <>
                         <FormField
                           control={form.control}
@@ -1331,7 +1350,7 @@ export function EmailRuleFormDialog({
                         )}
                       />
 
-                        {form.watch("whatsappAccountId") ? (
+                        {selectedWhatsappAccountId ? (
                           <FormField
                             control={form.control}
                             name="whatsappRecipientIds"
@@ -1427,8 +1446,8 @@ export function EmailRuleFormDialog({
           bodyPlaceholder={t("placeholders.body")}
           toolbarLabel={t("editor.toolbar_title")}
           emptyTokensLabel={t("editor.empty_tokens")}
-          subjectValue={form.watch("subjectTemplate")}
-          bodyValue={form.watch("bodyTemplate")}
+          subjectValue={subjectTemplate}
+          bodyValue={bodyTemplate}
           onSave={({ subject, body }) => {
             form.setValue("subjectTemplate", subject, { shouldDirty: true, shouldValidate: true })
             form.setValue("bodyTemplate", body, { shouldDirty: true, shouldValidate: true })

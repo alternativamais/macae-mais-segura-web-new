@@ -30,11 +30,6 @@ import { useTranslator } from "@/lib/i18n"
 import { useMemo } from "react"
 import { formatLocaleNumber } from "./utils"
 
-type FormValues = {
-  password?: string
-  notes?: string
-}
-
 interface CreateBackupDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -65,8 +60,10 @@ export function CreateBackupDialog({
     [validationNotesMax, validationPasswordMax, validationPasswordMin]
   )
 
+  type FormValues = z.infer<typeof formSchema>
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
       notes: "",

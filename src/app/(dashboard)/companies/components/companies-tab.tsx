@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState, useCallback } from "react"
-import { EllipsisVertical, Eye, Pencil, Plus, Search, Trash2, Building2 } from "lucide-react"
+import { EllipsisVertical, Eye, Pencil, Plus, Search, Trash2 } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"

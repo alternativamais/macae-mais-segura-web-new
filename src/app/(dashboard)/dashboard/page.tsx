@@ -151,6 +151,23 @@ function CameraFilterField({
   )
 }
 
+const dashboardPeriodValues = ["default", "today", "7d", "30d"] as const
+const dashboardGranularityValues = ["default", "hour", "day"] as const
+
+function isDashboardPeriodValue(
+  value: string,
+): value is DashboardWidgetPeriod | "default" {
+  return dashboardPeriodValues.includes(value as DashboardWidgetPeriod | "default")
+}
+
+function isDashboardGranularityValue(
+  value: string,
+): value is DashboardWidgetGranularity | "default" {
+  return dashboardGranularityValues.includes(
+    value as DashboardWidgetGranularity | "default",
+  )
+}
+
 export default function DashboardPage() {
   const t = useTranslator("dashboard")
   const activeCompanyId = useAuthStore((state) => state.activeCompanyId)
@@ -362,7 +379,11 @@ export default function DashboardPage() {
               <ToggleGroup
                 type="single"
                 value={periodOverride}
-                onValueChange={(value) => value && setPeriodOverride(value as any)}
+                onValueChange={(value) => {
+                  if (value && isDashboardPeriodValue(value)) {
+                    setPeriodOverride(value)
+                  }
+                }}
                 variant="outline"
                 size="sm"
                 className="flex flex-wrap"
@@ -387,7 +408,11 @@ export default function DashboardPage() {
               <ToggleGroup
                 type="single"
                 value={granularityOverride}
-                onValueChange={(value) => value && setGranularityOverride(value as any)}
+                onValueChange={(value) => {
+                  if (value && isDashboardGranularityValue(value)) {
+                    setGranularityOverride(value)
+                  }
+                }}
                 variant="outline"
                 size="sm"
                 className="flex flex-wrap"

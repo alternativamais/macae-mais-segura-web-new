@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { z } from "zod"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { useTranslator } from "@/lib/i18n"
@@ -93,7 +93,10 @@ export function IntegrationCameraFormDialog({
     },
   })
 
-  const directionFilter = form.watch("directionFilter")
+  const directionFilter = useWatch({
+    control: form.control,
+    name: "directionFilter",
+  })
 
   const locationLabel = useMemo(
     () => getCameraLocationLabel(targetCamera, t("shared.not_informed")),

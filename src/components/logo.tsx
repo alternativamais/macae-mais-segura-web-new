@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 const brandLogoLight = "/brand/logo-retangulo-fundo-branco.png"
@@ -26,18 +27,20 @@ export function Logo({
 }: LogoProps) {
   return (
     <>
-      <img
+      <Image
         src={squareLogoLight}
         alt="Hórus Core"
         width={size}
         height={size}
+        priority={priority}
         className={cn("h-auto w-auto object-contain dark:hidden", className)}
       />
-      <img
+      <Image
         src={squareLogoDark}
         alt="Hórus Core"
         width={size}
         height={size}
+        priority={priority}
         className={cn("hidden h-auto w-auto object-contain dark:block", className)}
       />
     </>
@@ -52,18 +55,20 @@ export function BrandLogo({
 }: BrandLogoProps) {
   return (
     <>
-      <img
+      <Image
         src={brandLogoLight}
         alt="Hórus Core"
         width={width}
         height={height}
+        priority={priority}
         className={cn("h-auto w-auto object-contain dark:hidden", className)}
       />
-      <img
+      <Image
         src={brandLogoDark}
         alt="Hórus Core"
         width={width}
         height={height}
+        priority={priority}
         className={cn("hidden h-auto w-auto object-contain dark:block", className)}
       />
     </>

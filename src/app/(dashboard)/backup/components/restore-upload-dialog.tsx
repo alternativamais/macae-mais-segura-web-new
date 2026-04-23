@@ -42,11 +42,6 @@ interface RestoreUploadDialogProps {
   onSuccess: () => void | Promise<void>
 }
 
-type FormValues = {
-  password?: string
-  mode: "replace" | "dry-run"
-}
-
 export function RestoreUploadDialog({
   open,
   onOpenChange,
@@ -71,8 +66,10 @@ export function RestoreUploadDialog({
     [validationPasswordMax, validationPasswordMin]
   )
 
+  type FormValues = z.infer<typeof formSchema>
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
       mode: "dry-run",

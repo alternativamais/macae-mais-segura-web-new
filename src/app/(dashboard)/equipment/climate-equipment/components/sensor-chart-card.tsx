@@ -53,7 +53,7 @@ export function SensorChartCard({ sensor }: SensorChartCardProps) {
     normalizeNumericValue(sensor.lastValue) !== null
       ? normalizeNumericValue(sensor.lastValue)
       : (sensor.lastRawValue ?? t("not_informed"))
-  const chartColor = getClimateSensorColor(sensor.type)
+  const chartColor = getClimateSensorColor()
 
   return (
     <Card className="overflow-hidden">

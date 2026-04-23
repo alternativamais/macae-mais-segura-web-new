@@ -55,6 +55,26 @@ export function PointMapPickerDialog({
   initialCoordinates,
   onConfirm,
 }: PointMapPickerDialogProps) {
+  if (!open) {
+    return null
+  }
+
+  return (
+    <OpenPointMapPickerDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      initialCoordinates={initialCoordinates}
+      onConfirm={onConfirm}
+    />
+  )
+}
+
+function OpenPointMapPickerDialog({
+  open,
+  onOpenChange,
+  initialCoordinates,
+  onConfirm,
+}: PointMapPickerDialogProps) {
   const t = useTranslator("points.form.map_picker")
   const mapRef = useRef<google.maps.Map | null>(null)
   const [selectedPosition, setSelectedPosition] = useState<PointCoordinates | null>(
@@ -65,14 +85,6 @@ export function PointMapPickerDialog({
     id: GOOGLE_MAPS_LOADER_ID,
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   })
-
-  useEffect(() => {
-    if (!open) {
-      return
-    }
-
-    setSelectedPosition(initialCoordinates || null)
-  }, [initialCoordinates, open])
 
   const center = useMemo(() => {
     return selectedPosition || initialCoordinates || DEFAULT_CENTER

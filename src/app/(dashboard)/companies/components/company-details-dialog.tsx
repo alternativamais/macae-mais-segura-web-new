@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,31 @@ interface CompanyDetailsDialogProps {
   company: Empresa | null
   open: boolean
   onOpenChange: (open: boolean) => void
+}
+
+function CompanyAssetPreview({
+  src,
+  alt,
+  className,
+  width,
+  height,
+}: {
+  src: string
+  alt: string
+  className: string
+  width: number
+  height: number
+}) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      unoptimized
+      className={className}
+    />
+  )
 }
 
 export function CompanyDetailsDialog({ company, open, onOpenChange }: CompanyDetailsDialogProps) {
@@ -73,58 +99,74 @@ export function CompanyDetailsDialog({ company, open, onOpenChange }: CompanyDet
             <>
               <div className="flex flex-wrap items-center gap-3 rounded-lg border bg-muted/20 p-3">
                 {iconLogoUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={iconLogoUrl}
                     alt={company.nome}
+                    width={48}
+                    height={48}
                     className="size-12 rounded-lg object-contain"
                   />
                 ) : null}
                 {fullLogoUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={fullLogoUrl}
                     alt={company.nome}
+                    width={220}
+                    height={40}
                     className="max-h-10 max-w-[220px] object-contain"
                   />
                 ) : null}
                 {lightLogoUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={lightLogoUrl}
                     alt={`${company.nome} tema claro`}
+                    width={220}
+                    height={40}
                     className="max-h-10 max-w-[220px] rounded bg-white p-1 object-contain"
                   />
                 ) : null}
                 {darkLogoUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={darkLogoUrl}
                     alt={`${company.nome} tema escuro`}
+                    width={220}
+                    height={40}
                     className="max-h-10 max-w-[220px] rounded bg-zinc-950 p-1 object-contain"
                   />
                 ) : null}
                 {squareLightLogoUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={squareLightLogoUrl}
                     alt={`${company.nome} quadrada tema claro`}
+                    width={48}
+                    height={48}
                     className="size-12 rounded bg-white p-1 object-contain"
                   />
                 ) : null}
                 {squareDarkLogoUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={squareDarkLogoUrl}
                     alt={`${company.nome} quadrada tema escuro`}
+                    width={48}
+                    height={48}
                     className="size-12 rounded bg-zinc-950 p-1 object-contain"
                   />
                 ) : null}
                 {pointPinUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={pointPinUrl}
                     alt={`${company.nome} pin de ponto`}
+                    width={48}
+                    height={48}
                     className="size-12 object-contain"
                   />
                 ) : null}
                 {totemPinUrl ? (
-                  <img
+                  <CompanyAssetPreview
                     src={totemPinUrl}
                     alt={`${company.nome} pin de totem`}
+                    width={48}
+                    height={48}
                     className="size-12 object-contain"
                   />
                 ) : null}

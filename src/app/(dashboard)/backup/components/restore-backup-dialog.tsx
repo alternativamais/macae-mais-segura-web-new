@@ -43,11 +43,6 @@ interface RestoreBackupDialogProps {
   backup: BackupRecord | null
 }
 
-type FormValues = {
-  password?: string
-  mode: "replace" | "dry-run"
-}
-
 export function RestoreBackupDialog({
   open,
   onOpenChange,
@@ -72,8 +67,10 @@ export function RestoreBackupDialog({
     [validationPasswordMax, validationPasswordMin]
   )
 
+  type FormValues = z.infer<typeof formSchema>
+
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       password: "",
       mode: "dry-run",

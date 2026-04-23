@@ -12,7 +12,7 @@ export function BackupStatusBadge({ status }: { status: BackupRecord["status"] }
     failed: { label: t("status_failed"), tone: "danger" },
     running: { label: t("status_running"), tone: "warning" },
   } as const
-  const tag = resolveDataTagDefinition(status, backupStatusTagMap as any, {
+  const tag = resolveDataTagDefinition(status, backupStatusTagMap, {
     label: getStatusDescription(t, status),
     tone: "neutral",
   })
@@ -26,7 +26,7 @@ export function BackupOriginBadge({ initiatedBy }: { initiatedBy?: string | null
     scheduled: { label: t("origin_scheduled"), tone: "accent" },
     manual: { label: t("origin_manual"), tone: "neutral" },
   } as const
-  const tag = resolveDataTagDefinition(initiatedBy, backupOriginTagMap as any, {
+  const tag = resolveDataTagDefinition(initiatedBy, backupOriginTagMap, {
     label: getInitiatedByLabel(t, initiatedBy),
     tone: "neutral",
   })
@@ -44,7 +44,7 @@ export function BackupStorageProviderBadge({
     local: { label: t("badge_local"), tone: "neutral" },
     external: { label: t("badge_external"), tone: "info" },
   } as const
-  const tag = resolveDataTagDefinition(storageProvider, backupStorageProviderTagMap as any, {
+  const tag = resolveDataTagDefinition(storageProvider, backupStorageProviderTagMap, {
     label: storageProvider === "external" ? t("badge_external") : t("badge_local"),
     tone: storageProvider === "external" ? "info" : "neutral",
   })
@@ -63,7 +63,7 @@ export function BackupDropboxBadge({
     true: { label: t("badge_dropbox_yes"), tone: "info" },
     false: { label: t("badge_dropbox_no"), tone: "warning" },
   } as const
-  const tag = resolveDataTagDefinition(normalized, backupDropboxTagMap as any, {
+  const tag = resolveDataTagDefinition(normalized, backupDropboxTagMap, {
     label: uploadedToDropbox ? t("badge_dropbox_yes") : t("badge_dropbox_no"),
     tone: uploadedToDropbox ? "info" : "warning",
   })

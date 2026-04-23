@@ -87,7 +87,6 @@ export function IntegrationManagementTab({
   const isCustomIntegration = integration.driver === "custom_webhook"
 
   const canManage = hasPermission("configurar_integracao")
-  const canRead = hasPermission("listar_integracoes")
   const identifierLabel = getIntegrationIdentifierLabel(integration.code, t)
   const identifierHelper = isCustomIntegration
     ? t("management.custom_identifier_helper")
@@ -145,8 +144,14 @@ export function IntegrationManagementTab({
     setAvailablePage(1)
   }, [availableSearchTerm, availablePageSize])
 
-  const configuredItems = details?.configured ?? []
-  const availableItems = details?.availableCameras ?? []
+  const configuredItems = useMemo(
+    () => details?.configured ?? [],
+    [details],
+  )
+  const availableItems = useMemo(
+    () => details?.availableCameras ?? [],
+    [details],
+  )
 
   const configuredMetrics = useMemo(
     () => ({

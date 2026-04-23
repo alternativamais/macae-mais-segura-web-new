@@ -61,4 +61,4 @@ export interface CreateCameraPayload {
   empresaId?: number
 }
 
-export interface UpdateCameraPayload extends Partial<CreateCameraPayload> {}
+export type UpdateCameraPayload = Partial<CreateCameraPayload>

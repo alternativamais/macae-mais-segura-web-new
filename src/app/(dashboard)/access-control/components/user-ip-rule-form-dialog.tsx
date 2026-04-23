@@ -40,17 +40,6 @@ import { User } from "@/types/user"
 import { useTranslator } from "@/lib/i18n"
 import { getUserIpMatchTypeOptions, getUserRuleModeOptions } from "./utils"
 
-type UserIpRuleFormValues = {
-  userId: number
-  mode: "allow" | "block"
-  matchType: "single" | "cidr" | "range"
-  value?: string
-  rangeStart?: string
-  rangeEnd?: string
-  description?: string
-  active: boolean
-}
-
 interface UserIpRuleFormDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -82,7 +71,7 @@ export function UserIpRuleFormDialog({
     () =>
       z
         .object({
-          userId: z.coerce.number().min(1, validationUser),
+          userId: z.number().min(1, validationUser),
           mode: z.enum(["allow", "block"]),
           matchType: z.enum(["single", "cidr", "range"]),
           value: z.string().optional(),
@@ -126,8 +115,10 @@ export function UserIpRuleFormDialog({
     [validationCidr, validationEndIp, validationIp, validationStartIp, validationUser],
   )
 
+  type UserIpRuleFormValues = z.infer<typeof userIpRuleFormSchema>
+
   const form = useForm<UserIpRuleFormValues>({
-    resolver: zodResolver(userIpRuleFormSchema) as any,
+    resolver: zodResolver(userIpRuleFormSchema),
     defaultValues: {
       userId: 0,
       mode: "block",

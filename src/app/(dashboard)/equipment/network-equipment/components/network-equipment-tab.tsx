@@ -79,12 +79,15 @@ export function NetworkEquipmentTab() {
   const notInformed = t("shared.not_informed")
   const noReference = t("location.no_reference")
 
-  const locationLabels = {
-    point: t("location.point"),
-    totem: t("location.totem"),
-    noReference,
-    fallback: notInformed,
-  }
+  const locationLabels = useMemo(
+    () => ({
+      point: t("location.point"),
+      totem: t("location.totem"),
+      noReference,
+      fallback: notInformed,
+    }),
+    [noReference, notInformed, t],
+  )
 
   const loadData = useCallback(async () => {
     setIsLoading(true)

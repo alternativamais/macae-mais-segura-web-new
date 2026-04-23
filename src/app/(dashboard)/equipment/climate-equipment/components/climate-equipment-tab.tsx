@@ -107,13 +107,16 @@ export function ClimateEquipmentTab({
     return () => window.clearTimeout(timeout)
   }, [isDeleteDialogOpen])
 
-  const locationLabels = {
-    point: t("location.point"),
-    totem: t("location.totem"),
-    noReference: t("location.no_reference"),
-    unassigned: t("location.unassigned"),
-    fallback: t("shared.not_informed"),
-  }
+  const locationLabels = useMemo(
+    () => ({
+      point: t("location.point"),
+      totem: t("location.totem"),
+      noReference: t("location.no_reference"),
+      unassigned: t("location.unassigned"),
+      fallback: t("shared.not_informed"),
+    }),
+    [t],
+  )
 
   const filteredItems = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase()

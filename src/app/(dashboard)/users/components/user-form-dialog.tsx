@@ -75,12 +75,6 @@ interface UserFormDialogProps {
 
 const defaultBirthday = new Date("1995-01-01")
 
-type CompanyRoleValue = {
-  empresaId: number
-  roleId: number
-  isDefault: boolean
-}
-
 function CompanyMultiSelectField({
   companies,
   selectedCompanyIds,
@@ -228,8 +222,8 @@ export function UserFormDialog({
           .array(
             z.object({
               empresaId: z.number(),
-              roleId: z.coerce.number().min(1, t("validations.role_required")),
-              isDefault: z.boolean().default(false),
+              roleId: z.number().min(1, t("validations.role_required")),
+              isDefault: z.boolean(),
             }),
           )
           .min(1, t("validations.empresa_required"))
@@ -261,7 +255,7 @@ export function UserFormDialog({
               })
             }
           }),
-        locationRequired: z.boolean().default(false),
+        locationRequired: z.boolean(),
       }),
     [t],
   )
@@ -269,7 +263,7 @@ export function UserFormDialog({
   type UserFormValues = z.infer<typeof userFormSchema>
 
   const form = useForm<UserFormValues>({
-    resolver: zodResolver(userFormSchema) as any,
+    resolver: zodResolver(userFormSchema),
     defaultValues: {
       name: "",
       username: "",

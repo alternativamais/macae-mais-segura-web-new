@@ -42,14 +42,6 @@ interface EventFormProps {
   onDelete?: (eventId: number) => void
 }
 
-const eventTypes = [
-  { value: "meeting", label: "Meeting", color: "bg-blue-500" },
-  { value: "event", label: "Event", color: "bg-green-500" },
-  { value: "personal", label: "Personal", color: "bg-pink-500" },
-  { value: "task", label: "Task", color: "bg-orange-500" },
-  { value: "reminder", label: "Reminder", color: "bg-purple-500" }
-]
-
 const timeSlots = [
   "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
   "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM",
@@ -57,15 +49,10 @@ const timeSlots = [
   "6:00 PM", "6:30 PM", "7:00 PM", "7:30 PM", "8:00 PM", "8:30 PM"
 ]
 
-const durationOptions = [
-  "15 min", "30 min", "45 min", "1 hour", "1.5 hours", "2 hours", "3 hours", "All day"
-]
-
 import { useTranslator } from "@/lib/i18n"
 
 export function EventForm({ event, open, onOpenChange, onSave, onDelete }: EventFormProps) {
   const t = useTranslator("calendar.form")
-  const tCommon = useTranslator("calendar")
 
   const eventTypes = [
     { value: "meeting", label: t("types.meeting"), color: "bg-blue-500" },

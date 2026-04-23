@@ -64,7 +64,10 @@ export function OperationalMapCanvas({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   })
 
-  const visibleMarkers = showPoints ? markers : []
+  const visibleMarkers = useMemo(
+    () => (showPoints ? markers : []),
+    [markers, showPoints],
+  )
 
   const selectedMarker = useMemo(
     () => markers.find((marker) => marker.id === selectedMarkerId) ?? null,

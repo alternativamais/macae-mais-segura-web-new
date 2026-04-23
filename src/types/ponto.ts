@@ -46,4 +46,4 @@ export interface CreatePointPayload {
   empresaId?: number
 }
 
-export interface UpdatePointPayload extends Partial<CreatePointPayload> {}
+export type UpdatePointPayload = Partial<CreatePointPayload>

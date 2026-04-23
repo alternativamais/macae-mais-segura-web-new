@@ -159,7 +159,7 @@ export function UiSettingsProvider({ children }: { children: React.ReactNode }) 
         const currentSettings = await uiSettingsService.getSettings(targetEmpresaId)
         applySettings(currentSettings)
         return currentSettings
-      } catch (error) {
+      } catch {
         applySettings(DEFAULT_UI_SETTINGS)
         return DEFAULT_UI_SETTINGS
       } finally {

@@ -37,7 +37,7 @@ export interface BackupCreateResponse {
   fileName: string;
   createdAt: string;
   status: string;
-  metadata: any;
+  metadata: BackupMetadata | null;
   summary: BackupSummary;
 }
 
@@ -66,4 +66,4 @@ export interface BackupRestoreResponse {
   summary: BackupSummary;
 }
 
-export interface BackupListResponse extends PaginatedResponse<BackupRecord> {}
+export type BackupListResponse = PaginatedResponse<BackupRecord>;

@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { useTranslator } from "@/lib/i18n"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 
 interface JsonEditorModalProps {
@@ -31,14 +31,32 @@ export function JsonEditorModal({
   initialValue,
   onSave,
 }: JsonEditorModalProps) {
-  const t = useTranslator("plate_sending")
-  const [value, setValue] = useState(initialValue)
+  if (!open) {
+    return null
+  }
 
-  useEffect(() => {
-    if (open) {
-      setValue(initialValue)
-    }
-  }, [initialValue, open])
+  return (
+    <OpenJsonEditorModal
+      open={open}
+      onOpenChange={onOpenChange}
+      title={title}
+      description={description}
+      initialValue={initialValue}
+      onSave={onSave}
+    />
+  )
+}
+
+function OpenJsonEditorModal({
+  open,
+  onOpenChange,
+  title,
+  description,
+  initialValue,
+  onSave,
+}: JsonEditorModalProps) {
+  const t = useTranslator("plate_sending")
+  const [value, setValue] = useState(() => initialValue)
 
   const handleSave = () => {
     try {

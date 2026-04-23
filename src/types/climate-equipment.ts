@@ -105,8 +105,8 @@ export interface CreateClimateEquipmentPayload {
   status?: ClimateEquipmentStatus
 }
 
-export interface UpdateClimateEquipmentPayload
-  extends Partial<CreateClimateEquipmentPayload> {}
+export type UpdateClimateEquipmentPayload =
+  Partial<CreateClimateEquipmentPayload>
 
 export interface HomeAssistantClimateDeviceOption {
   deviceKey: string

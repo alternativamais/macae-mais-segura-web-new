@@ -1,7 +1,12 @@
 import { getTranslations, getLocale } from "next-intl/server"
 import { ITranslator, Locale } from "../../domain/ports/translator"
 
-function createTranslatorAdapter(translations: any, currentLocale: Locale): ITranslator {
+type TranslationFn = Awaited<ReturnType<typeof getTranslations>>
+
+function createTranslatorAdapter(
+  translations: TranslationFn,
+  currentLocale: Locale,
+): ITranslator {
   const translate = ((key: string, params?: Record<string, string | number>) => {
     try {
       return translations(key, params)

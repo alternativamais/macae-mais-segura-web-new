@@ -60,7 +60,7 @@ export function PermissionsTab() {
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     loadPermissions()

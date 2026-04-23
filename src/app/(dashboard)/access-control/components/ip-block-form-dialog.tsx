@@ -135,7 +135,7 @@ export function IpBlockFormDialog({
   )
 
   const form = useForm<IpBlockFormValues>({
-    resolver: zodResolver(ipBlockFormSchema) as any,
+    resolver: zodResolver(ipBlockFormSchema),
     defaultValues: {
       label: "",
       mode: "single",

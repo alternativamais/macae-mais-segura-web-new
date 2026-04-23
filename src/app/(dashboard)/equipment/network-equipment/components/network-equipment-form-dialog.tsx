@@ -50,7 +50,6 @@ import { totemService } from "@/services/totem.service"
 import {
   NetworkEquipment,
   NetworkEquipmentDestination,
-  NetworkEquipmentType,
 } from "@/types/network-equipment"
 import { Ponto } from "@/types/ponto"
 import { Totem } from "@/types/totem"
@@ -316,7 +315,8 @@ export function NetworkEquipmentFormDialog({
       const payload = buildNetworkEquipmentPayload(values)
 
       if (isEdit && item) {
-        const { empresaId, ...updatePayload } = payload
+        const updatePayload = { ...payload }
+        delete updatePayload.empresaId
         await networkEquipmentService.update(item.id, updatePayload)
         toast.success(updateSuccessMessage)
       } else {

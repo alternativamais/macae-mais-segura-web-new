@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { type ReactNode, useEffect, useState } from "react"
 import { ExternalLink, ImageIcon, Radio, ReceiptText } from "lucide-react"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
@@ -174,9 +175,12 @@ export function LprFineReportDetailsDialog({
 
                     <div className="p-4">
                       {resolvedImageUrl ? (
-                        <img
+                        <Image
                           src={resolvedImageUrl}
                           alt={item.plateText}
+                          width={1280}
+                          height={720}
+                          unoptimized
                           className="max-h-[420px] w-full rounded-lg border object-contain"
                         />
                       ) : (

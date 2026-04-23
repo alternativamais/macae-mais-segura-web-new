@@ -1,7 +1,7 @@
 "use client"
 
 import type { ReactNode } from "react"
-import { DataTag } from "@/components/shared/data-tag"
+import { DataTag, type DataTagTone } from "@/components/shared/data-tag"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
 import type { Locale } from "@/lib/i18n/domain/ports/translator"
 import type { EmailPlateAlertRule, EmailPlateAlertRuleFilters } from "@/types/email-integration"
@@ -58,7 +58,7 @@ export function getWhatsappSessionTag(
   labels: Record<string, string>,
 ) {
   const status = sessionStatus || "disconnected"
-  const tone =
+  const tone: DataTagTone =
     status === "ready"
       ? "success"
       : status === "qr_required" || status === "authenticated"
@@ -67,7 +67,7 @@ export function getWhatsappSessionTag(
           ? "danger"
           : "neutral"
 
-  return <DataTag tone={tone as any}>{labels[status] || status}</DataTag>
+  return <DataTag tone={tone}>{labels[status] || status}</DataTag>
 }
 
 export function getEnabledTag(

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -31,17 +31,33 @@ export function LprDetectionFormDialog({
   onSubmit,
   isSubmitting = false,
 }: LprDetectionFormDialogProps) {
-  const t = useTranslator("plate_sending")
-  const [plateText, setPlateText] = useState("")
-  const [confidence, setConfidence] = useState("")
+  if (!open) {
+    return null
+  }
 
-  useEffect(() => {
-    if (!open) return
-    setPlateText(detection?.plateText || "")
-    setConfidence(
-      typeof detection?.confidence === "number" ? String(detection.confidence) : "",
-    )
-  }, [detection, open])
+  return (
+    <OpenLprDetectionFormDialog
+      detection={detection}
+      open={open}
+      onOpenChange={onOpenChange}
+      onSubmit={onSubmit}
+      isSubmitting={isSubmitting}
+    />
+  )
+}
+
+function OpenLprDetectionFormDialog({
+  detection,
+  open,
+  onOpenChange,
+  onSubmit,
+  isSubmitting = false,
+}: LprDetectionFormDialogProps) {
+  const t = useTranslator("plate_sending")
+  const [plateText, setPlateText] = useState(() => detection?.plateText || "")
+  const [confidence, setConfidence] = useState(() =>
+    typeof detection?.confidence === "number" ? String(detection.confidence) : "",
+  )
 
   const handleSubmit = async () => {
     await onSubmit({

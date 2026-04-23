@@ -68,7 +68,7 @@ function createCameraFormSchema(messages: {
       usuario: z.string().trim().min(1, messages.userRequired),
       senha: z.string().optional(),
       rtspScheme: z.string(),
-      rtspPort: z.coerce.number(),
+      rtspPort: z.number(),
       rtspPath: z.string().trim().optional(),
       destino: z.enum(["ponto", "totem"]),
       pontoId: z.string().optional(),
@@ -166,7 +166,7 @@ export function CameraFormDialog({
   )
 
   const form = useForm<CameraFormValues>({
-    resolver: zodResolver(cameraFormSchema) as any,
+    resolver: zodResolver(cameraFormSchema),
     defaultValues: {
       nome: "",
       marca: "",

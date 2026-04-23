@@ -51,16 +51,17 @@ export function TrapRouteFormDialog({
 
   const formSchema = z.object({
     path: z.string().trim().min(1, t("val_path")),
-    method: z.string().trim().default("*"),
+    method: z.string().trim(),
     description: z.string().trim().max(255).optional(),
-    autoBlock: z.boolean().default(true),
-    active: z.boolean().default(true),
+    autoBlock: z.boolean(),
+    active: z.boolean(),
   })
 
-  type FormValues = z.infer<typeof formSchema>
+  type FormInput = z.input<typeof formSchema>
+  type FormValues = z.output<typeof formSchema>
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema) as any,
+  const form = useForm<FormInput, unknown, FormValues>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       path: "",
       method: "*",

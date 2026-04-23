@@ -83,7 +83,7 @@ export function LoginForm({
       if (accessToken) {
         persistClientAuthToken(accessToken)
 
-        let finalAllowedScreens = Array.isArray(allowedScreens)
+        const finalAllowedScreens = Array.isArray(allowedScreens)
           ? Array.from(
               new Set(
                 allowedScreens
@@ -101,7 +101,7 @@ export function LoginForm({
         toast.success("Login realizado com sucesso!")
         window.location.replace(new URL(nextPath, window.location.origin).toString())
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.apiError(error, "Erro ao realizar login")
     } finally {
       setIsLoading(false)

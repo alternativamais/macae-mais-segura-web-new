@@ -334,7 +334,8 @@ export function ClimateEquipmentFormDialog({
       const payload = buildClimateEquipmentPayload(values)
 
       if (item) {
-        const { empresaId: _empresaId, ...updatePayload } = payload
+        const updatePayload = { ...payload }
+        delete updatePayload.empresaId
         await climateEquipmentService.update(item.id, updatePayload)
         toast.success(t("notifications.update_success"))
       } else {

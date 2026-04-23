@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { Activity, Camera, KeyRound, Loader2, Send } from "lucide-react"
+import { Activity, Camera, KeyRound, Send } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
   Dialog,

@@ -187,7 +187,7 @@ export function EmailRulesTab({
         .toLowerCase()
         .includes(term),
     )
-  }, [companyNameById, rules, search])
+  }, [companyNameById, criteriaLabels, rules, search])
 
   const paginatedItems = useMemo(() => {
     const start = (page - 1) * pageSize

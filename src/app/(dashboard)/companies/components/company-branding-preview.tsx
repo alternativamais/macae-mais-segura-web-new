@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import type { ReactNode } from "react"
 import { ChevronDown, Globe, LayoutGrid, Loader2, MapPinned } from "lucide-react"
 import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api"
@@ -25,7 +26,16 @@ function LogoImage({
     return <>{fallback}</>
   }
 
-  return <img src={resolvedSrc} alt={alt} className={className} />
+  return (
+    <Image
+      src={resolvedSrc}
+      alt={alt}
+      width={256}
+      height={128}
+      unoptimized
+      className={className}
+    />
+  )
 }
 
 const PIN_PREVIEW_CENTER = {

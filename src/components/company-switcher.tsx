@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import * as React from "react"
 import { ChevronsUpDown, Building2, Globe, Loader2 } from "lucide-react"
 
@@ -54,9 +55,12 @@ function CompanySquareLogo({
   }
 
   return (
-    <img
+    <Image
       src={resolvedLogo}
       alt={companyName}
+      width={16}
+      height={16}
+      unoptimized
       className={className ?? "size-4 object-contain"}
     />
   )
@@ -91,9 +95,12 @@ function CompanyWideLogo({
   }
 
   return (
-    <img
+    <Image
       src={resolvedLogo}
       alt={companyName}
+      width={144}
+      height={28}
+      unoptimized
       className="block h-7 w-auto max-w-full object-contain"
     />
   )

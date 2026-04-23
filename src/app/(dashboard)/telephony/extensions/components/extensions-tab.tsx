@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { EllipsisVertical, Eye, Pencil, Phone, Plus, Search, Trash2 } from "lucide-react"
+import { EllipsisVertical, Eye, Pencil, Plus, Search, Trash2 } from "lucide-react"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { useTranslator } from "@/lib/i18n"
 import { formatLocalizedDateTime } from "@/lib/i18n/date"
@@ -37,7 +37,6 @@ import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
 import { callCenterExtensionService } from "@/services/call-center-extension.service"
 import {
   CallCenterExtension,
-  CallCenterExtensionType,
 } from "@/types/call-center-extension"
 import { parseISO } from "date-fns"
 import { ExtensionDetailsDialog } from "./extension-details-dialog"

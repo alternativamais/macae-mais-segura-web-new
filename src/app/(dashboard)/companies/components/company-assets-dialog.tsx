@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
+import { useCallback, useEffect, useRef, useState } from "react"
 import {
   Check,
   Clock3,
@@ -143,9 +144,12 @@ function AssetThumb({
       )}
     >
       {resolvedSrc ? (
-        <img
+        <Image
           src={resolvedSrc}
           alt={alt}
+          width={variant === "wide" ? 240 : 80}
+          height={variant === "wide" ? 48 : 80}
+          unoptimized
           className={
             variant === "wide"
               ? "max-h-12 max-w-full object-contain"
@@ -228,7 +232,7 @@ export function CompanyAssetsDialog({
   const [isEditorOpen, setIsEditorOpen] = useState(false)
   const [isMutating, setIsMutating] = useState(false)
 
-  const loadAssets = async () => {
+  const loadAssets = useCallback(async () => {
     if (!company?.id) {
       setAssets([])
       return
@@ -242,7 +246,7 @@ export function CompanyAssetsDialog({
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [company?.id, t])
 
   useEffect(() => {
     if (!open) {
@@ -252,7 +256,7 @@ export function CompanyAssetsDialog({
     setSelectedCategory("wide")
     setSelectedAssetType("logo_light")
     void loadAssets()
-  }, [company?.id, open])
+  }, [loadAssets, open])
 
   useEffect(() => {
     const types = COMPANY_ASSET_TYPES_BY_CATEGORY[selectedCategory]

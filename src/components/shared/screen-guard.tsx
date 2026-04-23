@@ -2,7 +2,7 @@
 
 import { useAuthStore } from "@/store/auth-store"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { ShieldAlert } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -33,24 +33,19 @@ export function ScreenGuard({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [mounted, setMounted] = useState(false)
   const currentPath = useMemo(() => {
     const query = searchParams.toString()
     return buildSafeNextPath(pathname, query ? `?${query}` : "")
   }, [pathname, searchParams])
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   const tokenExpired = token ? isTokenExpired(token) : false
-  const needsAuthentication = mounted && hasHydrated && (!isAuthenticated || !token || tokenExpired)
+  const needsAuthentication = hasHydrated && (!isAuthenticated || !token || tokenExpired)
   const hasAccess = hasHydrated && isAuthenticated && !tokenExpired && allowedScreens.includes(screenKey)
   const shouldRedirectToForbidden =
-    mounted && hasHydrated && !needsAuthentication && !hasAccess && fallbackAction === "redirect"
+    hasHydrated && !needsAuthentication && !hasAccess && fallbackAction === "redirect"
 
   useEffect(() => {
-    if (!mounted || !hasHydrated) {
+    if (!hasHydrated) {
       return
     }
 
@@ -75,7 +70,6 @@ export function ScreenGuard({
     currentPath,
     fallbackRedirectUrl,
     hasHydrated,
-    mounted,
     needsAuthentication,
     router,
     shouldRedirectToForbidden,
@@ -83,7 +77,7 @@ export function ScreenGuard({
   ])
 
   // Só checamos após a hidratação
-  if (!mounted || !hasHydrated) return null
+  if (!hasHydrated) return null
 
   if (!hasAccess) {
     if (needsAuthentication || shouldRedirectToForbidden) {

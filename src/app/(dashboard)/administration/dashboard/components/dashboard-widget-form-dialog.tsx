@@ -72,9 +72,9 @@ function createDashboardWidgetFormSchema(messages: {
     empresaId: z.string().trim().min(1, messages.companyRequired),
     title: z.string().trim().min(2, messages.titleRequired),
     size: z.enum(["half", "full"]),
-    position: z.coerce.number().int().min(0),
+    position: z.number().int().min(0),
     enabled: z.boolean(),
-    cameraIds: z.array(z.string()).default([]),
+    cameraIds: z.array(z.string()),
     period: z.enum(["today", "7d", "30d"]),
     granularity: z.enum(["hour", "day"]),
     chartType: z.enum(["bar", "line", "area"]),
@@ -258,7 +258,7 @@ export function DashboardWidgetFormDialog({
   )
 
   const form = useForm<DashboardWidgetFormValues>({
-    resolver: zodResolver(formSchema) as any,
+    resolver: zodResolver(formSchema),
     defaultValues: {
       empresaId: defaultCompanyId ? String(defaultCompanyId) : "",
       title: "",
@@ -278,7 +278,11 @@ export function DashboardWidgetFormDialog({
   const watchedSize = useWatch({ control: form.control, name: "size" })
   const watchedPosition = useWatch({ control: form.control, name: "position" })
   const watchedEnabled = useWatch({ control: form.control, name: "enabled" })
-  const watchedCameraIds = useWatch({ control: form.control, name: "cameraIds" }) ?? []
+  const watchedCameraIdsValue = useWatch({ control: form.control, name: "cameraIds" })
+  const watchedCameraIds = useMemo(
+    () => watchedCameraIdsValue ?? [],
+    [watchedCameraIdsValue],
+  )
   const watchedPeriod = useWatch({ control: form.control, name: "period" })
   const watchedGranularity = useWatch({ control: form.control, name: "granularity" })
   const watchedChartType = useWatch({ control: form.control, name: "chartType" })
@@ -506,7 +510,14 @@ export function DashboardWidgetFormDialog({
                               <FormItem>
                                 <FormLabel>{t("labels.position")}</FormLabel>
                                 <FormControl>
-                                  <Input type="number" min={0} {...field} />
+                                  <Input
+                                    type="number"
+                                    min={0}
+                                    value={field.value}
+                                    onChange={(event) =>
+                                      field.onChange(Number(event.target.value) || 0)
+                                    }
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>

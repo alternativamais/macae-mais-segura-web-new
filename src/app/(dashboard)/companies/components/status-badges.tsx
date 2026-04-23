@@ -1,7 +1,8 @@
 import { resolveDataTagDefinition, DataTag } from "@/components/shared/data-tag"
+import type { ITranslator } from "@/lib/i18n/domain/ports/translator"
 import { useTranslator } from "@/lib/i18n"
 
-export const companyStatusTagMap = (t: any) => ({
+export const companyStatusTagMap = (t: ITranslator) => ({
   active: { label: t("table.status_active"), tone: "success" },
   inactive: { label: t("table.status_inactive"), tone: "neutral" },
 } as const)

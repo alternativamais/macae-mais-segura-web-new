@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { defaultLocale, locales, localeCookieName } from './lib/i18n/config'
+import type { Locale } from './lib/i18n/domain/ports/translator'
 import {
   AUTH_COOKIE_KEY,
   AUTH_REDIRECT_REASON,
@@ -16,7 +17,7 @@ export function proxy(request: NextRequest) {
   const requestedNextPath = request.nextUrl.searchParams.get('next')
 
   let locale = request.cookies.get(localeCookieName)?.value
-  if (!locale || !locales.includes(locale as any)) {
+  if (!locale || !locales.includes(locale as Locale)) {
     locale = defaultLocale
   }
 
