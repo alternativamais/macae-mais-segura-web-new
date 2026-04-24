@@ -478,7 +478,6 @@ function OpenEmailRuleFormDialog({
   onSuccess,
 }: EmailRuleFormDialogProps) {
   const t = useTranslator("email_integrations.rules.form")
-  const tCompany = useTranslator("company_field")
   const { companies, defaultCompanyId, showCompanySelector } = useTenantCompanySelection()
   const [openSection, setOpenSection] = useState("scope")
   const [isTemplateEditorOpen, setIsTemplateEditorOpen] = useState(false)
@@ -510,13 +509,6 @@ function OpenEmailRuleFormDialog({
         emailEnabled: z.boolean(),
         whatsappEnabled: z.boolean(),
       }).superRefine((values, ctx) => {
-        if (showCompanySelector && !values.empresaId) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ["empresaId"],
-            message: tCompany("required"),
-          })
-        }
         if (!values.emailEnabled && !values.whatsappEnabled) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -565,7 +557,7 @@ function OpenEmailRuleFormDialog({
         }
       })
     },
-    [showCompanySelector, t, tCompany],
+    [t],
   )
 
   type FormValues = z.infer<typeof schema>
@@ -636,7 +628,7 @@ function OpenEmailRuleFormDialog({
   const selectedCompanyId = useWatch({ control: form.control, name: "empresaId" })
   const filteredCompanyId = selectedCompanyId?.trim()
     ? Number(selectedCompanyId)
-    : defaultCompanyId ?? null
+    : null
 
   const filteredCameras = useMemo(
     () => cameras.filter((camera) => (filteredCompanyId ? camera.empresaId === filteredCompanyId : true)),
@@ -682,6 +674,46 @@ function OpenEmailRuleFormDialog({
       }),
     [filteredCompanyId, selectedWhatsappAccountId, whatsappRecipients],
   )
+
+  useEffect(() => {
+    if (smtpAccountId && !filteredSmtpAccounts.some((account) => account.id === Number(smtpAccountId))) {
+      form.setValue("smtpAccountId", "", { shouldDirty: true, shouldValidate: true })
+      form.setValue("recipientIds", [], { shouldDirty: true, shouldValidate: true })
+    }
+  }, [filteredSmtpAccounts, form, smtpAccountId])
+
+  useEffect(() => {
+    const allowedRecipientIds = new Set(filteredRecipients.map((recipient) => String(recipient.id)))
+    const current = form.getValues("recipientIds")
+    const next = current.filter((recipientId) => allowedRecipientIds.has(recipientId))
+    if (next.length !== current.length) {
+      form.setValue("recipientIds", next, { shouldDirty: true, shouldValidate: true })
+    }
+  }, [filteredRecipients, form])
+
+  useEffect(() => {
+    if (
+      selectedWhatsappAccountId &&
+      !filteredWhatsappAccounts.some((account) => account.id === Number(selectedWhatsappAccountId))
+    ) {
+      form.setValue("whatsappAccountId", "", { shouldDirty: true, shouldValidate: true })
+      form.setValue("whatsappRecipientIds", [], { shouldDirty: true, shouldValidate: true })
+    }
+  }, [filteredWhatsappAccounts, form, selectedWhatsappAccountId])
+
+  useEffect(() => {
+    const allowedWhatsappRecipientIds = new Set(
+      filteredWhatsappRecipients.map((recipient) => String(recipient.id)),
+    )
+    const current = form.getValues("whatsappRecipientIds")
+    const next = current.filter((recipientId) => allowedWhatsappRecipientIds.has(recipientId))
+    if (next.length !== current.length) {
+      form.setValue("whatsappRecipientIds", next, {
+        shouldDirty: true,
+        shouldValidate: true,
+      })
+    }
+  }, [filteredWhatsappRecipients, form])
 
   const directionLabelMap = useMemo(
     () => new Map(DIRECTION_OPTIONS.map((option) => [option.value, t(option.translationKey)])),
