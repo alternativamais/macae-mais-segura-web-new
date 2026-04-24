@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api"
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api"
 import { Loader2, MapPinned, MousePointerClick } from "lucide-react"
+import { MapMarkerOverlay } from "@/components/maps/map-marker-overlay"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -48,6 +49,13 @@ const mapOptions: google.maps.MapOptions = {
     { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#f8fafc" }] },
   ],
 }
+
+const pickerMarkerSvg = `
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50" fill="none">
+    <path d="M20 49C20 49 36 32.5 36 20.5C36 11.3873 28.8366 4 20 4C11.1634 4 4 11.3873 4 20.5C4 32.5 20 49 20 49Z" fill="#111827" stroke="#f59e0b" stroke-width="4"/>
+    <circle cx="20" cy="20" r="6" fill="white"/>
+  </svg>
+`
 
 export function PointMapPickerDialog({
   open,
@@ -99,17 +107,6 @@ function OpenPointMapPickerDialog({
   }, [selectedPosition])
 
   const handleMapClick = (event: google.maps.MapMouseEvent) => {
-    if (!event.latLng) {
-      return
-    }
-
-    setSelectedPosition({
-      lat: event.latLng.lat(),
-      lng: event.latLng.lng(),
-    })
-  }
-
-  const handleMarkerDragEnd = (event: google.maps.MapMouseEvent) => {
     if (!event.latLng) {
       return
     }
@@ -188,11 +185,20 @@ function OpenPointMapPickerDialog({
               }}
             >
               {selectedPosition ? (
-                <MarkerF
+                <MapMarkerOverlay
                   position={selectedPosition}
-                  draggable
-                  onDragEnd={handleMarkerDragEnd}
-                />
+                  title={t("title")}
+                >
+                  <div
+                    className="h-[50px] w-[40px]"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml;charset=UTF-8,${encodeURIComponent(pickerMarkerSvg)}")`,
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundSize: "contain",
+                    }}
+                  />
+                </MapMarkerOverlay>
               ) : null}
             </GoogleMap>
           </div>

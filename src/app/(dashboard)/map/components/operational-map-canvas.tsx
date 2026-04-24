@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api"
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api"
 import { Loader2, MapPinned } from "lucide-react"
+import { MapMarkerOverlay } from "@/components/maps/map-marker-overlay"
 import { resolveMapPinUrl } from "@/lib/company-map-pin"
 import { useTranslator } from "@/lib/i18n"
 import { GOOGLE_MAPS_LOADER_ID } from "@/lib/google-maps-loader"
@@ -47,6 +48,17 @@ function buildMarkerSvg(fill: string, stroke: string) {
       <circle cx="22" cy="21" r="7" fill="white"/>
     </svg>
   `
+}
+
+function buildMarkerStyle(url: string, size: number): React.CSSProperties {
+  return {
+    width: size,
+    height: size,
+    backgroundImage: `url("${url}")`,
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
+  }
 }
 
 export function OperationalMapCanvas({
@@ -211,16 +223,32 @@ export function OperationalMapCanvas({
         {visibleMarkers.map((marker) => {
           const hasTotem = Boolean(marker.point.totem?.id)
           const isSelected = marker.id === selectedMarkerId
+          const icon = resolveMarkerIcon(marker)
+          const iconUrl = typeof icon?.url === "string" ? icon.url : null
+          const width = icon?.scaledSize?.width ?? (isSelected ? 50 : 44)
+          const height = icon?.scaledSize?.height ?? (isSelected ? 60 : 54)
 
           return (
-            <MarkerF
+            <MapMarkerOverlay
               key={`point-${marker.id}`}
               position={marker.position}
               title={marker.point.nome}
               zIndex={isSelected ? 20 : hasTotem ? 12 : 8}
-              icon={resolveMarkerIcon(marker)}
               onClick={() => onSelectMarker(marker.id)}
-            />
+            >
+              <div
+                className="cursor-pointer transition-transform hover:scale-[1.03]"
+                style={
+                  iconUrl
+                    ? {
+                        ...buildMarkerStyle(iconUrl, width),
+                        width,
+                        height,
+                      }
+                    : undefined
+                }
+              />
+            </MapMarkerOverlay>
           )
         })}
       </GoogleMap>

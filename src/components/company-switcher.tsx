@@ -85,24 +85,23 @@ function CompanyWideLogo({
 
   if (!resolvedLogo) {
     return (
-      <BrandLogo
-        width={144}
-        height={28}
-        className="h-7 w-auto max-w-full object-contain"
-        priority
-      />
+      <div className="relative h-7 w-36 max-w-full">
+        <BrandLogo width={144} height={28} className="h-7 w-36 max-w-full object-contain" priority />
+      </div>
     )
   }
 
   return (
-    <Image
-      src={resolvedLogo}
-      alt={companyName}
-      width={144}
-      height={28}
-      unoptimized
-      className="block h-7 w-auto max-w-full object-contain"
-    />
+    <div className="relative h-7 w-36 max-w-full">
+      <Image
+        src={resolvedLogo}
+        alt={companyName}
+        fill
+        sizes="144px"
+        unoptimized
+        className="block object-contain"
+      />
+    </div>
   )
 }
 
@@ -149,7 +148,9 @@ export function CompanySwitcher() {
                 <Building2 className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight ml-2">
-                <BrandLogo width={160} height={30} className="max-w-[160px]" priority />
+                <div className="relative h-[30px] w-40 max-w-[160px]">
+                  <BrandLogo width={160} height={30} className="h-[30px] w-40 object-contain" priority />
+                </div>
               </div>
             </a>
           </SidebarMenuButton>

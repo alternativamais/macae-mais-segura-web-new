@@ -1,8 +1,9 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { GoogleMap, MarkerF, PolylineF, useJsApiLoader } from "@react-google-maps/api"
+import { GoogleMap, PolylineF, useJsApiLoader } from "@react-google-maps/api"
 import { Loader2, MapPinned } from "lucide-react"
+import { MapMarkerOverlay } from "@/components/maps/map-marker-overlay"
 import { Card, CardContent } from "@/components/ui/card"
 import { useTranslator } from "@/lib/i18n"
 import { GOOGLE_MAPS_LOADER_ID } from "@/lib/google-maps-loader"
@@ -203,23 +204,29 @@ export function LocationHistoryMap({
           {points.map((point, index) => {
             const isSelected = selectedRecordId === point.id
             const isLast = index === 0
+            const markerSize = isSelected ? 18 : isLast ? 14 : 12
 
             return (
-              <MarkerF
+              <MapMarkerOverlay
                 key={point.id}
                 position={{ lat: point.latitude, lng: point.longitude }}
                 onClick={() => onSelectRecord?.(point.id)}
                 title={`${formatDateTime(point.createdAt, currentLocale)} • ${point.latitude.toFixed(6)}, ${point.longitude.toFixed(6)}`}
-                icon={{
-                  path: google.maps.SymbolPath.CIRCLE,
-                  fillColor: isSelected ? "#111827" : isLast ? "#0f766e" : "#2563eb",
-                  fillOpacity: 1,
-                  strokeColor: "#ffffff",
-                  strokeOpacity: 1,
-                  strokeWeight: isSelected ? 3 : 2,
-                  scale: isSelected ? 9 : isLast ? 7 : 6,
-                }}
-              />
+              >
+                <div
+                  className="cursor-pointer rounded-full border-2 border-white shadow-sm"
+                  style={{
+                    width: markerSize,
+                    height: markerSize,
+                    backgroundColor: isSelected
+                      ? "#111827"
+                      : isLast
+                        ? "#0f766e"
+                        : "#2563eb",
+                    borderWidth: isSelected ? 3 : 2,
+                  }}
+                />
+              </MapMarkerOverlay>
             )
           })}
         </GoogleMap>

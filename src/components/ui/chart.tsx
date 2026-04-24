@@ -45,28 +45,75 @@ function ChartContainer({
   ...props
 }: React.ComponentProps<"div"> & {
   config: ChartConfig
-  children: React.ComponentProps<
-    typeof RechartsPrimitive.ResponsiveContainer
-  >["children"]
+  children: React.ReactElement<{
+    width?: number
+    height?: number
+  }>
 }) {
   const uniqueId = React.useId()
   const chartId = `chart-${id || uniqueId.replace(/:/g, "")}`
+  const containerRef = React.useRef<HTMLDivElement>(null)
+  const [containerSize, setContainerSize] = React.useState({
+    width: 0,
+    height: 0,
+  })
+
+  React.useEffect(() => {
+    const element = containerRef.current
+    if (!element) {
+      return
+    }
+
+    const updateSize = () => {
+      const nextWidth = element.clientWidth
+      const nextHeight = element.clientHeight
+
+      setContainerSize((current) =>
+        current.width === nextWidth && current.height === nextHeight
+          ? current
+          : {
+              width: nextWidth,
+              height: nextHeight,
+            }
+      )
+    }
+
+    updateSize()
+
+    if (typeof ResizeObserver === "undefined") {
+      return
+    }
+
+    const observer = new ResizeObserver(() => {
+      updateSize()
+    })
+
+    observer.observe(element)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   return (
     <ChartContext.Provider value={{ config }}>
       <div
+        ref={containerRef}
         data-slot="chart"
         data-chart={chartId}
         className={cn(
-          "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
+          "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke='#ccc']]:stroke-border flex w-full min-w-0 justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
           className
         )}
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
-        <RechartsPrimitive.ResponsiveContainer>
-          {children}
-        </RechartsPrimitive.ResponsiveContainer>
+        {containerSize.width > 0 && containerSize.height > 0 ? (
+          React.cloneElement(children, {
+            width: containerSize.width,
+            height: containerSize.height,
+          })
+        ) : null}
       </div>
     </ChartContext.Provider>
   )

@@ -23,7 +23,11 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${inter.variable} antialiased`}>
+    <html
+      lang={locale}
+      className={`${inter.variable} antialiased`}
+      data-scroll-behavior="smooth"
+    >
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages} locale={locale}>
           <ThemeProvider defaultTheme="system" storageKey="nextjs-ui-theme">

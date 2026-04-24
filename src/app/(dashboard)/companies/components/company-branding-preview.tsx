@@ -3,7 +3,8 @@
 import Image from "next/image"
 import type { ReactNode } from "react"
 import { ChevronDown, Globe, LayoutGrid, Loader2, MapPinned } from "lucide-react"
-import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api"
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api"
+import { MapMarkerOverlay } from "@/components/maps/map-marker-overlay"
 import { BrandLogo, Logo } from "@/components/logo"
 import { resolveCompanyLogoUrl } from "@/lib/company-logo"
 import { cn } from "@/lib/utils"
@@ -34,6 +35,7 @@ function LogoImage({
       height={128}
       unoptimized
       className={className}
+      style={{ width: "auto", height: "auto" }}
     />
   )
 }
@@ -105,15 +107,21 @@ function CompanyMapPinCanvas({
       zoom={16}
       options={pinMapOptions}
     >
-      <MarkerF
+      <MapMarkerOverlay
         position={PIN_PREVIEW_CENTER}
         title={companyName}
-        icon={{
-          url: resolvedSrc,
-          scaledSize: new window.google.maps.Size(size, size),
-          anchor: new window.google.maps.Point(size / 2, size),
-        }}
-      />
+      >
+        <div
+          style={{
+            width: size,
+            height: size,
+            backgroundImage: `url("${resolvedSrc}")`,
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+          }}
+        />
+      </MapMarkerOverlay>
     </GoogleMap>
   )
 }

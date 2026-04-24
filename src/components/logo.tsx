@@ -33,7 +33,7 @@ export function Logo({
         width={size}
         height={size}
         priority={priority}
-        className={cn("h-auto w-auto object-contain dark:hidden", className)}
+        className={cn("object-contain dark:hidden", className)}
       />
       <Image
         src={squareLogoDark}
@@ -41,7 +41,7 @@ export function Logo({
         width={size}
         height={size}
         priority={priority}
-        className={cn("hidden h-auto w-auto object-contain dark:block", className)}
+        className={cn("hidden object-contain dark:block", className)}
       />
     </>
   )
@@ -61,7 +61,7 @@ export function BrandLogo({
         width={width}
         height={height}
         priority={priority}
-        className={cn("h-auto w-auto object-contain dark:hidden", className)}
+        className={cn("object-contain dark:hidden", className)}
       />
       <Image
         src={brandLogoDark}
@@ -69,7 +69,7 @@ export function BrandLogo({
         width={width}
         height={height}
         priority={priority}
-        className={cn("hidden h-auto w-auto object-contain dark:block", className)}
+        className={cn("hidden object-contain dark:block", className)}
       />
     </>
   )
