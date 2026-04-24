@@ -48,8 +48,6 @@ export interface LprFineReport {
   imageUrl?: string | null
   imageOriginalName?: string | null
   imageMimeType?: string | null
-  payloadSnapshot?: Record<string, unknown> | null
-  detectionSnapshot?: Record<string, unknown> | null
   triggeredAt: string
   detectedAt?: string | null
   createdAt?: string

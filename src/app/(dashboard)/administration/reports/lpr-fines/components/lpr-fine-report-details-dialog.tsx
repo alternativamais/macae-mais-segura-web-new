@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { type ReactNode, useEffect, useState } from "react"
-import { ExternalLink, ImageIcon, Radio, ReceiptText } from "lucide-react"
+import { ExternalLink, ImageIcon, ReceiptText } from "lucide-react"
 import { TableLoadingOverlay } from "@/app/(dashboard)/access-control/components/table-loading-overlay"
 import { TablePaginationFooter } from "@/app/(dashboard)/access-control/components/table-pagination-footer"
 import { DataTag } from "@/components/shared/data-tag"
@@ -39,14 +39,6 @@ function formatDateTime(value: string | null | undefined, locale: string) {
   }).format(new Date(value))
 }
 
-function formatJson(value: unknown) {
-  try {
-    return JSON.stringify(value ?? {}, null, 2)
-  } catch {
-    return "{}"
-  }
-}
-
 function SummaryMetric({
   label,
   value,
@@ -59,14 +51,6 @@ function SummaryMetric({
       <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{label}</p>
       <div className="mt-1 text-sm font-medium">{value}</div>
     </div>
-  )
-}
-
-function JsonBlock({ content }: { content: string }) {
-  return (
-    <pre className="max-h-[360px] overflow-auto whitespace-pre-wrap break-all rounded-xl border bg-muted/20 p-4 text-xs leading-5 text-muted-foreground">
-      {content}
-    </pre>
   )
 }
 
@@ -146,10 +130,9 @@ export function LprFineReportDetailsDialog({
 
         <Tabs defaultValue="overview" className="flex min-h-0 flex-1 flex-col overflow-hidden">
           <div className="border-b px-6 py-3">
-            <TabsList className="grid w-full max-w-md grid-cols-3">
+            <TabsList className="grid w-full max-w-md grid-cols-2">
               <TabsTrigger value="overview">{t("tabs.overview")}</TabsTrigger>
               <TabsTrigger value="deliveries">{t("tabs.deliveries")}</TabsTrigger>
-              <TabsTrigger value="raw_data">{t("tabs.raw_data")}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -306,28 +289,6 @@ export function LprFineReportDetailsDialog({
             </ScrollArea>
           </TabsContent>
 
-          <TabsContent value="raw_data" className="m-0 min-h-0 flex-1 overflow-hidden">
-            <ScrollArea className="h-full">
-              <div className="space-y-6 px-6 py-5">
-                <div className="flex items-center gap-2">
-                  <Radio className="h-4 w-4 text-muted-foreground" />
-                  <h4 className="text-sm font-medium">{t("sections.raw_summary")}</h4>
-                </div>
-
-                <div className="grid gap-6 xl:grid-cols-2">
-                  <div className="space-y-3">
-                    <h5 className="text-sm font-medium">{t("sections.detection_data")}</h5>
-                    <JsonBlock content={formatJson(item.detectionSnapshot)} />
-                  </div>
-
-                  <div className="space-y-3">
-                    <h5 className="text-sm font-medium">{t("sections.payload_data")}</h5>
-                    <JsonBlock content={formatJson(item.payloadSnapshot)} />
-                  </div>
-                </div>
-              </div>
-            </ScrollArea>
-          </TabsContent>
         </Tabs>
       </DialogContent>
     </Dialog>
