@@ -81,9 +81,11 @@ export default function NotificationSettings() {
   }
 
   return (
-    <div className="space-y-6 px-4 lg:px-6">
+    <div className="flex flex-col gap-4">
+      <div className="@container/main mt-8 px-4 lg:mt-12 lg:px-6">
+        <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Notifications</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
           <p className="text-muted-foreground">
             Configure how you receive notifications.
           </p>
@@ -254,16 +256,16 @@ export default function NotificationSettings() {
                       <FormLabel>Email Frequency</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full cursor-pointer">
                             <SelectValue placeholder="Select frequency" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="instant">Instant</SelectItem>
-                          <SelectItem value="hourly">Hourly digest</SelectItem>
-                          <SelectItem value="daily">Daily digest</SelectItem>
-                          <SelectItem value="weekly">Weekly digest</SelectItem>
-                          <SelectItem value="never">Never</SelectItem>
+                          <SelectItem value="instant" className="cursor-pointer">Instant</SelectItem>
+                          <SelectItem value="hourly" className="cursor-pointer">Hourly digest</SelectItem>
+                          <SelectItem value="daily" className="cursor-pointer">Daily digest</SelectItem>
+                          <SelectItem value="weekly" className="cursor-pointer">Weekly digest</SelectItem>
+                          <SelectItem value="never" className="cursor-pointer">Never</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -272,40 +274,40 @@ export default function NotificationSettings() {
                 />
                 <FormItem>
                   <FormLabel>Quiet Hours</FormLabel>
-                  <div className="flex space-x-2">
+                  <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
                     <FormField
                       control={form.control}
                       name="quietHoursStart"
                       render={({ field }) => (
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="w-50">
+                            <SelectTrigger className="w-full cursor-pointer">
                               <SelectValue placeholder="Start" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="22:00">10:00 PM</SelectItem>
-                            <SelectItem value="23:00">11:00 PM</SelectItem>
-                            <SelectItem value="00:00">12:00 AM</SelectItem>
+                            <SelectItem value="22:00" className="cursor-pointer">10:00 PM</SelectItem>
+                            <SelectItem value="23:00" className="cursor-pointer">11:00 PM</SelectItem>
+                            <SelectItem value="00:00" className="cursor-pointer">12:00 AM</SelectItem>
                           </SelectContent>
                         </Select>
                       )}
                     />
-                    <span className="self-center">to</span>
+                    <span className="self-center text-center text-sm text-muted-foreground">to</span>
                     <FormField
                       control={form.control}
                       name="quietHoursEnd"
                       render={({ field }) => (
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger className="w-50">
+                            <SelectTrigger className="w-full cursor-pointer">
                               <SelectValue placeholder="End" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="06:00">6:00 AM</SelectItem>
-                            <SelectItem value="07:00">7:00 AM</SelectItem>
-                            <SelectItem value="08:00">8:00 AM</SelectItem>
+                            <SelectItem value="06:00" className="cursor-pointer">6:00 AM</SelectItem>
+                            <SelectItem value="07:00" className="cursor-pointer">7:00 AM</SelectItem>
+                            <SelectItem value="08:00" className="cursor-pointer">8:00 AM</SelectItem>
                           </SelectContent>
                         </Select>
                       )}
@@ -492,14 +494,14 @@ export default function NotificationSettings() {
                           <FormLabel>When should we send you notifications?</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <SelectTrigger className="w-full max-w-sm">
+                              <SelectTrigger className="w-full cursor-pointer sm:max-w-sm">
                                 <SelectValue placeholder="Select timing" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="online">Only When I&apos;m online</SelectItem>
-                              <SelectItem value="always">Always</SelectItem>
-                              <SelectItem value="never">Never</SelectItem>
+                              <SelectItem value="online" className="cursor-pointer">Only When I&apos;m online</SelectItem>
+                              <SelectItem value="always" className="cursor-pointer">Always</SelectItem>
+                              <SelectItem value="never" className="cursor-pointer">Never</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -589,12 +591,14 @@ export default function NotificationSettings() {
               </CardContent>
             </Card>
 
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button type="submit" className="cursor-pointer">Save Preferences</Button>
               <Button variant="outline" type="reset" className="cursor-pointer">Cancel</Button>
             </div>
           </form>
         </Form>
+        </div>
       </div>
+    </div>
   )
 }
