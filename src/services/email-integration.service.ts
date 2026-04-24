@@ -7,6 +7,7 @@ import {
   EmailSmtpAccount,
   EmailSmtpAccountMutationPayload,
   WhatsappAccount,
+  WhatsappAccountSession,
   WhatsappAccountMutationPayload,
   WhatsappRecipient,
   WhatsappRecipientMutationPayload,
@@ -85,6 +86,11 @@ export const emailIntegrationService = {
 
   connectWhatsappAccount: async (id: number) => {
     const { data } = await api.post<WhatsappAccount>(`/email-integrations/whatsapp-accounts/${id}/connect`)
+    return data
+  },
+
+  getWhatsappAccountSession: async (id: number) => {
+    const { data } = await api.get<WhatsappAccountSession>(`/email-integrations/whatsapp-accounts/${id}/session`)
     return data
   },
 

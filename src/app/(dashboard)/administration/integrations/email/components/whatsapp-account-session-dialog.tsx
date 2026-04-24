@@ -12,11 +12,15 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useTranslator } from "@/lib/i18n"
-import { WhatsappAccount } from "@/types/email-integration"
-import { getWhatsappSessionTag } from "./utils"
+import {
+  formatEmailIntegrationDateTime,
+  getWhatsappSessionTag,
+} from "./utils"
+import { WhatsappAccount, WhatsappAccountSession } from "@/types/email-integration"
 
 interface WhatsappAccountSessionDialogProps {
   account: WhatsappAccount | null
+  session: WhatsappAccountSession | null
   open: boolean
   isLoading: boolean
   onOpenChange: (open: boolean) => void
@@ -24,25 +28,36 @@ interface WhatsappAccountSessionDialogProps {
 
 export function WhatsappAccountSessionDialog({
   account,
+  session,
   open,
   isLoading,
   onOpenChange,
 }: WhatsappAccountSessionDialogProps) {
   const t = useTranslator("email_integrations.whatsapp_accounts.session_dialog")
   const tSession = useTranslator("email_integrations.whatsapp_accounts.session")
+  const locale = t.getLocale()
 
   const sessionLabels = {
     disconnected: tSession("disconnected"),
-    initializing: tSession("initializing"),
+    starting: tSession("starting"),
     qr_required: tSession("qr_required"),
     authenticated: tSession("authenticated"),
+    syncing_remote_session: tSession("syncing_remote_session"),
     ready: tSession("ready"),
+    reconnecting: tSession("reconnecting"),
     auth_failure: tSession("auth_failure"),
+    error: tSession("error"),
   }
 
-  const status = account?.sessionStatus || "disconnected"
-  const hasQr = Boolean(account?.qrCodeDataUrl)
-  const lastError = account?.lastError?.trim()
+  const status = session?.status || account?.sessionStatus || "disconnected"
+  const hasQr = Boolean(session?.qrCodeDataUrl)
+  const lastError = session?.lastError?.trim() || account?.lastError?.trim()
+  const displayName = session?.displayName || account?.displayName
+  const phoneNumber = session?.phoneNumber || account?.phoneNumber
+  const lastState = session?.lastState || account?.lastState
+  const sessionSavedAt = session?.sessionSavedAt || account?.sessionSavedAt
+  const shouldWarnAboutUnsavedSession =
+    status === "ready" && !sessionSavedAt
 
   let body = (
     <div className="flex min-h-[320px] items-center justify-center rounded-xl border border-dashed bg-muted/20 p-6">
@@ -56,7 +71,7 @@ export function WhatsappAccountSessionDialog({
     </div>
   )
 
-  if (!isLoading && hasQr && account?.qrCodeDataUrl) {
+  if (!isLoading && hasQr && session?.qrCodeDataUrl) {
     body = (
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-3 rounded-xl border bg-muted/20 px-4 py-3">
@@ -69,7 +84,7 @@ export function WhatsappAccountSessionDialog({
 
         <div className="flex min-h-[320px] items-center justify-center rounded-xl border bg-muted/20 p-6">
           <Image
-            src={account.qrCodeDataUrl}
+            src={session.qrCodeDataUrl}
             alt={t("qr_alt")}
             width={280}
             height={280}
@@ -81,16 +96,25 @@ export function WhatsappAccountSessionDialog({
     )
   } else if (!isLoading && status === "ready") {
     body = (
-      <div className="flex min-h-[320px] items-center justify-center rounded-xl border bg-muted/20 p-6">
-        <div className="flex max-w-sm flex-col items-center gap-3 text-center">
-          <Smartphone className="h-8 w-8 text-emerald-500" />
-          <div className="space-y-1">
-            <p className="font-medium">{t("ready_title")}</p>
-            <p className="text-sm text-muted-foreground">
-              {t("ready_description", { phone: account?.phoneNumber || t("not_informed") })}
-            </p>
+      <div className="space-y-4 rounded-xl border bg-muted/20 p-6">
+        <div className="flex items-center justify-center">
+          <div className="flex max-w-sm flex-col items-center gap-3 text-center">
+            <Smartphone className="h-8 w-8 text-emerald-500" />
+            <div className="space-y-1">
+              <p className="font-medium">{t("ready_title")}</p>
+              <p className="text-sm text-muted-foreground">
+                {t("ready_description", { phone: phoneNumber || t("not_informed") })}
+              </p>
+            </div>
           </div>
         </div>
+
+        {shouldWarnAboutUnsavedSession ? (
+          <div className="rounded-lg border border-amber-400/40 bg-amber-500/10 px-4 py-3 text-sm text-muted-foreground">
+            <p className="font-medium text-foreground">{t("unsaved_title")}</p>
+            <p>{t("unsaved_description")}</p>
+          </div>
+        ) : null}
       </div>
     )
   } else if (!isLoading && lastError) {
@@ -122,6 +146,18 @@ export function WhatsappAccountSessionDialog({
     )
   }
 
+  const metadata = [
+    displayName ? { label: t("display_name"), value: displayName } : null,
+    phoneNumber ? { label: t("phone"), value: phoneNumber } : null,
+    lastState ? { label: t("last_state"), value: lastState } : null,
+    sessionSavedAt
+      ? {
+          label: t("session_saved_at"),
+          value: formatEmailIntegrationDateTime(sessionSavedAt, locale),
+        }
+      : null,
+  ].filter((item): item is { label: string; value: string } => Boolean(item))
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
@@ -135,12 +171,25 @@ export function WhatsappAccountSessionDialog({
         <div className="space-y-4">
           <div className="flex flex-wrap items-center gap-2">
             {getWhatsappSessionTag(status, sessionLabels)}
-            {account?.displayName ? (
-              <span className="text-sm text-muted-foreground">{account.displayName}</span>
+            {displayName ? (
+              <span className="text-sm text-muted-foreground">{displayName}</span>
             ) : null}
           </div>
 
           {body}
+
+          {metadata.length ? (
+            <div className="grid gap-3 rounded-xl border bg-muted/20 p-4 sm:grid-cols-2">
+              {metadata.map((item) => (
+                <div key={item.label} className="space-y-1">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    {item.label}
+                  </p>
+                  <p className="text-sm">{item.value}</p>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         <DialogFooter>

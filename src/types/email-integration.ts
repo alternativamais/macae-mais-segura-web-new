@@ -62,11 +62,30 @@ export interface WhatsappAccount {
   displayName?: string | null
   phoneNumber?: string | null
   lastError?: string | null
+  lastState?: string | null
+  lastQrAt?: string | null
+  lastAuthenticatedAt?: string | null
   lastReadyAt?: string | null
+  sessionSavedAt?: string | null
   qrCodeDataUrl?: string | null
   notes?: string | null
   createdAt?: string
   updatedAt?: string
+}
+
+export interface WhatsappAccountSession {
+  accountId: number
+  status: string
+  qrCodeDataUrl?: string | null
+  displayName?: string | null
+  phoneNumber?: string | null
+  lastError?: string | null
+  lastState?: string | null
+  lastQrAt?: string | null
+  lastAuthenticatedAt?: string | null
+  lastReadyAt?: string | null
+  sessionSavedAt?: string | null
+  updatedAt: string
 }
 
 export interface WhatsappAccountMutationPayload {

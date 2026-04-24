@@ -43,11 +43,14 @@ export function WhatsappAccountDetailsDialog({
 
   const sessionLabels = {
     disconnected: tSession("disconnected"),
-    initializing: tSession("initializing"),
+    starting: tSession("starting"),
     qr_required: tSession("qr_required"),
     authenticated: tSession("authenticated"),
+    syncing_remote_session: tSession("syncing_remote_session"),
     ready: tSession("ready"),
     auth_failure: tSession("auth_failure"),
+    reconnecting: tSession("reconnecting"),
+    error: tSession("error"),
   }
 
   const items = [

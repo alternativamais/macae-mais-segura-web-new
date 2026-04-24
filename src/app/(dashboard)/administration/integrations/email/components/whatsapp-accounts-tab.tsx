@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
   EllipsisVertical,
   Eye,
@@ -31,7 +31,7 @@ import { useTranslator } from "@/lib/i18n"
 import { MODAL_EXIT_DURATION_MS } from "@/lib/modal"
 import { notificationService as toast } from "@/lib/notifications/notification-service"
 import { emailIntegrationService } from "@/services/email-integration.service"
-import { WhatsappAccount } from "@/types/email-integration"
+import { WhatsappAccount, WhatsappAccountSession } from "@/types/email-integration"
 import { WhatsappAccountDetailsDialog } from "./whatsapp-account-details-dialog"
 import { WhatsappAccountFormDialog } from "./whatsapp-account-form-dialog"
 import { WhatsappAccountSessionDialog } from "./whatsapp-account-session-dialog"
@@ -65,11 +65,14 @@ export function WhatsappAccountsTab({
   const sessionLabels = useMemo(
     () => ({
       disconnected: t("session.disconnected"),
-      initializing: t("session.initializing"),
+      starting: t("session.starting"),
       qr_required: t("session.qr_required"),
       authenticated: t("session.authenticated"),
+      syncing_remote_session: t("session.syncing_remote_session"),
       ready: t("session.ready"),
+      reconnecting: t("session.reconnecting"),
       auth_failure: t("session.auth_failure"),
+      error: t("session.error"),
     }),
     [t],
   )
@@ -82,6 +85,7 @@ export function WhatsappAccountsTab({
   const [editingItem, setEditingItem] = useState<WhatsappAccount | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [sessionAccountId, setSessionAccountId] = useState<number | null>(null)
+  const [sessionSnapshot, setSessionSnapshot] = useState<WhatsappAccountSession | null>(null)
   const [isSessionDialogOpen, setIsSessionDialogOpen] = useState(false)
   const [isSessionLoading, setIsSessionLoading] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<WhatsappAccount | null>(null)
@@ -109,6 +113,7 @@ export function WhatsappAccountsTab({
     if (isSessionDialogOpen) return
     const timeout = window.setTimeout(() => {
       setSessionAccountId(null)
+      setSessionSnapshot(null)
       setIsSessionLoading(false)
     }, MODAL_EXIT_DURATION_MS)
     return () => window.clearTimeout(timeout)
@@ -122,7 +127,9 @@ export function WhatsappAccountsTab({
 
   useEffect(() => {
     const hasActiveSessions = accounts.some((account) =>
-      ["initializing", "qr_required", "authenticated"].includes(account.sessionStatus),
+      ["starting", "qr_required", "authenticated", "syncing_remote_session", "reconnecting"].includes(
+        account.sessionStatus,
+      ),
     )
 
     if (!hasActiveSessions) return
@@ -139,32 +146,47 @@ export function WhatsappAccountsTab({
     [accounts, sessionAccountId],
   )
 
+  const loadSessionSnapshot = useCallback(
+    async (accountId: number) => {
+      const data = await emailIntegrationService.getWhatsappAccountSession(accountId)
+      setSessionSnapshot(data)
+      return data
+    },
+    [],
+  )
+
   useEffect(() => {
     if (!isSessionDialogOpen || !sessionAccountId) return
 
-    const status = sessionAccount?.sessionStatus
+    const status = sessionSnapshot?.status
     const shouldPoll =
       isSessionLoading ||
-      !sessionAccount ||
-      ["initializing", "authenticated", "qr_required"].includes(status || "")
+      !sessionSnapshot ||
+      ["starting", "authenticated", "qr_required", "syncing_remote_session", "reconnecting"].includes(
+        status || "",
+      )
 
     if (!shouldPoll) return
 
     const interval = window.setInterval(() => {
-      void onReload()
+      void loadSessionSnapshot(sessionAccountId).catch(() => undefined)
     }, 2000)
 
     return () => window.clearInterval(interval)
-  }, [isSessionDialogOpen, isSessionLoading, onReload, sessionAccount, sessionAccountId])
+  }, [isSessionDialogOpen, isSessionLoading, loadSessionSnapshot, sessionAccountId, sessionSnapshot])
 
   useEffect(() => {
     if (!isSessionDialogOpen || !isSessionLoading) return
-    if (!sessionAccount) return
+    if (!sessionSnapshot) return
 
-    if (sessionAccount.qrCodeDataUrl || sessionAccount.lastError || sessionAccount.sessionStatus === "ready") {
+    if (
+      sessionSnapshot.qrCodeDataUrl ||
+      sessionSnapshot.lastError ||
+      ["ready", "auth_failure", "error", "disconnected"].includes(sessionSnapshot.status)
+    ) {
       setIsSessionLoading(false)
     }
-  }, [isSessionDialogOpen, isSessionLoading, sessionAccount])
+  }, [isSessionDialogOpen, isSessionLoading, sessionSnapshot])
 
   const filteredItems = useMemo(() => {
     const term = search.trim().toLowerCase()
@@ -205,13 +227,14 @@ export function WhatsappAccountsTab({
 
   const handleConnect = async (item: WhatsappAccount) => {
     setSessionAccountId(item.id)
+    setSessionSnapshot(null)
     setIsSessionDialogOpen(true)
     setIsSessionLoading(true)
     setPendingId(item.id)
 
     try {
       await emailIntegrationService.connectWhatsappAccount(item.id)
-      await onReload()
+      await Promise.all([onReload(), loadSessionSnapshot(item.id)])
       toast.success(t("notifications.connect_success"))
     } catch (error) {
       setIsSessionLoading(false)
@@ -293,7 +316,7 @@ export function WhatsappAccountsTab({
                   </TableCell>
                   <TableCell>{getCompanyName(companyNameById, item.empresaId)}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {item.qrCodeDataUrl ? t("table.qr_available") : t("table.qr_not_available")}
+                    {item.sessionStatus === "qr_required" ? t("table.qr_available") : t("table.qr_not_available")}
                   </TableCell>
                   <TableCell>{item.phoneNumber || t("table.no_phone")}</TableCell>
                   <TableCell className="hidden xl:table-cell text-sm text-muted-foreground">
@@ -396,6 +419,7 @@ export function WhatsappAccountsTab({
       <WhatsappAccountDetailsDialog account={detailsItem} open={isDetailsOpen} onOpenChange={setIsDetailsOpen} />
       <WhatsappAccountSessionDialog
         account={sessionAccount}
+        session={sessionSnapshot}
         open={isSessionDialogOpen}
         isLoading={isSessionLoading}
         onOpenChange={setIsSessionDialogOpen}

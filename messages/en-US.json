@@ -4642,11 +4642,14 @@
       },
       "session": {
         "disconnected": "Disconnected",
-        "initializing": "Initializing",
+        "starting": "Starting",
         "qr_required": "Waiting for QR",
         "authenticated": "Authenticated",
+        "syncing_remote_session": "Syncing session",
         "ready": "Connected",
-        "auth_failure": "Authentication failed"
+        "reconnecting": "Reconnecting",
+        "auth_failure": "Authentication failed",
+        "error": "Error"
       },
       "actions": {
         "create": "New WhatsApp account",
@@ -4689,10 +4692,16 @@
         "qr_alt": "QR code to connect WhatsApp account",
         "ready_title": "Account connected",
         "ready_description": "The session is ready for delivery. Detected number: {phone}.",
+        "unsaved_title": "Session not persisted yet",
+        "unsaved_description": "WhatsApp is already ready, but the session has not been saved in the backend yet. Wait a bit before restarting the container.",
         "error_title": "Failed to prepare session",
         "error_description": "The account returned an error while initializing WhatsApp.",
         "waiting_title": "Waiting for QR code",
         "waiting_description": "The session is still being prepared. This status should update automatically.",
+        "display_name": "Detected name",
+        "phone": "Detected number",
+        "last_state": "Last state",
+        "session_saved_at": "Session saved at",
         "not_informed": "Not informed",
         "close": "Close"
       },

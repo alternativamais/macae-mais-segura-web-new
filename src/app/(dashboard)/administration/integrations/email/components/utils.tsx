@@ -61,9 +61,13 @@ export function getWhatsappSessionTag(
   const tone: DataTagTone =
     status === "ready"
       ? "success"
-      : status === "qr_required" || status === "authenticated"
+      : status === "qr_required" ||
+          status === "authenticated" ||
+          status === "starting" ||
+          status === "syncing_remote_session" ||
+          status === "reconnecting"
         ? "accent"
-        : status === "auth_failure"
+        : status === "auth_failure" || status === "error"
           ? "danger"
           : "neutral"
 
