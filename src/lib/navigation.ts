@@ -97,16 +97,10 @@ export const appNavigation: AppNavigationGroup[] = [
         icon: Building2,
         items: [
           {
-            titleKey: "points",
-            url: "/administration/points",
-            screenKey: "admin.points",
-            icon: MapPin,
-          },
-          {
-            titleKey: "dashboards",
-            url: "/administration/dashboard",
-            screenKey: "admin.company_dashboards",
-            icon: LayoutDashboard,
+            titleKey: "companies",
+            url: "/companies",
+            screenKey: "admin.companies",
+            icon: Building2,
           },
           {
             titleKey: "infrastructure",
@@ -115,10 +109,10 @@ export const appNavigation: AppNavigationGroup[] = [
             icon: Building2,
           },
           {
-            titleKey: "companies",
-            url: "/companies",
-            screenKey: "admin.companies",
-            icon: Building2,
+            titleKey: "dashboards",
+            url: "/administration/dashboard",
+            screenKey: "admin.company_dashboards",
+            icon: LayoutDashboard,
           },
         ],
       },
@@ -128,15 +122,21 @@ export const appNavigation: AppNavigationGroup[] = [
         icon: HardDrive,
         items: [
           {
-            titleKey: "cameras",
-            url: "/equipment/cameras",
-            screenKey: "admin.cameras",
+            titleKey: "points",
+            url: "/administration/points",
+            screenKey: "admin.points",
+            icon: MapPin,
           },
           {
             titleKey: "totens",
             url: "/equipment/totens",
             screenKey: "admin.totens",
             icon: RadioTower,
+          },
+          {
+            titleKey: "cameras",
+            url: "/equipment/cameras",
+            screenKey: "admin.cameras",
           },
           {
             titleKey: "smart_switches",

@@ -91,7 +91,7 @@
     "companies": "Empresas",
     "points": "Pontos",
     "dashboards": "Dashboards",
-    "infrastructure": "Infraestrutura",
+    "infrastructure": "Equipamentos compartilhados",
     "system": "Sistema",
     "backups": "Backups",
     "ui_settings": "Layout e Tema",
@@ -116,9 +116,9 @@
     "extensions": "Ramais"
   },
   "shared_infrastructure": {
-    "title": "Infraestrutura",
-    "description": "Gerencie compartilhamento de pontos, totens e equipamentos entre empresas.",
-    "fetch_error": "Erro ao carregar a infraestrutura compartilhada.",
+    "title": "Equipamentos compartilhados",
+    "description": "Gerencie o compartilhamento de pontos, totens e equipamentos entre empresas.",
+    "fetch_error": "Erro ao carregar os equipamentos compartilhados.",
     "search_placeholder": "Buscar por nome, IP ou empresa...",
     "not_informed": "Não informado",
     "empty": "Nenhum ativo encontrado para o contexto selecionado.",

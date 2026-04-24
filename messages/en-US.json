@@ -91,7 +91,7 @@
     "companies": "Companies",
     "points": "Points",
     "dashboards": "Dashboards",
-    "infrastructure": "Infrastructure",
+    "infrastructure": "Shared equipment",
     "system": "System",
     "backups": "Backups",
     "ui_settings": "UI Settings",
@@ -116,9 +116,9 @@
     "extensions": "Extensions"
   },
   "shared_infrastructure": {
-    "title": "Infrastructure",
-    "description": "Manage company sharing for points, totens, and attached equipment.",
-    "fetch_error": "Error loading shared infrastructure.",
+    "title": "Shared equipment",
+    "description": "Manage the sharing of points, totems, and equipment across companies.",
+    "fetch_error": "Error loading shared equipment.",
     "search_placeholder": "Search by name, IP, or company...",
     "not_informed": "Not informed",
     "empty": "No assets were found for the selected scope.",

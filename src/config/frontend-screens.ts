@@ -43,7 +43,7 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
   "admin.points": {
     title: "Pontos",
     description: "Gerenciamento dos pontos de monitoramento.",
-    group: "Administração Manual",
+    group: "Equipamentos",
   },
   "admin.company_dashboards": {
     title: "Dashboards",
@@ -51,7 +51,7 @@ export const FRONTEND_SCREEN_METADATA: Record<string, FrontendScreenMetadata> = 
     group: "Administração Manual",
   },
   "admin.shared_infrastructure": {
-    title: "Infraestrutura",
+    title: "Equipamentos compartilhados",
     description: "Gerenciamento centralizado de pontos, totens e equipamentos compartilhados entre empresas.",
     group: "Administração Manual",
   },
