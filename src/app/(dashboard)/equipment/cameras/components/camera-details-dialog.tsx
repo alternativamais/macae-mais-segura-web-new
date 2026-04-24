@@ -40,6 +40,10 @@ export function CameraDetailsDialog({
   const items = [
     { label: t("labels.name"), value: camera.nome || notInformed },
     { label: t("labels.brand"), value: camera.marca || notInformed },
+    {
+      label: t("labels.type"),
+      value: camera.cameraType === "lpr" ? t("type.lpr") : t("type.normal"),
+    },
     { label: t("labels.status"), value: <CameraStatusBadge status={camera.status} /> },
     {
       label: t("labels.ip"),

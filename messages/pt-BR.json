@@ -667,6 +667,7 @@
       "description_edit": "Atualize as informações técnicas e de acesso do dispositivo.",
       "labels": {
         "name": "Nome da Câmera",
+        "camera_type": "Tipo da câmera",
         "ip": "IP / Hostname",
         "user": "Usuário Admin",
         "password": "Senha de Acesso",
@@ -678,7 +679,10 @@
         "ponto": "Ponto de Instalação",
         "totem": "Totem Vinculado",
         "destination": "Destino da Instalação",
-        "status": "Estado"
+        "status": "Estado",
+        "active_generated_token": "Token gerado",
+        "generate_lpr_token": "Gerar token LPR ao salvar",
+        "lpr_tokens": "Tokens LPR"
       },
       "placeholders": {
         "name": "Ex.: Câmera Praça 01",
@@ -686,6 +690,7 @@
         "user": "admin",
         "password": "••••••••",
         "brand": "Ex.: Hikvision, Dahua",
+        "camera_type": "Selecione o tipo",
         "rtsp_path": "/Streaming/Channels/101",
         "ponto": "Selecione o ponto",
         "totem": "Selecione o totem",
@@ -699,6 +704,8 @@
         "network_desc": "Credenciais para comunicação com o dispositivo.",
         "location": "Localização",
         "location_desc": "Onde a câmera está instalada.",
+        "lpr": "Configuração LPR",
+        "lpr_desc": "Gerencie o token usado pela câmera para envio das leituras LPR.",
         "advanced": "Configuração RTSP avançada",
         "advanced_desc": "O caminho RTSP é resolvido pela marca. Use estes campos apenas para sobrescrever."
       },
@@ -710,10 +717,17 @@
       },
       "descriptions": {
         "test_connection": "Teste a conectividade antes de salvar para validar o acesso básico ao equipamento.",
-        "destination": "Escolha se a câmera será vinculada diretamente a um ponto ou a um totem."
+        "destination": "Escolha se a câmera será vinculada diretamente a um ponto ou a um totem.",
+        "camera_type": "Use LPR para câmeras que enviam leituras de placas para o sistema.",
+        "generate_lpr_token": "Quando ativado, o cadastro já retorna um token pronto para configurar na câmera LPR.",
+        "lpr_tokens": "Gere, copie e revogue tokens da câmera sem sair desta tela.",
+        "save_before_manage_lpr": "Salve a câmera como LPR para começar a gerenciar os tokens.",
+        "disable_lpr_warning": "Ao salvar como câmera normal, os tokens LPR ativos serão revogados e a captura LPR será desabilitada."
       },
       "options": {
-        "brand_generic": "Genérico / Outros"
+        "brand_generic": "Genérico / Outros",
+        "camera_type_normal": "Câmera normal",
+        "camera_type_lpr": "Câmera LPR"
       },
       "test_button": {
         "idle": "Testar Conexão",
@@ -723,6 +737,7 @@
       },
       "notifications": {
         "load_dependencies_error": "Erro ao carregar pontos e totens.",
+        "load_lpr_tokens_error": "Erro ao carregar os tokens LPR da câmera.",
         "create_success": "Câmera cadastrada com sucesso.",
         "update_success": "Câmera atualizada com sucesso.",
         "create_error": "Erro ao cadastrar câmera.",
@@ -730,13 +745,39 @@
         "test_missing_ip": "Informe o IP ou hostname para testar a conexão.",
         "test_success": "Conexão validada com sucesso.",
         "test_success_with_path": "Conexão validada com sucesso. Caminho detectado: {path}",
-        "test_error": "Erro ao testar conexão com a câmera."
+        "test_error": "Erro ao testar conexão com a câmera.",
+        "copy_lpr_token_success": "Token LPR copiado com sucesso.",
+        "copy_lpr_token_error": "Não foi possível copiar o token LPR.",
+        "generate_lpr_token_success": "Token LPR gerado com sucesso.",
+        "generate_lpr_token_error": "Erro ao gerar token LPR.",
+        "revoke_lpr_token_success": "Token LPR revogado com sucesso.",
+        "revoke_lpr_token_error": "Erro ao revogar token LPR.",
+        "token_generated_on_create": "Câmera cadastrada com token LPR gerado.",
+        "token_generated_on_save": "Novo token LPR gerado para a câmera."
       },
       "validations": {
         "name_min": "Nome deve ter pelo menos 2 caracteres.",
         "ip_required": "IP ou hostname é obrigatório.",
         "user_required": "Usuário é obrigatório.",
         "location_required": "Selecione o local de instalação."
+      },
+      "actions": {
+        "copy_token": "Copiar token",
+        "generate_token": "Gerar token",
+        "revoke_token": "Revogar token"
+      },
+      "empty": {
+        "lpr_tokens": "Nenhum token LPR cadastrado para esta câmera."
+      },
+      "status": {
+        "token_active": "Ativo",
+        "token_revoked": "Revogado"
+      },
+      "token_dialog": {
+        "title": "Token LPR gerado",
+        "description": "Copie este token e configure-o na câmera LPR. Ele não será exibido novamente com este nível de detalhe.",
+        "copy": "Copiar token",
+        "close": "Concluir"
       }
     },
     "details": {
@@ -748,9 +789,14 @@
         "point": "Ponto",
         "totem": "Totem"
       },
+      "type": {
+        "normal": "Câmera normal",
+        "lpr": "Câmera LPR"
+      },
       "labels": {
         "name": "Nome",
         "brand": "Marca / Modelo",
+        "type": "Tipo",
         "status": "Estado",
         "ip": "IP / Hostname",
         "user": "Usuário Admin",

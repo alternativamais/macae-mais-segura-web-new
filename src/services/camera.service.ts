@@ -1,8 +1,10 @@
 import api from "@/lib/api-client"
 import {
   Camera,
+  CameraLprTokenSummary,
   CameraListParams,
   CreateCameraPayload,
+  GeneratedCameraLprToken,
   UpdateCameraPayload,
   Ponto,
   Totem,
@@ -35,6 +37,21 @@ export const cameraService = {
 
   update: async (id: number, payload: UpdateCameraPayload) => {
     const { data } = await api.put<Camera>(`${basePath}/${id}`, payload)
+    return data
+  },
+
+  listLprTokens: async (id: number) => {
+    const { data } = await api.get<CameraLprTokenSummary[]>(`${basePath}/${id}/lpr-tokens`)
+    return Array.isArray(data) ? data : []
+  },
+
+  generateLprToken: async (id: number) => {
+    const { data } = await api.post<GeneratedCameraLprToken>(`${basePath}/${id}/lpr-token`)
+    return data
+  },
+
+  revokeLprToken: async (id: number, tokenId: number) => {
+    const { data } = await api.delete(`${basePath}/${id}/lpr-token/${tokenId}`)
     return data
   },
 

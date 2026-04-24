@@ -1,3 +1,5 @@
+export type CameraType = "normal" | "lpr" | string
+
 export interface Ponto {
   id: number
   nome: string
@@ -33,6 +35,8 @@ export interface Camera {
   totemId?: number
   empresaId?: number | null
   status: "active" | "inactive" | string
+  cameraType: CameraType
+  generatedLprToken?: string | null
   createdAt: string
   updatedAt: string
   ponto?: Ponto
@@ -44,6 +48,7 @@ export interface CameraListParams {
   limit?: number
   search?: string
   empresaId?: number
+  cameraType?: CameraType
 }
 
 export interface CreateCameraPayload {
@@ -59,6 +64,24 @@ export interface CreateCameraPayload {
   totemId?: number
   status?: string
   empresaId?: number
+  cameraType?: CameraType
+  generateLprToken?: boolean
 }
 
 export type UpdateCameraPayload = Partial<CreateCameraPayload>
+
+export interface CameraLprTokenSummary {
+  id: number
+  tokenPreview?: string | null
+  token?: string | null
+  revoked: boolean
+  revokedAt?: string | null
+  createdAt?: string
+}
+
+export interface GeneratedCameraLprToken {
+  id: number
+  token: string
+  createdAt?: string
+  message: string
+}

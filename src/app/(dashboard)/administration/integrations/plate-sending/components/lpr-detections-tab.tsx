@@ -97,7 +97,7 @@ export function LprDetectionsTab() {
   const loadCameras = useCallback(async () => {
     setIsLoadingCameras(true)
     try {
-      const response = await cameraService.findAll({ page: 1, limit: 500 })
+      const response = await cameraService.findAll({ page: 1, limit: 500, cameraType: "lpr" })
       setCameras(response.data || [])
     } catch (error) {
       setCameras([])
