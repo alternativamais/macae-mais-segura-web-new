@@ -81,23 +81,12 @@ export function OperationalMapCanvas({
     [markers, showPoints],
   )
 
-  const selectedMarker = useMemo(
-    () => markers.find((marker) => marker.id === selectedMarkerId) ?? null,
-    [markers, selectedMarkerId],
-  )
-
   useEffect(() => {
     if (!mapRef.current || !isLoaded || !mapsReady) {
       return
     }
 
     const map = mapRef.current
-
-    if (selectedMarker) {
-      map.panTo(selectedMarker.position)
-      map.setZoom(16)
-      return
-    }
 
     const targets = visibleMarkers.map((marker) => marker.position)
 
@@ -116,7 +105,7 @@ export function OperationalMapCanvas({
     const bounds = new google.maps.LatLngBounds()
     targets.forEach((target) => bounds.extend(target))
     map.fitBounds(bounds, 72)
-  }, [isLoaded, mapsReady, selectedMarker, visibleMarkers])
+  }, [isLoaded, mapsReady, visibleMarkers])
 
   const pointIcon = useMemo(() => {
     if (!isLoaded || !window.google?.maps) return undefined
