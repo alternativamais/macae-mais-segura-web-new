@@ -64,31 +64,6 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
   const [errorMessage, setErrorMessage] = useState("")
   const [retryToken, setRetryToken] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const target = containerRef.current
-    if (!target || typeof IntersectionObserver === "undefined") {
-      setIsVisible(true)
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting)
-      },
-      {
-        threshold: 0.2,
-      },
-    )
-
-    observer.observe(target)
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
-
   // ---------- Fullscreen ----------
   useEffect(() => {
     const onFsChange = () => setIsFullscreen(!!document.fullscreenElement)
@@ -284,12 +259,6 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
   // ---------- WebRTC WHEP ----------
   useEffect(() => {
     if (!camera?.id) return
-    if (!isVisible) {
-      void cleanupConnection(true)
-      setStatus("idle")
-      setErrorMessage("")
-      return
-    }
 
     let mounted = true
 
@@ -497,7 +466,7 @@ export function CameraStreamTile({ camera }: CameraStreamTileProps) {
       void cleanupConnection(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [camera?.id, cleanupConnection, clearDisconnectTimer, isVisible, retryToken, scheduleReconnect, startStallMonitor, t])
+  }, [camera?.id, cleanupConnection, clearDisconnectTimer, retryToken, scheduleReconnect, startStallMonitor, t])
 
   const handleRetry = () => {
     silentRetriesRef.current = 0
